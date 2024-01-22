@@ -34,16 +34,16 @@ constant.incidence.daily <- cbind(constant1[,2:101],constant2[,2:101],constant3[
                                   constant5[,2:101],constant6[,2:101],constant7[,2:101],
                                   constant8[,2:101],constant9[,2:101],constant10[,2:101])
 
-warning1 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warning.incidence.last.120.1.csv")
-warning2 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warning.incidence.last.120.2.csv")
-warning3 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warning.incidence.last.120.3.csv")
-warning4 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warning.incidence.last.120.4.csv")
-warning5 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warning.incidence.last.120.5.csv")
-warning6 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warning.incidence.last.120.6.csv")
-warning7 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warning.incidence.last.120.7.csv")
-warning8 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warning.incidence.last.120.8.csv")
-warning9 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warning.incidence.last.120.9.csv")
-warning10 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warning.incidence.last.120.10.csv")
+warming1 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.1.csv")
+warming2 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.2.csv")
+warming3 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.3.csv")
+warming4 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.4.csv")
+warming5 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.5.csv")
+warming6 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.6.csv")
+warming7 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.7.csv")
+warming8 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.8.csv")
+warming9 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.9.csv")
+warming10 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.10.csv")
 
 
 warming.incidence.daily <- cbind(warming1[,2:101],warming2[,2:101],warming3[,2:101],warming4[,2:101],
@@ -957,7 +957,7 @@ require(TTR)
 require(moments)
 
 
-data <- read.xls("~/Desktop/Epidemics Project/epidemics_data.xlsx", header=TRUE)
+data <- read.xls("Kirk_Data/Epidemics_Data_Dryad/Kirk_et_al_epidemics_sampling_data.xlsx", header=TRUE)
 
 data.sum <- summaryBy(status ~ population+treatment+day, data = data, FUN = sum)
 
