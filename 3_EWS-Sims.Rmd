@@ -1120,6 +1120,38 @@ abline(v = 60, col = "black", lwd = 2, lty = 2)
 
 # Area Under Curve (AUC) Tests
 
+From Brett et al. 2018, *PLoS Computational Biology*:
+
+"We quantify the association of each EWS with time using Kendall's rank correlation coefficient. A coefficient close to (+/−)1 implies consistent increases/decreases of the EWS in time. As the underlying dynamics of the case reports are stochastic, the value of the rank correlation coefficient is itself a random variable. Multiple simulations of the test (emerging) and null (stationary/not emerging) scenarios result in two distributions of correlation coefficients for each EWS. We measure performance using the AUC statistic, defined as the overlap of the two distributions, and may be interpreted as the probability that a randomly chosen test coefficient is higher than a randomly chosen null coefficient, $AUC=P(\tau_{test}>\tau_{null})$... In this paper the **AUC statistic quantifies how successfully an EWS distinguishes whether or not a disease is approaching an epidemic transition. An AUC = 0.5 implies that an observed rank coefficient value conveys no information about whether or not the disease is emerging, i.e. the EWS is ineffective. If the AUC \< 0.5 then a decreasing trend in the EWS indicates emergence, whereas if AUC \> 0.5 an increasing trend indicates emergence. A larger \|AUC − 0.5\| implies better performance, if \|AUC − 0.5\| = 0.5 the rank coefficient value classifies the two scenarios perfectly.**"
+
+Where $\tau_{test}$ is a vector of Kendall tau values for the metric under warming/emerging conditions, and $\tau_{null}$ is a vector of Kendall tau values for the metric under constant/non-emerging conditions.
+
+Instead of explicitly calculating the ROC curve, the AUC can be efficiently calculated after ranking the combined set of test and null correlation coefficients by value, as follows:
+
+$AUC = \frac{r_{test}-\frac{n_{test}(n_{test}+1)}{2}} {n_{test}n_{null}}$
+
+Where $r_{test}$ is the sum of the ranks of test coefficients, and $n_{test}$ and $n_{null}$ are the number of realizations of the test and null models, respectively.
+
+So, here's the function Devin wrote to calculate the AUC:
+
+```{r}
+calc_auc <- function(test.taus, null.taus){
+  
+  combined.taus <- c(test.taus, null.taus)
+  r <- rank(combined.taus, na.last = NA)
+  
+  test.taus.length <- sum(!is.na(test.taus))
+  null.taus.length <- sum(!is.na(null.taus))
+  
+  r1 <- sum(r[1:test.taus.length])
+  
+  n1 <- test.taus.length
+  n2 <- null.taus.length
+  
+  (r1 - n1 * (n1 + 1) / 2) / (n1 * n2)
+}
+```
+
 As per Devin's script (and Brett et al. 2018, *PLoS Computational Biology*), to evaluate the predictive power of EWS, we should look at the relevant metrics before transition.
 
 For reference, metrics and their short hands are as follows:
@@ -1194,26 +1226,26 @@ Calculate Kendall's tau for each metric:
 time.5 <- c(1:55)
 
 for(i in 1:num.of.sims){
-  constant.sims.variance.5.tau[i] <- cor(constant.sims.variance.5[ , i], time.5, method = "kendall")
   constant.sims.mean.5.tau[i] <- cor(constant.sims.mean.5[ , i], time.5, method = "kendall")
-  constant.sims.cv.5.tau[i] <- cor(constant.sims.cv.5[ , i], time.5, method = "kendall")
   constant.sims.skewness.5.tau[i] <- cor(constant.sims.skewness.5[ , i], time.5, method = "kendall")
   constant.sims.kurtosis.5.tau[i] <- cor(constant.sims.kurtosis.5[ , i], time.5, method = "kendall")
+  constant.sims.variance.5.tau[i] <- cor(constant.sims.variance.5[ , i], time.5, method = "kendall")
+  constant.sims.cv.5.tau[i] <- cor(constant.sims.cv.5[ , i], time.5, method = "kendall")
   constant.sims.id.5.tau[i] <- cor(constant.sims.id.5[ , i], time.5, method = "kendall")
+  constant.sims.first.diff.variance.5.tau[i] <- cor(constant.sims.first.diff.variance.5[ , i], time.5, method = "kendall")
   constant.sims.cor.5.tau[i] <- cor(constant.sims.cor.5[ , i], time.5, method = "kendall")
   constant.sims.cov.5.tau[i] <- cor(constant.sims.cov.5[ , i], time.5, method = "kendall")
-  constant.sims.first.diff.variance.5.tau[i] <- cor(constant.sims.first.diff.variance.5[ , i], time.5, method = "kendall")
   constant.sims.decay.time.5.tau[i] <- cor(constant.sims.decay.time.5[ , i], time.5, method = "kendall")
   
-  warming.sims.variance.5.tau[i] <- cor(warming.sims.variance.5[ , i], time.5, method = "kendall")
   warming.sims.mean.5.tau[i] <- cor(warming.sims.mean.5[ , i], time.5, method = "kendall")
-  warming.sims.cv.5.tau[i] <- cor(warming.sims.cv.5[ , i], time.5, method = "kendall")
   warming.sims.skewness.5.tau[i] <- cor(warming.sims.skewness.5[ , i], time.5, method = "kendall")
   warming.sims.kurtosis.5.tau[i] <- cor(warming.sims.kurtosis.5[ , i], time.5, method = "kendall")
+  warming.sims.variance.5.tau[i] <- cor(warming.sims.variance.5[ , i], time.5, method = "kendall")
+  warming.sims.cv.5.tau[i] <- cor(warming.sims.cv.5[ , i], time.5, method = "kendall")
   warming.sims.id.5.tau[i] <- cor(warming.sims.id.5[ , i], time.5, method = "kendall")
+  warming.sims.first.diff.variance.5.tau[i] <- cor(warming.sims.first.diff.variance.5[ , i], time.5, method = "kendall")
   warming.sims.cor.5.tau[i] <- cor(warming.sims.cor.5[ , i], time.5, method = "kendall")
   warming.sims.cov.5.tau[i] <- cor(warming.sims.cov.5[ , i], time.5, method = "kendall")
-  warming.sims.first.diff.variance.5.tau[i] <- cor(warming.sims.first.diff.variance.5[ , i], time.5, method = "kendall")
   warming.sims.decay.time.5.tau[i] <- cor(warming.sims.decay.time.5[ , i], time.5, method = "kendall")
 }
 ```
@@ -1221,35 +1253,342 @@ for(i in 1:num.of.sims){
 Plot to compare Kendall tau distributions:
 
 ```{r}
-par(mfrow=c(1,1))
+par(mfrow = c(1, 1))
 
-hist(constant.sims.mean.5.tau, col=alpha("cornflowerblue", 0.4), breaks = 20,add=T)
-hist(warming.sims.mean.5.tau, col=alpha("red2",0.4), breaks=20)
+hist(constant.sims.mean.5.tau, col = alpha("cornflowerblue", 0.4), breaks = 20)
+hist(warming.sims.mean.5.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
 
-hist(constant.sims.cv.5.tau, col=alpha("cornflowerblue", 0.4), breaks = 20,add=T)
-hist(warming.sims.cv.5.tau, col=alpha("red2",0.4), breaks=20)
+hist(constant.sims.skewness.5.tau, col = alpha("cornflowerblue", 0.4), breaks = 20)
+hist(warming.sims.skewness.5.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
 
-hist(constant.sims.variance.5.tau, col=alpha("cornflowerblue", 0.4), breaks = 20,add=T)
-hist(warming.sims.variance.5.tau, col=alpha("red2",0.4), breaks=20)
+hist(constant.sims.kurtosis.5.tau, col = alpha("cornflowerblue", 0.4), breaks = 20)
+hist(warming.sims.kurtosis.5.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
 
-hist(constant.sims.skewness.5.tau, col=alpha("cornflowerblue", 0.4), breaks = 20,add=T)
-hist(warming.sims.skewness.5.tau, col=alpha("red2",0.4), breaks=20)
+hist(constant.sims.variance.5.tau, col = alpha("cornflowerblue",  0.4), breaks = 20)
+hist(warming.sims.variance.5.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
 
-hist(constant.sims.kurtosis.5.tau, col=alpha("cornflowerblue", 0.4), breaks = 20,add=T)
-hist(warming.sims.kurtosis.5.tau, col=alpha("red2",0.4), breaks=20)
+hist(constant.sims.cv.5.tau, col = alpha("cornflowerblue", 0.4), breaks = 20)
+hist(warming.sims.cv.5.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
 
-hist(constant.sims.id.5.tau, col=alpha("cornflowerblue", 0.4), breaks = 20,add=T)
-hist(warming.sims.id.5.tau, col=alpha("red2",0.4), breaks=20)
+hist(constant.sims.id.5.tau, col = alpha("cornflowerblue",0.4), breaks = 20)
+hist(warming.sims.id.5.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
 
-hist(constant.sims.cor.5.tau, col=alpha("cornflowerblue", 0.4), breaks = 20,add=T)
-hist(warming.sims.cor.5.tau, col=alpha("red2",0.4), breaks=20)
+hist(constant.sims.first.diff.variance.5.tau, col = alpha("cornflowerblue", 0.4), breaks = 20)
+hist(warming.sims.first.diff.variance.5.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
 
-hist(constant.sims.cov.5.tau, col=alpha("cornflowerblue", 0.4), breaks = 20,add=T)
-hist(warming.sims.cov.5.tau, col=alpha("red2",0.4), breaks=20)
+hist(constant.sims.cor.5.tau, col = alpha("cornflowerblue", 0.4), breaks = 20)
+hist(warming.sims.cor.5.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
 
-hist(constant.sims.decay.time.5.tau, col=alpha("cornflowerblue", 0.4), breaks = 20,add=T)
-hist(warming.sims.decay.time.5.tau, col=alpha("red2",0.4), breaks=20)
+hist(constant.sims.cov.5.tau, col = alpha("cornflowerblue", 0.4), breaks = 20)
+hist(warming.sims.cov.5.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
 
-hist(constant.sims.first.diff.variance.5.tau, col=alpha("cornflowerblue", 0.4), breaks = 20,add=T)
-hist(warming.sims.first.diff.variance.5.tau, col=alpha("red2",0.4), breaks=20)
+# constant.sims.decay.time.5.tau and warming.sims.decay.time.5.tau are all NA
+# hist(constant.sims.decay.time.5.tau, col = alpha("cornflowerblue", 0.4), breaks = 20)
+# hist(warming.sims.decay.time.5.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
+```
+
+Calculating AUC:
+
+```{r}
+AUC_variance_5 <- calc_auc(warming.sims.variance.5.tau, constant.sims.variance.5.tau); AUC_variance_5
+AUC_mean_5 <- calc_auc(warming.sims.mean.5.tau, constant.sims.mean.5.tau); AUC_mean_5
+AUC_kurtosis_5 <- calc_auc(warming.sims.kurtosis.5.tau, constant.sims.kurtosis.5.tau); AUC_kurtosis_5
+AUC_skewness_5 <- calc_auc(warming.sims.skewness.5.tau, constant.sims.skewness.5.tau); AUC_skewness_5
+AUC_id_5 <- calc_auc(warming.sims.id.5.tau, constant.sims.id.5.tau); AUC_id_5
+AUC_first.diff.variance_5 <- calc_auc(warming.sims.first.diff.variance.5.tau, constant.sims.first.diff.variance.5.tau); AUC_first.diff.variance_5
+AUC_cor_5 <- calc_auc(warming.sims.cor.5.tau, constant.sims.cor.5.tau); AUC_cor_5
+AUC_cov_5 <- calc_auc(warming.sims.cov.5.tau, constant.sims.cov.5.tau); AUC_cov_5
+AUC_cv_5 <- calc_auc(warming.sims.cv.5.tau, constant.sims.cv.5.tau); AUC_cv_5
+AUC_decay.time_5 <- calc_auc(warming.sims.decay.time.5.tau, constant.sims.decay.time.5.tau); AUC_decay.time_5
+```
+
+## 15 Day Sliding Window
+
+Cutting down all our statistical metric data frame to restrict our time frame to the first 55 days, and making some empty vectors to store our results in.
+
+```{r}
+constant.sims.variance.15 <- constant.sims.variance.15[1:45, ]
+constant.sims.mean.15 <- constant.sims.mean.15[1:45, ]
+constant.sims.cv.15 <- constant.sims.cv.15[1:45, ]
+constant.sims.skewness.15 <-  constant.sims.skewness.15[1:45, ]
+constant.sims.kurtosis.15 <-  constant.sims.kurtosis.15[1:45, ]
+constant.sims.id.15 <-  constant.sims.id.15[1:45, ]
+constant.sims.cor.15 <-  constant.sims.cor.15[1:45, ]
+constant.sims.cov.15 <-  constant.sims.cov.15[1:45, ]
+constant.sims.first.diff.variance.15 <-  constant.sims.first.diff.variance.15[1:45, ]
+constant.sims.decay.time.15 <-  constant.sims.decay.time.15[1:45, ]
+
+warming.sims.variance.15 <- warming.sims.variance.15[1:45, ]
+warming.sims.mean.15 <- warming.sims.mean.15[1:45, ]
+warming.sims.cv.15 <- warming.sims.cv.15[1:45, ]
+warming.sims.skewness.15 <-  warming.sims.skewness.15[1:45, ]
+warming.sims.kurtosis.15 <-  warming.sims.kurtosis.15[1:45, ]
+warming.sims.id.15 <-  warming.sims.id.15[1:45, ]
+warming.sims.cor.15 <-  warming.sims.cor.15[1:45, ]
+warming.sims.cov.15 <-  warming.sims.cov.15[1:45, ]
+warming.sims.first.diff.variance.15 <-  warming.sims.first.diff.variance.15[1:45, ]
+warming.sims.decay.time.15 <-  warming.sims.decay.time.15[1:45, ]
+
+constant.sims.variance.15.tau <- c()
+constant.sims.mean.15.tau <- c()
+constant.sims.cv.15.tau <- c()
+constant.sims.skewness.15.tau <-  c()
+constant.sims.kurtosis.15.tau <- c()
+constant.sims.id.15.tau <- c()
+constant.sims.cor.15.tau <- c()
+constant.sims.cov.15.tau <- c()
+constant.sims.first.diff.variance.15.tau <-  c()
+constant.sims.decay.time.15.tau <- c()
+
+warming.sims.variance.15.tau <- c()
+warming.sims.mean.15.tau <- c()
+warming.sims.cv.15.tau <- c()
+warming.sims.skewness.15.tau <-  c()
+warming.sims.kurtosis.15.tau <- c()
+warming.sims.id.15.tau <-  c()
+warming.sims.cor.15.tau <-  c()
+warming.sims.cov.15.tau <-  c()
+warming.sims.first.diff.variance.15.tau <-  c()
+warming.sims.decay.time.15.tau <-  c()
+```
+
+Calculate Kendall's tau for each metric:
+
+```{r}
+time.15 <- c(1:45)
+
+for(i in 1:num.of.sims){
+  constant.sims.mean.15.tau[i] <- cor(constant.sims.mean.15[ , i], time.15, method = "kendall")
+  constant.sims.skewness.15.tau[i] <- cor(constant.sims.skewness.15[ , i], time.15, method = "kendall")
+  constant.sims.kurtosis.15.tau[i] <- cor(constant.sims.kurtosis.15[ , i], time.15, method = "kendall")
+  constant.sims.variance.15.tau[i] <- cor(constant.sims.variance.15[ , i], time.15, method = "kendall")
+  constant.sims.cv.15.tau[i] <- cor(constant.sims.cv.15[ , i], time.15, method = "kendall")
+  constant.sims.id.15.tau[i] <- cor(constant.sims.id.15[ , i], time.15, method = "kendall")
+  constant.sims.first.diff.variance.15.tau[i] <- cor(constant.sims.first.diff.variance.15[ , i], time.15, method = "kendall")
+  constant.sims.cor.15.tau[i] <- cor(constant.sims.cor.15[ , i], time.15, method = "kendall")
+  constant.sims.cov.15.tau[i] <- cor(constant.sims.cov.15[ , i], time.15, method = "kendall")
+  constant.sims.decay.time.15.tau[i] <- cor(constant.sims.decay.time.15[ , i], time.15, method = "kendall")
+  
+  warming.sims.mean.15.tau[i] <- cor(warming.sims.mean.15[ , i], time.15, method = "kendall")
+  warming.sims.skewness.15.tau[i] <- cor(warming.sims.skewness.15[ , i], time.15, method = "kendall")
+  warming.sims.kurtosis.15.tau[i] <- cor(warming.sims.kurtosis.15[ , i], time.15, method = "kendall")
+  warming.sims.variance.15.tau[i] <- cor(warming.sims.variance.15[ , i], time.15, method = "kendall")
+  warming.sims.cv.15.tau[i] <- cor(warming.sims.cv.15[ , i], time.15, method = "kendall")
+  warming.sims.id.15.tau[i] <- cor(warming.sims.id.15[ , i], time.15, method = "kendall")
+  warming.sims.first.diff.variance.15.tau[i] <- cor(warming.sims.first.diff.variance.15[ , i], time.15, method = "kendall")
+  warming.sims.cor.15.tau[i] <- cor(warming.sims.cor.15[ , i], time.15, method = "kendall")
+  warming.sims.cov.15.tau[i] <- cor(warming.sims.cov.15[ , i], time.15, method = "kendall")
+  warming.sims.decay.time.15.tau[i] <- cor(warming.sims.decay.time.15[ , i], time.15, method = "kendall")
+}
+```
+
+Plot to compare Kendall tau distributions:
+
+```{r}
+par(mfrow = c(1, 1))
+
+hist(constant.sims.mean.15.tau, col = alpha("cornflowerblue", 0.4), breaks = 20)
+hist(warming.sims.mean.15.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
+
+hist(constant.sims.skewness.15.tau, col = alpha("cornflowerblue", 0.4), breaks = 20)
+hist(warming.sims.skewness.15.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
+
+hist(constant.sims.kurtosis.15.tau, col = alpha("cornflowerblue", 0.4), breaks = 20)
+hist(warming.sims.kurtosis.15.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
+
+hist(constant.sims.variance.15.tau, col = alpha("cornflowerblue",  0.4), breaks = 20)
+hist(warming.sims.variance.15.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
+
+hist(constant.sims.cv.15.tau, col = alpha("cornflowerblue", 0.4), breaks = 20)
+hist(warming.sims.cv.15.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
+
+hist(constant.sims.id.15.tau, col = alpha("cornflowerblue",0.4), breaks = 20)
+hist(warming.sims.id.15.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
+
+hist(constant.sims.first.diff.variance.15.tau, col = alpha("cornflowerblue", 0.4), breaks = 20)
+hist(warming.sims.first.diff.variance.15.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
+
+hist(constant.sims.cor.15.tau, col = alpha("cornflowerblue", 0.4), breaks = 20)
+hist(warming.sims.cor.15.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
+
+hist(constant.sims.cov.15.tau, col = alpha("cornflowerblue", 0.4), breaks = 20)
+hist(warming.sims.cov.15.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
+
+# constant.sims.decay.time.15.tau and warming.sims.decay.time.15.tau are all NA
+# hist(constant.sims.decay.time.15.tau, col = alpha("cornflowerblue", 0.4), breaks = 20)
+# hist(warming.sims.decay.time.15.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
+```
+
+Calculating AUC:
+
+```{r}
+AUC_variance_15 <- calc_auc(warming.sims.variance.15.tau, constant.sims.variance.15.tau); AUC_variance_15
+AUC_mean_15 <- calc_auc(warming.sims.mean.15.tau, constant.sims.mean.15.tau); AUC_mean_15
+AUC_kurtosis_15 <- calc_auc(warming.sims.kurtosis.15.tau, constant.sims.kurtosis.15.tau); AUC_kurtosis_15
+AUC_skewness_15 <- calc_auc(warming.sims.skewness.15.tau, constant.sims.skewness.15.tau); AUC_skewness_15
+AUC_id_15 <- calc_auc(warming.sims.id.15.tau, constant.sims.id.15.tau); AUC_id_15
+AUC_first.diff.variance_15 <- calc_auc(warming.sims.first.diff.variance.15.tau, constant.sims.first.diff.variance.15.tau); AUC_first.diff.variance_15
+AUC_cor_15 <- calc_auc(warming.sims.cor.15.tau, constant.sims.cor.15.tau); AUC_cor_15
+AUC_cov_15 <- calc_auc(warming.sims.cov.15.tau, constant.sims.cov.15.tau); AUC_cov_15
+AUC_cv_15 <- calc_auc(warming.sims.cv.15.tau, constant.sims.cv.15.tau); AUC_cv_15
+AUC_decay.time_15 <- calc_auc(warming.sims.decay.time.15.tau, constant.sims.decay.time.15.tau); AUC_decay.time_15
+```
+
+## 30 Day Sliding Window
+
+Cutting down all our statistical metric data frame to restrict our time frame to the first 55 days, and making some empty vectors to store our results in.
+
+```{r}
+constant.sims.variance.30 <- constant.sims.variance.30[1:30, ]
+constant.sims.mean.30 <- constant.sims.mean.30[1:30, ]
+constant.sims.cv.30 <- constant.sims.cv.30[1:30, ]
+constant.sims.skewness.30 <-  constant.sims.skewness.30[1:30, ]
+constant.sims.kurtosis.30 <-  constant.sims.kurtosis.30[1:30, ]
+constant.sims.id.30 <-  constant.sims.id.30[1:30, ]
+constant.sims.cor.30 <-  constant.sims.cor.30[1:30, ]
+constant.sims.cov.30 <-  constant.sims.cov.30[1:30, ]
+constant.sims.first.diff.variance.30 <-  constant.sims.first.diff.variance.30[1:30, ]
+constant.sims.decay.time.30 <-  constant.sims.decay.time.30[1:30, ]
+
+warming.sims.variance.30 <- warming.sims.variance.30[1:30, ]
+warming.sims.mean.30 <- warming.sims.mean.30[1:30, ]
+warming.sims.cv.30 <- warming.sims.cv.30[1:30, ]
+warming.sims.skewness.30 <-  warming.sims.skewness.30[1:30, ]
+warming.sims.kurtosis.30 <-  warming.sims.kurtosis.30[1:30, ]
+warming.sims.id.30 <-  warming.sims.id.30[1:30, ]
+warming.sims.cor.30 <-  warming.sims.cor.30[1:30, ]
+warming.sims.cov.30 <-  warming.sims.cov.30[1:30, ]
+warming.sims.first.diff.variance.30 <-  warming.sims.first.diff.variance.30[1:30, ]
+warming.sims.decay.time.30 <-  warming.sims.decay.time.30[1:30, ]
+
+constant.sims.variance.30.tau <- c()
+constant.sims.mean.30.tau <- c()
+constant.sims.cv.30.tau <- c()
+constant.sims.skewness.30.tau <-  c()
+constant.sims.kurtosis.30.tau <- c()
+constant.sims.id.30.tau <- c()
+constant.sims.cor.30.tau <- c()
+constant.sims.cov.30.tau <- c()
+constant.sims.first.diff.variance.30.tau <-  c()
+constant.sims.decay.time.30.tau <- c()
+
+warming.sims.variance.30.tau <- c()
+warming.sims.mean.30.tau <- c()
+warming.sims.cv.30.tau <- c()
+warming.sims.skewness.30.tau <-  c()
+warming.sims.kurtosis.30.tau <- c()
+warming.sims.id.30.tau <-  c()
+warming.sims.cor.30.tau <-  c()
+warming.sims.cov.30.tau <-  c()
+warming.sims.first.diff.variance.30.tau <-  c()
+warming.sims.decay.time.30.tau <-  c()
+```
+
+Calculate Kendall's tau for each metric:
+
+```{r}
+time.30 <- c(1:30)
+
+for(i in 1:num.of.sims){
+  constant.sims.mean.30.tau[i] <- cor(constant.sims.mean.30[ , i], time.30, method = "kendall")
+  constant.sims.skewness.30.tau[i] <- cor(constant.sims.skewness.30[ , i], time.30, method = "kendall")
+  constant.sims.kurtosis.30.tau[i] <- cor(constant.sims.kurtosis.30[ , i], time.30, method = "kendall")
+  constant.sims.variance.30.tau[i] <- cor(constant.sims.variance.30[ , i], time.30, method = "kendall")
+  constant.sims.cv.30.tau[i] <- cor(constant.sims.cv.30[ , i], time.30, method = "kendall")
+  constant.sims.id.30.tau[i] <- cor(constant.sims.id.30[ , i], time.30, method = "kendall")
+  constant.sims.first.diff.variance.30.tau[i] <- cor(constant.sims.first.diff.variance.30[ , i], time.30, method = "kendall")
+  constant.sims.cor.30.tau[i] <- cor(constant.sims.cor.30[ , i], time.30, method = "kendall")
+  constant.sims.cov.30.tau[i] <- cor(constant.sims.cov.30[ , i], time.30, method = "kendall")
+  constant.sims.decay.time.30.tau[i] <- cor(constant.sims.decay.time.30[ , i], time.30, method = "kendall")
+  
+  warming.sims.mean.30.tau[i] <- cor(warming.sims.mean.30[ , i], time.30, method = "kendall")
+  warming.sims.skewness.30.tau[i] <- cor(warming.sims.skewness.30[ , i], time.30, method = "kendall")
+  warming.sims.kurtosis.30.tau[i] <- cor(warming.sims.kurtosis.30[ , i], time.30, method = "kendall")
+  warming.sims.variance.30.tau[i] <- cor(warming.sims.variance.30[ , i], time.30, method = "kendall")
+  warming.sims.cv.30.tau[i] <- cor(warming.sims.cv.30[ , i], time.30, method = "kendall")
+  warming.sims.id.30.tau[i] <- cor(warming.sims.id.30[ , i], time.30, method = "kendall")
+  warming.sims.first.diff.variance.30.tau[i] <- cor(warming.sims.first.diff.variance.30[ , i], time.30, method = "kendall")
+  warming.sims.cor.30.tau[i] <- cor(warming.sims.cor.30[ , i], time.30, method = "kendall")
+  warming.sims.cov.30.tau[i] <- cor(warming.sims.cov.30[ , i], time.30, method = "kendall")
+  warming.sims.decay.time.30.tau[i] <- cor(warming.sims.decay.time.30[ , i], time.30, method = "kendall")
+}
+```
+
+Plot to compare Kendall tau distributions:
+
+```{r}
+par(mfrow = c(1, 1))
+
+hist(constant.sims.mean.30.tau, col = alpha("cornflowerblue", 0.4), breaks = 20)
+hist(warming.sims.mean.30.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
+
+hist(constant.sims.skewness.30.tau, col = alpha("cornflowerblue", 0.4), breaks = 20)
+hist(warming.sims.skewness.30.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
+
+hist(constant.sims.kurtosis.30.tau, col = alpha("cornflowerblue", 0.4), breaks = 20)
+hist(warming.sims.kurtosis.30.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
+
+hist(constant.sims.variance.30.tau, col = alpha("cornflowerblue",  0.4), breaks = 20)
+hist(warming.sims.variance.30.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
+
+hist(constant.sims.cv.30.tau, col = alpha("cornflowerblue", 0.4), breaks = 20)
+hist(warming.sims.cv.30.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
+
+hist(constant.sims.id.30.tau, col = alpha("cornflowerblue",0.4), breaks = 20)
+hist(warming.sims.id.30.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
+
+hist(constant.sims.first.diff.variance.30.tau, col = alpha("cornflowerblue", 0.4), breaks = 20)
+hist(warming.sims.first.diff.variance.30.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
+
+hist(constant.sims.cor.30.tau, col = alpha("cornflowerblue", 0.4), breaks = 20)
+hist(warming.sims.cor.30.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
+
+hist(constant.sims.cov.30.tau, col = alpha("cornflowerblue", 0.4), breaks = 20)
+hist(warming.sims.cov.30.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
+
+# constant.sims.decay.time.30.tau and warming.sims.decay.time.30.tau are all NA
+# hist(constant.sims.decay.time.30.tau, col = alpha("cornflowerblue", 0.4), breaks = 20)
+# hist(warming.sims.decay.time.30.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
+```
+
+Calculating AUC:
+
+```{r}
+AUC_variance_30 <- calc_auc(warming.sims.variance.30.tau, constant.sims.variance.30.tau); AUC_variance_30
+AUC_mean_30 <- calc_auc(warming.sims.mean.30.tau, constant.sims.mean.30.tau); AUC_mean_30
+AUC_kurtosis_30 <- calc_auc(warming.sims.kurtosis.30.tau, constant.sims.kurtosis.30.tau); AUC_kurtosis_30
+AUC_skewness_30 <- calc_auc(warming.sims.skewness.30.tau, constant.sims.skewness.30.tau); AUC_skewness_30
+AUC_id_30 <- calc_auc(warming.sims.id.30.tau, constant.sims.id.30.tau); AUC_id_30
+AUC_first.diff.variance_30 <- calc_auc(warming.sims.first.diff.variance.30.tau, constant.sims.first.diff.variance.30.tau); AUC_first.diff.variance_30
+AUC_cor_30 <- calc_auc(warming.sims.cor.30.tau, constant.sims.cor.30.tau); AUC_cor_30
+AUC_cov_30 <- calc_auc(warming.sims.cov.30.tau, constant.sims.cov.30.tau); AUC_cov_30
+AUC_cv_30 <- calc_auc(warming.sims.cv.30.tau, constant.sims.cv.30.tau); AUC_cv_30
+AUC_decay.time_30 <- calc_auc(warming.sims.decay.time.30.tau, constant.sims.decay.time.30.tau); AUC_decay.time_30
+```
+
+## Summarize Outputs
+
+```{r}
+metrics <- c("mean", "skewness", "kurtosis", "variance", "cv", "id", "first.diff.variance", "cor", "cov", "decay.time")
+
+AUC_5 <- c(AUC_mean_5, AUC_skewness_5, AUC_kurtosis_5, AUC_variance_5, AUC_cv_5, 
+           AUC_id_5, AUC_first.diff.variance_5, AUC_cor_5 ,AUC_cov_5, AUC_decay.time_5)
+AUC_15 <- c(AUC_mean_15, AUC_skewness_15, AUC_kurtosis_15, AUC_variance_15, AUC_cv_15, 
+           AUC_id_15, AUC_first.diff.variance_15, AUC_cor_15 ,AUC_cov_15, AUC_decay.time_15)
+AUC_30 <- c(AUC_mean_30, AUC_skewness_30, AUC_kurtosis_30, AUC_variance_30, AUC_cv_30, 
+           AUC_id_30, AUC_first.diff.variance_30, AUC_cor_30 ,AUC_cov_30, AUC_decay.time_30)
+AUC_df <- data.frame(metrics, AUC_5, AUC_15, AUC_30); AUC_df
+```
+
+Let's make a quick plot:
+
+```{r}
+metrics_full <- c("Mean", "Skewness", "Kurtosis", "Variance", "Covariance", "Index of Dispersion", "First Difference Variance", "Autocorrelation", "Autocovariance", "Decay Time")
+plot(1:10, AUC_df$AUC_5, type = "p", 
+     main = "Simulated Data", xaxt = "none", xlab = "", ylim = c(0.3, 0.7), ylab = "AUC",
+     col = "forestgreen", pch = 19)
+points(1:10, AUC_df$AUC_15, col = "orchid", pch = 19)
+points(1:10, AUC_df$AUC_30, col = "#4B0082", pch = 19)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2)
 ```
