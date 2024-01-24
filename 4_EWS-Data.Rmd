@@ -1,0 +1,203 @@
+# Looking for EWS in Empirical Data
+
+## Required Packages
+
+```{r}
+require(scales)
+require(evobiR)
+require(gdata)
+require(doBy)
+require(ecp)
+require(strucchange)
+require(TTR)
+require(moments)
+```
+
+# Data Exploration
+
+## Read in Data
+
+```{r}
+data <- read.csv("Kirk_Data/Epidemics_Data_Dryad/Kirk_et_al_epidemics_sampling_data.csv")
+```
+
+## Data Manipulation
+
+```{r}
+data.sum <- summaryBy(status ~ population + treatment + day, data = data, FUN = sum)
+
+sub1 <- subset(data.sum, population == 1)
+sub2 <- subset(data.sum, population == 2)
+sub3 <- subset(data.sum, population == 3)
+sub4 <- subset(data.sum, population == 4)
+sub5 <- subset(data.sum, population == 5)
+sub6 <- subset(data.sum, population == 6)
+sub7 <- subset(data.sum, population == 7)
+sub8 <- subset(data.sum, population == 8)
+```
+
+## Plotting Data
+
+```{r}
+par(mfrow = c(4, 2))
+par(oma = c(4, 4, 0, 0))
+par(mar = c(0, 0, 0, 0))
+
+plot(sub1$status.sum, type = "l", col = "blue", xaxt = "n", yaxt = "n", ylim = c(0,6))
+abline(v = 20, lty = 2)
+
+plot(sub2$status.sum,type = "l", col = "blue", xaxt = "n", yaxt = "n", ylim = c(0,6))
+abline(v = 20, lty = 2)
+
+plot(sub3$status.sum,type = "l", col = "blue", xaxt = "n", yaxt = "n", ylim = c(0,6))
+abline(v = 20, lty = 2)
+
+plot(sub4$status.sum,type = "l", col = "blue", xaxt = "n", yaxt = "n", ylim = c(0,6))
+abline(v = 20, lty = 2)
+
+plot(sub5$status.sum, type = "l", col = "red", xaxt = "n", yaxt = "n", ylim = c(0,6))
+abline(v = 20, lty = 2)
+
+plot(sub6$status.sum,type = "l", col = "red", xaxt = "n", yaxt = "n", ylim = c(0,6))
+abline(v = 20, lty = 2)
+
+plot(sub7$status.sum,type = "l", col = "red", xaxt = "n", yaxt = "n", ylim = c(0,6))
+abline(v = 20, lty = 2)
+
+plot(sub8$status.sum,type = "l", col = "red", xaxt = "n", yaxt = "n", ylim = c(0,6))
+abline(v = 20, lty = 2)
+
+mtext(text = "Number of Infecteds", side = 2, line = 2, outer = TRUE)
+mtext(text = "Days", side = 1, line = 2, outer = TRUE)
+```
+
+# Calculating Statistical Metrics
+
+## 15 Day Sliding Window
+
+Devin notes that due to the structure of the empirical data, we can't implement a shorter or longer window.
+
+```{r}
+## Standard deviation
+pop1.sd <- SlidingWindow(FUN = "sd", data = sub1$status.sum, window = 5, step = 1)
+pop2.sd <- SlidingWindow(FUN = "sd", data = sub2$status.sum, window = 5, step = 1)
+pop3.sd <- SlidingWindow(FUN = "sd", data = sub3$status.sum, window = 5, step = 1)
+pop4.sd <- SlidingWindow(FUN = "sd", data = sub4$status.sum, window = 5, step = 1)
+pop5.sd <- SlidingWindow(FUN = "sd", data = sub5$status.sum, window = 5, step = 1)
+pop6.sd <- SlidingWindow(FUN = "sd", data = sub6$status.sum, window = 5, step = 1)
+pop7.sd <- SlidingWindow(FUN = "sd", data = sub7$status.sum, window = 5, step = 1)
+pop8.sd <- SlidingWindow(FUN = "sd", data = sub8$status.sum, window = 5, step = 1)
+
+## Mean
+pop1.mean <- SlidingWindow(FUN = "mean", data = sub1$status.sum, window = 5, step = 1)
+pop2.mean <- SlidingWindow(FUN = "mean", data = sub2$status.sum, window = 5, step = 1)
+pop3.mean <- SlidingWindow(FUN = "mean", data = sub3$status.sum, window = 5, step = 1)
+pop4.mean <- SlidingWindow(FUN = "mean", data = sub4$status.sum, window = 5, step = 1)
+pop5.mean <- SlidingWindow(FUN = "mean", data = sub5$status.sum, window = 5, step = 1)
+pop6.mean <- SlidingWindow(FUN = "mean", data = sub6$status.sum, window = 5, step = 1)
+pop7.mean <- SlidingWindow(FUN = "mean", data = sub7$status.sum, window = 5, step = 1)
+pop8.mean <- SlidingWindow(FUN = "mean", data = sub8$status.sum, window = 5, step = 1)
+
+## Skewness
+pop1.skewness <- SlidingWindow(FUN = "skewness", data = sub1$status.sum, window = 5, step = 1)
+pop2.skewness <- SlidingWindow(FUN = "skewness", data = sub2$status.sum, window = 5, step = 1)
+pop3.skewness <- SlidingWindow(FUN = "skewness", data = sub3$status.sum, window = 5, step = 1)
+pop4.skewness <- SlidingWindow(FUN = "skewness", data = sub4$status.sum, window = 5, step = 1)
+pop5.skewness <- SlidingWindow(FUN = "skewness", data = sub5$status.sum, window = 5, step = 1)
+pop6.skewness <- SlidingWindow(FUN = "skewness", data = sub6$status.sum, window = 5, step = 1)
+pop7.skewness <- SlidingWindow(FUN = "skewness", data = sub7$status.sum, window = 5, step = 1)
+pop8.skewness <- SlidingWindow(FUN = "skewness", data = sub8$status.sum, window = 5, step = 1)
+
+## Kurtosis
+pop1.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub1$status.sum, window = 5, step = 1)
+pop2.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub2$status.sum, window = 5, step = 1)
+pop3.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub3$status.sum, window = 5, step = 1)
+pop4.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub4$status.sum, window = 5, step = 1)
+pop5.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub5$status.sum, window = 5, step = 1)
+pop6.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub6$status.sum, window = 5, step = 1)
+pop7.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub7$status.sum, window = 5, step = 1)
+pop8.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub8$status.sum, window = 5, step = 1)
+```
+
+### Variance
+
+```{r}
+pop1.var <- pop1.sd^2
+pop2.var <- pop2.sd^2
+pop3.var <- pop3.sd^2
+pop4.var <- pop4.sd^2
+pop5.var <- pop5.sd^2
+pop6.var <- pop6.sd^2
+pop7.var <- pop7.sd^2
+pop8.var <- pop8.sd^2
+```
+
+### Coefficient of Variation
+
+We're adding 1e-10 to the mean so we don't divide by 0.
+
+```{r}
+pop1.cv <- pop1.sd/(pop1.mean + 1e-10)
+pop2.cv <- pop2.sd/(pop2.mean + 1e-10)
+pop3.cv <- pop3.sd/(pop3.mean + 1e-10)
+pop4.cv <- pop4.sd/(pop4.mean + 1e-10)
+pop5.cv <- pop5.sd/(pop5.mean + 1e-10)
+pop6.cv <- pop6.sd/(pop6.mean + 1e-10)
+pop7.cv <- pop7.sd/(pop7.mean + 1e-10)
+pop8.cv <- pop8.sd/(pop8.mean + 1e-10)
+```
+
+### Index of Dispersion
+
+```{r}
+pop1.id <- pop1.var/(pop1.mean + 1e-10)
+pop2.id <- pop2.var/(pop2.mean + 1e-10)
+pop3.id <- pop3.var/(pop3.mean + 1e-10)
+pop4.id <- pop4.var/(pop4.mean + 1e-10)
+pop5.id <- pop5.var/(pop5.mean + 1e-10)
+pop6.id <- pop6.var/(pop6.mean + 1e-10)
+pop7.id <- pop7.var/(pop7.mean + 1e-10)
+pop8.id <- pop8.var/(pop8.mean + 1e-10)
+```
+
+### First Difference Variance
+
+```{r}
+pop1.first.diff.variance <- c()
+pop2.first.diff.variance <- c()
+pop3.first.diff.variance <- c()
+pop4.first.diff.variance <- c()
+pop5.first.diff.variance <- c()
+pop6.first.diff.variance <- c()
+pop7.first.diff.variance <- c()
+pop8.first.diff.variance <- c()
+
+for(i in 2:35){
+pop1.first.diff.variance[i - 1] <- pop1.var[i] - pop1.var[i - 1]
+pop2.first.diff.variance[i - 1] <- pop2.var[i] - pop2.var[i - 1]
+pop3.first.diff.variance[i - 1] <- pop3.var[i] - pop3.var[i - 1]
+pop4.first.diff.variance[i - 1] <- pop4.var[i] - pop4.var[i - 1]
+pop5.first.diff.variance[i - 1] <- pop5.var[i] - pop5.var[i - 1]
+pop6.first.diff.variance[i - 1] <- pop6.var[i] - pop6.var[i - 1]
+pop7.first.diff.variance[i - 1] <- pop7.var[i] - pop7.var[i - 1]
+pop8.first.diff.variance[i - 1] <- pop8.var[i] - pop8.var[i - 1]
+}
+```
+
+### Autocorrelation
+
+```{r}
+
+```
+
+### Autocovariance
+
+```{r}
+
+```
+
+### Decay Time
+
+```{r}
+
+```
