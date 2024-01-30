@@ -444,11 +444,22 @@ A plot!
 
 ```{r}
 metrics_full <- c("Mean", "Skewness", "Kurtosis", "Variance", "Covariance", "Index of Dispersion", "First Difference Variance", "Autocorrelation", "Autocovariance", "Decay Time")
+
+## Plot
 plot(1:10, AUC_df$AUC_data, type = "p", 
      main = "Empirical Data, All Populations", xaxt = "none", xlab = "", ylim = c(0.3, 0.7), ylab = "AUC",
      col = "orchid", pch = 19)
 abline(h = 0.5, lty = 3)
 axis(side = 1, at = 1:10, labels = metrics_full, las = 2)
+
+## Saving plot as .png
+png(file = "Plots/AUC_EmpiricalData_AllPopns.png", width = 1500, height = 350)
+plot(1:10, AUC_df$AUC_data, type = "p", 
+     main = "Empirical Data, All Populations", xaxt = "none", xlab = "", ylim = c(0.3, 0.7), ylab = "AUC",
+     col = "orchid", pch = 19)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full)
+dev.off()
 ```
 
 # Excluding Population 5
@@ -534,6 +545,7 @@ AUC_df_without5 <- data.frame(metrics, AUC_data); AUC_df_without5
 A plot!
 
 ```{r}
+## Plots
 plot(1:10, AUC_df_without5$AUC_data, type = "p", 
      main = "Empirical Data, Excluding Population 5", xaxt = "none", xlab = "", ylim = c(0.2, 0.8), ylab = "AUC",
      col = "red3", pch = 19)
@@ -547,7 +559,27 @@ points(1:10, AUC_df_without5$AUC_data, col = "red3", pch = 19)
 abline(h = 0.5, lty = 3)
 axis(side = 1, at = 1:10, labels = metrics_full, las = 2)
 legend("bottomright", legend = c("All Populations", "Excluding Population 5"),
-       col = c("red3", "orchid"), pch = 19)
+       col = c("orchid", "red3"), pch = 19)
+
+## Saving plots as .pngs
+png(file = "Plots/AUC_EmpiricalData_ExcludingPopn5.png", width = 1500, height = 350)
+plot(1:10, AUC_df_without5$AUC_data, type = "p", 
+     main = "Empirical Data, Excluding Population 5", xaxt = "none", xlab = "", ylim = c(0.2, 0.8), ylab = "AUC",
+     col = "red3", pch = 19)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full)
+dev.off()
+
+png(file = "Plots/AUC_EmpiricalData.png", width = 1500, height = 350)
+plot(1:10, AUC_df$AUC_data, type = "p", 
+     main = "Empirical Data", xaxt = "none", xlab = "", ylim = c(0.2, 0.8), ylab = "AUC",
+     col = "orchid", pch = 19)
+points(1:10, AUC_df_without5$AUC_data, col = "red3", pch = 19)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full)
+legend("bottomright", legend = c("All Populations", "Excluding Population 5"),
+       col = c("orchid", "red3"), pch = 19)
+dev.off()
 ```
 
 # Plotting
@@ -557,8 +589,6 @@ legend("bottomright", legend = c("All Populations", "Excluding Population 5"),
 ```{r}
 col.vec <- rep(c("gray0", "gray12", "gray24", "gray36"), 2)
 time.plot <- c(6:20)
-
-quartz()
 
 par(mfrow = c(3, 2))
 par(mar = c(1, 1, 1, 1))
@@ -578,7 +608,7 @@ for(i in 5:8){
   lines(sub$status.sum ~ sub$day, col = alpha(col.vec[i], 0.6), lty = 1,lwd = 3)
 }
 abline(v = c(15, 30, 45, 75, 90, 105), lty = 3)
-abline(v = c(60), col = "yellow2", lty = 3, lwd = 4)
+abline(v = c(60), col = "orchid", lty = 3, lwd = 4)
 text(x = c(7.5, 22.5, 37.5, 52.5, 67.5, 82.5, 97.5, 112.5), y = 5.7, 
      labels = c("10.0C", "10.5C", "11.0C", "11.5C", "12.0C", "12.5C", "13.0C", "13.5C"), cex = 0.75)
 text(5, 5, labels = ("(b)"))
@@ -594,7 +624,7 @@ plot(pop5.mean[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), lwd = 3,type = "
 lines(pop6.mean[1:15] ~ time.plot,col = alpha(col.vec[2], 0.6), lwd = 3, ylim = c(0, 4))
 lines(pop7.mean[1:15] ~ time.plot,col = alpha(col.vec[3], 0.6), lwd = 3, ylim = c(0, 4))
 lines(pop8.mean[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6),lwd = 3, ylim = c(0, 4))
-abline(v = c(20), col = "yellow2",lty = 3, lwd = 4)
+abline(v = c(20), col = "orchid",lty = 3, lwd = 4)
 
 ## VARIANCE ##
 plot(pop1.var[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), lwd = 3,type = "l",ylim = c(0, 2), xlim = c(0, 40))
@@ -607,7 +637,7 @@ plot(pop5.var[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), lwd = 3, type = "
 lines(pop6.var[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 3, ylim = c(0, 4))
 lines(pop7.var[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 3, ylim = c(0, 4))
 lines(pop8.var[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 3, ylim = c(0, 4))
-abline(v = c(60), col = "yellow2",lty = 3, lwd = 4)
+abline(v = c(60), col = "orchid",lty = 3, lwd = 4)
 
 mtext("Day", side = 1, cex = 1, line = 2, outer = TRUE)
 ```
@@ -639,7 +669,7 @@ for(i in 1:1000){
   lines(warming.incidence.daily[ ,i], col = alpha("black", 0.01), lwd = 1)
 }
 lines(warming.sims.mean.incidence, col = "black", lwd = 3)
-abline(v = 60, lty = 2, col = "yellow",  lwd = 2)
+abline(v = 60, lty = 2, col = "orchid",  lwd = 2)
 mtext("Warming", side = 3, cex = 1, line = 1, outer = FALSE)
 text(10, 95, labels = ("b)"))
 
@@ -656,7 +686,7 @@ for(i in 5:8){
   sub <- subset(data.sum, population = i)
   lines(sub$status.sum ~ sub$day, col = alpha(col.vec[i], 0.6), lty = 1, lwd = 1)
 }
-abline(v = c(60), col = "yellow2", lty = 2, lwd = 2)
+abline(v = c(60), col = "orchid", lty = 2, lwd = 2)
 mtext("Warming", side = 3, cex = 1, line = 1, outer = FALSE)
 mtext("Experiment", side = 3, cex = 1, line = 2, outer = TRUE, at = 0.75)
 mtext("Simulations", side = 3, cex = 1, line =2, outer = TRUE, at = 0.25)
@@ -678,7 +708,7 @@ for(i in 1:1000){
   lines(warming.sims.mean.15[ ,i] ~ plot.time, col = alpha("black", 0.05), lwd = 1)
 }
 lines(warming.sims.mean.mean ~ plot.time, col = "black", lwd = 3)
-abline(v = 60, lty = 2, col = "yellow", lwd = 2)
+abline(v = 60, lty = 2, col = "orchid", lwd = 2)
 text(5, 28.5, labels = ("f)"))
 
 plot(pop1.mean[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), xaxt = "n", type = "l", ylim = c(0, 1), xlim = c(0, 40), lwd = 1)
@@ -693,7 +723,7 @@ lines(pop6.mean[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 1, ylim =
 lines(pop7.mean[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 1, ylim = c(0, 4))
 lines(pop8.mean[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 1, ylim = c(0, 4))
 axis(side = 1, at = c(0, 20/3, 40/3, 60/3, 80/3, 100/3, 120/3), labels = c(0, 20, 40, 60, 80, 100, 120))
-abline(v = c(20), col = "yellow2", lty = 2, lwd = 2)
+abline(v = c(20), col = "orchid", lty = 2, lwd = 2)
 text(5, 0.95, labels = ("h)"))
 
 # VARIANCE #
@@ -712,7 +742,7 @@ for(i in 1:1000){
   lines(warming.sims.variance.15[ ,i] ~ plot.time, col = alpha("black", 0.01), lwd = 1)
 }
 lines(warming.sims.mean.variance ~ plot.time, col = "black", lwd = 3)
-abline(v = 60, lty = 2, col = "yellow", lwd = 2)
+abline(v = 60, lty = 2, col = "orchid", lwd = 2)
 text(5, 19, labels = ("j)"))
 
 plot(pop1.var[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), xaxt = "n", lwd = 1, type = "l", ylim = c(0, 1.5), xlim = c(0, 40))
@@ -727,8 +757,189 @@ lines(pop6.var[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 1, ylim = 
 lines(pop7.var[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 1, ylim = c(0, 4))
 lines(pop8.var[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 1, ylim = c(0, 4))
 axis(side = 1, at = c(0, 20/3, 40/3, 60/3, 80/3, 100/3, 120/3), labels = c(0, 20, 40, 60, 80, 100, 120))
-abline(v = c(20), col = "yellow2", lty = 2, lwd = 2)
+abline(v = c(20), col = "orchid", lty = 2, lwd = 2)
 text(5, 1.425, labels = ("l)"))
 
 mtext("Days", side = 1, cex = 1, line = 2, outer = TRUE)
+```
+
+Saving plots:
+
+```{r}
+## Plot 1
+png("Plots/Sim-Emp_Comparison_1.png", width = 1200, height = 800)
+
+col.vec <- rep(c("gray0", "gray12", "gray24", "gray36"), 2)
+time.plot <- c(6:20)
+
+par(mfrow = c(3, 2))
+par(mar = c(1, 1, 1, 1))
+par(oma = c(4, 4, 0, 0))
+
+plot(sub1$status.sum ~ sub1$day, type = "n", ylim = c(0, 6), ylab = NA, xlab = NA, cex.axis = 0.8)
+for(i in 1:4){
+  sub <- subset(data.sum, population == i)
+  lines(sub$status.sum ~ sub$day, col = alpha(col.vec[i], 0.6), lty = 1, lwd = 3)
+}
+text(5, 5.5, labels = ("(a)"))
+mtext("Disease Incidence", side = 2, cex = 1, line = 3, outer = FALSE)
+
+plot(sub5$status.sum ~ sub5$day, type = "n", ylim = c(0,6), ylab = NA, xlab = NA, cex.axis = 0.8)
+for(i in 5:8){
+  sub <- subset(data.sum, population == i)
+  lines(sub$status.sum ~ sub$day, col = alpha(col.vec[i], 0.6), lty = 1,lwd = 3)
+}
+abline(v = c(15, 30, 45, 75, 90, 105), lty = 3)
+abline(v = c(60), col = "orchid", lty = 3, lwd = 4)
+text(x = c(7.5, 22.5, 37.5, 52.5, 67.5, 82.5, 97.5, 112.5), y = 5.7, 
+     labels = c("10.0C", "10.5C", "11.0C", "11.5C", "12.0C", "12.5C", "13.0C", "13.5C"), cex = 0.75)
+text(5, 5, labels = ("(b)"))
+
+# MEAN #
+plot(pop1.mean[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), type = "l", ylim = c(0, 1.5), xlim = c(0, 40), lwd = 3)
+lines(pop2.mean[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 3, ylim = c(0, 4))
+lines(pop3.mean[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 3,ylim = c(0, 4))
+lines(pop4.mean[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 3,ylim = c(0, 4))
+mtext("Mean", side = 2, cex = 1, line = 3, outer = FALSE)
+
+plot(pop5.mean[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), lwd = 3,type = "l", ylim = c(0, 1.5), xlim = c(0, 40))
+lines(pop6.mean[1:15] ~ time.plot,col = alpha(col.vec[2], 0.6), lwd = 3, ylim = c(0, 4))
+lines(pop7.mean[1:15] ~ time.plot,col = alpha(col.vec[3], 0.6), lwd = 3, ylim = c(0, 4))
+lines(pop8.mean[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6),lwd = 3, ylim = c(0, 4))
+abline(v = c(20), col = "orchid",lty = 3, lwd = 4)
+
+## VARIANCE ##
+plot(pop1.var[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), lwd = 3,type = "l",ylim = c(0, 2), xlim = c(0, 40))
+lines(pop2.var[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 3, ylim = c(0, 4))
+lines(pop3.var[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 3, ylim = c(0, 4))
+lines(pop4.var[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 3, ylim = c(0, 4))
+mtext("Variance", side = 2, cex = 1, line = 3, outer = FALSE)
+
+plot(pop5.var[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), lwd = 3, type = "l", ylim = c(0, 2), xlim = c(0, 40))
+lines(pop6.var[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 3, ylim = c(0, 4))
+lines(pop7.var[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 3, ylim = c(0, 4))
+lines(pop8.var[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 3, ylim = c(0, 4))
+abline(v = c(60), col = "orchid",lty = 3, lwd = 4)
+
+mtext("Day", side = 1, cex = 1, line = 2, outer = TRUE)
+
+dev.off()
+
+## Plot 2
+png("Plots/Sim-Emp_Comparison_2.png", width = 1200, height = 800)
+
+par(mfrow = c(3, 4))
+par(mar = c(1, 1, 1, 1))
+par(oma = c(4, 4, 4, 0))
+
+plot(constant.incidence.daily[, 1] ~ c(1:120),  type = "n", ylim = c(0, 100), xlim = c(0, 120), 
+     xlab = "Time", ylab = "Disease Incidence", cex.lab = 1.5 , lwd = 3)
+for(i in 1:1000){
+  lines(constant.incidence.daily[ ,i] ~ c(1:120), col = alpha("black", 0.01), lwd = 1)
+}
+lines(constant.sims.mean.incidence, col = "black", lwd = 3)
+mtext("Disease Incidence", side = 2, cex = 1, line = 3, outer = FALSE)
+mtext("Constant", side = 3, cex = 1, line = 1, outer = FALSE)
+text(10, 95, labels = ("a)"))
+
+plot(warming.incidence.daily[, 1], col = "black", type = "n", ylim = c(0, 100), xlim = c(0, 120), 
+     xlab = "Time", ylab = NA, cex.lab = 1.5)
+for(i in 1:1000){
+  lines(warming.incidence.daily[ ,i], col = alpha("black", 0.01), lwd = 1)
+}
+lines(warming.sims.mean.incidence, col = "black", lwd = 3)
+abline(v = 60, lty = 2, col = "orchid",  lwd = 2)
+mtext("Warming", side = 3, cex = 1, line = 1, outer = FALSE)
+text(10, 95, labels = ("b)"))
+
+plot(sub1$status.sum ~ sub1$day, type = "n", ylim = c(0, 6), ylab = NA, xlab = NA)
+for(i in 1:4){
+  sub <- subset(data.sum, population = i)
+  lines(sub$status.sum ~ sub$day, col = alpha(col.vec[i], 0.6), lty = 1, lwd = 1)
+}
+mtext("Constant", side = 3, cex = 1 , line = 1, outer = FALSE)
+text(5, 5.7,labels = ("c)"))
+
+plot(sub5$status.sum ~ sub5$day, type = "n", ylim = c(0, 6), ylab = NA, xlab = NA)
+for(i in 5:8){
+  sub <- subset(data.sum, population = i)
+  lines(sub$status.sum ~ sub$day, col = alpha(col.vec[i], 0.6), lty = 1, lwd = 1)
+}
+abline(v = c(60), col = "orchid", lty = 2, lwd = 2)
+mtext("Warming", side = 3, cex = 1, line = 1, outer = FALSE)
+mtext("Experiment", side = 3, cex = 1, line = 2, outer = TRUE, at = 0.75)
+mtext("Simulations", side = 3, cex = 1, line =2, outer = TRUE, at = 0.25)
+text(5, 5.7, labels = ("d)"))
+
+# MEAN #
+plot(constant.sims.mean.15[ ,1] ~ plot.time, col = "black", type = "n", ylim = c(0, 30), xlim = c(0, 120), 
+     xlab = "Time", ylab = "Mean", cex.lab = 1.5)
+for(i in 1:1000){
+  lines(constant.sims.mean.15[ ,i] ~ plot.time, col = alpha("black", 0.05), lwd = 1)
+}
+lines(constant.sims.mean.mean ~ plot.time, col = "black", lwd = 3)
+mtext("Mean", side = 2, cex = 1, line = 3, outer = FALSE)
+text(5, 28.5, labels = ("e)"))
+
+plot(warming.sims.mean.15[ ,1] ~ plot.time, col = "black", type = "n", ylim = c(0, 30), xlim = c(0, 120), 
+     xlab = "Time", ylab = NA, cex.lab = 1.5)
+for(i in 1:1000){
+  lines(warming.sims.mean.15[ ,i] ~ plot.time, col = alpha("black", 0.05), lwd = 1)
+}
+lines(warming.sims.mean.mean ~ plot.time, col = "black", lwd = 3)
+abline(v = 60, lty = 2, col = "orchid", lwd = 2)
+text(5, 28.5, labels = ("f)"))
+
+plot(pop1.mean[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), xaxt = "n", type = "l", ylim = c(0, 1), xlim = c(0, 40), lwd = 1)
+lines(pop2.mean[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 1 , ylim = c(0, 4))
+lines(pop3.mean[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 1, ylim = c(0, 4))
+lines(pop4.mean[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 1, ylim = c(0, 4))
+axis(side = 1, at = c(0, 20/3, 40/3, 60/3, 80/3, 100/3, 120/3), labels = c(0, 20, 40, 60, 80, 100, 120))
+text(5, 0.95, labels = ("g)"))
+
+plot(pop5.mean[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), xaxt = "n", lwd = 1, type = "l", ylim = c(0, 1), xlim = c(0, 40))
+lines(pop6.mean[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 1, ylim = c(0, 4))
+lines(pop7.mean[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 1, ylim = c(0, 4))
+lines(pop8.mean[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 1, ylim = c(0, 4))
+axis(side = 1, at = c(0, 20/3, 40/3, 60/3, 80/3, 100/3, 120/3), labels = c(0, 20, 40, 60, 80, 100, 120))
+abline(v = c(20), col = "orchid", lty = 2, lwd = 2)
+text(5, 0.95, labels = ("h)"))
+
+# VARIANCE #
+plot(constant.sims.variance.15[ ,1] ~ plot.time, col = "black", type = "n", ylim = c(0, 20), xlim = c(0, 120), 
+     xlab = "Time", ylab = "Variance", cex.lab = 1.5)
+for(i in 1:1000){
+  lines(constant.sims.variance.15[ ,i] ~ plot.time, col = alpha("black", 0.01), lwd = 1)
+}
+lines(constant.sims.mean.variance ~ plot.time, col = "black", lwd = 3)
+mtext("Variance", side = 2, cex = 1, line = 3, outer = FALSE)
+text(5, 19, labels = ("i)"))
+
+plot(warming.sims.variance.15[ ,1] ~ plot.time, col = "black", type = "n", ylim = c(0, 20), xlim = c(0, 120), 
+     xlab = "Time", ylab = NA, cex.lab = 1.5)
+for(i in 1:1000){
+  lines(warming.sims.variance.15[ ,i] ~ plot.time, col = alpha("black", 0.01), lwd = 1)
+}
+lines(warming.sims.mean.variance ~ plot.time, col = "black", lwd = 3)
+abline(v = 60, lty = 2, col = "orchid", lwd = 2)
+text(5, 19, labels = ("j)"))
+
+plot(pop1.var[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), xaxt = "n", lwd = 1, type = "l", ylim = c(0, 1.5), xlim = c(0, 40))
+lines(pop2.var[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 1, ylim = c(0, 4))
+lines(pop3.var[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 1, ylim = c(0, 4))
+lines(pop4.var[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 1, ylim = c(0, 4))
+axis(side = 1, at = c(0, 20/3, 40/3, 60/3, 80/3, 100/3, 120/3),  labels = c(0, 20, 40, 60, 80, 100, 120))
+text(5, 1.425, labels = ("k)"))
+
+plot(pop5.var[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), xaxt = "n", lwd = 1, type = "l", ylim = c(0, 1.5), xlim = c(0, 40))
+lines(pop6.var[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 1, ylim = c(0, 4))
+lines(pop7.var[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 1, ylim = c(0, 4))
+lines(pop8.var[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 1, ylim = c(0, 4))
+axis(side = 1, at = c(0, 20/3, 40/3, 60/3, 80/3, 100/3, 120/3), labels = c(0, 20, 40, 60, 80, 100, 120))
+abline(v = c(20), col = "orchid", lty = 2, lwd = 2)
+text(5, 1.425, labels = ("l)"))
+
+mtext("Days", side = 1, cex = 1, line = 2, outer = TRUE)
+
+dev.off()
 ```

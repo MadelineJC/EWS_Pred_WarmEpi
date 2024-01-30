@@ -1584,6 +1584,8 @@ Let's make a quick plot:
 
 ```{r}
 metrics_full <- c("Mean", "Skewness", "Kurtosis", "Variance", "Covariance", "Index of Dispersion", "First Difference Variance", "Autocorrelation", "Autocovariance", "Decay Time")
+
+## Plot 
 plot(1:10, AUC_df$AUC_5, type = "p", 
      main = "Simulated Data", xaxt = "none", xlab = "", ylim = c(0.3, 0.7), ylab = "AUC",
      col = "forestgreen", pch = 19)
@@ -1591,4 +1593,21 @@ points(1:10, AUC_df$AUC_15, col = "orchid", pch = 19)
 points(1:10, AUC_df$AUC_30, col = "#4B0082", pch = 19)
 abline(h = 0.5, lty = 3)
 axis(side = 1, at = 1:10, labels = metrics_full, las = 2)
+legend("bottomright", 
+       legend = c("Sliding Window = 5 Days", "Sliding Window = 15 Days", "Sliding Window = 30 Days"),
+       col = c("forestgreen", "orchid", "#4B0082"), pch = 19)
+
+## Saving plot as .png
+png(file = "Plots/AUC_SimulatedData.png", width = 1500, height = 350)
+plot(1:10, AUC_df$AUC_5, type = "p", 
+     main = "Simulated Data", xaxt = "none", xlab = "", ylim = c(0.3, 0.7), ylab = "AUC",
+     col = "forestgreen", pch = 19)
+points(1:10, AUC_df$AUC_15, col = "orchid", pch = 19)
+points(1:10, AUC_df$AUC_30, col = "#4B0082", pch = 19)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full)
+legend("bottomright", 
+       legend = c("Sliding Window = 5 Days", "Sliding Window = 15 Days", "Sliding Window = 30 Days"),
+       col = c("forestgreen", "orchid", "#4B0082"), pch = 19)
+dev.off()
 ```
