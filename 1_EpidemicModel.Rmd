@@ -93,6 +93,254 @@ k <- 8.62*10^(-5)
 
 # Assumptions
 
+1.  Within-host parasite abundance as a function of equilibrium abundance:
+
+```{r}
+abundance.prop <- 0.182
+```
+
+2.  How long clusters take to burst:
+
+```{r}
+burst.time <- 7
+```
+
+3.  Spores per cluster:
+
+```{r}
+spores.per.cluster <- 24
+```
+
+4.  How many spores are released into the environment from each burst:
+
+```{r}
+burst.size <- 0.5
+```
+
+5.  Daphnia size and mass:
+
+```{r}
+size <- 2700
+mass <- (0.009*(size*0.001)^2.63)*0.001
+```
+
+# Temperature-Dependent Parameters
+
+Note: In this loop, `sigma` is the infection rate; we'll calculate infection probability in the next step.
+
 ```{r}
 
+for(t in seq(temp) ){
+  chi[t] <- ((((chi0*(mass^cs)*exp((-E_chi/k)*(1/temp[t] - 1/T0_chi))/(1 + exp(E_chiH/k*(-1/temp[t] + 1/T_chiH)))))/3.5E7)*1440) # Values at the end are to standardize to the volume and time of the experiment
+  
+  mu[t] <- mu0*exp((-E_mu/k)*(1/temp[t] - 1/T0_mu))*(1 + exp(E_muL/k*(1/temp[t] - 1/T_muL)) + exp(E_muH/k*(-1/temp[t] + 1/T_muH)))
+  
+  beta[t] <- beta0*exp((-E_beta/k)*((1/temp[t]) - (1/T0_beta)))*((1 + exp((E_betaH/k)*((-1/temp[t]) + (1/T_betaH))))^(-1))
+  
+  sigma[t] <- sigma0*(mass^is)*exp((-E_sigma/k)*(1/temp[t] - 1/T0_sigma))*(1 + exp(E_sigmaL/k*(1/temp[t] - 1/T_sigmaL)) + exp(E_sigmaH/k*(-1/temp[t] + 1/T_sigmaH)))^(-1) 
+  
+  equil.abundance[t] <-  omega0*exp((-E_omega/k)*(1/temp[t] - 1/T0_omega))*(1 + exp(E_omegaL/k*(1/temp[t] - 1/T_omegaL)) + exp(E_omegaH/k*(-1/temp[t] + 1/T_omegaH)))^(-1)
+  
+  omega[t] <- (equil.abundance[t]*abundance.prop)*spores.per.cluster
+  
+  alpha[t] <- (equil.abundance[t]*abundance.prop)*5.12E-6; # Parasite intensity multiplied by per parasite virulence
+  
+  lambda[t] <- (equil.abundance[t]*abundance.prop)*(spores.per.cluster*burst.size)/burst.time
+}
+```
+
+## Calculating Infection Probability
+
+To calculate infection probability, we need to calculate contact in microliters per minute, to calculate gut residence time.
+
+```{r}
+# Contact here is in microliters per minute
+standardized.contact <- c()
+for(i in 1:length(temp)){
+  standardized.contact[i] <- ((chi0*(mass^cs)*exp((-E_chi/k)*(1/temp[i] - 1/T0_chi))/(1 + exp(E_chiH/k*(-1/temp[i] + 1/T_chiH)))))
+}
+```
+
+Next, calculate ingestion rate (cells/hour), and we have 10 algal cells per microliter:
+
+```{r}
+ing.cells.rate <- ((standardized.contact)*10)*60
+```
+
+From Kooijman 1993 and Evers and Kooijman: $gut.res.time = \frac{gv * length^3}{ing.cells.rate}$, in hours. Note that the concentration of algae here was much lower than in Kirk et al. (2019). Therefore, ingestion of cells is lower and gut residence time is longer.
+
+```{r}
+gut.res.time <- (9900*((size/1000)^3))/ing.cells.rate; head(gut.res.time)
+```
+
+And finally, let's calculate the probability of infection:
+
+```{r}
+sigma.prob <- 1 - exp(-sigma*gut.res.time); head(sigma.prob)
+```
+
+# Temperature-Independent Parameters
+
+```{r}
+# Add in temperature independent parameters, and then subset continuous temperature functions from above for our 8 temperatures from 10 - 13.5 
+
+# Input from stocks
+inputS <- 3 + 0.5350318
+inputI <- 0.4649682
+
+# Max recruitment rate
+recruit <- 1.33
+
+# Carrying capacity
+kappa <- 170
+
+# Harvesting rate
+h <- 0.0235
+
+# Degradation rate of dead infecteds 
+theta <- 0.1
+  
+# Environmental parasite mortality rate (induced via changing the medium)
+gamma <- 0.02857143
+```
+
+# Calculating Average Lifespan and Mortality Rate
+
+In Kirk et al. (2018), mortality rate was defined by a Weibull survival model. Here, we use a constant hazard rate (i.e., exponential survival distribution) instead.
+
+To translate between the two, we will simulate survival using `mu` (mortality scale parameter) and `beta` (mortality shape parameter), for each temperature. We can then calculate average lifespan and mortality rate.
+
+```{r}
+hazard <- matrix(nrow = 4001, ncol = 2)
+hazard[, 1] <- temp
+
+for(i in c(1:4001)){
+  mu.sim <- mu[i]
+  beta.sim <- beta[i]
+  
+  U <- 1; # Starting conditions
+  N0 <- c(U)
+  
+  TT <- seq(0.1, 400, 0.1) #Set amount of time steps to run in simulation
+  step <- 0.1
+  
+  parms <- c(beta.sim, mu.sim)
+  
+  survival <- function(t,y,p){
+    beta <- p[1]; mu <- p[2];
+    U <- y[1];
+    
+    dU <- -beta*mu^(beta)*(t^(beta - 1))*U
+    
+    list(c(dU))
+  }
+  
+  # Run lsoda	
+  predictions <- lsoda(N0, TT, survival, parms)	
+  hazard[i, 2] <- 1/predictions[which(predictions[, 2] <= 0.5)[[1]], 1]
+  
+}
+
+# Set mu.t to be equal to the hazard, which is now mu for an exponential survival distribution
+mu.t <- hazard[,2]
+```
+
+# Plotting
+
+## Temperature-Dependent Parameters
+
+As used in R~0~ calculation.
+
+```{r}
+# Plot
+par(mfrow = c(2, 2))
+par(mar = c(1, 5, 1, 1))
+par(oma = c(4, 0, 0, 0))
+
+ats <- c(0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000); labels <- c(0, 5, 10, 15, 20, 25, 30, 35, 40)
+
+plot(mu.t, type = "l", lwd = 3, ylim = c(0,0.5), xlab = NA, xaxt = "n", ylab = "Mortality Rate (1/day)", cex.lab = 1)
+axis(side = 1, at = ats, labels = labels, tick = TRUE)
+
+plot(chi, type = "l", lwd = 3, xlab = NA,xaxt = "n",ylab = "Contact Rate (1/day)",cex.lab = 1)
+axis(side = 1, at = ats, labels = labels, tick = TRUE)
+
+plot(sigma.prob, type = "l", lwd = 3, xaxt = "n",ylab = "Probability of Infection",cex.lab = 1)
+axis(side = 1, at = ats, labels = labels, tick = TRUE)
+
+plot(equil.abundance*abundance.prop, xaxt = "n", type = "l", lwd = 3, ylab = "Within-Host Infection Intensity", cex.lab = 1)
+axis(side = 1, at = ats, labels = labels, tick = TRUE)
+mtext(expression(paste('Temperature ('~degree~'C)')), side = 1, cex = 1.5, line = 3, outer = TRUE)
+
+# Save plot as .png
+png("Plots/TempDepParms.png", width = 800, height = 600)
+par(mfrow = c(2, 2))
+par(mar = c(1, 5, 1, 1))
+par(oma = c(4, 0, 0, 0))
+plot(mu.t, type = "l", lwd = 3, ylim = c(0,0.5), xlab = NA, xaxt = "n", ylab = "Mortality Rate (1/day)", cex.lab = 1)
+axis(side = 1, at = ats, labels = labels, tick = TRUE)
+plot(chi, type = "l", lwd = 3, xlab = NA,xaxt = "n",ylab = "Contact Rate (1/day)",cex.lab = 1)
+axis(side = 1, at = ats, labels = labels, tick = TRUE)
+plot(sigma.prob, type = "l", lwd = 3, xaxt = "n",ylab = "Probability of Infection",cex.lab = 1)
+axis(side = 1, at = ats, labels = labels, tick = TRUE)
+plot(equil.abundance*abundance.prop, xaxt = "n", type = "l", lwd = 3, ylab = "Within-Host Infection Intensity", cex.lab = 1)
+axis(side = 1, at = ats, labels = labels, tick = TRUE)
+mtext(expression(paste('Temperature ('~degree~'C)')), side = 1, cex = 1.5, line = 3, outer = TRUE)
+dev.off()
+```
+
+## R~0~ Across Temperatures at Experimental Host Density
+
+At experimental host density (170 hosts):
+
+```{r}
+# Plot
+R0 <- c()
+for(t in 1:length(temp)){  
+  R0[t] <- (((lambda[t]/(mu.t[t] + alpha[t]+h)) + (omega[t]*((mu.t[t]+alpha[t])/(mu.t[t] + alpha[t]+h)))) * (chi[t]*sigma.prob[t]*170/gamma))
+}
+
+# This crosses R0 = 1 at 11.97 degrees C #
+par(mfrow = c(1, 1))
+plot(R0 ~ c(temp - 273.15), type = "l", lwd = 3, ylab = "R0", xlab = "Temperature (C)")
+abline(h = 1, col = "red3", lty = 2) # Red dashed line shows R0 = 1 
+
+# Save plot as .png
+png("Plots/R0_ExpHostDens.png", width = 800, height = 600)
+par(mfrow = c(1, 1))
+plot(R0 ~ c(temp - 273.15), type = "l", lwd = 3, ylab = "R0", xlab = "Temperature (C)")
+abline(h = 1, col = "red3", lty = 2) # Red dashed line shows R0 = 1 
+dev.off()
+```
+
+## R~0~ Across Temperatures and Host Densities
+
+We can also calculate R~0~ at different temperatures and host densities:
+
+```{r}
+# Plot
+R0.matrix.thin <- matrix(nrow = 2501, ncol = 201) # Look across 25 degrees and 0-200 hosts
+
+for(t in 501:3001){  
+  for(i in 1:201){
+    density <- seq(0,200,1)[i]
+    R0.matrix.thin[t - 500,i] <- (((lambda[t]/(mu.t[t] + alpha[t] + h)) + (omega[t]*((mu.t[t] + alpha[t])/(mu.t[t] + alpha[t] + h)))) * (chi[t]*sigma.prob[t]*density/gamma))
+  }
+}
+
+temp.thin <- temp[501:3001]
+temps.thin <- temp.thin - 273.15
+density <- seq(0, 200, 1)
+mycols <- c("cornflowerblue", "forestgreen", "goldenrod1" ,"orange1", "red3")
+
+filled.contour(x = temps.thin, y = density, z = R0.matrix.thin, 
+               xlab = "Temperature", ylab = "Density of Susceptible, Large Adult Females", main = "R0", 
+               levels = c(0, 1, 6, 11, 16, 21), col = mycols)
+
+# Save plot as .png
+png("Plots/R0_VarHostDens.png", width = 800, height = 600)
+filled.contour(x = temps.thin, y = density, z = R0.matrix.thin, 
+               xlab = "Temperature", ylab = "Density of Susceptible, Large Adult Females", main = "R0", 
+               levels = c(0, 1, 6, 11, 16, 21), col = mycols)
+dev.off()
 ```
