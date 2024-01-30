@@ -1,0 +1,98 @@
+# Simulating an Epidemic (Deterministic)
+
+This script states the MTE functions and underlying assumptions for the temperature-(in)dependent model parameters.
+
+We then show how these parameters are used in the R~0~ calculation for the *Daphnia magna*-*Ordospora colligata* experimental system detailed in Kirk et al. (2020, *Proc. B*).
+
+Instead of calculating R~0~, the parameters could also be used in one's preferred simulator to simulate dynamics deterministically or stochastically.
+
+## Required Packages
+
+```{r}
+library(deSolve)
+library(FME)
+library(plotly)
+```
+
+# Set-Up Objects
+
+```{r}
+minTemp <- 273.15  # The minimum temperature 
+maxTemp <- 313.15  # The maximum temperature
+resol <- 0.01  # Resolution
+temp <- seq(from = minTemp, to = maxTemp, by = resol)
+
+# Initialize vectors for each of the parameters
+mu <- vector(mode = "numeric", length(temp)) # Natural mortality rate in Weibull survival
+beta <- vector(mode = "numeric", length(temp)) # Ageing rate in Weibull survival
+alpha <- vector(mode = "numeric", length(temp)) # Per-parasite virulence
+chi <- vector(mode = "numeric", length(temp)) # Contact rate
+lambda <- vector(mode = "numeric", length(temp)) # Shedding rate
+sigma <- vector(mode = "numeric", length(temp)) # Probability of infection
+theta <- vector(mode = "numeric", length(temp)) # Degradation rate
+omega <- vector(mode = "numeric", length(temp)) # Shedding rate after death
+equil.abundance<- vector(mode = "numeric", length(temp)) 
+```
+
+# Defining MTE Parameters
+
+When parameterizing, Kirk et al. (2018) used 15C as the reference T~0~; Kirk et al. (2019) used 20C as reference T~0~.
+
+```{r}
+# Normalization constant (i.e.. value at reference temperature)
+chi0 <- 1.304617e+02
+sigma0 <- 5.684252e-09
+omega0 <- 131
+beta0 <- 2.281060732
+mu0 <- 0.007507025     
+
+# Activation energy 
+E_chi <- 2.90155e-01
+E_sigma <- 1.106441
+E_omega <- -0.295
+E_beta <- 0.390532437
+E_mu <- 0.801482243   
+
+# Inactivation energy at lower threshold  
+E_sigmaL <- 6.766889 
+E_omegaL <- 357
+E_muL <- E_mu*5  
+
+# Inactivation energy at upper threshold 
+E_chiH <- 4.129647
+E_sigmaH <- 5.66131
+E_omegaH <- 6.32
+E_betaH <- 1.472373114
+E_muH <- 4.239515185     
+
+# Reference temperatures (taken as 20C for contact and infection, 15C for mu, beta, and omega)
+T0_chi <- 293.15
+T0_sigma <- 293.15
+T0_omega <- 288.15
+T0_beta <- 288.15 
+T0_mu <- 288.15    
+
+# Lower thresholds 
+T_sigmaL <- 273.15 + 1.414539e+01
+T_omegaL<- 273.15 + 9.9 
+T_muL <- 8.957624193 + 273.15 
+# Upper thresholds  
+T_chiH <- 273.15 + 3.513025e+01
+T_sigmaH <- 273.15 + 2.343956e+01
+T_omegaH <- 273.15 + 23.9
+T_betaH <- 28.8419577 + 273.15
+T_muH <- 30.23264714 + 273.15   
+
+# Allometric scaling values for contact rate and infection rate (all other parameters don't use body size here)
+cs <- 2.574784e-01
+is <- -1.181799 
+
+# Boltzmann's constant
+k <- 8.62*10^(-5) 
+```
+
+# Assumptions
+
+```{r}
+
+```
