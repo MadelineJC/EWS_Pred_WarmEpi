@@ -2,7 +2,7 @@
 
 ## Required Packages
 
-```{r}
+```{r, echo = FALSE}
 require(scales)
 require(evobiR)
 require(gdata)

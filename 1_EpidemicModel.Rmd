@@ -129,7 +129,6 @@ mass <- (0.009*(size*0.001)^2.63)*0.001
 Note: In this loop, `sigma` is the infection rate; we'll calculate infection probability in the next step.
 
 ```{r}
-
 for(t in seq(temp) ){
   chi[t] <- ((((chi0*(mass^cs)*exp((-E_chi/k)*(1/temp[t] - 1/T0_chi))/(1 + exp(E_chiH/k*(-1/temp[t] + 1/T_chiH)))))/3.5E7)*1440) # Values at the end are to standardize to the volume and time of the experiment
   
@@ -154,7 +153,6 @@ for(t in seq(temp) ){
 To calculate infection probability, we need to calculate contact in microliters per minute, to calculate gut residence time.
 
 ```{r}
-# Contact here is in microliters per minute
 standardized.contact <- c()
 for(i in 1:length(temp)){
   standardized.contact[i] <- ((chi0*(mass^cs)*exp((-E_chi/k)*(1/temp[i] - 1/T0_chi))/(1 + exp(E_chiH/k*(-1/temp[i] + 1/T_chiH)))))
@@ -188,7 +186,7 @@ sigma.prob <- 1 - exp(-sigma*gut.res.time); head(sigma.prob)
 inputS <- 3 + 0.5350318
 inputI <- 0.4649682
 
-# Max recruitment rate
+# Maximum recruitment rate
 recruit <- 1.33
 
 # Carrying capacity
@@ -226,7 +224,7 @@ for(i in c(1:4001)){
   
   parms <- c(beta.sim, mu.sim)
   
-  survival <- function(t,y,p){
+  survival <- function(t, y, p){
     beta <- p[1]; mu <- p[2];
     U <- y[1];
     
@@ -234,11 +232,9 @@ for(i in c(1:4001)){
     
     list(c(dU))
   }
-  
   # Run lsoda	
   predictions <- lsoda(N0, TT, survival, parms)	
   hazard[i, 2] <- 1/predictions[which(predictions[, 2] <= 0.5)[[1]], 1]
-  
 }
 
 # Set mu.t to be equal to the hazard, which is now mu for an exponential survival distribution
