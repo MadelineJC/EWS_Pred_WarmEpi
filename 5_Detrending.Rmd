@@ -1,0 +1,5 @@
+# Detrending Data
+
+Lots of people detrend simulated and empirical data before looking for EWS to remove long-term trends unrelated to the system's response to perturbation.
+
+As a quick summary, here a few works that have discussed/performed pre-processing data by detrending:
