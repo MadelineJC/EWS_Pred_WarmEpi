@@ -2,4 +2,262 @@
 
 Lots of people detrend simulated and empirical data before looking for EWS to remove long-term trends unrelated to the system's response to perturbation.
 
+# From the Literature
+
 As a quick summary, here a few works that have discussed/performed pre-processing data by detrending:
+
+## Dakos et al. 2008
+
+-   They subtracted a **Gaussian kernel smoothing function** from the data and used the remaining residuals for the estimation of the autoregressive coefficient at lag 1
+
+## Lenton 2011
+
+-   Used detrended fluctuation analysis (DFA) to identify correlations over long time scales
+
+-   Used **Gaussian filtering** to detrend the data
+
+-   Warns that when using Gaussian filtering, filtering bandwidth and sliding-window length should be carefully chosen to remove any long-term trends whilst retaining the fluctuations pertinent to diagnosing slowing down
+
+## Dakos et al. 2012
+
+-   For all metrics that were estimated within rolling windows, they removed trends or filtered out high frequencies using **Gaussian smoothing** (autocorrelation, variance, skewness), **simple linear detrending** (DFA), or by **fitting linear autoregressive models** (conditional heteroskedasticity)
+-   When applying these or any other type of detrending or filtering (i.e. **first-differences, removing running means, loess smoothing**), care should be taken to not over-fit or filter out the slow dynamics (of interest) from the dataset
+-   Alternatively, one could also detrend within the rolling windows rather than the entire dataset
+
+## O'Regan and Drake 2013
+
+-   Used **Van Kampen detrending** and **Gaussian filtering**
+
+-   They found no qualitative difference, but did find that Van Kampen detrending made it easier to detect EWS
+
+## Gsell et al. 2016
+
+-   Used a **Gaussian smoother**
+
+## Miller et al. 2017
+
+-   "For our model, estimating and removing a periodic trend prior to EWS analysis did not improve prediction uniformly among statistics. This was not entirely surprising because the **seasonal signal was not apparent in many time series... Therefore, periodic detrending and differencing introduced artificial patterns in the time series.**"
+
+## Pananos et al. 2017
+
+-   They smoothed the time series for both the stochastic model and the empirical data using a **Nadarya Watson estimator with Gaussian kernel at a bandwidth of 10%, selected based on Silverman's rule of thumb, and then subtracted the smoothed time series from the raw time series to generate a detrended (residual) time series.**
+
+## Dessavre et al. 2019
+
+-   Compares methods, mainly focusing on **simulation detrending (over multiple realisations of the process) and windowed detrending (applied to empirical data)**
+
+-   Also mentions: **Gaussian detrending, windowed linear regression, windowed quadratic regression, and wavelets**
+
+-   They propose a **spatial detrending approach** that could me applied to meta-population data
+
+    -   This approach removes the mean over multiple populations to obtain the fluctuations, and unlike Gaussian detrending, does not require any hyperparamaters to be inputted; however, it does **assume spatial ergodicity**, i.e. all subpopulations are similar
+
+## Harris et al. 2020
+
+-   Used a **Gaussian kernel**
+
+## Bury et al. 2021
+
+-   Data were detrended using **Lowess smoothing** with a span of 0.2 and degree 1
+
+-   They used the same data preprocessing as Dakos et al. 2012, which involved using **linear interpolation to make the data equidistant**, and **detrending with a Gaussian kernel smoothing function**. Bandwidth of the kernel was specified for each time series to remove long-term trends while not overfitting
+
+## Southall et al. 2021
+
+-   "In simulation studies, [detrending] can be done by removing the average over replicate realizations, and it has been shown that stochastic simulations produced using the Gillespie algorithm match the theoretical predictions of EWSs"
+
+-   "In practice, without the availability of true replicates, **Gaussian detrending** is often implemented. **Gaussian detrending is a moving average technique, which removes a weighted mean over a selected window size, where the weights are taken from a Gaussian kernel with a user-inputted standard deviation.**"
+
+## Dablander et al. 2022
+
+-   Used R package, *spaero*, which detrends with a **Gaussian kernel**
+
+## Delecroix et al. 2022 (medrxiv)
+
+-   Essentially cites Miller et al. 2017 and Dessavre et al. 2019 to say that **detrending is very important when dynamics are subject to seasonal forcing**
+
+## Summary:
+
+-   Gaussian smoothing/filtering/detrending seems to be the most popular approach
+
+-   However, per Southall et al. 2021: "This method not only **requires the user to select a suitable choice of window size and standard deviation**, but also **makes the assumption that the data are ergodic**. This raises a key challenge with this technique, as **ergodicity only holds for stationary time series; however, these methods will be implemented on data that are believed to be approaching a critical transition**. For this reason, the choice of the window size and the speed a disease is approaching a critical transition are interlinked when deciding if the assumptions of Gaussian detrending are appropriate."
+
+    -   Ergodicity: a stochastic process is said to be in an ergodic regime if an observable's ensemble average equals the time average. In this regime, **any collection of random samples from a process must represent the average statistical properties of the entire regime**.
+
+-   How to actually do it:
+
+    -   May find more specific methods in Dakos et al. 2012, Pananos et al. 2017
+
+    -   Could also take a look at the meta-population approach in Dessavre et al. 2019...
+
+    -   From [Towards Data Science](https://towardsdatascience.com/gaussian-smoothing-in-time-series-data-c6801f8a4dc3):
+
+        -   Kernels define the shape of the function used to take the average of the neighboring points. The Gaussian kernel has the shape of the Gaussian curve. As seen in the Gaussian curve, the near points (around 0 in the above curve) will be weighted higher and the farther points will be weighted lower.
+
+        -   Expression for the Gaussian kernel: $K(x^*,x_i)=exp(-\frac{(x^*-x_i)^2}{2b^2})$, where $b$ defines the width of the kernel (or, more simply, the number of data points included in the window; as such, smaller widths risk maintining the noise, and larger widths risk removing the signal)
+
+        -   For doing the smoothing, we proceed data point by point. For each point, we calculate the kernel function values and calculate the weighted average of data points weighted by kernel function values.
+
+        -   We standardize the kernel values so that we do not scale up the new number of cases. We do it by dividing the Gaussian kernel values by sum of all the Gaussian kernel values. Then, we do element-wise multiplication of *new cases* column with *Gaussian kernel values* column and sum them to get the *smoothed* number of cases.
+
+# Troubleshooting
+
+## Using R Package: `smoother`
+
+### COVID Data
+
+```{r}
+library(smoother)
+# smth.gaussian(x, window, alpha)
+## Where:
+### x: data
+### window: the length of the smoothing window, if an integer, represents number of items, else, if a value between 0 and 1, represents the proportion of the input vector
+### alpha: parameter to determine the breadth of the gaussian window, yielding more or less sensitive smoothing characteristics
+
+data <- read.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv")
+npl <- subset(data, iso_code == "NPL")
+smooth.ts <- smth.gaussian(npl$new_cases)
+days <- seq(1, nrow(npl), 1)
+plot(days, npl$new_cases, type = "l", main = "Default 'window' and 'alpha' Values", xlab = "Day", ylab = "New Cases", col = "grey", lwd = 1)
+lines(days, smooth.ts, col = "orchid", lwd = 2)
+lines(days, npl$new_cases_smoothed, col = "orange", lwd = 2)
+legend("topright", legend = c("Raw Data", "Auto-Smoothed", "Given Smoothed"),
+       col = c("grey", "orchid", "orange"), lwd = 2)
+# With adjusted window and alpha values
+smooth.ts <- smth.gaussian(npl$new_cases, window = 8, alpha = 1)
+plot(days, npl$new_cases, type = "l", main = "Bandwidth = 8", xlab = "Day", ylab = "New Cases", col = "grey", lwd = 1)
+lines(days, smooth.ts, col = "orchid", lwd = 2)
+lines(days, npl$new_cases_smoothed, col = "orange", lwd = 2)
+legend("topright", legend = c("Raw Data", "Auto-Smoothed", "Given Smoothed"),
+       col = c("grey", "orchid", "orange"), lwd = 2)
+```
+
+### Devin's Data
+
+```{r}
+library(smoother)
+# smth.gaussian(x, window, alpha)
+## Where:
+### x: data
+### window: the length of the smoothing window, if an integer, represents number of items, else, if a value between 0 and 1, represents the proportion of the input vector
+### alpha: parameter to determine the breadth of the gaussian window, yielding more or less sensitive smoothing characteristics
+
+data <- read.csv("Kirk_Data/Epidemics_Data_Dryad/Kirk_et_al_epidemics_sampling_data.csv")
+data.sum <- summaryBy(status ~ population + treatment + day, data = data, FUN = sum)
+sub8 <- subset(data.sum, population == 8); sub8_ts <- sub8$status.sum
+smooth.ts <- smth.gaussian(sub8$status.sum); # smth.gaussian(x, window, alpha)
+plot(sub8$day, sub8$status.sum, type = "l", main = "Default 'window' and 'alpha' Values", xlab = "Day", ylab = "Infecteds", col = "grey", lwd = 2)
+lines(sub8$day, smooth.ts, col = "orchid", lwd = 2)
+legend("topleft", legend = c("Raw Data", "Auto-Smoothed"),
+       col = c("grey", "orchid"), lwd = 2)
+# With adjusted window and alpha values
+smooth.ts <- smth.gaussian(sub8$status.sum, window = 3, alpha = 1)
+plot(sub8$day, sub8$status.sum, type = "l", main = "Bandwidth = 8", xlab = "Day", ylab = "Infecteds", col = "grey", lwd = 2)
+lines(sub8$day, smooth.ts, col = "orchid", lwd = 2)
+legend("topleft", legend = c("Raw Data", "Auto-Smoothed"),
+       col = c("grey", "orchid"), lwd = 2)
+```
+
+## Manually
+
+### COVID Data
+
+```{r}
+data <- read.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv")
+npl <- subset(data, iso_code == "NPL")
+npl.dates <- as.Date(npl$date)
+## Setting up the df for the top half of the expression
+day.nums <- seq(0, length(npl.dates) - 1, 1)
+for (i in 2:(length(npl.dates) - 1)){
+  temp <- c(seq(-i + 1, -1, 1), 0, seq(1, length(npl.dates) - i, 1))
+  day.nums <- cbind(day.nums, temp)
+}
+day.nums <- cbind(day.nums, rev(seq(0, length(npl.dates) - 1, 1))*(-1))
+## Calculating the Gaussian kernel
+temp <- c(); width <- 8; smoothed <- c()
+for (i in 1:length(npl.dates)){
+  temp <- exp(-(day.nums[ , i]^2) / (2*(width^2)))
+  temp <- temp/sum(temp)
+  smoothed[i] <- sum(npl$new_cases*temp)
+}
+## Plotting
+plot(smoothed, type = "l")
+# Let'c compare it to (1) the raw data, and (2) the automatically smoothed data:
+smooth.ts <- smth.gaussian(npl$new_cases, window = 8, alpha = 1)
+days <- seq(1, nrow(npl), 1)
+plot(days, npl$new_cases, type = "l", main = "Bandwidth = 8", xlab = "Day", ylab = "New Cases", col = "grey", lwd = 1)
+lines(days, smoothed, col = "red3", lwd = 2)
+lines(days, smooth.ts, col = "orchid", lwd = 2, lty = 2)
+lines(days, npl$new_cases_smoothed, col = "orange", lwd = 2, lty = 3)
+legend("topright", legend = c("Raw Data", "Manually Smoothed", "Auto-Smoothed", "Given Smoothed"),
+       col = c("grey", "red3", "orchid", "orange"), lwd = 2, lty = c(1, 1, 2, 3))
+```
+
+### Devin's Data
+
+```{r}
+# ... 
+```
+
+# Messing!
+
+First, let's try to detrend with a Gaussian kernel, via the *spaero* package:
+
+```{r}
+library(spaero); library(KRLS)
+devtools::install_github("e3bo/spaero")
+help(package = "spaero")
+
+## Example:
+# A highly autocorrelated time series
+x <- 1:10
+get_stats(x, stat_bandwidth = 3)$stats
+# Plot log of acf
+plot(log(get_stats(x, stat_bandwidth = 3)$stats$autocor))
+# Check estimates with AR1 simulations with lag-1 core 0.1
+w <- rnorm(1000)
+xnext <- function(xlast, w) 0.1 * xlast + w
+x <- Reduce(xnext, x = w, init = 0, accumulate = TRUE)
+acf(x, lag.max = 1, plot = FALSE)
+head(get_stats(x, stat_bandwidth = length(x))$stats$autocor)
+# Check detrending ability
+x2 <- x + seq(1, 10, len = length(x))
+ans <- get_stats(x2, center_trend = "local_linear",
+center_bandwidth = length(x),
+stat_bandwidth = length(x))$stats
+head(ans$autocor)
+# The simple acf estimate is inflated by the trend
+acf(x2, lag.max = 1, plot = FALSE)
+# Check ability to estimate time-dependent autocorrelation
+xnext <- function(xlast, w) 0.8 * xlast + w
+xhi <- Reduce(xnext, x = w, init = 0, accumulate = TRUE)
+acf(xhi, lag.max = 1, plot = FALSE)
+wt <- seq(0, 1, len = length(x))
+xdynamic <- wt * xhi + (1 - wt) * x
+get_stats(xdynamic, stat_bandwidth = 100)$stats$autocor
+```
+
+```{r}
+data <- read.csv("Kirk_Data/Epidemics_Data_Dryad/Kirk_et_al_epidemics_sampling_data.csv")
+
+data.sum <- summaryBy(status ~ population + treatment + day, data = data, FUN = sum)
+
+sub8 <- subset(data.sum, population == 8); sub8_ts <- sub8$status.sum
+
+plot(sub8_ts, type = "l")
+
+get_stats(sub8_ts, stat_bandwidth = 5)$stats
+
+get_stats(
+  sub8_ts,
+  center_trend = "grand_mean",
+  center_kernel = c("gaussian"),
+  center_bandwidth = 3,
+  stat_trend = c("local_linear"),
+  stat_kernel = c("gaussian"),
+  stat_bandwidth = 3,
+  lag = 1,
+  backward_only = FALSE
+)
+
+```
