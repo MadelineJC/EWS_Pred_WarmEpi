@@ -104,6 +104,8 @@ As a quick summary, here a few works that have discussed/performed pre-processin
 
 ## Using R Package: `smoother`
 
+Note: You can also implement Gaussian filtering using `library(spaero)` or `library(KRLS)`.
+
 ### COVID Data
 
 ```{r}
@@ -191,73 +193,254 @@ lines(days, smooth.ts, col = "orchid", lwd = 2, lty = 2)
 lines(days, npl$new_cases_smoothed, col = "orange", lwd = 2, lty = 3)
 legend("topright", legend = c("Raw Data", "Manually Smoothed", "Auto-Smoothed", "Given Smoothed"),
        col = c("grey", "red3", "orchid", "orange"), lwd = 2, lty = c(1, 1, 2, 3))
+## Summing total cases
+sum(npl$new_cases); sum(smoothed) # They're the same!
 ```
 
 ### Devin's Data
 
 ```{r}
-# ... 
+## Data manipulation
+data <- read.csv("Kirk_Data/Epidemics_Data_Dryad/Kirk_et_al_epidemics_sampling_data.csv")
+data.sum <- summaryBy(status ~ population + treatment + day, data = data, FUN = sum)
+sub8 <- subset(data.sum, population == 8)
+sub8 <- data.frame(sub8$day, sub8$status.sum); colnames(sub8) <- c("day", "infecteds")
+
+## EVERYDAY
+# Adding missing rows
+all.days <- seq(1, 120, 1); exp.days <- seq(3, 120, 3); missing.days <- setdiff(all.days, exp.days)
+missing.days <- data.frame(cbind(missing.days, c(rep(0, length(missing.days))))); colnames(missing.days) <- c("day", "infecteds")
+sub8.mod <- rbind(sub8, missing.days)
+sub8.mod <- sub8.mod[order(sub8.mod$day), ]
+# Setting up the df for the top half of the expression
+day.nums <- seq(0, length(all.days) - 1, 1)
+for (i in 2:(length(all.days) - 1)){
+  temp <- c(seq(-i + 1, -1, 1), 0, seq(1, length(all.days) - i, 1))
+  day.nums <- cbind(day.nums, temp)
+}
+day.nums <- cbind(day.nums, rev(seq(0, length(all.days) - 1, 1))*(-1))
+# Calculating the Gaussian kernel
+temp <- c(); width <- 3; smoothed <- c()
+for (i in 1:length(all.days)){
+  temp <- exp(-(day.nums[ , i]^2) / (2*(width^2)))
+  temp <- temp/sum(temp)
+  smoothed[i] <- sum(sub8.mod$infecteds*temp)
+}
+# Plotting
+plot(smoothed, type = "l")
+# Let'c compare it to (1) the raw data, and (2) the automatically smoothed data:
+smooth.ts.1 <- smth.gaussian(sub8$infecteds, window = 3, alpha = 1)
+smooth.ts.2 <- smth.gaussian(sub8.mod$infecteds, window = 3, alpha = 1)
+plot(sub8$day, sub8$infecteds, type = "l", main = "Bandwidth = 3", xlab = "Day", ylab = "New Cases", col = "grey", lwd = 1)
+lines(sub8.mod$day, smoothed, col = "red3", lwd = 2)
+lines(sub8$day, smooth.ts.1, col = "orchid", lwd = 2, lty = 2)
+lines(sub8.mod$day, smooth.ts.2, col = "hotpink", lwd = 2, lty = 2)
+legend("topleft", legend = c("Raw Data", "Manually Smoothed (Everyday)", "Auto-Smoothed (Every 3 Days)", "Auto-Smoothed (Everyday)"),
+       col = c("grey", "red3", "orchid", "hotpink"), lwd = 2, lty = c(1, 1, 2, 2))
+
+## EVERY 3 DAYS
+# Setting up the df for the top half of the expression
+interval <- 3
+day.nums <- seq(0, sub8$day[length(sub8$day)] - interval, 3)
+suppressWarnings(
+for (i in sub8$day[1:39]){
+  temp <- c(seq(-i, -interval, interval), 0, seq(interval, sub8$day[length(sub8$day)] - interval*2, interval))
+  day.nums <- cbind(day.nums, temp)
+})
+# Calculating the Gaussian kernel
+temp <- c(); width <- 3; smoothed_3days <- c()
+for (i in 1:length(sub8$day)){
+  temp <- exp(-(day.nums[ , i]^2) / (2*(width^2)))
+  temp <- temp/sum(temp)
+  smoothed_3days[i] <- sum(sub8$infecteds*temp)
+}
+# Plotting
+plot(smoothed_3days, type = "l")
+# Let'c compare it to (1) the raw data, (2) the manually smoothed over 120 days data, and (3) the automatically smoothed data:
+plot(sub8$day, sub8$infecteds, type = "l", main = "Bandwidth = 3", xlab = "Day", ylab = "New Cases", col = "grey", lwd = 1)
+lines(sub8.mod$day, smoothed, col = "red3", lwd = 2)
+lines(sub8$day, smooth.ts.1, col = "orchid", lwd = 2, lty = 2)
+lines(sub8.mod$day, smooth.ts.2, col = "hotpink", lwd = 2, lty = 2)
+lines(sub8$day, smoothed_3days, col = "goldenrod1", lwd = 2)
+legend("topleft", legend = c("Raw Data", "Manually Smoothed (Everyday)", "Manually Smoothed (Every 3 Days)", "Auto-Smoothed (Every 3 Days)", "Auto-Smoothed (Everyday)"),
+       col = c("grey", "red3", "goldenrod1", "orchid", "hotpink"), lwd = 2, lty = c(1, 1, 1, 2, 2))
 ```
 
-# Messing!
-
-First, let's try to detrend with a Gaussian kernel, via the *spaero* package:
+# Playing with Bandwidth
 
 ```{r}
-library(spaero); library(KRLS)
-devtools::install_github("e3bo/spaero")
-help(package = "spaero")
+## EVERYDAY
+day.nums <- seq(0, length(all.days) - 1, 1)
+for (i in 2:(length(all.days) - 1)){
+  temp <- c(seq(-i + 1, -1, 1), 0, seq(1, length(all.days) - i, 1))
+  day.nums <- cbind(day.nums, temp)
+}
+day.nums <- cbind(day.nums, rev(seq(0, length(all.days) - 1, 1))*(-1))
 
-## Example:
-# A highly autocorrelated time series
-x <- 1:10
-get_stats(x, stat_bandwidth = 3)$stats
-# Plot log of acf
-plot(log(get_stats(x, stat_bandwidth = 3)$stats$autocor))
-# Check estimates with AR1 simulations with lag-1 core 0.1
-w <- rnorm(1000)
-xnext <- function(xlast, w) 0.1 * xlast + w
-x <- Reduce(xnext, x = w, init = 0, accumulate = TRUE)
-acf(x, lag.max = 1, plot = FALSE)
-head(get_stats(x, stat_bandwidth = length(x))$stats$autocor)
-# Check detrending ability
-x2 <- x + seq(1, 10, len = length(x))
-ans <- get_stats(x2, center_trend = "local_linear",
-center_bandwidth = length(x),
-stat_bandwidth = length(x))$stats
-head(ans$autocor)
-# The simple acf estimate is inflated by the trend
-acf(x2, lag.max = 1, plot = FALSE)
-# Check ability to estimate time-dependent autocorrelation
-xnext <- function(xlast, w) 0.8 * xlast + w
-xhi <- Reduce(xnext, x = w, init = 0, accumulate = TRUE)
-acf(xhi, lag.max = 1, plot = FALSE)
-wt <- seq(0, 1, len = length(x))
-xdynamic <- wt * xhi + (1 - wt) * x
-get_stats(xdynamic, stat_bandwidth = 100)$stats$autocor
+widths <- seq(1, 8, 1); df <- matrix(nrow = length(all.days), ncol = length(widths))
+for (j in widths){
+  temp <- c(); smoothed <- c()
+  for (i in 1:length(all.days)){
+    temp <- exp(-(day.nums[ , i]^2) / (2*(widths[j]^2)))
+    temp <- temp/sum(temp)
+    smoothed[i] <- sum(sub8.mod$infecteds*temp)
+  }
+  df[ , j] <- smoothed
+}
+
+cols <- c("red3", "orange", "goldenrod1", "forestgreen", "cornflowerblue", "orchid")
+plot(sub8$day, sub8$infecteds, type = "l",
+     main = "Manually Smoothed (Everyday), Varying Bandwidths", xlab = "Day", ylab = "Infecteds",
+     col = "grey", lwd = 2)
+for (i in 1:length(widths)){
+  lines(all.days, df[ , i], col = cols[i], lwd = 1)
+}
+
+## EVERY 3 DAYS
+interval <- 3
+day.nums <- seq(0, sub8$day[length(sub8$day)] - interval, 3)
+suppressWarnings(
+for (i in sub8$day[1:39]){
+  temp <- c(seq(-i, -interval, interval), 0, seq(interval, sub8$day[length(sub8$day)] - interval*2, interval))
+  day.nums <- cbind(day.nums, temp)
+})
+
+widths <- seq(1, 8, 1); df <- matrix(nrow = length(sub8$day), ncol = length(widths))
+for (j in widths){
+  temp <- c(); smoothed <- c()
+  for (i in 1:length(sub8$day)){
+    temp <- exp(-(day.nums[ , i]^2) / (2*(widths[j]^2)))
+    temp <- temp/sum(temp)
+    smoothed[i] <- sum(sub8$infecteds*temp)
+  }
+  df[ , j] <- smoothed
+}
+
+plot(sub8$day, sub8$infecteds, type = "l",
+     main = "Manually Smoothed (Every 3 Days), Varying Bandwidths", xlab = "Day", ylab = "Infecteds",
+     col = "grey")
+for (i in 1:length(widths)){
+  lines(sub8$day, df[ , i], col = cols[i], lty = 2)
+}
 ```
+
+Looking at the smoothed time series above, it looks like we should go with a **bandwidth of 2 or 3**.
+
+# Smoothing Simulated Data
+
+```{r}
+
+```
+
+# Smoothing Empirical Data
 
 ```{r}
 data <- read.csv("Kirk_Data/Epidemics_Data_Dryad/Kirk_et_al_epidemics_sampling_data.csv")
-
 data.sum <- summaryBy(status ~ population + treatment + day, data = data, FUN = sum)
+sub1 <- subset(data.sum, population == 1) 
+sub1 <- cbind(sub1$day, sub1$status.sum); colnames(sub1) <- c("day", "infecteds")
+sub2 <- subset(data.sum, population == 2) 
+sub2 <- cbind(sub2$day, sub2$status.sum); colnames(sub2) <- c("day", "infecteds")
+sub3 <- subset(data.sum, population == 3) 
+sub3 <- cbind(sub3$day, sub3$status.sum); colnames(sub3) <- c("day", "infecteds")
+sub4 <- subset(data.sum, population == 4) 
+sub4 <- cbind(sub4$day, sub4$status.sum); colnames(sub4) <- c("day", "infecteds")
+sub5 <- subset(data.sum, population == 5) 
+sub5 <- cbind(sub5$day, sub5$status.sum); colnames(sub5) <- c("day", "infecteds")
+sub6 <- subset(data.sum, population == 6) 
+sub6 <- cbind(sub6$day, sub6$status.sum); colnames(sub6) <- c("day", "infecteds")
+sub7 <- subset(data.sum, population == 7) 
+sub7 <- cbind(sub7$day, sub7$status.sum); colnames(sub7) <- c("day", "infecteds")
+sub8 <- subset(data.sum, population == 8) 
+sub8 <- cbind(sub8$day, sub8$status.sum); colnames(sub8) <- c("day", "infecteds")
 
-sub8 <- subset(data.sum, population == 8); sub8_ts <- sub8$status.sum
+## EVERYDAY
+# Adding missing rows
+all.days <- seq(1, 120, 1); exp.days <- seq(3, 120, 3); missing.days <- setdiff(all.days, exp.days)
+missing.days <- data.frame(cbind(missing.days, c(rep(0, length(missing.days))))); colnames(missing.days) <- c("day", "infecteds")
+sub1.mod <- rbind(sub1, missing.days)
+sub1.mod <- sub1.mod[order(sub1.mod$day), ]
+sub2.mod <- rbind(sub2, missing.days)
+sub2.mod <- sub2.mod[order(sub2.mod$day), ]
+sub3.mod <- rbind(sub3, missing.days)
+sub3.mod <- sub3.mod[order(sub3.mod$day), ]
+sub4.mod <- rbind(sub4, missing.days)
+sub4.mod <- sub4.mod[order(sub4.mod$day), ]
+sub5.mod <- rbind(sub5, missing.days)
+sub5.mod <- sub5.mod[order(sub5.mod$day), ]
+sub6.mod <- rbind(sub6, missing.days)
+sub6.mod <- sub6.mod[order(sub6.mod$day), ]
+sub7.mod <- rbind(sub7, missing.days)
+sub7.mod <- sub7.mod[order(sub7.mod$day), ]
+sub8.mod <- rbind(sub8, missing.days)
+sub8.mod <- sub8.mod[order(sub8.mod$day), ]
+subpops.list <- list(sub1.mod, sub2.mod, sub3.mod, sub4.mod,
+                     sub5.mod, sub6.mod, sub7.mod, sub8.mod)
+# Setting up the df for the top half of the expression
+day.nums <- seq(0, length(all.days) - 1, 1)
+for (i in 2:(length(all.days) - 1)){
+  temp <- c(seq(-i + 1, -1, 1), 0, seq(1, length(all.days) - i, 1))
+  day.nums <- cbind(day.nums, temp)
+}
+day.nums <- cbind(day.nums, rev(seq(0, length(all.days) - 1, 1))*(-1))
+# Calculating the Gaussian kernel
+width <- 1; subpops <- seq(1, 8, 1); df <- matrix(nrow = length(all.days), ncol = length(subpops))
+for (j in subpops){
+  temp <- c(); smoothed <- c()
+  for (i in 1:length(all.days)){
+    temp <- exp(-(day.nums[ , i]^2) / (2*(width^2)))
+    temp <- temp/sum(temp)
+    smoothed[i] <- sum(subpops.list[[j]]$infecteds*temp)
+  }
+  df[ , j] <- smoothed
+}
 
-plot(sub8_ts, type = "l")
+cols <- c("navyblue", "steelblue3", "cornflowerblue", "lightblue", "darkred", "firebrick", "red3", "red2")
+plot(0, 0, type = "n", xlim = c(0, 120), ylim = c(0, 5),
+     main = "Constant Temperature", xlab = "Day", ylab = "Infecteds")
+for (i in 1:4){
+  lines(all.days, subpops.list[[i]]$infecteds, col = "grey", lwd = 2)
+  lines(all.days, df[ , i], col = cols[i], lwd = 2)
+}
+plot(0, 0, type = "n", xlim = c(0, 120), ylim = c(0, 5),
+     main = "Rising Temperature", xlab = "Day", ylab = "Infecteds")
+for (i in 5:8){
+  lines(all.days, subpops.list[[i]]$infecteds, col = "grey", lwd = 2)
+  lines(all.days, df[ , i], col = cols[i], lwd = 2)
+}
 
-get_stats(sub8_ts, stat_bandwidth = 5)$stats
+## EVERY 3 DAYS
+subpops.list <- list(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8)
 
-get_stats(
-  sub8_ts,
-  center_trend = "grand_mean",
-  center_kernel = c("gaussian"),
-  center_bandwidth = 3,
-  stat_trend = c("local_linear"),
-  stat_kernel = c("gaussian"),
-  stat_bandwidth = 3,
-  lag = 1,
-  backward_only = FALSE
-)
+interval <- 3
+day.nums <- seq(0, sub1[ , 1][length(sub1[ , 1])] - interval, 3)
+suppressWarnings(
+for (i in sub1[ , 1][1:39]){
+  temp <- c(seq(-i, -interval, interval), 0, seq(interval, sub1[ , 1][length(sub1[ , 1])] - interval*2, interval))
+  day.nums <- cbind(day.nums, temp)
+})
+
+width <- 3; subpops <- seq(1, 8, 1); df <- matrix(nrow = nrow(sub1), ncol = length(widths))
+for (j in subpops){
+  temp <- c(); smoothed <- c()
+  for (i in 1:nrow(sub1)){
+    temp <- exp(-(day.nums[ , i]^2) / (2*(width^2)))
+    temp <- temp/sum(temp)
+    smoothed[i] <- sum(subpops.list[[j]][ , 2]*temp)
+  }
+  df[ , j] <- smoothed
+}
+plot(0, 0, type = "n", xlim = c(0, 120), ylim = c(0, 5),
+     main = "Constant Temperature", xlab = "Day", ylab = "Infecteds")
+for (i in 1:4){
+  lines(sub1[ , 1], subpops.list[[i]][ , 2], col = "grey", lwd = 2)
+  lines(sub1[ , 1], df[ , i], col = cols[i], lwd = 2)
+}
+plot(0, 0, type = "n", xlim = c(0, 120), ylim = c(0, 5),
+     main = "Rising Temperature", xlab = "Day", ylab = "Infecteds")
+for (i in 5:8){
+  lines(sub1[ , 1], subpops.list[[i]][ , 2], col = "grey", lwd = 2)
+  lines(sub1[ , 1], df[ , i], col = cols[i], lwd = 2)
+}
 
 ```
