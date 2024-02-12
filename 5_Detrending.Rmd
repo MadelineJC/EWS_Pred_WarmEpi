@@ -442,5 +442,34 @@ for (i in 5:8){
   lines(sub1[ , 1], subpops.list[[i]][ , 2], col = "grey", lwd = 2)
   lines(sub1[ , 1], df[ , i], col = cols[i], lwd = 2)
 }
-
+```
+# Plotting
+```{r}
+png("Plots/EmpDat_Detrend.png", width = 2000, height = 800)
+par(mfrow = c(2, 4))
+plot(sub1[ , 1], subpops.list[[1]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
+     main = "Subpopulation 1 (Constant) | Every 3 Days; Bandwidth = 3", xlab = "Day", ylab = "Infecteds")
+lines(sub1[ , 1], df[ , 1], col = "cornflowerblue", lwd = 2)
+plot(sub2[ , 1], subpops.list[[2]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
+     main = "Subpopulation 2 (Constant) | Every 3 Days; Bandwidth = 3", xlab = "Day", ylab = "Infecteds")
+lines(sub2[ , 1], df[ , 2], col = "cornflowerblue", lwd = 2)
+plot(sub3[ , 1], subpops.list[[3]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
+     main = "Subpopulation 3 (Constant) | Every 3 Days; Bandwidth = 3", xlab = "Day", ylab = "Infecteds")
+lines(sub3[ , 1], df[ , 3], col = "cornflowerblue", lwd = 2)
+plot(sub4[ , 1], subpops.list[[4]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
+     main = "Subpopulation 4 (Constant) | Every 3 Days; Bandwidth = 3", xlab = "Day", ylab = "Infecteds")
+lines(sub4[ , 1], df[ , 4], col = "cornflowerblue", lwd = 2)
+plot(sub5[ , 1], subpops.list[[5]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
+     main = "Subpopulation 5 (Warming) | Every 3 Days; Bandwidth = 3", xlab = "Day", ylab = "Infecteds")
+lines(sub5[ , 1], df[ , 5], col = "red3", lwd = 2)
+plot(sub6[ , 1], subpops.list[[6]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
+     main = "Subpopulation 6 (Warming) | Every 3 Days; Bandwidth = 3", xlab = "Day", ylab = "Infecteds")
+lines(sub6[ , 1], df[ , 6], col = "red3", lwd = 2)
+plot(sub7[ , 1], subpops.list[[7]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
+     main = "Subpopulation 7 (Warming) | Every 3 Days; Bandwidth = 3", xlab = "Day", ylab = "Infecteds")
+lines(sub7[ , 1], df[ , 7], col = "red3", lwd = 2)
+plot(sub8[ , 1], subpops.list[[8]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
+     main = "Subpopulation 8 (Warming) | Every 3 Days; Bandwidth = 3", xlab = "Day", ylab = "Infecteds")
+lines(sub8[ , 1], df[ , 8], col = "red3", lwd = 2)
+dev.off()
 ```
