@@ -329,7 +329,78 @@ Looking at the smoothed time series above, it looks like we should go with a **b
 # Smoothing Simulated Data
 
 ```{r}
+## Constant temperature
+constant1 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.1.csv")
+constant2 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.2.csv")
+constant3 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.3.csv")
+constant4 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.4.csv")
+constant5 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.5.csv")
+constant6 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.6.csv")
+constant7 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.7.csv")
+constant8 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.8.csv")
+constant9 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.9.csv")
+constant10 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.10.csv")
+const.list <- list(constant1, constant2, constant3, constant4,
+                   constant5, constant6, constant7, constant8)
 
+## Variable temperature
+warming1 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.1.csv")
+warming2 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.2.csv")
+warming3 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.3.csv")
+warming4 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.4.csv")
+warming5 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.5.csv")
+warming6 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.6.csv")
+warming7 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.7.csv")
+warming8 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.8.csv")
+warming9 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.9.csv")
+warming10 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.10.csv")
+warm.list <- list(warming1, warming2, warming3, warming4,
+                  warming5, warming6, warming7, warming8)
+
+day.nums <- seq(0, length(all.days) - 1, 1)
+for (i in 2:(length(all.days) - 1)){
+  temp <- c(seq(-i + 1, -1, 1), 0, seq(1, length(all.days) - i, 1))
+  day.nums <- cbind(day.nums, temp)
+}
+day.nums <- cbind(day.nums, rev(seq(0, length(all.days) - 1, 1))*(-1))
+
+width <- 3; const.df <- matrix(nrow = length(all.days), ncol = 100) # Let's just do 100 pop'ns for now
+constant1.mod <- constant1[ , 2:ncol(constant1)]
+for (j in 1:100){
+  temp <- c(); smoothed <- c()
+  for (i in 1:length(all.days)){
+    temp <- exp(-(day.nums[ , i]^2) / (2*(width^2)))
+    temp <- temp/sum(temp)
+    smoothed[i] <- sum(constant1.mod[ , j]*temp)
+  }
+  const.df[ , j] <- smoothed
+}
+
+plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 200),
+     main = "", xlab = "", ylab = "")
+for (i in 1:100){
+  lines(1:120, constant1.mod[ , i], col = "grey")
+  lines(1:120, const.df[ , i], col = "cornflowerblue", lty = 2)
+}
+
+width <- 3; warm.df <- matrix(nrow = length(all.days), ncol = 100) # Let's just do 100 pop'ns for now
+warming1.mod <- warming1[ , 2:ncol(warming1)]
+for (j in 1:100){
+  temp <- c(); smoothed <- c()
+  for (i in 1:length(all.days)){
+    temp <- exp(-(day.nums[ , i]^2) / (2*(width^2)))
+    temp <- temp/sum(temp)
+    smoothed[i] <- sum(warming1.mod[ , j]*temp)
+  }
+  warm.df[ , j] <- smoothed
+}
+
+plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 200),
+     main = "", xlab = "", ylab = "")
+for (i in 1:100){
+  lines(1:120, warming1.mod[ , i], col = "grey")
+  lines(1:120, warm.df[ , i], col = "red3", lty = 2)
+}
 ```
 
 # Smoothing Empirical Data
@@ -396,13 +467,13 @@ for (j in subpops){
 }
 
 cols <- c("navyblue", "steelblue3", "cornflowerblue", "lightblue", "darkred", "firebrick", "red3", "red2")
-plot(0, 0, type = "n", xlim = c(0, 120), ylim = c(0, 5),
+plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 5),
      main = "Constant Temperature", xlab = "Day", ylab = "Infecteds")
 for (i in 1:4){
   lines(all.days, subpops.list[[i]]$infecteds, col = "grey", lwd = 2)
   lines(all.days, df[ , i], col = cols[i], lwd = 2)
 }
-plot(0, 0, type = "n", xlim = c(0, 120), ylim = c(0, 5),
+plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 5),
      main = "Rising Temperature", xlab = "Day", ylab = "Infecteds")
 for (i in 5:8){
   lines(all.days, subpops.list[[i]]$infecteds, col = "grey", lwd = 2)
@@ -430,13 +501,13 @@ for (j in subpops){
   }
   df[ , j] <- smoothed
 }
-plot(0, 0, type = "n", xlim = c(0, 120), ylim = c(0, 5),
+plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 5),
      main = "Constant Temperature", xlab = "Day", ylab = "Infecteds")
 for (i in 1:4){
   lines(sub1[ , 1], subpops.list[[i]][ , 2], col = "grey", lwd = 2)
   lines(sub1[ , 1], df[ , i], col = cols[i], lwd = 2)
 }
-plot(0, 0, type = "n", xlim = c(0, 120), ylim = c(0, 5),
+plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 5),
      main = "Rising Temperature", xlab = "Day", ylab = "Infecteds")
 for (i in 5:8){
   lines(sub1[ , 1], subpops.list[[i]][ , 2], col = "grey", lwd = 2)
