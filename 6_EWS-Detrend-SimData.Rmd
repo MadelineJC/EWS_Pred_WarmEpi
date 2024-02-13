@@ -1,2 +1,396 @@
 # Looking for EWS in Detrended Simulated and Empirical Data
 
+## Required Packages
+
+```{r}
+require(scales)
+require(evobiR)
+require(gdata)
+require(doBy)
+require(ecp)
+require(strucchange)
+require(TTR)
+require(moments)
+```
+
+# Simulated Data
+
+Both of these data frames are 120 rows (days) by 1000 columns (populations).
+
+```{r}
+head(smoothed.const.df)
+head(smoothed.warm.df)
+```
+
+# Calculating Statistical Metrics Along Variously-Sized Sliding Windows
+
+For details on these metrics, see `3_EWS-Sim.Rmd`.
+
+## 5 Day Sliding Window
+
+### Standard Deviation, Mean, Skewness, Kurtosis
+
+```{r}
+num.of.sims <- 10^3
+
+# Making empty matricies
+constant.sims.sd.5 <- matrix(nrow = 115, ncol = num.of.sims)
+constant.sims.mean.5 <- matrix(nrow = 115, ncol = num.of.sims)
+constant.sims.skewness.5 <- matrix(nrow = 115, ncol = num.of.sims)
+constant.sims.kurtosis.5 <- matrix(nrow = 115, ncol = num.of.sims)
+
+warming.sims.sd.5 <- matrix(nrow = 115, ncol = num.of.sims)
+warming.sims.mean.5 <- matrix(nrow = 115, ncol = num.of.sims)
+warming.sims.skewness.5 <- matrix(nrow = 115, ncol = num.of.sims)
+warming.sims.kurtosis.5 <- matrix(nrow = 115, ncol = num.of.sims)
+
+# Use SlidingWindow to calculate sd, mean, skewness, and kurtosis
+for(i in 1:num.of.sims){
+  constant.sims.sd.5[ ,i] <- SlidingWindow(FUN = "sd", data = smoothed.const.df[,i], window = 5,step = 1)
+  constant.sims.mean.5[ ,i] <- SlidingWindow(FUN = "mean", data = smoothed.const.df[,i], window = 5, step = 1)
+  constant.sims.skewness.5[ ,i] <- SlidingWindow(FUN = "skewness", data = smoothed.const.df[,i], window = 5, step = 1)
+  constant.sims.kurtosis.5[ ,i] <- SlidingWindow(FUN = "kurtosis", data = smoothed.const.df[,i], window = 5, step = 1)
+}
+
+for(i in 1:num.of.sims){
+  warming.sims.sd.5[ ,i] <- SlidingWindow(FUN = "sd", data = smoothed.warm.df[,i], window = 5,step = 1)
+  warming.sims.mean.5[ ,i] <- SlidingWindow(FUN = "mean", data = smoothed.warm.df[,i], window = 5, step = 1)
+  warming.sims.skewness.5[ ,i] <- SlidingWindow(FUN = "skewness", data = smoothed.warm.df[,i], window = 5, step = 1)
+  warming.sims.kurtosis.5[ ,i] <- SlidingWindow(FUN = "kurtosis", data = smoothed.warm.df[,i], window = 5, step = 1)
+}
+```
+
+### Variation
+
+```{r}
+constant.sims.variance.5 <- constant.sims.sd.5*constant.sims.sd.5
+warming.sims.variance.5 <- warming.sims.sd.5*warming.sims.sd.5
+```
+
+### Co-Efficient of Variation
+
+```{r}
+constant.sims.cv.5 <- constant.sims.sd.5/constant.sims.mean.5
+warming.sims.cv.5 <- warming.sims.sd.5/warming.sims.mean.5
+```
+
+### Index of Dispersion
+
+```{r}
+constant.sims.id.5 <- constant.sims.variance.5/constant.sims.mean.5
+warming.sims.id.5 <- warming.sims.variance.5/warming.sims.mean.5
+```
+
+### First Difference Variance
+
+```{r}
+constant.sims.first.diff.variance.5 <- matrix(ncol = num.of.sims, nrow = 115)
+warming.sims.first.diff.variance.5 <- matrix(ncol = num.of.sims, nrow = 115)
+
+for(i in 1:num.of.sims){
+  for(j in 2:115){
+    constant.sims.first.diff.variance.5[j - 1,i] <- constant.sims.variance.5[j,i] - constant.sims.variance.5[j - 1,i]
+    warming.sims.first.diff.variance.5[j - 1,i] <- warming.sims.variance.5[j,i] - warming.sims.variance.5[j - 1,i]
+  }
+}
+
+# Get rid of NA (last) row
+constant.sims.first.diff.variance.5 <- constant.sims.first.diff.variance.5[1:114, ]
+warming.sims.first.diff.variance.5 <- warming.sims.first.diff.variance.5[1:114, ]
+```
+
+### Autocorrelation and Autocovariance
+
+```{r}
+constant.sims.cor.5 <- matrix(ncol = num.of.sims, nrow = 120)
+constant.sims.cov.5 <- matrix(ncol = num.of.sims, nrow = 120)
+
+for(j in 1:num.of.sims){
+  for(i in 1:115){
+    window.start <- i
+    window.end <- i + 4
+    
+    segment <- smoothed.const.df[c(window.start:window.end),j]
+    
+    constant.sims.cor.5[i,j] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+    constant.sims.cov.5[i,j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+  }
+}
+
+warming.sims.cor.5 <- matrix(ncol=num.of.sims,nrow = 120)
+warming.sims.cov.5 <- matrix(ncol=num.of.sims,nrow = 120)
+
+for(j in 1:num.of.sims){
+  for(i in 1:115){
+    window.start <- i
+    window.end <- i + 4
+    
+    segment <- smoothed.warm.df[c(window.start:window.end),j]
+    
+    warming.sims.cor.5[i,j] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+    warming.sims.cov.5[i,j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+  }
+}
+```
+
+### Decay Time
+
+```{r}
+constant.sims.decay.time.5 <- matrix(ncol = num.of.sims, nrow = 55)
+warming.sims.decay.time.5 <- matrix(nco = num.of.sims, nrow = 55)
+
+for(i in 1:num.of.sims){
+  for(j in 1:55){
+    suppressWarnings(constant.sims.decay.time.5[j, i] <- -j/log(constant.sims.cor.5[j, i]))
+    suppressWarnings(warming.sims.decay.time.5[j, i] <- -j/log(warming.sims.cor.5[j, i]))
+  }
+}
+```
+
+## 15 Day Sliding Window
+
+### Standard Deviation, Mean, Skewness, Kurtosis
+
+```{r}
+num.of.sims <- 10^3
+
+# Making empty matricies
+constant.sims.sd.15 <- matrix(nrow = 105, ncol = num.of.sims)
+constant.sims.mean.15 <- matrix(nrow = 105, ncol = num.of.sims)
+constant.sims.skewness.15 <- matrix(nrow = 105, ncol = num.of.sims)
+constant.sims.kurtosis.15 <- matrix(nrow = 105, ncol = num.of.sims)
+
+warming.sims.sd.15 <- matrix(nrow = 105, ncol = num.of.sims)
+warming.sims.mean.15 <- matrix(nrow = 105, ncol = num.of.sims)
+warming.sims.skewness.15 <- matrix(nrow = 105, ncol = num.of.sims)
+warming.sims.kurtosis.15 <- matrix(nrow = 105, ncol = num.of.sims)
+
+# Use SlidingWindow to calculate sd, mean, skewness, and kurtosis
+for(i in 1:num.of.sims){
+  constant.sims.sd.15[ ,i] <- SlidingWindow(FUN = "sd", data = smoothed.const.df[,i], window = 15,step = 1)
+  constant.sims.mean.15[ ,i] <- SlidingWindow(FUN = "mean", data = smoothed.const.df[,i], window = 15, step = 1)
+  constant.sims.skewness.15[ ,i] <- SlidingWindow(FUN = "skewness", data = smoothed.const.df[,i], window = 15, step = 1)
+  constant.sims.kurtosis.15[ ,i] <- SlidingWindow(FUN = "kurtosis", data = smoothed.const.df[,i], window = 15, step = 1)
+}
+
+for(i in 1:num.of.sims){
+  warming.sims.sd.15[ ,i] <- SlidingWindow(FUN = "sd", data = smoothed.warm.df[,i], window = 15,step = 1)
+  warming.sims.mean.15[ ,i] <- SlidingWindow(FUN = "mean", data = smoothed.warm.df[,i], window = 15, step = 1)
+  warming.sims.skewness.15[ ,i] <- SlidingWindow(FUN = "skewness", data = smoothed.warm.df[,i], window = 15, step = 1)
+  warming.sims.kurtosis.15[ ,i] <- SlidingWindow(FUN = "kurtosis", data = smoothed.warm.df[,i], window = 15, step = 1)
+}
+```
+
+### Variation
+
+```{r}
+constant.sims.variance.15 <- constant.sims.sd.15*constant.sims.sd.15
+warming.sims.variance.15 <- warming.sims.sd.15*warming.sims.sd.15
+```
+
+### Co-Efficient of Variation
+
+```{r}
+constant.sims.cv.15 <- constant.sims.sd.15/constant.sims.mean.15
+warming.sims.cv.15 <- warming.sims.sd.15/warming.sims.mean.15
+```
+
+### Index of Dispersion
+
+```{r}
+constant.sims.id.15 <- constant.sims.variance.15/constant.sims.mean.15
+warming.sims.id.15 <- warming.sims.variance.15/warming.sims.mean.15
+```
+
+### First Difference Variance
+
+```{r}
+constant.sims.first.diff.variance.15 <- matrix(ncol = num.of.sims, nrow = 105)
+warming.sims.first.diff.variance.15 <- matrix(ncol = num.of.sims, nrow = 105)
+
+for(i in 1:num.of.sims){
+  for(j in 2:105){
+    constant.sims.first.diff.variance.15[j - 1,i] <- constant.sims.variance.15[j,i] - constant.sims.variance.15[j - 1,i]
+    warming.sims.first.diff.variance.15[j - 1,i] <- warming.sims.variance.15[j,i] - warming.sims.variance.15[j - 1,i]
+  }
+}
+
+# Get rid of NA (last) row
+constant.sims.first.diff.variance.15 <- constant.sims.first.diff.variance.15[1:104, ]
+warming.sims.first.diff.variance.15 <- warming.sims.first.diff.variance.15[1:104, ]
+```
+
+### Autocorrelation and Autocovariance
+
+```{r}
+constant.sims.cor.15 <- matrix(ncol = num.of.sims, nrow = 120)
+constant.sims.cov.15 <- matrix(ncol = num.of.sims, nrow = 120)
+
+for(j in 1:num.of.sims){
+  for(i in 1:105){
+    window.start <- i
+    window.end <- i + 14
+    
+    segment <- smoothed.const.df[c(window.start:window.end),j]
+    
+    constant.sims.cor.15[i,j] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+    constant.sims.cov.15[i,j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+  }
+}
+
+warming.sims.cor.15 <- matrix(ncol=num.of.sims,nrow = 120)
+warming.sims.cov.15 <- matrix(ncol=num.of.sims,nrow = 120)
+
+for(j in 1:num.of.sims){
+  for(i in 1:105){
+    window.start <- i
+    window.end <- i + 14
+    
+    segment <- smoothed.warm.df[c(window.start:window.end),j]
+    
+    warming.sims.cor.15[i,j] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+    warming.sims.cov.15[i,j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+  }
+}
+```
+
+### Decay Time
+
+```{r}
+constant.sims.decay.time.15 <- matrix(ncol = num.of.sims, nrow = 45)
+warming.sims.decay.time.15 <- matrix(nco = num.of.sims, nrow = 45)
+
+for(i in 1:num.of.sims){
+  for(j in 1:45){
+    suppressWarnings(constant.sims.decay.time.15[j, i] <- -j/log(constant.sims.cor.15[j, i]))
+    suppressWarnings(warming.sims.decay.time.15[j, i] <- -j/log(warming.sims.cor.15[j, i]))
+  }
+}
+```
+
+## 30 Day Sliding Window
+
+### Standard Deviation, Mean, Skewness, Kurtosis
+
+```{r}
+num.of.sims <- 10^3
+
+# Making empty matricies
+constant.sims.sd.30 <- matrix(nrow = 90, ncol = num.of.sims)
+constant.sims.mean.30 <- matrix(nrow = 90, ncol = num.of.sims)
+constant.sims.skewness.30 <- matrix(nrow = 90, ncol = num.of.sims)
+constant.sims.kurtosis.30 <- matrix(nrow = 90, ncol = num.of.sims)
+
+warming.sims.sd.30 <- matrix(nrow = 90, ncol = num.of.sims)
+warming.sims.mean.30 <- matrix(nrow = 90, ncol = num.of.sims)
+warming.sims.skewness.30 <- matrix(nrow = 90, ncol = num.of.sims)
+warming.sims.kurtosis.30 <- matrix(nrow = 90, ncol = num.of.sims)
+
+# Use SlidingWindow to calculate sd, mean, skewness, and kurtosis
+for(i in 1:num.of.sims){
+  constant.sims.sd.30[ ,i] <- SlidingWindow(FUN = "sd", data = smoothed.const.df[,i], window = 30,step = 1)
+  constant.sims.mean.30[ ,i] <- SlidingWindow(FUN = "mean", data = smoothed.const.df[,i], window = 30, step = 1)
+  constant.sims.skewness.30[ ,i] <- SlidingWindow(FUN = "skewness", data = smoothed.const.df[,i], window = 30, step = 1)
+  constant.sims.kurtosis.30[ ,i] <- SlidingWindow(FUN = "kurtosis", data = smoothed.const.df[,i], window = 30, step = 1)
+}
+
+for(i in 1:num.of.sims){
+  warming.sims.sd.30[ ,i] <- SlidingWindow(FUN = "sd", data = smoothed.warm.df[,i], window = 30,step = 1)
+  warming.sims.mean.30[ ,i] <- SlidingWindow(FUN = "mean", data = smoothed.warm.df[,i], window = 30, step = 1)
+  warming.sims.skewness.30[ ,i] <- SlidingWindow(FUN = "skewness", data = smoothed.warm.df[,i], window = 30, step = 1)
+  warming.sims.kurtosis.30[ ,i] <- SlidingWindow(FUN = "kurtosis", data = smoothed.warm.df[,i], window = 30, step = 1)
+}
+```
+
+### Variation
+
+```{r}
+constant.sims.variance.30 <- constant.sims.sd.30*constant.sims.sd.30
+warming.sims.variance.30 <- warming.sims.sd.30*warming.sims.sd.30
+```
+
+### Co-Efficient of Variation
+
+```{r}
+constant.sims.cv.30 <- constant.sims.sd.30/constant.sims.mean.30
+warming.sims.cv.30 <- warming.sims.sd.30/warming.sims.mean.30
+```
+
+### Index of Dispersion
+
+```{r}
+constant.sims.id.30 <- constant.sims.variance.30/constant.sims.mean.30
+warming.sims.id.30 <- warming.sims.variance.30/warming.sims.mean.30
+```
+
+### First Difference Variance
+
+```{r}
+constant.sims.first.diff.variance.30 <- matrix(ncol = num.of.sims, nrow = 90)
+warming.sims.first.diff.variance.30 <- matrix(ncol = num.of.sims, nrow = 90)
+
+for(i in 1:num.of.sims){
+  for(j in 2:90){
+    constant.sims.first.diff.variance.30[j - 1,i] <- constant.sims.variance.30[j,i] - constant.sims.variance.30[j - 1,i]
+    warming.sims.first.diff.variance.30[j - 1,i] <- warming.sims.variance.30[j,i] - warming.sims.variance.30[j - 1,i]
+  }
+}
+
+# Get rid of NA (last) row
+constant.sims.first.diff.variance.30 <- constant.sims.first.diff.variance.30[1:89, ]
+warming.sims.first.diff.variance.30 <- warming.sims.first.diff.variance.30[1:89, ]
+```
+
+### Autocorrelation and Autocovariance
+
+```{r}
+constant.sims.cor.30 <- matrix(ncol = num.of.sims, nrow = 120)
+constant.sims.cov.30 <- matrix(ncol = num.of.sims, nrow = 120)
+
+for(j in 1:num.of.sims){
+  for(i in 1:90){
+    window.start <- i
+    window.end <- i + 29
+    
+    segment <- smoothed.const.df[c(window.start:window.end),j]
+    
+    constant.sims.cor.30[i,j] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+    constant.sims.cov.30[i,j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+  }
+}
+
+warming.sims.cor.30 <- matrix(ncol=num.of.sims,nrow = 120)
+warming.sims.cov.30 <- matrix(ncol=num.of.sims,nrow = 120)
+
+for(j in 1:num.of.sims){
+  for(i in 1:90){
+    window.start <- i
+    window.end <- i + 29
+    
+    segment <- smoothed.warm.df[c(window.start:window.end),j]
+    
+    warming.sims.cor.30[i,j] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+    warming.sims.cov.30[i,j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+  }
+}
+```
+
+### Decay Time
+
+```{r}
+constant.sims.decay.time.30 <- matrix(ncol = num.of.sims, nrow = 30)
+warming.sims.decay.time.30 <- matrix(nco = num.of.sims, nrow = 30)
+
+for(i in 1:num.of.sims){
+  for(j in 1:30){
+    suppressWarnings(constant.sims.decay.time.30[j, i] <- -j/log(constant.sims.cor.30[j, i]))
+    suppressWarnings(warming.sims.decay.time.30[j, i] <- -j/log(warming.sims.cor.30[j, i]))
+  }
+}
+```
+
+# Area Under Curve (AUC) Tests
+
+```{r}
+
+```

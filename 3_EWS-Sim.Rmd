@@ -412,8 +412,8 @@ for(j in 1:num.of.sims){
   }
 }
 
-warming.sims.cor.5 <- matrix(ncol=num.of.sims,nrow=120)
-warming.sims.cov.5 <- matrix(ncol=num.of.sims,nrow=120)
+warming.sims.cor.5 <- matrix(ncol=num.of.sims,nrow = 120)
+warming.sims.cov.5 <- matrix(ncol=num.of.sims,nrow = 120)
 
 for(j in 1:num.of.sims){
   for(i in 1:115){
@@ -725,8 +725,8 @@ for(j in 1:num.of.sims){
   }
 }
 
-warming.sims.cor.15 <- matrix(ncol=num.of.sims,nrow=120)
-warming.sims.cov.15 <- matrix(ncol=num.of.sims,nrow=120)
+warming.sims.cor.15 <- matrix(ncol=num.of.sims,nrow = 120)
+warming.sims.cov.15 <- matrix(ncol=num.of.sims,nrow = 120)
 
 for(j in 1:num.of.sims){
   for(i in 1:105){
@@ -1038,8 +1038,8 @@ for(j in 1:num.of.sims){
   }
 }
 
-warming.sims.cor.30 <- matrix(ncol=num.of.sims,nrow=120)
-warming.sims.cov.30 <- matrix(ncol=num.of.sims,nrow=120)
+warming.sims.cor.30 <- matrix(ncol=num.of.sims,nrow = 120)
+warming.sims.cov.30 <- matrix(ncol=num.of.sims,nrow = 120)
 
 for(j in 1:num.of.sims){
   for(i in 1:90){
