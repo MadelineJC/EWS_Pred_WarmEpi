@@ -722,6 +722,92 @@ AUC_df <- data.frame(metrics, AUC_5, AUC_15, AUC_30); AUC_df
 
 A quick plot!
 
+>>>>>>> 236011fac6124c7103a4fce3f1096427af95f946
 ```{r}
+time.30 <- c(1:30)
 
+for(i in 1:num.of.sims){
+  constant.sims.mean.30.tau[i] <- cor(constant.sims.mean.30[ , i], time.30, method = "kendall")
+  constant.sims.skewness.30.tau[i] <- cor(constant.sims.skewness.30[ , i], time.30, method = "kendall")
+  constant.sims.kurtosis.30.tau[i] <- cor(constant.sims.kurtosis.30[ , i], time.30, method = "kendall")
+  constant.sims.variance.30.tau[i] <- cor(constant.sims.variance.30[ , i], time.30, method = "kendall")
+  constant.sims.cv.30.tau[i] <- cor(constant.sims.cv.30[ , i], time.30, method = "kendall")
+  constant.sims.id.30.tau[i] <- cor(constant.sims.id.30[ , i], time.30, method = "kendall")
+  constant.sims.first.diff.variance.30.tau[i] <- cor(constant.sims.first.diff.variance.30[ , i], time.30, method = "kendall")
+  constant.sims.cor.30.tau[i] <- cor(constant.sims.cor.30[ , i], time.30, method = "kendall")
+  constant.sims.cov.30.tau[i] <- cor(constant.sims.cov.30[ , i], time.30, method = "kendall")
+  constant.sims.decay.time.30.tau[i] <- cor(constant.sims.decay.time.30[ , i], time.30, method = "kendall")
+  
+  warming.sims.mean.30.tau[i] <- cor(warming.sims.mean.30[ , i], time.30, method = "kendall")
+  warming.sims.skewness.30.tau[i] <- cor(warming.sims.skewness.30[ , i], time.30, method = "kendall")
+  warming.sims.kurtosis.30.tau[i] <- cor(warming.sims.kurtosis.30[ , i], time.30, method = "kendall")
+  warming.sims.variance.30.tau[i] <- cor(warming.sims.variance.30[ , i], time.30, method = "kendall")
+  warming.sims.cv.30.tau[i] <- cor(warming.sims.cv.30[ , i], time.30, method = "kendall")
+  warming.sims.id.30.tau[i] <- cor(warming.sims.id.30[ , i], time.30, method = "kendall")
+  warming.sims.first.diff.variance.30.tau[i] <- cor(warming.sims.first.diff.variance.30[ , i], time.30, method = "kendall")
+  warming.sims.cor.30.tau[i] <- cor(warming.sims.cor.30[ , i], time.30, method = "kendall")
+  warming.sims.cov.30.tau[i] <- cor(warming.sims.cov.30[ , i], time.30, method = "kendall")
+  warming.sims.decay.time.30.tau[i] <- cor(warming.sims.decay.time.30[ , i], time.30, method = "kendall")
+}
+```
+
+Calculating AUC:
+
+```{r}
+AUC_variance_30 <- calc_auc(warming.sims.variance.30.tau, constant.sims.variance.30.tau); AUC_variance_30
+AUC_mean_30 <- calc_auc(warming.sims.mean.30.tau, constant.sims.mean.30.tau); AUC_mean_30
+AUC_kurtosis_30 <- calc_auc(warming.sims.kurtosis.30.tau, constant.sims.kurtosis.30.tau); AUC_kurtosis_30
+AUC_skewness_30 <- calc_auc(warming.sims.skewness.30.tau, constant.sims.skewness.30.tau); AUC_skewness_30
+AUC_id_30 <- calc_auc(warming.sims.id.30.tau, constant.sims.id.30.tau); AUC_id_30
+AUC_first.diff.variance_30 <- calc_auc(warming.sims.first.diff.variance.30.tau, constant.sims.first.diff.variance.30.tau); AUC_first.diff.variance_30
+AUC_cor_30 <- calc_auc(warming.sims.cor.30.tau, constant.sims.cor.30.tau); AUC_cor_30
+AUC_cov_30 <- calc_auc(warming.sims.cov.30.tau, constant.sims.cov.30.tau); AUC_cov_30
+AUC_cv_30 <- calc_auc(warming.sims.cv.30.tau, constant.sims.cv.30.tau); AUC_cv_30
+AUC_decay.time_30 <- calc_auc(warming.sims.decay.time.30.tau, constant.sims.decay.time.30.tau); AUC_decay.time_30
+```
+
+## Summarize Outputs
+
+```{r}
+metrics <- c("mean", "skewness", "kurtosis", "variance", "cv", "id", "first.diff.variance", "cor", "cov", "decay.time")
+
+AUC_5 <- c(AUC_mean_5, AUC_skewness_5, AUC_kurtosis_5, AUC_variance_5, AUC_cv_5, 
+           AUC_id_5, AUC_first.diff.variance_5, AUC_cor_5 ,AUC_cov_5, AUC_decay.time_5)
+AUC_15 <- c(AUC_mean_15, AUC_skewness_15, AUC_kurtosis_15, AUC_variance_15, AUC_cv_15, 
+           AUC_id_15, AUC_first.diff.variance_15, AUC_cor_15 ,AUC_cov_15, AUC_decay.time_15)
+AUC_30 <- c(AUC_mean_30, AUC_skewness_30, AUC_kurtosis_30, AUC_variance_30, AUC_cv_30, 
+           AUC_id_30, AUC_first.diff.variance_30, AUC_cor_30 ,AUC_cov_30, AUC_decay.time_30)
+AUC_df <- data.frame(metrics, AUC_5, AUC_15, AUC_30); AUC_df
+```
+
+A quick plot!
+
+```{r}
+metrics_full <- c("Mean", "Skewness", "Kurtosis", "Variance", "Covariance", "Index of Dispersion", "First Difference Variance", "Autocorrelation", "Autocovariance", "Decay Time")
+
+## Plot 
+plot(1:10, AUC_df$AUC_5, type = "p", 
+     main = "Smoothed Simulated Data", xaxt = "none", xlab = "", ylim = c(0.3, 0.7), ylab = "AUC",
+     col = "forestgreen", pch = 19)
+points(1:10, AUC_df$AUC_15, col = "orchid", pch = 19)
+points(1:10, AUC_df$AUC_30, col = "#4B0082", pch = 19)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2)
+legend("bottomright", 
+       legend = c("Sliding Window = 5 Days", "Sliding Window = 15 Days", "Sliding Window = 30 Days"),
+       col = c("forestgreen", "orchid", "#4B0082"), pch = 19)
+
+## Saving plot as .png
+png(file = "Plots/AUC_SmoothedSimulatedData.png", width = 1500, height = 350)
+plot(1:10, AUC_df$AUC_5, type = "p", 
+     main = "Smoothed Simulated Data", xaxt = "none", xlab = "", ylim = c(0.3, 0.7), ylab = "AUC",
+     col = "forestgreen", pch = 19)
+points(1:10, AUC_df$AUC_15, col = "orchid", pch = 19)
+points(1:10, AUC_df$AUC_30, col = "#4B0082", pch = 19)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full)
+legend("bottomright", 
+       legend = c("Sliding Window = 5 Days", "Sliding Window = 15 Days", "Sliding Window = 30 Days"),
+       col = c("forestgreen", "orchid", "#4B0082"), pch = 19)
+dev.off()
 ```
