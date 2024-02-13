@@ -1578,6 +1578,7 @@ AUC_15 <- c(AUC_mean_15, AUC_skewness_15, AUC_kurtosis_15, AUC_variance_15, AUC_
 AUC_30 <- c(AUC_mean_30, AUC_skewness_30, AUC_kurtosis_30, AUC_variance_30, AUC_cv_30, 
            AUC_id_30, AUC_first.diff.variance_30, AUC_cor_30 ,AUC_cov_30, AUC_decay.time_30)
 AUC_df <- data.frame(metrics, AUC_5, AUC_15, AUC_30); AUC_df
+saveRDS(AUC_df, "Objects/AUC_SimulatedData.rds")
 ```
 
 Let's make a quick plot:

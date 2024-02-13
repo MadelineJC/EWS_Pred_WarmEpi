@@ -534,7 +534,9 @@ for (i in 5:8){
   lines(sub1[ , 1], df[ , i], col = cols[i], lwd = 2)
 }
 ```
+
 # Plotting
+
 ```{r}
 png("Plots/EmpDat_Detrend.png", width = 2000, height = 800)
 par(mfrow = c(2, 4))
