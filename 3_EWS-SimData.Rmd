@@ -1588,7 +1588,7 @@ metrics_full <- c("Mean", "Skewness", "Kurtosis", "Variance", "Covariance", "Ind
 
 ## Plot 
 plot(1:10, AUC_df$AUC_5, type = "p", 
-     main = "Simulated Data", xaxt = "none", xlab = "", ylim = c(0.3, 0.7), ylab = "AUC",
+     main = "Simulated Data", xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
      col = "forestgreen", pch = 19)
 points(1:10, AUC_df$AUC_15, col = "orchid", pch = 19)
 points(1:10, AUC_df$AUC_30, col = "#4B0082", pch = 19)
@@ -1601,7 +1601,7 @@ legend("bottomright",
 ## Saving plot as .png
 png(file = "Plots/AUC_SimulatedData.png", width = 1500, height = 350)
 plot(1:10, AUC_df$AUC_5, type = "p", 
-     main = "Simulated Data", xaxt = "none", xlab = "", ylim = c(0.3, 0.7), ylab = "AUC",
+     main = "Simulated Data", xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
      col = "forestgreen", pch = 19)
 points(1:10, AUC_df$AUC_15, col = "orchid", pch = 19)
 points(1:10, AUC_df$AUC_30, col = "#4B0082", pch = 19)

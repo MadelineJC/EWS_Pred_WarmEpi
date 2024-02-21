@@ -290,11 +290,12 @@ for (j in widths){
   df[ , j] <- smoothed
 }
 
+cols <- c("red3", "orange", "goldenrod1", "forestgreen", "cornflowerblue", "orchid")
 plot(sub8$day, sub8$infecteds, type = "l",
      main = "Manually Smoothed (Every 3 Days), Varying Bandwidths", xlab = "Day", ylab = "Infecteds",
-     col = "grey")
+     col = "grey", lwd = 2)
 for (i in 1:length(widths)){
-  lines(sub8$day, df[ , i], col = cols[i], lty = 2)
+  lines(sub8$day, df[ , i], col = cols[i], lwd = 2, lty = 2)
 }
 ```
 
