@@ -442,12 +442,14 @@ for (j in subpops){
   }
   smooth.emp.b3[ , j] <- smoothed
 }
+cols <- c("navy", "cornflowerblue", "steelblue2", "lightblue2")
 plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 5),
      main = "Constant Temperature", xlab = "Day", ylab = "Infecteds")
 for (i in 1:4){
   lines(sub1[ , 1], subpops.list[[i]][ , 2], col = "grey", lwd = 2)
   lines(sub1[ , 1], smooth.emp.b3[ , i], col = cols[i], lwd = 2)
 }
+cols <- c("darkred", "firebrick", "red2", "tomato")
 plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 5),
      main = "Rising Temperature", xlab = "Day", ylab = "Infecteds")
 for (i in 5:8){
@@ -567,12 +569,14 @@ for (j in subpops){
   }
   smooth.emp.b2[ , j] <- smoothed
 }
+cols <- c("navy", "cornflowerblue", "steelblue2", "lightblue2")
 plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 5),
      main = "Constant Temperature", xlab = "Day", ylab = "Infecteds")
 for (i in 1:4){
   lines(sub1[ , 1], subpops.list[[i]][ , 2], col = "grey", lwd = 2)
   lines(sub1[ , 1], smooth.emp.b2[ , i], col = cols[i], lwd = 2)
 }
+cols <- c("darkred", "firebrick", "red2", "tomato")
 plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 5),
      main = "Rising Temperature", xlab = "Day", ylab = "Infecteds")
 for (i in 5:8){
@@ -692,12 +696,14 @@ for (j in subpops){
   }
   smooth.emp.b4[ , j] <- smoothed
 }
+cols <- c("navy", "cornflowerblue", "steelblue2", "lightblue2")
 plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 5),
      main = "Constant Temperature", xlab = "Day", ylab = "Infecteds")
 for (i in 1:4){
   lines(sub1[ , 1], subpops.list[[i]][ , 2], col = "grey", lwd = 2)
   lines(sub1[ , 1], smooth.emp.b4[ , i], col = cols[i], lwd = 2)
 }
+cols <- c("darkred", "firebrick", "red2", "tomato")
 plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 5),
      main = "Rising Temperature", xlab = "Day", ylab = "Infecteds")
 for (i in 5:8){
