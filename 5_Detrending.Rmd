@@ -301,7 +301,323 @@ for (i in 1:length(widths)){
 
 Looking at the smoothed time series above, it looks like we should go with a **bandwidth of 2 or 3**.
 
-# Smoothing Simulated and Empirical Data: Bandwidth = 4
+# Smoothing: Bandwidth = 1
+
+## Simulated Data
+
+```{r}
+constant1 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.1.csv")
+constant2 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.2.csv")
+constant3 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.3.csv")
+constant4 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.4.csv")
+constant5 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.5.csv")
+constant6 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.6.csv")
+constant7 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.7.csv")
+constant8 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.8.csv")
+constant9 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.9.csv")
+constant10 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.10.csv")
+warming1 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.1.csv")
+warming2 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.2.csv")
+warming3 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.3.csv")
+warming4 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.4.csv")
+warming5 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.5.csv")
+warming6 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.6.csv")
+warming7 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.7.csv")
+warming8 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.8.csv")
+warming9 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.9.csv")
+warming10 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.10.csv")
+const.df <- data.frame(cbind(constant1[ , 2:101],
+                             constant2[ , 2:101],
+                             constant3[ , 2:101],
+                             constant4[ , 2:101],
+                             constant5[ , 2:101],
+                             constant6[ , 2:101],
+                             constant7[ , 2:101],
+                             constant8[ , 2:101],
+                             constant9[ , 2:101],
+                             constant10[ , 2:101]))
+warm.df <- data.frame(cbind(warming1[ , 2:101],
+                             warming2[ , 2:101],
+                             warming3[ , 2:101],
+                             warming4[ , 2:101],
+                             warming5[ , 2:101],
+                             warming6[ , 2:101],
+                             warming7[ , 2:101],
+                             warming8[ , 2:101],
+                             warming9[ , 2:101],
+                             warming10[ , 2:101]))
+
+all.days <- seq(1, 120, 1)
+day.nums <- seq(0, length(all.days) - 1, 1)
+for (i in 2:(length(all.days) - 1)){
+  temp <- c(seq(-i + 1, -1, 1), 0, seq(1, length(all.days) - i, 1))
+  day.nums <- cbind(day.nums, temp)
+}
+day.nums <- cbind(day.nums, rev(seq(0, length(all.days) - 1, 1))*(-1))
+
+width <- 1
+smooth.sim.const.b1 <- matrix(nrow = length(all.days), ncol = ncol(const.df)) 
+smooth.sim.warm.b1 <- matrix(nrow = length(all.days), ncol = ncol(warm.df))
+for (j in 1:ncol(const.df)){
+  temp <- c(); smoothed.c <- c(); smoothed.w <- c()
+  for (i in 1:length(all.days)){
+    temp <- exp(-(day.nums[ , i]^2) / (2*(width^2)))
+    temp <- temp/sum(temp)
+    smoothed.c[i] <- sum(const.df[ , j]*temp)
+    smoothed.w[i] <- sum(warm.df[ , j]*temp)
+  }
+  smooth.sim.const.b1[ , j] <- smoothed.c
+  smooth.sim.warm.b1[ , j] <- smoothed.w
+}
+
+par(mfrow = c(1, 2))
+plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 120),
+     main = "Constant Temperature", xlab = "Day", ylab = "Infecteds")
+for (i in 1:1000){
+  lines(1:120, const.df[ , i], col = "grey")
+  lines(1:120, smooth.sim.const.b1[ , i], col = "cornflowerblue", lty = 2)
+}
+plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 120),
+     main = "Rising Temperature", xlab = "Day", ylab = "Infecteds")
+for (i in 1:1000){
+  lines(1:120, warm.df[ , i], col = "grey")
+  lines(1:120, smooth.sim.warm.b1[ , i], col = "red3", lty = 2)
+}
+
+set.seed(123); sample <- sample(1:1000, 20)
+par(mfrow = c(1, 2))
+plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 120),
+     main = "Constant Temperature (Select Implementations)", xlab = "Day", ylab = "Infecteds")
+for (i in sample){
+  lines(1:120, const.df[ , i], col = "grey")
+  lines(1:120, smooth.sim.const.b1[ , i], col = "cornflowerblue", lty = 2)
+}
+plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 120),
+     main = "Rising Temperature (Select Implementations)", xlab = "Day", ylab = "Infecteds")
+for (i in sample){
+  lines(1:120, warm.df[ , i], col = "grey")
+  lines(1:120, smooth.sim.warm.b1[ , i], col = "red3", lty = 2)
+}
+```
+
+## Empirical Data
+
+```{r}
+data <- read.csv("Kirk_Data/Epidemics_Data_Dryad/Kirk_et_al_epidemics_sampling_data.csv")
+data.sum <- summaryBy(status ~ population + treatment + day, data = data, FUN = sum)
+sub1 <- subset(data.sum, population == 1) 
+sub1 <- cbind(sub1$day, sub1$status.sum); colnames(sub1) <- c("day", "infecteds")
+sub2 <- subset(data.sum, population == 2) 
+sub2 <- cbind(sub2$day, sub2$status.sum); colnames(sub2) <- c("day", "infecteds")
+sub3 <- subset(data.sum, population == 3) 
+sub3 <- cbind(sub3$day, sub3$status.sum); colnames(sub3) <- c("day", "infecteds")
+sub4 <- subset(data.sum, population == 4) 
+sub4 <- cbind(sub4$day, sub4$status.sum); colnames(sub4) <- c("day", "infecteds")
+sub5 <- subset(data.sum, population == 5) 
+sub5 <- cbind(sub5$day, sub5$status.sum); colnames(sub5) <- c("day", "infecteds")
+sub6 <- subset(data.sum, population == 6) 
+sub6 <- cbind(sub6$day, sub6$status.sum); colnames(sub6) <- c("day", "infecteds")
+sub7 <- subset(data.sum, population == 7) 
+sub7 <- cbind(sub7$day, sub7$status.sum); colnames(sub7) <- c("day", "infecteds")
+sub8 <- subset(data.sum, population == 8) 
+sub8 <- cbind(sub8$day, sub8$status.sum); colnames(sub8) <- c("day", "infecteds")
+
+subpops.list <- list(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8)
+
+interval <- 3
+day.nums <- seq(0, sub1[ , 1][length(sub1[ , 1])] - interval, 3)
+suppressWarnings(
+for (i in sub1[ , 1][1:39]){
+  temp <- c(seq(-i, -interval, interval), 0, seq(interval, sub1[ , 1][length(sub1[ , 1])] - interval*2, interval))
+  day.nums <- cbind(day.nums, temp)
+})
+
+width <- 1; subpops <- seq(1, 8, 1); smooth.emp.b1 <- matrix(nrow = nrow(sub1), ncol = length(widths))
+for (j in subpops){
+  temp <- c(); smoothed <- c()
+  for (i in 1:nrow(sub1)){
+    temp <- exp(-(day.nums[ , i]^2) / (2*(width^2)))
+    temp <- temp/sum(temp)
+    smoothed[i] <- sum(subpops.list[[j]][ , 2]*temp)
+  }
+  smooth.emp.b1[ , j] <- smoothed
+}
+cols <- c("navy", "cornflowerblue", "steelblue2", "lightblue2")
+plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 5),
+     main = "Constant Temperature", xlab = "Day", ylab = "Infecteds")
+for (i in 1:4){
+  lines(sub1[ , 1], subpops.list[[i]][ , 2], col = "grey", lwd = 2)
+  lines(sub1[ , 1], smooth.emp.b1[ , i], col = cols[i], lwd = 2)
+}
+cols <- c("darkred", "firebrick", "red2", "tomato")
+plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 5),
+     main = "Rising Temperature", xlab = "Day", ylab = "Infecteds")
+for (i in 5:8){
+  lines(sub1[ , 1], subpops.list[[i]][ , 2], col = "grey", lwd = 2)
+  lines(sub1[ , 1], smooth.emp.b1[ , i], col = cols[i - 4], lwd = 2)
+}
+```
+
+### Plotting
+
+```{r}
+png("Plots/EmpDat_Detrend_B1.png", width = 2000, height = 800)
+par(mfrow = c(2, 4))
+plot(sub1[ , 1], subpops.list[[1]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
+     main = "Subpopulation 1 (Constant) | Bandwidth = 4", xlab = "Day", ylab = "Infecteds")
+lines(sub1[ , 1], smooth.emp.b1[ , 1], col = "cornflowerblue", lwd = 2, lty = 2)
+plot(sub2[ , 1], subpops.list[[2]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
+     main = "Subpopulation 2 (Constant) | Bandwidth = 4", xlab = "Day", ylab = "Infecteds")
+lines(sub2[ , 1], smooth.emp.b1[ , 2], col = "cornflowerblue", lwd = 2, lty = 2)
+plot(sub4[ , 1], subpops.list[[3]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
+     main = "Subpopulation 3 (Constant) | Bandwidth = 4", xlab = "Day", ylab = "Infecteds")
+lines(sub4[ , 1], smooth.emp.b1[ , 3], col = "cornflowerblue", lwd = 2, lty = 2)
+plot(sub4[ , 1], subpops.list[[4]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
+     main = "Subpopulation 4 (Constant) | Bandwidth = 4", xlab = "Day", ylab = "Infecteds")
+lines(sub4[ , 1], smooth.emp.b1[ , 4], col = "cornflowerblue", lwd = 2, lty = 2)
+plot(sub5[ , 1], subpops.list[[5]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
+     main = "Subpopulation 5 (Warming) | Bandwidth = 4", xlab = "Day", ylab = "Infecteds")
+lines(sub5[ , 1], smooth.emp.b1[ , 5], col = "red3", lwd = 2, lty = 2)
+plot(sub6[ , 1], subpops.list[[6]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
+     main = "Subpopulation 6 (Warming) | Bandwidth = 4", xlab = "Day", ylab = "Infecteds")
+lines(sub6[ , 1], smooth.emp.b1[ , 6], col = "red3", lwd = 2, lty = 2)
+plot(sub7[ , 1], subpops.list[[7]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
+     main = "Subpopulation 7 (Warming) | Bandwidth = 4", xlab = "Day", ylab = "Infecteds")
+lines(sub7[ , 1], smooth.emp.b1[ , 7], col = "red3", lwd = 2, lty = 2)
+plot(sub8[ , 1], subpops.list[[8]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
+     main = "Subpopulation 8 (Warming) | Bandwidth = 4", xlab = "Day", ylab = "Infecteds")
+lines(sub8[ , 1], smooth.emp.b1[ , 8], col = "red3", lwd = 2, lty = 2)
+dev.off()
+```
+
+# Smoothing: Bandwidth = 2
+
+## Simulated Data
+
+```{r}
+all.days <- seq(1, 120, 1)
+day.nums <- seq(0, length(all.days) - 1, 1)
+for (i in 2:(length(all.days) - 1)){
+  temp <- c(seq(-i + 1, -1, 1), 0, seq(1, length(all.days) - i, 1))
+  day.nums <- cbind(day.nums, temp)
+}
+day.nums <- cbind(day.nums, rev(seq(0, length(all.days) - 1, 1))*(-1))
+
+width <- 2
+smooth.sim.const.b2 <- matrix(nrow = length(all.days), ncol = ncol(const.df)) 
+smooth.sim.warm.b2 <- matrix(nrow = length(all.days), ncol = ncol(warm.df))
+for (j in 1:ncol(const.df)){
+  temp <- c(); smoothed.c <- c(); smoothed.w <- c()
+  for (i in 1:length(all.days)){
+    temp <- exp(-(day.nums[ , i]^2) / (2*(width^2)))
+    temp <- temp/sum(temp)
+    smoothed.c[i] <- sum(const.df[ , j]*temp)
+    smoothed.w[i] <- sum(warm.df[ , j]*temp)
+  }
+  smooth.sim.const.b2[ , j] <- smoothed.c
+  smooth.sim.warm.b2[ , j] <- smoothed.w
+}
+
+par(mfrow = c(1, 2))
+plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 120),
+     main = "Constant Temperature", xlab = "Day", ylab = "Infecteds")
+for (i in 1:1000){
+  lines(1:120, const.df[ , i], col = "grey")
+  lines(1:120, smooth.sim.const.b2[ , i], col = "cornflowerblue", lty = 2)
+}
+plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 120),
+     main = "Rising Temperature", xlab = "Day", ylab = "Infecteds")
+for (i in 1:1000){
+  lines(1:120, warm.df[ , i], col = "grey")
+  lines(1:120, smooth.sim.warm.b2[ , i], col = "red3", lty = 2)
+}
+
+set.seed(123); sample <- sample(1:1000, 20)
+par(mfrow = c(1, 2))
+plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 120),
+     main = "Constant Temperature (Select Implementations)", xlab = "Day", ylab = "Infecteds")
+for (i in sample){
+  lines(1:120, const.df[ , i], col = "grey")
+  lines(1:120, smooth.sim.const.b2[ , i], col = "cornflowerblue", lty = 2)
+}
+plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 120),
+     main = "Rising Temperature (Select Implementations)", xlab = "Day", ylab = "Infecteds")
+for (i in sample){
+  lines(1:120, warm.df[ , i], col = "grey")
+  lines(1:120, smooth.sim.warm.b2[ , i], col = "red3", lty = 2)
+}
+```
+
+## Empirical Data
+
+```{r}
+interval <- 3
+day.nums <- seq(0, sub1[ , 1][length(sub1[ , 1])] - interval, 3)
+suppressWarnings(
+for (i in sub1[ , 1][1:39]){
+  temp <- c(seq(-i, -interval, interval), 0, seq(interval, sub1[ , 1][length(sub1[ , 1])] - interval*2, interval))
+  day.nums <- cbind(day.nums, temp)
+})
+
+width <- 2; subpops <- seq(1, 8, 1); smooth.emp.b2 <- matrix(nrow = nrow(sub1), ncol = length(widths))
+for (j in subpops){
+  temp <- c(); smoothed <- c()
+  for (i in 1:nrow(sub1)){
+    temp <- exp(-(day.nums[ , i]^2) / (2*(width^2)))
+    temp <- temp/sum(temp)
+    smoothed[i] <- sum(subpops.list[[j]][ , 2]*temp)
+  }
+  smooth.emp.b2[ , j] <- smoothed
+}
+cols <- c("navy", "cornflowerblue", "steelblue2", "lightblue2")
+plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 5),
+     main = "Constant Temperature", xlab = "Day", ylab = "Infecteds")
+for (i in 1:4){
+  lines(sub1[ , 1], subpops.list[[i]][ , 2], col = "grey", lwd = 2)
+  lines(sub1[ , 1], smooth.emp.b2[ , i], col = cols[i], lwd = 2)
+}
+cols <- c("darkred", "firebrick", "red2", "tomato")
+plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 5),
+     main = "Rising Temperature", xlab = "Day", ylab = "Infecteds")
+for (i in 5:8){
+  lines(sub1[ , 1], subpops.list[[i]][ , 2], col = "grey", lwd = 2)
+  lines(sub1[ , 1], smooth.emp.b2[ , i], col = cols[i - 4], lwd = 2)
+}
+```
+
+### Plotting
+
+```{r}
+png("Plots/EmpDat_Detrend_B2.png", width = 2000, height = 800)
+par(mfrow = c(2, 4))
+plot(sub1[ , 1], subpops.list[[1]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
+     main = "Subpopulation 1 (Constant) | Bandwidth = 2", xlab = "Day", ylab = "Infecteds")
+lines(sub1[ , 1], smooth.emp.b2[ , 1], col = "cornflowerblue", lwd = 2)
+plot(sub2[ , 1], subpops.list[[2]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
+     main = "Subpopulation 2 (Constant) | Bandwidth = 2", xlab = "Day", ylab = "Infecteds")
+lines(sub2[ , 1], smooth.emp.b2[ , 2], col = "cornflowerblue", lwd = 2)
+plot(sub2[ , 1], subpops.list[[3]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
+     main = "Subpopulation 3 (Constant) | Bandwidth = 2", xlab = "Day", ylab = "Infecteds")
+lines(sub2[ , 1], smooth.emp.b2[ , 3], col = "cornflowerblue", lwd = 2)
+plot(sub4[ , 1], subpops.list[[4]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
+     main = "Subpopulation 4 (Constant) | Bandwidth = 2", xlab = "Day", ylab = "Infecteds")
+lines(sub4[ , 1], smooth.emp.b2[ , 4], col = "cornflowerblue", lwd = 2)
+plot(sub5[ , 1], subpops.list[[5]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
+     main = "Subpopulation 5 (Warming) | Bandwidth = 2", xlab = "Day", ylab = "Infecteds")
+lines(sub5[ , 1], smooth.emp.b2[ , 5], col = "red3", lwd = 2)
+plot(sub6[ , 1], subpops.list[[6]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
+     main = "Subpopulation 6 (Warming) | Bandwidth = 2", xlab = "Day", ylab = "Infecteds")
+lines(sub6[ , 1], smooth.emp.b2[ , 6], col = "red3", lwd = 2)
+plot(sub7[ , 1], subpops.list[[7]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
+     main = "Subpopulation 7 (Warming) | Bandwidth = 2", xlab = "Day", ylab = "Infecteds")
+lines(sub7[ , 1], smooth.emp.b2[ , 7], col = "red3", lwd = 2)
+plot(sub8[ , 1], subpops.list[[8]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
+     main = "Subpopulation 8 (Warming) | Bandwidth = 2", xlab = "Day", ylab = "Infecteds")
+lines(sub8[ , 1], smooth.emp.b2[ , 8], col = "red3", lwd = 2)
+dev.off()
+```
+
+# Smoothing: Bandwidth = 3
 
 ## Simulated Data
 
@@ -454,7 +770,7 @@ plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 5),
      main = "Rising Temperature", xlab = "Day", ylab = "Infecteds")
 for (i in 5:8){
   lines(sub1[ , 1], subpops.list[[i]][ , 2], col = "grey", lwd = 2)
-  lines(sub1[ , 1], smooth.emp.b3[ , i], col = cols[i], lwd = 2)
+  lines(sub1[ , 1], smooth.emp.b3[ , i], col = cols[i - 4], lwd = 2)
 }
 ```
 
@@ -490,134 +806,7 @@ lines(sub8[ , 1], smooth.emp.b3[ , 8], col = "red3", lwd = 2)
 dev.off()
 ```
 
-# Smoothing Simulated and Empirical Data: Bandwidth = 2
-
-## Simulated Data
-
-```{r}
-all.days <- seq(1, 120, 1)
-day.nums <- seq(0, length(all.days) - 1, 1)
-for (i in 2:(length(all.days) - 1)){
-  temp <- c(seq(-i + 1, -1, 1), 0, seq(1, length(all.days) - i, 1))
-  day.nums <- cbind(day.nums, temp)
-}
-day.nums <- cbind(day.nums, rev(seq(0, length(all.days) - 1, 1))*(-1))
-
-width <- 2
-smooth.sim.const.b2 <- matrix(nrow = length(all.days), ncol = ncol(const.df)) 
-smooth.sim.warm.b2 <- matrix(nrow = length(all.days), ncol = ncol(warm.df))
-for (j in 1:ncol(const.df)){
-  temp <- c(); smoothed.c <- c(); smoothed.w <- c()
-  for (i in 1:length(all.days)){
-    temp <- exp(-(day.nums[ , i]^2) / (2*(width^2)))
-    temp <- temp/sum(temp)
-    smoothed.c[i] <- sum(const.df[ , j]*temp)
-    smoothed.w[i] <- sum(warm.df[ , j]*temp)
-  }
-  smooth.sim.const.b2[ , j] <- smoothed.c
-  smooth.sim.warm.b2[ , j] <- smoothed.w
-}
-
-par(mfrow = c(1, 2))
-plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 120),
-     main = "Constant Temperature", xlab = "Day", ylab = "Infecteds")
-for (i in 1:1000){
-  lines(1:120, const.df[ , i], col = "grey")
-  lines(1:120, smooth.sim.const.b2[ , i], col = "cornflowerblue", lty = 2)
-}
-plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 120),
-     main = "Rising Temperature", xlab = "Day", ylab = "Infecteds")
-for (i in 1:1000){
-  lines(1:120, warm.df[ , i], col = "grey")
-  lines(1:120, smooth.sim.warm.b2[ , i], col = "red3", lty = 2)
-}
-
-set.seed(123); sample <- sample(1:1000, 20)
-par(mfrow = c(1, 2))
-plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 120),
-     main = "Constant Temperature (Select Implementations)", xlab = "Day", ylab = "Infecteds")
-for (i in sample){
-  lines(1:120, const.df[ , i], col = "grey")
-  lines(1:120, smooth.sim.const.b2[ , i], col = "cornflowerblue", lty = 2)
-}
-plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 120),
-     main = "Rising Temperature (Select Implementations)", xlab = "Day", ylab = "Infecteds")
-for (i in sample){
-  lines(1:120, warm.df[ , i], col = "grey")
-  lines(1:120, smooth.sim.warm.b2[ , i], col = "red3", lty = 2)
-}
-```
-
-## Empirical Data
-
-```{r}
-interval <- 3
-day.nums <- seq(0, sub1[ , 1][length(sub1[ , 1])] - interval, 3)
-suppressWarnings(
-for (i in sub1[ , 1][1:39]){
-  temp <- c(seq(-i, -interval, interval), 0, seq(interval, sub1[ , 1][length(sub1[ , 1])] - interval*2, interval))
-  day.nums <- cbind(day.nums, temp)
-})
-
-width <- 2; subpops <- seq(1, 8, 1); smooth.emp.b2 <- matrix(nrow = nrow(sub1), ncol = length(widths))
-for (j in subpops){
-  temp <- c(); smoothed <- c()
-  for (i in 1:nrow(sub1)){
-    temp <- exp(-(day.nums[ , i]^2) / (2*(width^2)))
-    temp <- temp/sum(temp)
-    smoothed[i] <- sum(subpops.list[[j]][ , 2]*temp)
-  }
-  smooth.emp.b2[ , j] <- smoothed
-}
-cols <- c("navy", "cornflowerblue", "steelblue2", "lightblue2")
-plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 5),
-     main = "Constant Temperature", xlab = "Day", ylab = "Infecteds")
-for (i in 1:4){
-  lines(sub1[ , 1], subpops.list[[i]][ , 2], col = "grey", lwd = 2)
-  lines(sub1[ , 1], smooth.emp.b2[ , i], col = cols[i], lwd = 2)
-}
-cols <- c("darkred", "firebrick", "red2", "tomato")
-plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 5),
-     main = "Rising Temperature", xlab = "Day", ylab = "Infecteds")
-for (i in 5:8){
-  lines(sub1[ , 1], subpops.list[[i]][ , 2], col = "grey", lwd = 2)
-  lines(sub1[ , 1], smooth.emp.b2[ , i], col = cols[i], lwd = 2)
-}
-```
-
-### Plotting
-
-```{r}
-png("Plots/EmpDat_Detrend_B2.png", width = 2000, height = 800)
-par(mfrow = c(2, 4))
-plot(sub1[ , 1], subpops.list[[1]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
-     main = "Subpopulation 1 (Constant) | Bandwidth = 2", xlab = "Day", ylab = "Infecteds")
-lines(sub1[ , 1], smooth.emp.b2[ , 1], col = "cornflowerblue", lwd = 2)
-plot(sub2[ , 1], subpops.list[[2]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
-     main = "Subpopulation 2 (Constant) | Bandwidth = 2", xlab = "Day", ylab = "Infecteds")
-lines(sub2[ , 1], smooth.emp.b2[ , 2], col = "cornflowerblue", lwd = 2)
-plot(sub2[ , 1], subpops.list[[3]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
-     main = "Subpopulation 3 (Constant) | Bandwidth = 2", xlab = "Day", ylab = "Infecteds")
-lines(sub2[ , 1], smooth.emp.b2[ , 3], col = "cornflowerblue", lwd = 2)
-plot(sub4[ , 1], subpops.list[[4]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
-     main = "Subpopulation 4 (Constant) | Bandwidth = 2", xlab = "Day", ylab = "Infecteds")
-lines(sub4[ , 1], smooth.emp.b2[ , 4], col = "cornflowerblue", lwd = 2)
-plot(sub5[ , 1], subpops.list[[5]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
-     main = "Subpopulation 5 (Warming) | Bandwidth = 2", xlab = "Day", ylab = "Infecteds")
-lines(sub5[ , 1], smooth.emp.b2[ , 5], col = "red3", lwd = 2)
-plot(sub6[ , 1], subpops.list[[6]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
-     main = "Subpopulation 6 (Warming) | Bandwidth = 2", xlab = "Day", ylab = "Infecteds")
-lines(sub6[ , 1], smooth.emp.b2[ , 6], col = "red3", lwd = 2)
-plot(sub7[ , 1], subpops.list[[7]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
-     main = "Subpopulation 7 (Warming) | Bandwidth = 2", xlab = "Day", ylab = "Infecteds")
-lines(sub7[ , 1], smooth.emp.b2[ , 7], col = "red3", lwd = 2)
-plot(sub8[ , 1], subpops.list[[8]][ , 2], type = "l", ylim = c(0, 5), col = "grey", lwd = 2,
-     main = "Subpopulation 8 (Warming) | Bandwidth = 2", xlab = "Day", ylab = "Infecteds")
-lines(sub8[ , 1], smooth.emp.b2[ , 8], col = "red3", lwd = 2)
-dev.off()
-```
-
-# Smoothing Simulated and Empirical Data: Bandwidth = 4
+# Smoothing: Bandwidth = 4
 
 ## Simulated Data
 
@@ -708,7 +897,7 @@ plot(0, 0, type = "n", xlim = c(1, 120), ylim = c(0, 5),
      main = "Rising Temperature", xlab = "Day", ylab = "Infecteds")
 for (i in 5:8){
   lines(sub1[ , 1], subpops.list[[i]][ , 2], col = "grey", lwd = 2)
-  lines(sub1[ , 1], smooth.emp.b4[ , i], col = cols[i], lwd = 2)
+  lines(sub1[ , 1], smooth.emp.b4[ , i], col = cols[i - 4], lwd = 2)
 }
 ```
 
@@ -849,12 +1038,15 @@ dev.off()
 # Saving Relevant Objects
 
 ```{r}
+saveRDS(smooth.sim.const.b1, "Objects/smooth-sim-const-b1.rds")
+saveRDS(smooth.sim.warm.b1, "Objects/smooth-sim-warm-b1.rds")
 saveRDS(smooth.sim.const.b2, "Objects/smooth-sim-const-b2.rds")
 saveRDS(smooth.sim.warm.b2, "Objects/smooth-sim-warm-b2.rds")
 saveRDS(smooth.sim.const.b3, "Objects/smooth-sim-const-b3.rds")
 saveRDS(smooth.sim.warm.b3, "Objects/smooth-sim-warm-b3.rds")
 saveRDS(smooth.sim.const.b4, "Objects/smooth-sim-const-b4.rds")
 saveRDS(smooth.sim.warm.b4, "Objects/smooth-sim-warm-b4.rds")
+saveRDS(smooth.emp.b1, "Objects/smooth-emp-b1.rds")
 saveRDS(smooth.emp.b2, "Objects/smooth-emp-b2.rds")
 saveRDS(smooth.emp.b3, "Objects/smooth-emp-b3.rds")
 saveRDS(smooth.emp.b4, "Objects/smooth-emp-b4.rds")
