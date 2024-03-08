@@ -962,7 +962,6 @@ So, we're missing AUCs for:
 
 Note: Decay time is dependent on autocorrelation, so if we figure out autocorrelation, we should be good for decay time as well.
 
-<<<<<<< HEAD
 ## Outputs
 
 ### Skewness
