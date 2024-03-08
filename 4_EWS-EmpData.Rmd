@@ -962,6 +962,7 @@ So, we're missing AUCs for:
 
 Note: Decay time is dependent on autocorrelation, so if we figure out autocorrelation, we should be good for decay time as well.
 
+<<<<<<< HEAD
 ## Outputs
 
 ### Skewness
@@ -1399,8 +1400,6 @@ pop1.ac
 pop1.decay.time
 ```
 
-Okay, that looks better (except for decay time... Back to that in a minute...).
-
 ### Computing Kendall's $\tau$s and AUCs
 
 ```{r}
@@ -1456,7 +1455,6 @@ AUC_data <- c(AUC_mean_data,
 
 metrics_full <- c("Mean", "Skewness", "Kurtosis", "Variance", "Covariance", "Index of Dispersion", "First Difference Variance", "Autocorrelation", "Autocovariance", "Decay Time")
 
-## Plot
 cols <- c("orchid", rep("black", 2), rep("orchid", 4), "black", "orchid", "black")
 pts <- c(19, rep(8, 2), rep(19, 4), 8, 19, 8)
 plot(1:10, AUC_data, type = "p", 
