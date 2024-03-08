@@ -1018,7 +1018,7 @@ print("Population 8"); pop8.decay.time
 
 The problem is that for each of these metrics, and in each population, we're getting from NaNs. Since we're getting NaNs instead of NAs, we could be dividing by 0 somewhere. Dividing by 0 also makes sense as the issue given that (1) we account for that issue when calculating coefficient of variation, and index of dispersion, and (2) we're not seeing this issue in the pre-processed empirical data, which are real-valued rather than integer-valued.
 
-## Adding `1e-10` to Every Abundance Value:
+## (1) Adding `1e-10` to Every Abundance Value:
 
 ```{r}
 sub1.mod <- sub1$status.sum + 1e-10
@@ -1134,7 +1134,7 @@ pop1.ac
 pop1.decay.time
 ```
 
-## Using Detrended Data (Bandwidth = 1)
+## (2) Using Detrended Data (Bandwidth = 1)
 
 ```{r}
 smooth.emp.b1 <- readRDS("Objects/smooth-emp-b1.rds")
@@ -1254,7 +1254,7 @@ pop1.decay.time
 
 Okay, now I think that the problem is that the windows over which skewness, etc. is being calculated, contain adjacent identical values, or, at least, values that are small enough for my computer to mistake for identical values.
 
-## Adding Small, Random Values
+## (3) Adding Small, Random Values
 
 ```{r}
 set.seed(123)
