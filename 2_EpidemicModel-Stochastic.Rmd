@@ -2,7 +2,7 @@
 
 ## Required Packages
 
-```{r, echo = FALSE}
+```{r, include = FALSE}
 library(deSolve)
 library(FME)
 library(GillespieSSA)

@@ -8,7 +8,7 @@ Instead of calculating R~0~, the parameters could also be used in one's preferre
 
 ## Required Packages
 
-```{r}
+```{r, include = FALSE}
 library(deSolve)
 library(FME)
 library(plotly)
