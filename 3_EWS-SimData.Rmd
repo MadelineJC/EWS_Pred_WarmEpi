@@ -209,15 +209,15 @@ warming.sims.kurtosis.5 <- matrix(nrow = 115, ncol = num.of.sims)
 for(i in 1:num.of.sims){
   constant.sims.sd.5[ ,i] <- SlidingWindow(FUN = "sd", data = constant.incidence.daily[,i], window = 5,step = 1)
   constant.sims.mean.5[ ,i] <- SlidingWindow(FUN = "mean", data = constant.incidence.daily[,i], window = 5, step = 1)
-  constant.sims.skewness.5[ ,i] <- SlidingWindow(FUN = "skewness", data = constant.incidence.daily[,i], window = 5, step = 1)
-  constant.sims.kurtosis.5[ ,i] <- SlidingWindow(FUN = "kurtosis", data = constant.incidence.daily[,i], window = 5, step = 1)
+  constant.sims.skewness.5[ ,i] <- SlidingWindow(FUN = "skewness", data = constant.incidence.daily[ ,i], window = 5, step = 1)
+  constant.sims.kurtosis.5[ ,i] <- SlidingWindow(FUN = "kurtosis", data = constant.incidence.daily[ ,i], window = 5, step = 1)
 }
 
 for(i in 1:num.of.sims){
   warming.sims.sd.5[ ,i] <- SlidingWindow(FUN = "sd", data = warming.incidence.daily[,i], window = 5,step = 1)
   warming.sims.mean.5[ ,i] <- SlidingWindow(FUN = "mean", data = warming.incidence.daily[,i], window = 5, step = 1)
-  warming.sims.skewness.5[ ,i] <- SlidingWindow(FUN = "skewness", data = warming.incidence.daily[,i], window = 5, step = 1)
-  warming.sims.kurtosis.5[ ,i] <- SlidingWindow(FUN = "kurtosis", data = warming.incidence.daily[,i], window = 5, step = 1)
+  warming.sims.skewness.5[ ,i] <- SlidingWindow(FUN = "skewness", data = warming.incidence.daily[ ,i], window = 5, step = 1)
+  warming.sims.kurtosis.5[ ,i] <- SlidingWindow(FUN = "kurtosis", data = warming.incidence.daily[ ,i], window = 5, step = 1)
 }
 ```
 
@@ -407,13 +407,13 @@ for(j in 1:num.of.sims){
     
     segment <- constant.incidence.daily[c(window.start:window.end),j]
     
-    constant.sims.cor.5[i,j] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
-    constant.sims.cov.5[i,j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+    constant.sims.cor.5[i, j] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+    constant.sims.cov.5[i, j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
   }
 }
 
-warming.sims.cor.5 <- matrix(ncol=num.of.sims,nrow = 120)
-warming.sims.cov.5 <- matrix(ncol=num.of.sims,nrow = 120)
+warming.sims.cor.5 <- matrix(ncol = num.of.sims,nrow = 120)
+warming.sims.cov.5 <- matrix(ncol = num.of.sims,nrow = 120)
 
 for(j in 1:num.of.sims){
   for(i in 1:115){
@@ -422,8 +422,8 @@ for(j in 1:num.of.sims){
     
     segment <- warming.incidence.daily[c(window.start:window.end),j]
     
-    warming.sims.cor.5[i,j] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
-    warming.sims.cov.5[i,j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+    warming.sims.cor.5[i, j] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+    warming.sims.cov.5[i, j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
   }
 }
 
@@ -522,15 +522,15 @@ warming.sims.kurtosis.15 <- matrix(nrow = 105, ncol = num.of.sims)
 for(i in 1:num.of.sims){
   constant.sims.sd.15[ ,i] <- SlidingWindow(FUN = "sd", data = constant.incidence.daily[,i], window = 15,step = 1)
   constant.sims.mean.15[ ,i] <- SlidingWindow(FUN = "mean", data = constant.incidence.daily[,i], window = 15, step = 1)
-  constant.sims.skewness.15[ ,i] <- SlidingWindow(FUN = "skewness", data = constant.incidence.daily[,i], window = 15, step = 1)
-  constant.sims.kurtosis.15[ ,i] <- SlidingWindow(FUN = "kurtosis", data = constant.incidence.daily[,i], window = 15, step = 1)
+  constant.sims.skewness.15[ ,i] <- SlidingWindow(FUN = "skewness", data = constant.incidence.daily[ ,i], window = 15, step = 1)
+  constant.sims.kurtosis.15[ ,i] <- SlidingWindow(FUN = "kurtosis", data = constant.incidence.daily[ ,i], window = 15, step = 1)
 }
 
 for(i in 1:num.of.sims){
   warming.sims.sd.15[ ,i] <- SlidingWindow(FUN = "sd", data = warming.incidence.daily[,i], window = 15,step = 1)
   warming.sims.mean.15[ ,i] <- SlidingWindow(FUN = "mean", data = warming.incidence.daily[,i], window = 15, step = 1)
-  warming.sims.skewness.15[ ,i] <- SlidingWindow(FUN = "skewness", data = warming.incidence.daily[,i], window = 15, step = 1)
-  warming.sims.kurtosis.15[ ,i] <- SlidingWindow(FUN = "kurtosis", data = warming.incidence.daily[,i], window = 15, step = 1)
+  warming.sims.skewness.15[ ,i] <- SlidingWindow(FUN = "skewness", data = warming.incidence.daily[ ,i], window = 15, step = 1)
+  warming.sims.kurtosis.15[ ,i] <- SlidingWindow(FUN = "kurtosis", data = warming.incidence.daily[ ,i], window = 15, step = 1)
 }
 ```
 
@@ -720,13 +720,13 @@ for(j in 1:num.of.sims){
     
     segment <- constant.incidence.daily[c(window.start:window.end),j]
     
-    constant.sims.cor.15[i,j] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
-    constant.sims.cov.15[i,j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+    constant.sims.cor.15[i, j] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+    constant.sims.cov.15[i, j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
   }
 }
 
-warming.sims.cor.15 <- matrix(ncol=num.of.sims,nrow = 120)
-warming.sims.cov.15 <- matrix(ncol=num.of.sims,nrow = 120)
+warming.sims.cor.15 <- matrix(ncol = num.of.sims,nrow = 120)
+warming.sims.cov.15 <- matrix(ncol = num.of.sims,nrow = 120)
 
 for(j in 1:num.of.sims){
   for(i in 1:105){
@@ -735,8 +735,8 @@ for(j in 1:num.of.sims){
     
     segment <- warming.incidence.daily[c(window.start:window.end),j]
     
-    warming.sims.cor.15[i,j] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
-    warming.sims.cov.15[i,j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+    warming.sims.cor.15[i, j] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+    warming.sims.cov.15[i, j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
   }
 }
 
@@ -835,15 +835,15 @@ warming.sims.kurtosis.30 <- matrix(nrow = 90, ncol = num.of.sims)
 for(i in 1:num.of.sims){
   constant.sims.sd.30[ ,i] <- SlidingWindow(FUN = "sd", data = constant.incidence.daily[,i], window = 30,step = 1)
   constant.sims.mean.30[ ,i] <- SlidingWindow(FUN = "mean", data = constant.incidence.daily[,i], window = 30, step = 1)
-  constant.sims.skewness.30[ ,i] <- SlidingWindow(FUN = "skewness", data = constant.incidence.daily[,i], window = 30, step = 1)
-  constant.sims.kurtosis.30[ ,i] <- SlidingWindow(FUN = "kurtosis", data = constant.incidence.daily[,i], window = 30, step = 1)
+  constant.sims.skewness.30[ ,i] <- SlidingWindow(FUN = "skewness", data = constant.incidence.daily[ ,i], window = 30, step = 1)
+  constant.sims.kurtosis.30[ ,i] <- SlidingWindow(FUN = "kurtosis", data = constant.incidence.daily[ ,i], window = 30, step = 1)
 }
 
 for(i in 1:num.of.sims){
   warming.sims.sd.30[ ,i] <- SlidingWindow(FUN = "sd", data = warming.incidence.daily[,i], window = 30,step = 1)
   warming.sims.mean.30[ ,i] <- SlidingWindow(FUN = "mean", data = warming.incidence.daily[,i], window = 30, step = 1)
-  warming.sims.skewness.30[ ,i] <- SlidingWindow(FUN = "skewness", data = warming.incidence.daily[,i], window = 30, step = 1)
-  warming.sims.kurtosis.30[ ,i] <- SlidingWindow(FUN = "kurtosis", data = warming.incidence.daily[,i], window = 30, step = 1)
+  warming.sims.skewness.30[ ,i] <- SlidingWindow(FUN = "skewness", data = warming.incidence.daily[ ,i], window = 30, step = 1)
+  warming.sims.kurtosis.30[ ,i] <- SlidingWindow(FUN = "kurtosis", data = warming.incidence.daily[ ,i], window = 30, step = 1)
 }
 ```
 
@@ -1033,13 +1033,13 @@ for(j in 1:num.of.sims){
     
     segment <- constant.incidence.daily[c(window.start:window.end),j]
     
-    constant.sims.cor.30[i,j] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
-    constant.sims.cov.30[i,j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+    constant.sims.cor.30[i, j] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+    constant.sims.cov.30[i, j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
   }
 }
 
-warming.sims.cor.30 <- matrix(ncol=num.of.sims,nrow = 120)
-warming.sims.cov.30 <- matrix(ncol=num.of.sims,nrow = 120)
+warming.sims.cor.30 <- matrix(ncol = num.of.sims,nrow = 120)
+warming.sims.cov.30 <- matrix(ncol = num.of.sims,nrow = 120)
 
 for(j in 1:num.of.sims){
   for(i in 1:90){
@@ -1048,8 +1048,8 @@ for(j in 1:num.of.sims){
     
     segment <- warming.incidence.daily[c(window.start:window.end),j]
     
-    warming.sims.cor.30[i,j] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
-    warming.sims.cov.30[i,j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+    warming.sims.cor.30[i, j] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+    warming.sims.cov.30[i, j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
   }
 }
 
