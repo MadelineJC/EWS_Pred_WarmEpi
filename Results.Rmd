@@ -1,0 +1,290 @@
+# Results
+
+# Raw
+
+## Empirical
+
+### Raw
+
+```{r}
+AUC_Emp <- readRDS("Objects/AUC_EmpiricalData.rds")
+
+par(mar = c(12, 4, 2, 2))
+plot(1:10, AUC_Emp$AUC_data, type = "p", 
+     main = "Empirical Data, All Populations", 
+     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = "orchid", pch = 19, cex = 1)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
+```
+
+```{r}
+AUC_Emp_Ex5 <- readRDS("Objects/AUC_EmpiricalData_ExPop5.rds")
+
+par(mar = c(12, 4, 2, 2))
+plot(1:10, AUC_Emp_Ex5$AUC_data, type = "p", 
+     main = "Empirical Data, Excluding Pop'n 5", 
+     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = "orchid", pch = 19, cex = 1)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
+```
+
+### Adjusted
+
+```{r}
+AUC_AdjEmp <- readRDS("Objects/AUC_AdjEmpiricalData.rds")
+
+par(mar = c(12, 4, 2, 2))
+plot(1:10, AUC_AdjEmp$AUC_data, type = "p", 
+     main = "Adjusted Empirical Data, All Populations", 
+     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = "orchid", pch = 19, cex = 1)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
+```
+
+```{r}
+AUC_AdjEmp_Ex5 <- readRDS("Objects/AUC_AdjEmpiricalData_ExPop5.rds")
+
+par(mar = c(12, 4, 2, 2))
+plot(1:10, AUC_AdjEmp_Ex5$AUC_data, type = "p", 
+     main = "Adjusted Empirical Data, Excluding Pop'n 5", 
+     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = "orchid", pch = 19, cex = 1)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
+```
+
+## Simulated
+
+```{r}
+AUC_Sim <- readRDS("Objects/AUC_SimulatedData.rds")
+
+par(mar = c(12, 4, 2, 2))
+plot(1:10, AUC_Sim$AUC_5, type = "p", 
+     main = "Simulated Data", 
+     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = alpha("red3", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_Sim$AUC_15, col = alpha("orange", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_Sim$AUC_30, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
+legend(x = 7.8, y = 0.25,
+       legend = c("Sliding Window = 5 Days", "Sliding Window = 15 Days", "Sliding Window = 30 Days"),
+       col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
+```
+
+# Pre-Processed
+
+## Empirical
+
+### Bandwidth = 2
+
+```{r}
+AUC_SmoothEmp_2 <- readRDS("Objects/AUC_SmoothEmpiricalData_B2.rds")
+
+par(mar = c(12, 4, 2, 2))
+plot(1:10, AUC_SmoothEmp_2$AUC_data, type = "p", 
+     main = "Pre-Processed Empirical Data, All Populations | Bandwidth = 2", 
+     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = "orchid", pch = 19, cex = 1)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
+```
+
+```{r}
+AUC_SmoothEmp_Ex5_2 <- readRDS("Objects/AUC_SmoothEmpiricalData_ExPop5_B2.rds")
+
+par(mar = c(12, 4, 2, 2))
+plot(1:10, AUC_SmoothEmp_Ex5_2$AUC_data, type = "p", 
+     main = "Pre-Processed Empirical Data, Excluding Pop'n 5 | Bandwidth = 2", 
+     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = "orchid", pch = 19, cex = 1)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
+```
+
+### Bandwidth = 3
+
+```{r}
+AUC_SmoothEmp_3 <- readRDS("Objects/AUC_SmoothEmpiricalData_B3.rds")
+
+par(mar = c(12, 4, 2, 2))
+plot(1:10, AUC_SmoothEmp_3$AUC_data, type = "p", 
+     main = "Pre-Processed Empirical Data, All Populations | Bandwidth = 3", 
+     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = "orchid", pch = 19, cex = 1)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
+```
+
+```{r}
+AUC_SmoothEmp_Ex5_3 <- readRDS("Objects/AUC_SmoothEmpiricalData_ExPop5_B3.rds")
+
+par(mar = c(12, 4, 2, 2))
+plot(1:10, AUC_SmoothEmp_Ex5_3$AUC_data, type = "p", 
+     main = "Pre-Processed Empirical Data, Excluding Pop'n 5 | Bandwidth = 3", 
+     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = "orchid", pch = 19, cex = 1)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
+```
+
+### Bandwidth = 4
+
+```{r}
+AUC_SmoothEmp_4 <- readRDS("Objects/AUC_SmoothEmpiricalData_B4.rds")
+
+par(mar = c(12, 4, 2, 2))
+plot(1:10, AUC_SmoothEmp_4$AUC_data, type = "p", 
+     main = "Pre-Processed Empirical Data, All Populations | Bandwidth = 4", 
+     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = "orchid", pch = 19, cex = 1)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
+```
+
+```{r}
+AUC_SmoothEmp_Ex5_4 <- readRDS("Objects/AUC_SmoothEmpiricalData_ExPop5_B4.rds")
+
+par(mar = c(12, 4, 2, 2))
+plot(1:10, AUC_SmoothEmp_Ex5_4$AUC_data, type = "p", 
+     main = "Pre-Processed Empirical Data, Excluding Pop'n 5 | Bandwidth = 4", 
+     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = "orchid", pch = 19, cex = 1)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
+```
+
+### Comparison
+
+```{r}
+par(mar = c(12, 4, 2, 2))
+plot(1:10, AUC_SmoothEmp_2$AUC_data, type = "p", 
+     main = "Pre-Processed Empirical Data, All Populations | All Bandwidths", 
+     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = alpha("red3", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothEmp_3$AUC_data, col = alpha("orange", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothEmp_4$AUC_data, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
+legend(x = 8.5, y = 0.3,
+       legend = c("Bandwidth = 2", "Bandwidth = 3", "Bandwidth = 4"),
+       col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
+
+par(mar = c(12, 4, 2, 2))
+plot(1:10, AUC_SmoothEmp_Ex5_2$AUC_data, type = "p", 
+     main = "Pre-Processed Empirical Data, Excluding Pop'n 5 | All Bandwidths", 
+     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = alpha("red3", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothEmp_Ex5_3$AUC_data, col = alpha("orange", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothEmp_Ex5_4$AUC_data, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
+legend(x = 8.5, y = 0.25,
+       legend = c("Bandwidth = 2", "Bandwidth = 3", "Bandwidth = 4"),
+       col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
+```
+
+## Simulated
+
+### Bandwidth = 2
+
+```{r}
+AUC_SmoothSim_2 <- readRDS("Objects/AUC_SmoothSimulatedData_B2.rds")
+
+par(mar = c(12, 4, 2, 2))
+plot(1:10, AUC_SmoothSim_2$AUC_5, type = "p", 
+     main = "Pre-Processed Simulated Data | Bandwidth = 2", 
+     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = alpha("red3", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothSim_2$AUC_15, col = alpha("orange", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothSim_2$AUC_30, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
+legend(x = 7.8, y = 0.25,
+       legend = c("Sliding Window = 5 Days", "Sliding Window = 15 Days", "Sliding Window = 30 Days"),
+       col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
+```
+
+### Bandwidth = 3
+
+```{r}
+AUC_SmoothSim_3 <- readRDS("Objects/AUC_SmoothSimulatedData_B3.rds")
+
+par(mar = c(12, 4, 2, 2))
+plot(1:10, AUC_SmoothSim_3$AUC_5, type = "p", 
+     main = "Pre-Processed Simulated Data | Bandwidth = 3", 
+     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = alpha("red3", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothSim_3$AUC_15, col = alpha("orange", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothSim_3$AUC_30, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
+legend(x = 7.8, y = 0.25,
+       legend = c("Sliding Window = 5 Days", "Sliding Window = 15 Days", "Sliding Window = 30 Days"),
+       col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
+```
+
+### Bandwidth = 4
+
+```{r}
+AUC_SmoothSim_4 <- readRDS("Objects/AUC_SmoothSimulatedData_B4.rds")
+
+par(mar = c(12, 4, 2, 2))
+plot(1:10, AUC_SmoothSim_4$AUC_5, type = "p", 
+     main = "Pre-Processed Simulated Data | Bandwidth = 4", 
+     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = alpha("red3", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothSim_4$AUC_15, col = alpha("orange", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothSim_4$AUC_30, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
+legend(x = 7.8, y = 0.3,
+       legend = c("Sliding Window = 5 Days", "Sliding Window = 15 Days", "Sliding Window = 30 Days"),
+       col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
+```
+
+### Comparison
+
+```{r}
+par(mar = c(12, 4, 2, 2))
+plot(1:10, AUC_SmoothSim_2$AUC_5, type = "p", 
+     main = "Pre-Processed Simulated Data | 5 Day Sliding Window", 
+     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = alpha("red3", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothSim_3$AUC_5, col = alpha("orange", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothSim_4$AUC_5, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
+legend(x = 8.5, y = 0.3,
+       legend = c("Bandwidth = 2", "Bandwidth = 3", "Bandwidth = 4"),
+       col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
+
+par(mar = c(12, 4, 2, 2))
+plot(1:10, AUC_SmoothSim_2$AUC_15, type = "p", 
+     main = "Pre-Processed Simulated Data | 15 Day Sliding Window", 
+     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = alpha("red3", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothSim_3$AUC_15, col = alpha("orange", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothSim_4$AUC_15, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
+legend(x = 8.5, y = 0.3,
+       legend = c("Bandwidth = 2", "Bandwidth = 3", "Bandwidth = 4"),
+       col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
+
+par(mar = c(12, 4, 2, 2))
+plot(1:10, AUC_SmoothSim_2$AUC_30, type = "p", 
+     main = "Pre-Processed Simulated Data | 30 Day Sliding Window", 
+     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = alpha("red3", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothSim_3$AUC_30, col = alpha("orange", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothSim_4$AUC_30, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
+legend(x = 8.5, y = 0.3,
+       legend = c("Bandwidth = 2", "Bandwidth = 3", "Bandwidth = 4"),
+       col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
+```
