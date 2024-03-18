@@ -744,6 +744,42 @@ for(i in 1:num.of.sims){
 
 ## Calculating AUCs by Grouping
 
+### Variance
+
+```{r}
+c.grp1 <- constant.sims.variance.15.tau[1:100]
+c.grp2 <- constant.sims.variance.15.tau[101:200]
+c.grp3 <- constant.sims.variance.15.tau[201:300]
+c.grp4 <- constant.sims.variance.15.tau[301:400]
+c.grp5 <- constant.sims.variance.15.tau[401:500]
+c.grp6 <- constant.sims.variance.15.tau[501:600]
+c.grp7 <- constant.sims.variance.15.tau[601:700]
+c.grp8 <- constant.sims.variance.15.tau[701:800]
+c.grp9 <- constant.sims.variance.15.tau[801:900]
+c.grp10 <- constant.sims.variance.15.tau[901:1000]
+const.taus <- cbind(c.grp1, c.grp2, c.grp3, c.grp4, c.grp5,
+                    c.grp6, c.grp7, c.grp8, c.grp9, c.grp10)
+
+w.grp1 <- warming.sims.variance.15.tau[1:100]
+w.grp2 <- warming.sims.variance.15.tau[101:200]
+w.grp3 <- warming.sims.variance.15.tau[201:300]
+w.grp4 <- warming.sims.variance.15.tau[301:400]
+w.grp5 <- warming.sims.variance.15.tau[401:500]
+w.grp6 <- warming.sims.variance.15.tau[501:600]
+w.grp7 <- warming.sims.variance.15.tau[601:700]
+w.grp8 <- warming.sims.variance.15.tau[701:800]
+w.grp9 <- warming.sims.variance.15.tau[801:900]
+w.grp10 <- warming.sims.variance.15.tau[901:1000]
+warm.taus <- cbind(w.grp1, w.grp2, w.grp3, w.grp4, w.grp5,
+                   w.grp6, w.grp7, w.grp8, w.grp9, w.grp10)
+
+var.aucs <- c()
+for (i in 1:10){
+  test <- warm.taus[ ,i]; null <- const.taus[ ,i]
+  var.aucs[i] <- calc_auc(test, null)
+}
+```
+
 ### Mean
 
 ```{r}
@@ -777,6 +813,42 @@ m.aucs <- c()
 for (i in 1:10){
   test <- warm.taus[ ,i]; null <- const.taus[ ,i]
   m.aucs[i] <- calc_auc(test, null)
+}
+```
+
+### Co-Efficient of Variation
+
+```{r}
+c.grp1 <- constant.sims.cv.15.tau[1:100]
+c.grp2 <- constant.sims.cv.15.tau[101:200]
+c.grp3 <- constant.sims.cv.15.tau[201:300]
+c.grp4 <- constant.sims.cv.15.tau[301:400]
+c.grp5 <- constant.sims.cv.15.tau[401:500]
+c.grp6 <- constant.sims.cv.15.tau[501:600]
+c.grp7 <- constant.sims.cv.15.tau[601:700]
+c.grp8 <- constant.sims.cv.15.tau[701:800]
+c.grp9 <- constant.sims.cv.15.tau[801:900]
+c.grp10 <- constant.sims.cv.15.tau[901:1000]
+const.taus <- cbind(c.grp1, c.grp2, c.grp3, c.grp4, c.grp5,
+                    c.grp6, c.grp7, c.grp8, c.grp9, c.grp10)
+
+w.grp1 <- warming.sims.cv.15.tau[1:100]
+w.grp2 <- warming.sims.cv.15.tau[101:200]
+w.grp3 <- warming.sims.cv.15.tau[201:300]
+w.grp4 <- warming.sims.cv.15.tau[301:400]
+w.grp5 <- warming.sims.cv.15.tau[401:500]
+w.grp6 <- warming.sims.cv.15.tau[501:600]
+w.grp7 <- warming.sims.cv.15.tau[601:700]
+w.grp8 <- warming.sims.cv.15.tau[701:800]
+w.grp9 <- warming.sims.cv.15.tau[801:900]
+w.grp10 <- warming.sims.cv.15.tau[901:1000]
+warm.taus <- cbind(w.grp1, w.grp2, w.grp3, w.grp4, w.grp5,
+                   w.grp6, w.grp7, w.grp8, w.grp9, w.grp10)
+
+cv.aucs <- c()
+for (i in 1:10){
+  test <- warm.taus[ ,i]; null <- const.taus[ ,i]
+  cv.aucs[i] <- calc_auc(test, null)
 }
 ```
 
@@ -1068,6 +1140,42 @@ for (i in 1:10){
 }
 ```
 
+### First Difference Variance
+
+```{r}
+c.grp1 <- constant.sims.first.diff.variance.15.tau[1:100]
+c.grp2 <- constant.sims.first.diff.variance.15.tau[101:200]
+c.grp3 <- constant.sims.first.diff.variance.15.tau[201:300]
+c.grp4 <- constant.sims.first.diff.variance.15.tau[301:400]
+c.grp5 <- constant.sims.first.diff.variance.15.tau[401:500]
+c.grp6 <- constant.sims.first.diff.variance.15.tau[501:600]
+c.grp7 <- constant.sims.first.diff.variance.15.tau[601:700]
+c.grp8 <- constant.sims.first.diff.variance.15.tau[701:800]
+c.grp9 <- constant.sims.first.diff.variance.15.tau[801:900]
+c.grp10 <- constant.sims.first.diff.variance.15.tau[901:1000]
+const.taus <- cbind(c.grp1, c.grp2, c.grp3, c.grp4, c.grp5,
+                    c.grp6, c.grp7, c.grp8, c.grp9, c.grp10)
+
+w.grp1 <- warming.sims.first.diff.variance.15.tau[1:100]
+w.grp2 <- warming.sims.first.diff.variance.15.tau[101:200]
+w.grp3 <- warming.sims.first.diff.variance.15.tau[201:300]
+w.grp4 <- warming.sims.first.diff.variance.15.tau[301:400]
+w.grp5 <- warming.sims.first.diff.variance.15.tau[401:500]
+w.grp6 <- warming.sims.first.diff.variance.15.tau[501:600]
+w.grp7 <- warming.sims.first.diff.variance.15.tau[601:700]
+w.grp8 <- warming.sims.first.diff.variance.15.tau[701:800]
+w.grp9 <- warming.sims.first.diff.variance.15.tau[801:900]
+w.grp10 <- warming.sims.first.diff.variance.15.tau[901:1000]
+warm.taus <- cbind(w.grp1, w.grp2, w.grp3, w.grp4, w.grp5,
+                   w.grp6, w.grp7, w.grp8, w.grp9, w.grp10)
+
+fdv.aucs <- c()
+for (i in 1:10){
+  test <- warm.taus[ ,i]; null <- const.taus[ ,i]
+  fdv.aucs[i] <- calc_auc(test, null)
+}
+```
+
 ### Decay Time
 
 ```{r}
@@ -1128,6 +1236,7 @@ ggplot(smooth_df, aes(x = metric, y = smooth_3_aucs, colour = metric)) +
         axis.text.y = element_text(color = "black", size = 12),
         legend.position = "none") +
   labs(title = "Pre-Processed Simulated Data (Bandwidth = 3) | 15 Day Sliding Window", x = "", y = "AUC") +
+  labs(x = "", y = "AUC") +
   scale_x_discrete(labels = metrics_full) +
   ylim(0, 1)
 ```
