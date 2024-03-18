@@ -110,7 +110,7 @@ lines(warming4$X, warming4$V5, col = "cornflowerblue")
 lines(warming4$X, warming4$V6, col = "orchid")
 ```
 
-Each .csv has 120 rows (one for each day the the "experiment"), and 100 columns ([**[WHAT DOES EACH COLUMN REPRESENT?]**]{.underline}). Each sheet (of ten) represents **[[WHAT DOES EACH SHEET REPRESENT?]{.underline}]**.
+Each .csv has 120 rows (one for each day the the "experiment"), and 101 columns (one for "Time", and 100 for simulated data). Each sheet (of ten) represents another batch of 100 simulations.
 
 ## Data Manipulation
 
@@ -1200,24 +1200,24 @@ warming.sims.decay.time.5 <-  warming.sims.decay.time.5[1:55, ]
 constant.sims.variance.5.tau <- c()
 constant.sims.mean.5.tau <- c()
 constant.sims.cv.5.tau <- c()
-constant.sims.skewness.5.tau <-  c()
+constant.sims.skewness.5.tau <- c()
 constant.sims.kurtosis.5.tau <- c()
 constant.sims.id.5.tau <- c()
 constant.sims.cor.5.tau <- c()
 constant.sims.cov.5.tau <- c()
-constant.sims.first.diff.variance.5.tau <-  c()
+constant.sims.first.diff.variance.5.tau <- c()
 constant.sims.decay.time.5.tau <- c()
 
 warming.sims.variance.5.tau <- c()
 warming.sims.mean.5.tau <- c()
 warming.sims.cv.5.tau <- c()
-warming.sims.skewness.5.tau <-  c()
+warming.sims.skewness.5.tau <- c()
 warming.sims.kurtosis.5.tau <- c()
-warming.sims.id.5.tau <-  c()
-warming.sims.cor.5.tau <-  c()
-warming.sims.cov.5.tau <-  c()
-warming.sims.first.diff.variance.5.tau <-  c()
-warming.sims.decay.time.5.tau <-  c()
+warming.sims.id.5.tau <- c()
+warming.sims.cor.5.tau <- c()
+warming.sims.cov.5.tau <- c()
+warming.sims.first.diff.variance.5.tau <- c()
+warming.sims.decay.time.5.tau <- c()
 ```
 
 Calculate Kendall's tau for each metric:
@@ -1332,24 +1332,24 @@ warming.sims.decay.time.15 <-  warming.sims.decay.time.15[1:45, ]
 constant.sims.variance.15.tau <- c()
 constant.sims.mean.15.tau <- c()
 constant.sims.cv.15.tau <- c()
-constant.sims.skewness.15.tau <-  c()
+constant.sims.skewness.15.tau <- c()
 constant.sims.kurtosis.15.tau <- c()
 constant.sims.id.15.tau <- c()
 constant.sims.cor.15.tau <- c()
 constant.sims.cov.15.tau <- c()
-constant.sims.first.diff.variance.15.tau <-  c()
+constant.sims.first.diff.variance.15.tau <- c()
 constant.sims.decay.time.15.tau <- c()
 
 warming.sims.variance.15.tau <- c()
 warming.sims.mean.15.tau <- c()
 warming.sims.cv.15.tau <- c()
-warming.sims.skewness.15.tau <-  c()
+warming.sims.skewness.15.tau <- c()
 warming.sims.kurtosis.15.tau <- c()
-warming.sims.id.15.tau <-  c()
-warming.sims.cor.15.tau <-  c()
-warming.sims.cov.15.tau <-  c()
-warming.sims.first.diff.variance.15.tau <-  c()
-warming.sims.decay.time.15.tau <-  c()
+warming.sims.id.15.tau <- c()
+warming.sims.cor.15.tau <- c()
+warming.sims.cov.15.tau <- c()
+warming.sims.first.diff.variance.15.tau <- c()
+warming.sims.decay.time.15.tau <- c()
 ```
 
 Calculate Kendall's tau for each metric:
@@ -1464,24 +1464,24 @@ warming.sims.decay.time.30 <-  warming.sims.decay.time.30[1:30, ]
 constant.sims.variance.30.tau <- c()
 constant.sims.mean.30.tau <- c()
 constant.sims.cv.30.tau <- c()
-constant.sims.skewness.30.tau <-  c()
+constant.sims.skewness.30.tau <- c()
 constant.sims.kurtosis.30.tau <- c()
 constant.sims.id.30.tau <- c()
 constant.sims.cor.30.tau <- c()
 constant.sims.cov.30.tau <- c()
-constant.sims.first.diff.variance.30.tau <-  c()
+constant.sims.first.diff.variance.30.tau <- c()
 constant.sims.decay.time.30.tau <- c()
 
 warming.sims.variance.30.tau <- c()
 warming.sims.mean.30.tau <- c()
 warming.sims.cv.30.tau <- c()
-warming.sims.skewness.30.tau <-  c()
+warming.sims.skewness.30.tau <- c()
 warming.sims.kurtosis.30.tau <- c()
-warming.sims.id.30.tau <-  c()
-warming.sims.cor.30.tau <-  c()
-warming.sims.cov.30.tau <-  c()
-warming.sims.first.diff.variance.30.tau <-  c()
-warming.sims.decay.time.30.tau <-  c()
+warming.sims.id.30.tau <- c()
+warming.sims.cor.30.tau <- c()
+warming.sims.cov.30.tau <- c()
+warming.sims.first.diff.variance.30.tau <- c()
+warming.sims.decay.time.30.tau <- c()
 ```
 
 Calculate Kendall's tau for each metric:
