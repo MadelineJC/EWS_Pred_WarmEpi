@@ -169,7 +169,7 @@ points(1:10, AUC_SmoothEmp_3$AUC_data, col = alpha("orange", 0.75), pch = 19, ce
 points(1:10, AUC_SmoothEmp_4$AUC_data, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
 abline(h = 0.5, lty = 3)
 axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
-legend(x = 8.5, y = 0.3,
+legend(x = 8.5, y = 0.25,
        legend = c("Bandwidth = 2", "Bandwidth = 3", "Bandwidth = 4"),
        col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
 
@@ -241,7 +241,7 @@ points(1:10, AUC_SmoothSim_4$AUC_15, col = alpha("orange", 0.75), pch = 19, cex 
 points(1:10, AUC_SmoothSim_4$AUC_30, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
 abline(h = 0.5, lty = 3)
 axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
-legend(x = 7.8, y = 0.3,
+legend(x = 7.8, y = 0.25,
        legend = c("Sliding Window = 5 Days", "Sliding Window = 15 Days", "Sliding Window = 30 Days"),
        col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
 ```
@@ -258,7 +258,7 @@ points(1:10, AUC_SmoothSim_3$AUC_5, col = alpha("orange", 0.75), pch = 19, cex =
 points(1:10, AUC_SmoothSim_4$AUC_5, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
 abline(h = 0.5, lty = 3)
 axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
-legend(x = 8.5, y = 0.3,
+legend(x = 8.5, y = 0.25,
        legend = c("Bandwidth = 2", "Bandwidth = 3", "Bandwidth = 4"),
        col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
 
@@ -271,7 +271,7 @@ points(1:10, AUC_SmoothSim_3$AUC_15, col = alpha("orange", 0.75), pch = 19, cex 
 points(1:10, AUC_SmoothSim_4$AUC_15, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
 abline(h = 0.5, lty = 3)
 axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
-legend(x = 8.5, y = 0.3,
+legend(x = 8.5, y = 0.25,
        legend = c("Bandwidth = 2", "Bandwidth = 3", "Bandwidth = 4"),
        col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
 
@@ -284,7 +284,7 @@ points(1:10, AUC_SmoothSim_3$AUC_30, col = alpha("orange", 0.75), pch = 19, cex 
 points(1:10, AUC_SmoothSim_4$AUC_30, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
 abline(h = 0.5, lty = 3)
 axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
-legend(x = 8.5, y = 0.3,
+legend(x = 8.5, y = 0.25,
        legend = c("Bandwidth = 2", "Bandwidth = 3", "Bandwidth = 4"),
        col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
 ```
