@@ -576,6 +576,7 @@ ggplot(raw_df, aes(x = metric, y = raw_aucs, colour = metric)) +
   geom_jitter(shape = 16, position = position_jitter(0.2)) +
   geom_hline(yintercept = 0.5, colour = "grey", linetype = "dotted") +
   theme(panel.background = element_blank(),
+        plot.title = element_text(size = 18),
         axis.title = element_text(size = 16),
         axis.text.x = element_text(color = "black", size = 12, angle = 30, vjust = 0.8, hjust = 0.8),
         axis.text.y = element_text(color = "black", size = 12),
@@ -1231,6 +1232,7 @@ ggplot(smooth_df, aes(x = metric, y = smooth_3_aucs, colour = metric)) +
   geom_jitter(shape = 16, position = position_jitter(0.2)) +
   geom_hline(yintercept = 0.5, colour = "grey", linetype = "dotted") +
   theme(panel.background = element_blank(),
+        plot.title = element_text(size = 18),
         axis.title = element_text(size = 16),
         axis.text.x = element_text(color = "black", size = 12, angle = 30, vjust = 0.8, hjust = 0.8),
         axis.text.y = element_text(color = "black", size = 12),
