@@ -288,3 +288,125 @@ legend(x = 8.5, y = 0.25,
        legend = c("Bandwidth = 2", "Bandwidth = 3", "Bandwidth = 4"),
        col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
 ```
+
+# Comparisons
+
+## Objects
+
+```{r}
+## Raw
+# Empirical
+AUC_Emp
+AUC_Emp_Ex5
+AUC_AdjEmp
+AUC_AdjEmp_Ex5
+# Simulated
+AUC_Sim # (Includes all 3 window sizes)
+## Pre-Processed
+# Empirical
+AUC_SmoothEmp_2
+AUC_SmoothEmp_Ex5_2
+AUC_SmoothEmp_3
+AUC_SmoothEmp_Ex5_3
+AUC_SmoothEmp_4
+AUC_SmoothEmp_Ex5_4
+# Simulated 
+AUC_SmoothSim_2 # (Includes all 3 window sizes)
+AUC_SmoothSim_3 # (Includes all 3 window sizes)
+AUC_SmoothSim_4 # (Includes all 3 window sizes)
+```
+
+## Plotting
+
+### Empirical 
+
+```{r}
+## We're looking at ten versions of this!
+v1 <- seq(1, 100, 10); v2 <- seq(2, 100, 10); v3 <- seq(3, 100, 10); v4 <- seq(4, 100, 10); v5 <- seq(5, 100, 10)
+v6 <- seq(6, 100, 10); v7 <- seq(7, 100, 10); v8 <- seq(8, 100, 10); v9 <- seq(9, 100, 10); v10 <- seq(10, 100, 10)
+
+par(mar = c(12, 4, 2, 2))
+plot(v1, AUC_Emp$AUC_data, type = "p", 
+     main = "Empirical Data", 
+     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = "red3", pch = 19)
+points(v2, AUC_Emp_Ex5$AUC_data, col = "red3", pch = 1)
+points(v3, AUC_AdjEmp$AUC_data, col = "goldenrod1", pch = 19)
+points(v4, AUC_AdjEmp_Ex5$AUC_data, col = "goldenrod1", pch = 1)
+points(v5, AUC_SmoothEmp_2$AUC_data, col = "springgreen4", pch = 17)
+points(v6, AUC_SmoothEmp_Ex5_2$AUC_data, col = "springgreen4", pch = 2)
+points(v7, AUC_SmoothEmp_3$AUC_data, col = "navy", pch = 17)
+points(v8, AUC_SmoothEmp_Ex5_3$AUC_data, col = "navy", pch = 2)
+points(v9, AUC_SmoothEmp_4$AUC_data, col = "orchid", pch = 17)
+points(v10, AUC_SmoothEmp_Ex5_4$AUC_data, col = "orchid", pch = 2)
+abline(v = c(10.5, 20.5, 30.5, 40.5, 50.5, 60.5, 70.5, 80.5, 90.5), lty = 3, col = "grey")
+abline(h = 0.5, lty = 3, col = "black")
+axis(side = 1, at = seq(5.5, 100, 10), labels = metrics_full, las = 2, cex.axis = 1)
+legend(x = 75, y = 0.28, 
+       legend = c("Raw", "Adjusted", "Smoothed (Bandwidth = 2)", "Smoothed (Bandwidth = 3)", "Smoothed (Bandwidth = 4)"), 
+       col = c("red3", "goldenrod1", "springgreen4", "navy", "orchid"), pch = c(19, 19, 17, 17, 17),
+       box.lwd = 0, box.col = "white", bg = "white", y.intersp = 0.3)
+```
+
+### Simulated 
+
+```{r}
+v1 <- seq(1, 40, 4); v2 <- seq(2, 40, 4); v3 <- seq(3, 40, 4); v4 <- seq(4, 40, 4)
+
+par(mar = c(12, 4, 2, 2))
+plot(v1, AUC_Sim$AUC_15, type = "p", 
+     main = "Simulated Data", 
+     xlim = c(2, 39), xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = "red3", pch = 19)
+points(v2, AUC_SmoothSim_2$AUC_15, col = "orange", pch = 19)
+points(v3, AUC_SmoothSim_3$AUC_15, col = "springgreen4", pch = 19)
+points(v4, AUC_SmoothSim_4$AUC_15, col = "orchid", pch = 19)
+abline(v = c(4.5, 8.5, 12.5, 16.5, 20.5, 24.5, 28.5, 32.5, 36.5), lty = 3, col = "grey")
+abline(h = 0.5, lty = 3, col = "black")
+axis(side = 1, at = seq(2.5, 40, 4), labels = metrics_full, las = 2, cex.axis = 1)
+legend(x = 33, y = 0.25, 
+       legend = c("Raw", "Smoothed (Bandwidth = 2)", "Smoothed (Bandwidth = 3)", "Smoothed (Bandwidth = 4)"), 
+       col = c("red3", "orange", "springgreen4", "orchid"), pch = 19,
+       box.lwd = 0, box.col = "white", bg = "white", y.intersp = 0.3)
+```
+
+Note: To generate these objects, run `8_EWS-ByPop.Rmd`.
+
+```{r}
+metric <- c(rep(1, 10), rep(2, 10), rep(3, 10), rep(4, 10), rep(5, 10),
+            rep(6, 10), rep(7, 10), rep(8, 10), rep(9, 10), rep(10, 10))
+raw_df <- data.frame(cbind(metric, raw_aucs))
+
+raw_df$metric <- as.factor(raw_df$metric)
+ggplot(raw_df, aes(x = metric, y = raw_aucs, colour = metric)) + 
+  geom_boxplot() +
+  geom_jitter(shape = 16, position = position_jitter(0.2)) +
+  geom_hline(yintercept = 0.5, colour = "grey", linetype = "dotted") +
+  theme(panel.background = element_blank(),
+        plot.title = element_text(size = 18),
+        axis.title = element_text(size = 16),
+        axis.text.x = element_text(color = "black", size = 12, angle = 30, vjust = 0.8, hjust = 0.8),
+        axis.text.y = element_text(color = "black", size = 12),
+        legend.position = "none") +
+  labs(title = "Raw Simulated Data | 15 Day Sliding Window", x = "", y = "AUC") +
+  scale_x_discrete(labels = metrics_full) +
+  ylim(0, 1)
+
+smooth_df <- data.frame(cbind(metric, smooth_3_aucs))
+
+smooth_df$metric <- as.factor(smooth_df$metric)
+ggplot(smooth_df, aes(x = metric, y = smooth_3_aucs, colour = metric)) + 
+  geom_boxplot() +
+  geom_jitter(shape = 16, position = position_jitter(0.2)) +
+  geom_hline(yintercept = 0.5, colour = "grey", linetype = "dotted") +
+  theme(panel.background = element_blank(),
+        plot.title = element_text(size = 18),
+        axis.title = element_text(size = 16),
+        axis.text.x = element_text(color = "black", size = 12, angle = 30, vjust = 0.8, hjust = 0.8),
+        axis.text.y = element_text(color = "black", size = 12),
+        legend.position = "none") +
+  labs(title = "Pre-Processed Simulated Data (Bandwidth = 3) | 15 Day Sliding Window", x = "", y = "AUC") +
+  labs(x = "", y = "AUC") +
+  scale_x_discrete(labels = metrics_full) +
+  ylim(0, 1)
+```
