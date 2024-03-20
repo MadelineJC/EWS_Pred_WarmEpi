@@ -318,7 +318,7 @@ AUC_SmoothSim_4 # (Includes all 3 window sizes)
 
 ## Plotting
 
-### Empirical 
+### Empirical
 
 ```{r}
 ## We're looking at ten versions of this!
@@ -328,7 +328,8 @@ v6 <- seq(6, 100, 10); v7 <- seq(7, 100, 10); v8 <- seq(8, 100, 10); v9 <- seq(9
 par(mar = c(12, 4, 2, 2))
 plot(v1, AUC_Emp$AUC_data, type = "p", 
      main = "Empirical Data", 
-     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     # xaxt = "none", 
+     xlim = c(2, 99), xlab = "", ylim = c(0, 1), ylab = "AUC",
      col = "red3", pch = 19)
 points(v2, AUC_Emp_Ex5$AUC_data, col = "red3", pch = 1)
 points(v3, AUC_AdjEmp$AUC_data, col = "goldenrod1", pch = 19)
@@ -348,7 +349,7 @@ legend(x = 75, y = 0.28,
        box.lwd = 0, box.col = "white", bg = "white", y.intersp = 0.3)
 ```
 
-### Simulated 
+### Simulated
 
 ```{r}
 v1 <- seq(1, 40, 4); v2 <- seq(2, 40, 4); v3 <- seq(3, 40, 4); v4 <- seq(4, 40, 4)
