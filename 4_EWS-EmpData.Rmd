@@ -944,7 +944,7 @@ mtext("Days", side = 1, cex = 1, line = 2, outer = TRUE)
 dev.off()
 ```
 
-#  Troubleshooting Missing Outputs
+# Troubleshooting Missing Outputs
 
 So, if we look at the AUCs, there are missing values that aren't missing when we analyse simulation data, or pre-processes empirical/simulated data.
 
@@ -1602,9 +1602,15 @@ Hmm, interesting that these AUCs are so different from the previously calculated
 data <- as.matrix(cbind(sub1$status.sum, sub2$status.sum, sub3$status.sum, sub4$status.sum, sub5$status.sum, sub6$status.sum, sub7$status.sum, sub8$status.sum))
 
 set.seed(123)
-add.ons <- runif(length(which(data == 0)), min = 1e-22, max = 1e-21); length(add.ons) == length(unique(add.ons))
 
-data[data %in% 0] <- add.ons
+## Adding to 0s only
+# add.ons <- runif(length(which(data == 0)), min = 1e-22, max = 1e-21); length(add.ons) == length(unique(add.ons))
+# data[data %in% 0] <- add.ons
+## Adding to all values
+timepts <- nrow(data)*ncol(data)
+add.ons <- runif(timepts, min = 1e-22, max = 1e-21); length(add.ons) == length(unique(add.ons))
+add.ons <- matrix(add.ons, nrow = 40)
+data <- data + add.ons
 
 sub1.mod <- data[ , 1]
 sub2.mod <- data[ , 2]
@@ -1748,7 +1754,7 @@ AUC_decay.time_data <- calc_auc(warming.decay.time.tau,constant.decay.time.tau);
 Summary:
 
 |                     | Random values between 1e-12 and 1e-8 added to all abundances | Random values between 1e-12 and 1e-11 added to all 0s | Random values between 1e-16 and 1e-15 added to all 0s | Random values between 1e-18 and 1e-17 added to all 0s | Random values between 1e-20 and 1e-19 added to all 0s | Random values between 1e-22 and 1e-21 added to all 0s |
-|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
+|---------------------|--------------------------------------------------------------|-------------------------------------------------------|-------------------------------------------------------|-------------------------------------------------------|-------------------------------------------------------|-------------------------------------------------------|
 | **Skewness**        | 0.0625                                                       | 0.375                                                 | 0.3125                                                | 0.1875                                                | 0.1875                                                | 0.1875                                                |
 | **Kurtosis**        | 0.3125                                                       | 0.28125                                               | 0.25                                                  | 0.25                                                  | 0.25                                                  | 0.25                                                  |
 | **Autocorrelation** | 0.875                                                        | 0.96875                                               | 0.90625                                               | 0.875                                                 | 0.875                                                 | 0.875                                                 |
@@ -1930,4 +1936,1131 @@ length(which(is.nan(pop5.decay.time)) == TRUE)
 length(which(is.nan(pop6.decay.time)) == TRUE)
 length(which(is.nan(pop7.decay.time)) == TRUE)
 length(which(is.nan(pop8.decay.time)) == TRUE)
+```
+
+# Is this justified?
+
+Okay, to determine this, we're going to (1) Add small, random values to every data point, and (2) re-calculate all AUC. We're going to do this a few times, with different sets of small, random values.
+
+```{r}
+data <- as.matrix(cbind(sub1$status.sum, sub2$status.sum, sub3$status.sum, sub4$status.sum, sub5$status.sum, sub6$status.sum, sub7$status.sum, sub8$status.sum))
+
+timepts <- nrow(data)*ncol(data)
+data.list <- c()
+for (i in 1:5){
+  set.seed(i)
+  add.ons <- runif(timepts, min = 1e-22, max = 1e-21); length(add.ons) == length(unique(add.ons))
+  add.ons <- matrix(add.ons, nrow = 40)
+  data.list[[i]] <- data + add.ons
+}
+
+sub1.mod.1 <- data.list[[1]][ , 1]; sub2.mod.1 <- data.list[[1]][ , 2]; sub3.mod.1 <- data.list[[1]][ , 3]; sub4.mod.1 <- data.list[[1]][ , 4]
+sub5.mod.1 <- data.list[[1]][ , 5]; sub6.mod.1 <- data.list[[1]][ , 6]; sub7.mod.1 <- data.list[[1]][ , 7]; sub8.mod.1 <- data.list[[1]][ , 8]
+sub1.mod.2 <- data.list[[2]][ , 1]; sub2.mod.2 <- data.list[[2]][ , 2]; sub3.mod.2 <- data.list[[2]][ , 3]; sub4.mod.2 <- data.list[[2]][ , 4]
+sub5.mod.2 <- data.list[[2]][ , 5]; sub6.mod.2 <- data.list[[2]][ , 6]; sub7.mod.2 <- data.list[[2]][ , 7]; sub8.mod.2 <- data.list[[2]][ , 8]
+sub1.mod.3 <- data.list[[3]][ , 1]; sub2.mod.3 <- data.list[[3]][ , 2]; sub3.mod.3 <- data.list[[3]][ , 3]; sub4.mod.3 <- data.list[[3]][ , 4]
+sub5.mod.3 <- data.list[[3]][ , 5]; sub6.mod.3 <- data.list[[3]][ , 6]; sub7.mod.3 <- data.list[[3]][ , 7]; sub8.mod.3 <- data.list[[3]][ , 8]
+sub1.mod.4 <- data.list[[4]][ , 1]; sub2.mod.4 <- data.list[[4]][ , 2]; sub3.mod.4 <- data.list[[4]][ , 3]; sub4.mod.4 <- data.list[[4]][ , 4]
+sub5.mod.4 <- data.list[[4]][ , 5]; sub6.mod.4 <- data.list[[4]][ , 6]; sub7.mod.4 <- data.list[[4]][ , 7]; sub8.mod.4 <- data.list[[4]][ , 8]
+sub1.mod.5 <- data.list[[5]][ , 1]; sub2.mod.5 <- data.list[[5]][ , 2]; sub3.mod.5 <- data.list[[5]][ , 3]; sub4.mod.5 <- data.list[[5]][ , 4]
+sub5.mod.5 <- data.list[[5]][ , 5]; sub6.mod.5 <- data.list[[5]][ , 6]; sub7.mod.5 <- data.list[[5]][ , 7]; sub8.mod.5 <- data.list[[5]][ , 8]
+```
+
+## (1)
+
+```{r}
+## Standard deviation
+pop1.sd <- SlidingWindow(FUN = "sd", data = sub1.mod.1, window = 5, step = 1)
+pop2.sd <- SlidingWindow(FUN = "sd", data = sub2.mod.1, window = 5, step = 1)
+pop3.sd <- SlidingWindow(FUN = "sd", data = sub3.mod.1, window = 5, step = 1)
+pop4.sd <- SlidingWindow(FUN = "sd", data = sub4.mod.1, window = 5, step = 1)
+pop5.sd <- SlidingWindow(FUN = "sd", data = sub5.mod.1, window = 5, step = 1)
+pop6.sd <- SlidingWindow(FUN = "sd", data = sub6.mod.1, window = 5, step = 1)
+pop7.sd <- SlidingWindow(FUN = "sd", data = sub7.mod.1, window = 5, step = 1)
+pop8.sd <- SlidingWindow(FUN = "sd", data = sub8.mod.1, window = 5, step = 1)
+## Mean
+pop1.mean <- SlidingWindow(FUN = "mean", data = sub1.mod.1, window = 5, step = 1)
+pop2.mean <- SlidingWindow(FUN = "mean", data = sub2.mod.1, window = 5, step = 1)
+pop3.mean <- SlidingWindow(FUN = "mean", data = sub3.mod.1, window = 5, step = 1)
+pop4.mean <- SlidingWindow(FUN = "mean", data = sub4.mod.1, window = 5, step = 1)
+pop5.mean <- SlidingWindow(FUN = "mean", data = sub5.mod.1, window = 5, step = 1)
+pop6.mean <- SlidingWindow(FUN = "mean", data = sub6.mod.1, window = 5, step = 1)
+pop7.mean <- SlidingWindow(FUN = "mean", data = sub7.mod.1, window = 5, step = 1)
+pop8.mean <- SlidingWindow(FUN = "mean", data = sub8.mod.1, window = 5, step = 1)
+## Skewness
+pop1.skewness <- SlidingWindow(FUN = "skewness", data = sub1.mod.1, window = 5, step = 1)
+pop2.skewness <- SlidingWindow(FUN = "skewness", data = sub2.mod.1, window = 5, step = 1)
+pop3.skewness <- SlidingWindow(FUN = "skewness", data = sub3.mod.1, window = 5, step = 1)
+pop4.skewness <- SlidingWindow(FUN = "skewness", data = sub4.mod.1, window = 5, step = 1)
+pop5.skewness <- SlidingWindow(FUN = "skewness", data = sub5.mod.1, window = 5, step = 1)
+pop6.skewness <- SlidingWindow(FUN = "skewness", data = sub6.mod.1, window = 5, step = 1)
+pop7.skewness <- SlidingWindow(FUN = "skewness", data = sub7.mod.1, window = 5, step = 1)
+pop8.skewness <- SlidingWindow(FUN = "skewness", data = sub8.mod.1, window = 5, step = 1)
+## Kurtosis
+pop1.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub1.mod.1, window = 5, step = 1)
+pop2.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub2.mod.1, window = 5, step = 1)
+pop3.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub3.mod.1, window = 5, step = 1)
+pop4.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub4.mod.1, window = 5, step = 1)
+pop5.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub5.mod.1, window = 5, step = 1)
+pop6.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub6.mod.1, window = 5, step = 1)
+pop7.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub7.mod.1, window = 5, step = 1)
+pop8.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub8.mod.1, window = 5, step = 1)
+## Variation
+pop1.var <- pop1.sd^2
+pop2.var <- pop2.sd^2
+pop3.var <- pop3.sd^2
+pop4.var <- pop4.sd^2
+pop5.var <- pop5.sd^2
+pop6.var <- pop6.sd^2
+pop7.var <- pop7.sd^2
+pop8.var <- pop8.sd^2
+## Coefficient of Variation
+pop1.cv <- pop1.sd/(pop1.mean)
+pop2.cv <- pop2.sd/(pop2.mean)
+pop3.cv <- pop3.sd/(pop3.mean)
+pop4.cv <- pop4.sd/(pop4.mean)
+pop5.cv <- pop5.sd/(pop5.mean)
+pop6.cv <- pop6.sd/(pop6.mean)
+pop7.cv <- pop7.sd/(pop7.mean)
+pop8.cv <- pop8.sd/(pop8.mean)
+## Index of Dispersion
+pop1.id <- pop1.var/(pop1.mean)
+pop2.id <- pop2.var/(pop2.mean)
+pop3.id <- pop3.var/(pop3.mean)
+pop4.id <- pop4.var/(pop4.mean)
+pop5.id <- pop5.var/(pop5.mean)
+pop6.id <- pop6.var/(pop6.mean)
+pop7.id <- pop7.var/(pop7.mean)
+pop8.id <- pop8.var/(pop8.mean)
+## First Difference Variance
+pop1.first.diff.variance <- c()
+pop2.first.diff.variance <- c()
+pop3.first.diff.variance <- c()
+pop4.first.diff.variance <- c()
+pop5.first.diff.variance <- c()
+pop6.first.diff.variance <- c()
+pop7.first.diff.variance <- c()
+pop8.first.diff.variance <- c()
+for(i in 2:35){
+pop1.first.diff.variance[i - 1] <- pop1.var[i] - pop1.var[i - 1]
+pop2.first.diff.variance[i - 1] <- pop2.var[i] - pop2.var[i - 1]
+pop3.first.diff.variance[i - 1] <- pop3.var[i] - pop3.var[i - 1]
+pop4.first.diff.variance[i - 1] <- pop4.var[i] - pop4.var[i - 1]
+pop5.first.diff.variance[i - 1] <- pop5.var[i] - pop5.var[i - 1]
+pop6.first.diff.variance[i - 1] <- pop6.var[i] - pop6.var[i - 1]
+pop7.first.diff.variance[i - 1] <- pop7.var[i] - pop7.var[i - 1]
+pop8.first.diff.variance[i - 1] <- pop8.var[i] - pop8.var[i - 1]
+}
+## Autocorrelation and Autocovariance
+## Autocorrelation
+pop1.ac <- c()
+pop1.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub1.mod.1[c(window.start:window.end)]
+  pop1.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop1.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop2.ac <- c()
+pop2.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub2.mod.1[c(window.start:window.end)]
+  pop2.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop2.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop3.ac <- c()
+pop3.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub3.mod.1[c(window.start:window.end)]
+  pop3.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop3.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop4.ac <- c()
+pop4.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub4.mod.1[c(window.start:window.end)]
+  pop4.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop4.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop5.ac <- c()
+pop5.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub5.mod.1[c(window.start:window.end)]
+  pop5.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop5.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop6.ac <- c()
+pop6.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub6.mod.1[c(window.start:window.end)]
+  pop6.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop6.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop7.ac <- c()
+pop7.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub7.mod.1[c(window.start:window.end)]
+  pop7.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop7.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop8.ac <- c()
+pop8.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub8.mod.1[c(window.start:window.end)]
+  pop8.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop8.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+time.15 <- seq(1, 15, 1)
+constant.mean.tau<- c(cor(pop1.mean[1:15], time.15, method = "kendall"), cor(pop2.mean[1:15], time.15, method = "kendall"),
+                      cor(pop3.mean[1:15], time.15, method = "kendall"), cor(pop4.mean[1:15], time.15, method = "kendall"))
+warming.mean.tau <- c(cor(pop5.mean[1:15], time.15, method = "kendall"), cor(pop6.mean[1:15], time.15, method = "kendall"),
+                      cor(pop7.mean[1:15], time.15, method = "kendall"), cor(pop8.mean[1:15], time.15, method = "kendall"))
+constant.skewness.tau <- c(cor(pop1.skewness[1:15], time.15, method = "kendall"), cor(pop2.skewness[1:15], time.15, method = "kendall"),
+                          cor(pop3.skewness[1:15], time.15, method = "kendall"), cor(pop4.skewness[1:15], time.15, method = "kendall"))
+warming.skewness.tau <- c(cor(pop5.skewness[1:15], time.15, method = "kendall"), cor(pop6.skewness[1:15], time.15, method = "kendall"),
+                          cor(pop7.skewness[1:15], time.15, method = "kendall"), cor(pop8.skewness[1:15], time.15, method = "kendall"))
+constant.kurtosis.tau<- c(cor(pop1.kurtosis[1:15], time.15, method = "kendall"), cor(pop2.kurtosis[1:15], time.15, method = "kendall"),
+                          cor(pop3.kurtosis[1:15], time.15, method = "kendall"), cor(pop4.kurtosis[1:15], time.15, method = "kendall"))
+warming.kurtosis.tau <- c(cor(pop5.kurtosis[1:15], time.15, method = "kendall"), cor(pop6.kurtosis[1:15], time.15, method = "kendall"),
+                          cor(pop7.kurtosis[1:15], time.15, method = "kendall"), cor(pop8.kurtosis[1:15], time.15, method = "kendall"))
+constant.variance.tau<- c(cor(pop1.var[1:15], time.15, method = "kendall"), cor(pop2.var[1:15], time.15, method = "kendall"),
+                          cor(pop3.var[1:15], time.15, method = "kendall"), cor(pop4.var[1:15], time.15, method = "kendall"))
+warming.variance.tau<- c(cor(pop5.var[1:15], time.15, method = "kendall"), cor(pop6.var[1:15], time.15, method = "kendall"),
+                         cor(pop7.var[1:15], time.15, method = "kendall"), cor(pop8.var[1:15], time.15, method = "kendall"))
+constant.cv.tau<- c(cor(pop1.cv[1:15], time.15, method = "kendall"), cor(pop2.cv[1:15], time.15, method = "kendall"),
+                    cor(pop3.cv[1:15], time.15, method = "kendall"), cor(pop4.cv[1:15], time.15, method = "kendall"))
+warming.cv.tau <- c(cor(pop5.cv[1:15], time.15, method = "kendall"), cor(pop6.cv[1:15], time.15, method = "kendall"),
+                    cor(pop7.cv[1:15], time.15, method = "kendall"), cor(pop8.cv[1:15], time.15, method = "kendall"))
+constant.id.tau <- c(cor(pop1.id[1:15], time.15, method = "kendall"), cor(pop2.id[1:15], time.15, method = "kendall"),
+                    cor(pop3.id[1:15], time.15, method = "kendall"), cor(pop4.id[1:15], time.15, method = "kendall"))
+warming.id.tau <- c(cor(pop5.id[1:15], time.15, method = "kendall"), cor(pop6.id[1:15], time.15, method = "kendall"),
+                    cor(pop7.id[1:15], time.15, method = "kendall"), cor(pop8.id[1:15], time.15, method = "kendall"))
+constant.first.diff.variance.tau <- c(cor(pop1.first.diff.variance[1:15], time.15, method = "kendall"), cor(pop2.first.diff.variance[1:15], time.15, method = "kendall"),
+                                     cor(pop3.first.diff.variance[1:15], time.15, method = "kendall"), cor(pop4.first.diff.variance[1:15], time.15, method = "kendall"))
+warming.first.diff.variance.tau <- c(cor(pop5.first.diff.variance[1:15], time.15, method = "kendall"), cor(pop6.first.diff.variance[1:15], time.15, method = "kendall"),
+                                     cor(pop7.first.diff.variance[1:15], time.15, method = "kendall"), cor(pop8.first.diff.variance[1:15], time.15, method = "kendall"))
+constant.ac.tau <- c(cor(pop1.ac[1:15], time.15, method = "kendall"), cor(pop2.ac[1:15], time.15, method = "kendall"),
+                    cor(pop3.ac[1:15], time.15, method = "kendall"), cor(pop4.ac[1:15], time.15, method = "kendall"))
+warming.ac.tau <- c(cor(pop5.ac[1:15], time.15, method = "kendall"), cor(pop6.ac[1:15], time.15, method = "kendall"),
+                    cor(pop7.ac[1:15], time.15, method = "kendall"), cor(pop8.ac[1:15], time.15, method = "kendall"))
+constant.cov.tau <- c(cor(pop1.cov[1:15], time.15, method = "kendall"), cor(pop2.cov[1:15], time.15, method = "kendall"),
+                     cor(pop3.cov[1:15], time.15, method = "kendall"), cor(pop4.cov[1:15], time.15, method = "kendall"))
+warming.cov.tau <- c(cor(pop5.cov[1:15], time.15, method = "kendall"), cor(pop6.cov[1:15], time.15, method = "kendall"),
+                     cor(pop7.cov[1:15], time.15, method = "kendall"), cor(pop8.cov[1:15], time.15, method = "kendall"))
+AUC_mean_data <- calc_auc(warming.mean.tau,constant.mean.tau); AUC_mean_data
+AUC_skewness_data <- calc_auc(warming.skewness.tau,constant.skewness.tau); AUC_skewness_data
+AUC_kurtosis_data <- calc_auc(warming.kurtosis.tau,constant.kurtosis.tau); AUC_kurtosis_data
+AUC_variance_data <- calc_auc(warming.variance.tau,constant.variance.tau); AUC_variance_data
+AUC_cv_data <- calc_auc(warming.cv.tau,constant.cv.tau); AUC_cv_data
+AUC_id_data <- calc_auc(warming.id.tau,constant.id.tau); AUC_id_data
+AUC_first.diff.variance_data <- calc_auc(warming.first.diff.variance.tau,constant.first.diff.variance.tau); AUC_first.diff.variance_data
+AUC_ac_data <- calc_auc(warming.ac.tau,constant.ac.tau); AUC_ac_data
+AUC_cov_data <- calc_auc(warming.cov.tau,constant.cov.tau); AUC_cov_data
+AUC_decay.time_data <- calc_auc(warming.decay.time.tau,constant.decay.time.tau); AUC_decay.time_data
+AUC_data <- c(AUC_mean_data, 
+              AUC_skewness_data, 
+              AUC_kurtosis_data, 
+              AUC_variance_data,
+              AUC_cv_data,
+              AUC_id_data, 
+              AUC_first.diff.variance_data, 
+              AUC_ac_data, 
+              AUC_cov_data, 
+              AUC_decay.time_data)
+AUC_AdjEmp_1 <- data.frame(metrics, AUC_data)
+```
+
+## (2)
+
+```{r}
+## Standard deviation
+pop1.sd <- SlidingWindow(FUN = "sd", data = sub1.mod.2, window = 5, step = 1)
+pop2.sd <- SlidingWindow(FUN = "sd", data = sub2.mod.2, window = 5, step = 1)
+pop3.sd <- SlidingWindow(FUN = "sd", data = sub3.mod.2, window = 5, step = 1)
+pop4.sd <- SlidingWindow(FUN = "sd", data = sub4.mod.2, window = 5, step = 1)
+pop5.sd <- SlidingWindow(FUN = "sd", data = sub5.mod.2, window = 5, step = 1)
+pop6.sd <- SlidingWindow(FUN = "sd", data = sub6.mod.2, window = 5, step = 1)
+pop7.sd <- SlidingWindow(FUN = "sd", data = sub7.mod.2, window = 5, step = 1)
+pop8.sd <- SlidingWindow(FUN = "sd", data = sub8.mod.2, window = 5, step = 1)
+## Mean
+pop1.mean <- SlidingWindow(FUN = "mean", data = sub1.mod.2, window = 5, step = 1)
+pop2.mean <- SlidingWindow(FUN = "mean", data = sub2.mod.2, window = 5, step = 1)
+pop3.mean <- SlidingWindow(FUN = "mean", data = sub3.mod.2, window = 5, step = 1)
+pop4.mean <- SlidingWindow(FUN = "mean", data = sub4.mod.2, window = 5, step = 1)
+pop5.mean <- SlidingWindow(FUN = "mean", data = sub5.mod.2, window = 5, step = 1)
+pop6.mean <- SlidingWindow(FUN = "mean", data = sub6.mod.2, window = 5, step = 1)
+pop7.mean <- SlidingWindow(FUN = "mean", data = sub7.mod.2, window = 5, step = 1)
+pop8.mean <- SlidingWindow(FUN = "mean", data = sub8.mod.2, window = 5, step = 1)
+## Skewness
+pop1.skewness <- SlidingWindow(FUN = "skewness", data = sub1.mod.2, window = 5, step = 1)
+pop2.skewness <- SlidingWindow(FUN = "skewness", data = sub2.mod.2, window = 5, step = 1)
+pop3.skewness <- SlidingWindow(FUN = "skewness", data = sub3.mod.2, window = 5, step = 1)
+pop4.skewness <- SlidingWindow(FUN = "skewness", data = sub4.mod.2, window = 5, step = 1)
+pop5.skewness <- SlidingWindow(FUN = "skewness", data = sub5.mod.2, window = 5, step = 1)
+pop6.skewness <- SlidingWindow(FUN = "skewness", data = sub6.mod.2, window = 5, step = 1)
+pop7.skewness <- SlidingWindow(FUN = "skewness", data = sub7.mod.2, window = 5, step = 1)
+pop8.skewness <- SlidingWindow(FUN = "skewness", data = sub8.mod.2, window = 5, step = 1)
+## Kurtosis
+pop1.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub1.mod.2, window = 5, step = 1)
+pop2.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub2.mod.2, window = 5, step = 1)
+pop3.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub3.mod.2, window = 5, step = 1)
+pop4.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub4.mod.2, window = 5, step = 1)
+pop5.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub5.mod.2, window = 5, step = 1)
+pop6.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub6.mod.2, window = 5, step = 1)
+pop7.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub7.mod.2, window = 5, step = 1)
+pop8.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub8.mod.2, window = 5, step = 1)
+## Variation
+pop1.var <- pop1.sd^2
+pop2.var <- pop2.sd^2
+pop3.var <- pop3.sd^2
+pop4.var <- pop4.sd^2
+pop5.var <- pop5.sd^2
+pop6.var <- pop6.sd^2
+pop7.var <- pop7.sd^2
+pop8.var <- pop8.sd^2
+## Coefficient of Variation
+pop1.cv <- pop1.sd/(pop1.mean)
+pop2.cv <- pop2.sd/(pop2.mean)
+pop3.cv <- pop3.sd/(pop3.mean)
+pop4.cv <- pop4.sd/(pop4.mean)
+pop5.cv <- pop5.sd/(pop5.mean)
+pop6.cv <- pop6.sd/(pop6.mean)
+pop7.cv <- pop7.sd/(pop7.mean)
+pop8.cv <- pop8.sd/(pop8.mean)
+## Index of Dispersion
+pop1.id <- pop1.var/(pop1.mean)
+pop2.id <- pop2.var/(pop2.mean)
+pop3.id <- pop3.var/(pop3.mean)
+pop4.id <- pop4.var/(pop4.mean)
+pop5.id <- pop5.var/(pop5.mean)
+pop6.id <- pop6.var/(pop6.mean)
+pop7.id <- pop7.var/(pop7.mean)
+pop8.id <- pop8.var/(pop8.mean)
+## First Difference Variance
+pop1.first.diff.variance <- c()
+pop2.first.diff.variance <- c()
+pop3.first.diff.variance <- c()
+pop4.first.diff.variance <- c()
+pop5.first.diff.variance <- c()
+pop6.first.diff.variance <- c()
+pop7.first.diff.variance <- c()
+pop8.first.diff.variance <- c()
+for(i in 2:35){
+pop1.first.diff.variance[i - 1] <- pop1.var[i] - pop1.var[i - 1]
+pop2.first.diff.variance[i - 1] <- pop2.var[i] - pop2.var[i - 1]
+pop3.first.diff.variance[i - 1] <- pop3.var[i] - pop3.var[i - 1]
+pop4.first.diff.variance[i - 1] <- pop4.var[i] - pop4.var[i - 1]
+pop5.first.diff.variance[i - 1] <- pop5.var[i] - pop5.var[i - 1]
+pop6.first.diff.variance[i - 1] <- pop6.var[i] - pop6.var[i - 1]
+pop7.first.diff.variance[i - 1] <- pop7.var[i] - pop7.var[i - 1]
+pop8.first.diff.variance[i - 1] <- pop8.var[i] - pop8.var[i - 1]
+}
+## Autocorrelation and Autocovariance
+## Autocorrelation
+pop1.ac <- c()
+pop1.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub1.mod.2[c(window.start:window.end)]
+  pop1.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop1.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop2.ac <- c()
+pop2.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub2.mod.2[c(window.start:window.end)]
+  pop2.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop2.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop3.ac <- c()
+pop3.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub3.mod.2[c(window.start:window.end)]
+  pop3.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop3.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop4.ac <- c()
+pop4.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub4.mod.2[c(window.start:window.end)]
+  pop4.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop4.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop5.ac <- c()
+pop5.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub5.mod.2[c(window.start:window.end)]
+  pop5.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop5.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop6.ac <- c()
+pop6.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub6.mod.2[c(window.start:window.end)]
+  pop6.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop6.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop7.ac <- c()
+pop7.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub7.mod.2[c(window.start:window.end)]
+  pop7.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop7.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop8.ac <- c()
+pop8.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub8.mod.2[c(window.start:window.end)]
+  pop8.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop8.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+time.15 <- seq(1, 15, 1)
+constant.mean.tau<- c(cor(pop1.mean[1:15], time.15, method = "kendall"), cor(pop2.mean[1:15], time.15, method = "kendall"),
+                      cor(pop3.mean[1:15], time.15, method = "kendall"), cor(pop4.mean[1:15], time.15, method = "kendall"))
+warming.mean.tau <- c(cor(pop5.mean[1:15], time.15, method = "kendall"), cor(pop6.mean[1:15], time.15, method = "kendall"),
+                      cor(pop7.mean[1:15], time.15, method = "kendall"), cor(pop8.mean[1:15], time.15, method = "kendall"))
+constant.skewness.tau <- c(cor(pop1.skewness[1:15], time.15, method = "kendall"), cor(pop2.skewness[1:15], time.15, method = "kendall"),
+                          cor(pop3.skewness[1:15], time.15, method = "kendall"), cor(pop4.skewness[1:15], time.15, method = "kendall"))
+warming.skewness.tau <- c(cor(pop5.skewness[1:15], time.15, method = "kendall"), cor(pop6.skewness[1:15], time.15, method = "kendall"),
+                          cor(pop7.skewness[1:15], time.15, method = "kendall"), cor(pop8.skewness[1:15], time.15, method = "kendall"))
+constant.kurtosis.tau<- c(cor(pop1.kurtosis[1:15], time.15, method = "kendall"), cor(pop2.kurtosis[1:15], time.15, method = "kendall"),
+                          cor(pop3.kurtosis[1:15], time.15, method = "kendall"), cor(pop4.kurtosis[1:15], time.15, method = "kendall"))
+warming.kurtosis.tau <- c(cor(pop5.kurtosis[1:15], time.15, method = "kendall"), cor(pop6.kurtosis[1:15], time.15, method = "kendall"),
+                          cor(pop7.kurtosis[1:15], time.15, method = "kendall"), cor(pop8.kurtosis[1:15], time.15, method = "kendall"))
+constant.variance.tau<- c(cor(pop1.var[1:15], time.15, method = "kendall"), cor(pop2.var[1:15], time.15, method = "kendall"),
+                          cor(pop3.var[1:15], time.15, method = "kendall"), cor(pop4.var[1:15], time.15, method = "kendall"))
+warming.variance.tau<- c(cor(pop5.var[1:15], time.15, method = "kendall"), cor(pop6.var[1:15], time.15, method = "kendall"),
+                         cor(pop7.var[1:15], time.15, method = "kendall"), cor(pop8.var[1:15], time.15, method = "kendall"))
+constant.cv.tau<- c(cor(pop1.cv[1:15], time.15, method = "kendall"), cor(pop2.cv[1:15], time.15, method = "kendall"),
+                    cor(pop3.cv[1:15], time.15, method = "kendall"), cor(pop4.cv[1:15], time.15, method = "kendall"))
+warming.cv.tau <- c(cor(pop5.cv[1:15], time.15, method = "kendall"), cor(pop6.cv[1:15], time.15, method = "kendall"),
+                    cor(pop7.cv[1:15], time.15, method = "kendall"), cor(pop8.cv[1:15], time.15, method = "kendall"))
+constant.id.tau <- c(cor(pop1.id[1:15], time.15, method = "kendall"), cor(pop2.id[1:15], time.15, method = "kendall"),
+                    cor(pop3.id[1:15], time.15, method = "kendall"), cor(pop4.id[1:15], time.15, method = "kendall"))
+warming.id.tau <- c(cor(pop5.id[1:15], time.15, method = "kendall"), cor(pop6.id[1:15], time.15, method = "kendall"),
+                    cor(pop7.id[1:15], time.15, method = "kendall"), cor(pop8.id[1:15], time.15, method = "kendall"))
+constant.first.diff.variance.tau <- c(cor(pop1.first.diff.variance[1:15], time.15, method = "kendall"), cor(pop2.first.diff.variance[1:15], time.15, method = "kendall"),
+                                     cor(pop3.first.diff.variance[1:15], time.15, method = "kendall"), cor(pop4.first.diff.variance[1:15], time.15, method = "kendall"))
+warming.first.diff.variance.tau <- c(cor(pop5.first.diff.variance[1:15], time.15, method = "kendall"), cor(pop6.first.diff.variance[1:15], time.15, method = "kendall"),
+                                     cor(pop7.first.diff.variance[1:15], time.15, method = "kendall"), cor(pop8.first.diff.variance[1:15], time.15, method = "kendall"))
+constant.ac.tau <- c(cor(pop1.ac[1:15], time.15, method = "kendall"), cor(pop2.ac[1:15], time.15, method = "kendall"),
+                    cor(pop3.ac[1:15], time.15, method = "kendall"), cor(pop4.ac[1:15], time.15, method = "kendall"))
+warming.ac.tau <- c(cor(pop5.ac[1:15], time.15, method = "kendall"), cor(pop6.ac[1:15], time.15, method = "kendall"),
+                    cor(pop7.ac[1:15], time.15, method = "kendall"), cor(pop8.ac[1:15], time.15, method = "kendall"))
+constant.cov.tau <- c(cor(pop1.cov[1:15], time.15, method = "kendall"), cor(pop2.cov[1:15], time.15, method = "kendall"),
+                     cor(pop3.cov[1:15], time.15, method = "kendall"), cor(pop4.cov[1:15], time.15, method = "kendall"))
+warming.cov.tau <- c(cor(pop5.cov[1:15], time.15, method = "kendall"), cor(pop6.cov[1:15], time.15, method = "kendall"),
+                     cor(pop7.cov[1:15], time.15, method = "kendall"), cor(pop8.cov[1:15], time.15, method = "kendall"))
+AUC_mean_data <- calc_auc(warming.mean.tau,constant.mean.tau); AUC_mean_data
+AUC_skewness_data <- calc_auc(warming.skewness.tau,constant.skewness.tau); AUC_skewness_data
+AUC_kurtosis_data <- calc_auc(warming.kurtosis.tau,constant.kurtosis.tau); AUC_kurtosis_data
+AUC_variance_data <- calc_auc(warming.variance.tau,constant.variance.tau); AUC_variance_data
+AUC_cv_data <- calc_auc(warming.cv.tau,constant.cv.tau); AUC_cv_data
+AUC_id_data <- calc_auc(warming.id.tau,constant.id.tau); AUC_id_data
+AUC_first.diff.variance_data <- calc_auc(warming.first.diff.variance.tau,constant.first.diff.variance.tau); AUC_first.diff.variance_data
+AUC_ac_data <- calc_auc(warming.ac.tau,constant.ac.tau); AUC_ac_data
+AUC_cov_data <- calc_auc(warming.cov.tau,constant.cov.tau); AUC_cov_data
+AUC_decay.time_data <- calc_auc(warming.decay.time.tau,constant.decay.time.tau); AUC_decay.time_data
+AUC_data <- c(AUC_mean_data, 
+              AUC_skewness_data, 
+              AUC_kurtosis_data, 
+              AUC_variance_data,
+              AUC_cv_data,
+              AUC_id_data, 
+              AUC_first.diff.variance_data, 
+              AUC_ac_data, 
+              AUC_cov_data, 
+              AUC_decay.time_data)
+AUC_AdjEmp_2 <- data.frame(metrics, AUC_data)
+```
+
+## (3)
+
+```{r}
+## Standard deviation
+pop1.sd <- SlidingWindow(FUN = "sd", data = sub1.mod.3, window = 5, step = 1)
+pop2.sd <- SlidingWindow(FUN = "sd", data = sub2.mod.3, window = 5, step = 1)
+pop3.sd <- SlidingWindow(FUN = "sd", data = sub3.mod.3, window = 5, step = 1)
+pop4.sd <- SlidingWindow(FUN = "sd", data = sub4.mod.3, window = 5, step = 1)
+pop5.sd <- SlidingWindow(FUN = "sd", data = sub5.mod.3, window = 5, step = 1)
+pop6.sd <- SlidingWindow(FUN = "sd", data = sub6.mod.3, window = 5, step = 1)
+pop7.sd <- SlidingWindow(FUN = "sd", data = sub7.mod.3, window = 5, step = 1)
+pop8.sd <- SlidingWindow(FUN = "sd", data = sub8.mod.3, window = 5, step = 1)
+## Mean
+pop1.mean <- SlidingWindow(FUN = "mean", data = sub1.mod.3, window = 5, step = 1)
+pop2.mean <- SlidingWindow(FUN = "mean", data = sub2.mod.3, window = 5, step = 1)
+pop3.mean <- SlidingWindow(FUN = "mean", data = sub3.mod.3, window = 5, step = 1)
+pop4.mean <- SlidingWindow(FUN = "mean", data = sub4.mod.3, window = 5, step = 1)
+pop5.mean <- SlidingWindow(FUN = "mean", data = sub5.mod.3, window = 5, step = 1)
+pop6.mean <- SlidingWindow(FUN = "mean", data = sub6.mod.3, window = 5, step = 1)
+pop7.mean <- SlidingWindow(FUN = "mean", data = sub7.mod.3, window = 5, step = 1)
+pop8.mean <- SlidingWindow(FUN = "mean", data = sub8.mod.3, window = 5, step = 1)
+## Skewness
+pop1.skewness <- SlidingWindow(FUN = "skewness", data = sub1.mod.3, window = 5, step = 1)
+pop2.skewness <- SlidingWindow(FUN = "skewness", data = sub2.mod.3, window = 5, step = 1)
+pop3.skewness <- SlidingWindow(FUN = "skewness", data = sub3.mod.3, window = 5, step = 1)
+pop4.skewness <- SlidingWindow(FUN = "skewness", data = sub4.mod.3, window = 5, step = 1)
+pop5.skewness <- SlidingWindow(FUN = "skewness", data = sub5.mod.3, window = 5, step = 1)
+pop6.skewness <- SlidingWindow(FUN = "skewness", data = sub6.mod.3, window = 5, step = 1)
+pop7.skewness <- SlidingWindow(FUN = "skewness", data = sub7.mod.3, window = 5, step = 1)
+pop8.skewness <- SlidingWindow(FUN = "skewness", data = sub8.mod.3, window = 5, step = 1)
+## Kurtosis
+pop1.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub1.mod.3, window = 5, step = 1)
+pop2.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub2.mod.3, window = 5, step = 1)
+pop3.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub3.mod.3, window = 5, step = 1)
+pop4.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub4.mod.3, window = 5, step = 1)
+pop5.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub5.mod.3, window = 5, step = 1)
+pop6.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub6.mod.3, window = 5, step = 1)
+pop7.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub7.mod.3, window = 5, step = 1)
+pop8.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub8.mod.3, window = 5, step = 1)
+## Variation
+pop1.var <- pop1.sd^2
+pop2.var <- pop2.sd^2
+pop3.var <- pop3.sd^2
+pop4.var <- pop4.sd^2
+pop5.var <- pop5.sd^2
+pop6.var <- pop6.sd^2
+pop7.var <- pop7.sd^2
+pop8.var <- pop8.sd^2
+## Coefficient of Variation
+pop1.cv <- pop1.sd/(pop1.mean)
+pop2.cv <- pop2.sd/(pop2.mean)
+pop3.cv <- pop3.sd/(pop3.mean)
+pop4.cv <- pop4.sd/(pop4.mean)
+pop5.cv <- pop5.sd/(pop5.mean)
+pop6.cv <- pop6.sd/(pop6.mean)
+pop7.cv <- pop7.sd/(pop7.mean)
+pop8.cv <- pop8.sd/(pop8.mean)
+## Index of Dispersion
+pop1.id <- pop1.var/(pop1.mean)
+pop2.id <- pop2.var/(pop2.mean)
+pop3.id <- pop3.var/(pop3.mean)
+pop4.id <- pop4.var/(pop4.mean)
+pop5.id <- pop5.var/(pop5.mean)
+pop6.id <- pop6.var/(pop6.mean)
+pop7.id <- pop7.var/(pop7.mean)
+pop8.id <- pop8.var/(pop8.mean)
+## First Difference Variance
+pop1.first.diff.variance <- c()
+pop2.first.diff.variance <- c()
+pop3.first.diff.variance <- c()
+pop4.first.diff.variance <- c()
+pop5.first.diff.variance <- c()
+pop6.first.diff.variance <- c()
+pop7.first.diff.variance <- c()
+pop8.first.diff.variance <- c()
+for(i in 2:35){
+pop1.first.diff.variance[i - 1] <- pop1.var[i] - pop1.var[i - 1]
+pop2.first.diff.variance[i - 1] <- pop2.var[i] - pop2.var[i - 1]
+pop3.first.diff.variance[i - 1] <- pop3.var[i] - pop3.var[i - 1]
+pop4.first.diff.variance[i - 1] <- pop4.var[i] - pop4.var[i - 1]
+pop5.first.diff.variance[i - 1] <- pop5.var[i] - pop5.var[i - 1]
+pop6.first.diff.variance[i - 1] <- pop6.var[i] - pop6.var[i - 1]
+pop7.first.diff.variance[i - 1] <- pop7.var[i] - pop7.var[i - 1]
+pop8.first.diff.variance[i - 1] <- pop8.var[i] - pop8.var[i - 1]
+}
+## Autocorrelation and Autocovariance
+## Autocorrelation
+pop1.ac <- c()
+pop1.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub1.mod.3[c(window.start:window.end)]
+  pop1.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop1.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop2.ac <- c()
+pop2.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub2.mod.3[c(window.start:window.end)]
+  pop2.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop2.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop3.ac <- c()
+pop3.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub3.mod.3[c(window.start:window.end)]
+  pop3.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop3.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop4.ac <- c()
+pop4.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub4.mod.3[c(window.start:window.end)]
+  pop4.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop4.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop5.ac <- c()
+pop5.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub5.mod.3[c(window.start:window.end)]
+  pop5.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop5.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop6.ac <- c()
+pop6.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub6.mod.3[c(window.start:window.end)]
+  pop6.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop6.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop7.ac <- c()
+pop7.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub7.mod.3[c(window.start:window.end)]
+  pop7.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop7.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop8.ac <- c()
+pop8.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub8.mod.3[c(window.start:window.end)]
+  pop8.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop8.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+time.15 <- seq(1, 15, 1)
+constant.mean.tau<- c(cor(pop1.mean[1:15], time.15, method = "kendall"), cor(pop2.mean[1:15], time.15, method = "kendall"),
+                      cor(pop3.mean[1:15], time.15, method = "kendall"), cor(pop4.mean[1:15], time.15, method = "kendall"))
+warming.mean.tau <- c(cor(pop5.mean[1:15], time.15, method = "kendall"), cor(pop6.mean[1:15], time.15, method = "kendall"),
+                      cor(pop7.mean[1:15], time.15, method = "kendall"), cor(pop8.mean[1:15], time.15, method = "kendall"))
+constant.skewness.tau <- c(cor(pop1.skewness[1:15], time.15, method = "kendall"), cor(pop2.skewness[1:15], time.15, method = "kendall"),
+                          cor(pop3.skewness[1:15], time.15, method = "kendall"), cor(pop4.skewness[1:15], time.15, method = "kendall"))
+warming.skewness.tau <- c(cor(pop5.skewness[1:15], time.15, method = "kendall"), cor(pop6.skewness[1:15], time.15, method = "kendall"),
+                          cor(pop7.skewness[1:15], time.15, method = "kendall"), cor(pop8.skewness[1:15], time.15, method = "kendall"))
+constant.kurtosis.tau<- c(cor(pop1.kurtosis[1:15], time.15, method = "kendall"), cor(pop2.kurtosis[1:15], time.15, method = "kendall"),
+                          cor(pop3.kurtosis[1:15], time.15, method = "kendall"), cor(pop4.kurtosis[1:15], time.15, method = "kendall"))
+warming.kurtosis.tau <- c(cor(pop5.kurtosis[1:15], time.15, method = "kendall"), cor(pop6.kurtosis[1:15], time.15, method = "kendall"),
+                          cor(pop7.kurtosis[1:15], time.15, method = "kendall"), cor(pop8.kurtosis[1:15], time.15, method = "kendall"))
+constant.variance.tau<- c(cor(pop1.var[1:15], time.15, method = "kendall"), cor(pop2.var[1:15], time.15, method = "kendall"),
+                          cor(pop3.var[1:15], time.15, method = "kendall"), cor(pop4.var[1:15], time.15, method = "kendall"))
+warming.variance.tau<- c(cor(pop5.var[1:15], time.15, method = "kendall"), cor(pop6.var[1:15], time.15, method = "kendall"),
+                         cor(pop7.var[1:15], time.15, method = "kendall"), cor(pop8.var[1:15], time.15, method = "kendall"))
+constant.cv.tau<- c(cor(pop1.cv[1:15], time.15, method = "kendall"), cor(pop2.cv[1:15], time.15, method = "kendall"),
+                    cor(pop3.cv[1:15], time.15, method = "kendall"), cor(pop4.cv[1:15], time.15, method = "kendall"))
+warming.cv.tau <- c(cor(pop5.cv[1:15], time.15, method = "kendall"), cor(pop6.cv[1:15], time.15, method = "kendall"),
+                    cor(pop7.cv[1:15], time.15, method = "kendall"), cor(pop8.cv[1:15], time.15, method = "kendall"))
+constant.id.tau <- c(cor(pop1.id[1:15], time.15, method = "kendall"), cor(pop2.id[1:15], time.15, method = "kendall"),
+                    cor(pop3.id[1:15], time.15, method = "kendall"), cor(pop4.id[1:15], time.15, method = "kendall"))
+warming.id.tau <- c(cor(pop5.id[1:15], time.15, method = "kendall"), cor(pop6.id[1:15], time.15, method = "kendall"),
+                    cor(pop7.id[1:15], time.15, method = "kendall"), cor(pop8.id[1:15], time.15, method = "kendall"))
+constant.first.diff.variance.tau <- c(cor(pop1.first.diff.variance[1:15], time.15, method = "kendall"), cor(pop2.first.diff.variance[1:15], time.15, method = "kendall"),
+                                     cor(pop3.first.diff.variance[1:15], time.15, method = "kendall"), cor(pop4.first.diff.variance[1:15], time.15, method = "kendall"))
+warming.first.diff.variance.tau <- c(cor(pop5.first.diff.variance[1:15], time.15, method = "kendall"), cor(pop6.first.diff.variance[1:15], time.15, method = "kendall"),
+                                     cor(pop7.first.diff.variance[1:15], time.15, method = "kendall"), cor(pop8.first.diff.variance[1:15], time.15, method = "kendall"))
+constant.ac.tau <- c(cor(pop1.ac[1:15], time.15, method = "kendall"), cor(pop2.ac[1:15], time.15, method = "kendall"),
+                    cor(pop3.ac[1:15], time.15, method = "kendall"), cor(pop4.ac[1:15], time.15, method = "kendall"))
+warming.ac.tau <- c(cor(pop5.ac[1:15], time.15, method = "kendall"), cor(pop6.ac[1:15], time.15, method = "kendall"),
+                    cor(pop7.ac[1:15], time.15, method = "kendall"), cor(pop8.ac[1:15], time.15, method = "kendall"))
+constant.cov.tau <- c(cor(pop1.cov[1:15], time.15, method = "kendall"), cor(pop2.cov[1:15], time.15, method = "kendall"),
+                     cor(pop3.cov[1:15], time.15, method = "kendall"), cor(pop4.cov[1:15], time.15, method = "kendall"))
+warming.cov.tau <- c(cor(pop5.cov[1:15], time.15, method = "kendall"), cor(pop6.cov[1:15], time.15, method = "kendall"),
+                     cor(pop7.cov[1:15], time.15, method = "kendall"), cor(pop8.cov[1:15], time.15, method = "kendall"))
+AUC_mean_data <- calc_auc(warming.mean.tau,constant.mean.tau); AUC_mean_data
+AUC_skewness_data <- calc_auc(warming.skewness.tau,constant.skewness.tau); AUC_skewness_data
+AUC_kurtosis_data <- calc_auc(warming.kurtosis.tau,constant.kurtosis.tau); AUC_kurtosis_data
+AUC_variance_data <- calc_auc(warming.variance.tau,constant.variance.tau); AUC_variance_data
+AUC_cv_data <- calc_auc(warming.cv.tau,constant.cv.tau); AUC_cv_data
+AUC_id_data <- calc_auc(warming.id.tau,constant.id.tau); AUC_id_data
+AUC_first.diff.variance_data <- calc_auc(warming.first.diff.variance.tau,constant.first.diff.variance.tau); AUC_first.diff.variance_data
+AUC_ac_data <- calc_auc(warming.ac.tau,constant.ac.tau); AUC_ac_data
+AUC_cov_data <- calc_auc(warming.cov.tau,constant.cov.tau); AUC_cov_data
+AUC_decay.time_data <- calc_auc(warming.decay.time.tau,constant.decay.time.tau); AUC_decay.time_data
+AUC_data <- c(AUC_mean_data, 
+              AUC_skewness_data, 
+              AUC_kurtosis_data, 
+              AUC_variance_data,
+              AUC_cv_data,
+              AUC_id_data, 
+              AUC_first.diff.variance_data, 
+              AUC_ac_data, 
+              AUC_cov_data, 
+              AUC_decay.time_data)
+AUC_AdjEmp_3 <- data.frame(metrics, AUC_data)
+```
+
+## (4)
+
+```{r}
+## Standard deviation
+pop1.sd <- SlidingWindow(FUN = "sd", data = sub1.mod.4, window = 5, step = 1)
+pop2.sd <- SlidingWindow(FUN = "sd", data = sub2.mod.4, window = 5, step = 1)
+pop3.sd <- SlidingWindow(FUN = "sd", data = sub3.mod.4, window = 5, step = 1)
+pop4.sd <- SlidingWindow(FUN = "sd", data = sub4.mod.4, window = 5, step = 1)
+pop5.sd <- SlidingWindow(FUN = "sd", data = sub5.mod.4, window = 5, step = 1)
+pop6.sd <- SlidingWindow(FUN = "sd", data = sub6.mod.4, window = 5, step = 1)
+pop7.sd <- SlidingWindow(FUN = "sd", data = sub7.mod.4, window = 5, step = 1)
+pop8.sd <- SlidingWindow(FUN = "sd", data = sub8.mod.4, window = 5, step = 1)
+## Mean
+pop1.mean <- SlidingWindow(FUN = "mean", data = sub1.mod.4, window = 5, step = 1)
+pop2.mean <- SlidingWindow(FUN = "mean", data = sub2.mod.4, window = 5, step = 1)
+pop3.mean <- SlidingWindow(FUN = "mean", data = sub3.mod.4, window = 5, step = 1)
+pop4.mean <- SlidingWindow(FUN = "mean", data = sub4.mod.4, window = 5, step = 1)
+pop5.mean <- SlidingWindow(FUN = "mean", data = sub5.mod.4, window = 5, step = 1)
+pop6.mean <- SlidingWindow(FUN = "mean", data = sub6.mod.4, window = 5, step = 1)
+pop7.mean <- SlidingWindow(FUN = "mean", data = sub7.mod.4, window = 5, step = 1)
+pop8.mean <- SlidingWindow(FUN = "mean", data = sub8.mod.4, window = 5, step = 1)
+## Skewness
+pop1.skewness <- SlidingWindow(FUN = "skewness", data = sub1.mod.4, window = 5, step = 1)
+pop2.skewness <- SlidingWindow(FUN = "skewness", data = sub2.mod.4, window = 5, step = 1)
+pop3.skewness <- SlidingWindow(FUN = "skewness", data = sub3.mod.4, window = 5, step = 1)
+pop4.skewness <- SlidingWindow(FUN = "skewness", data = sub4.mod.4, window = 5, step = 1)
+pop5.skewness <- SlidingWindow(FUN = "skewness", data = sub5.mod.4, window = 5, step = 1)
+pop6.skewness <- SlidingWindow(FUN = "skewness", data = sub6.mod.4, window = 5, step = 1)
+pop7.skewness <- SlidingWindow(FUN = "skewness", data = sub7.mod.4, window = 5, step = 1)
+pop8.skewness <- SlidingWindow(FUN = "skewness", data = sub8.mod.4, window = 5, step = 1)
+## Kurtosis
+pop1.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub1.mod.4, window = 5, step = 1)
+pop2.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub2.mod.4, window = 5, step = 1)
+pop3.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub3.mod.4, window = 5, step = 1)
+pop4.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub4.mod.4, window = 5, step = 1)
+pop5.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub5.mod.4, window = 5, step = 1)
+pop6.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub6.mod.4, window = 5, step = 1)
+pop7.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub7.mod.4, window = 5, step = 1)
+pop8.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub8.mod.4, window = 5, step = 1)
+## Variation
+pop1.var <- pop1.sd^2
+pop2.var <- pop2.sd^2
+pop3.var <- pop3.sd^2
+pop4.var <- pop4.sd^2
+pop5.var <- pop5.sd^2
+pop6.var <- pop6.sd^2
+pop7.var <- pop7.sd^2
+pop8.var <- pop8.sd^2
+## Coefficient of Variation
+pop1.cv <- pop1.sd/(pop1.mean)
+pop2.cv <- pop2.sd/(pop2.mean)
+pop3.cv <- pop3.sd/(pop3.mean)
+pop4.cv <- pop4.sd/(pop4.mean)
+pop5.cv <- pop5.sd/(pop5.mean)
+pop6.cv <- pop6.sd/(pop6.mean)
+pop7.cv <- pop7.sd/(pop7.mean)
+pop8.cv <- pop8.sd/(pop8.mean)
+## Index of Dispersion
+pop1.id <- pop1.var/(pop1.mean)
+pop2.id <- pop2.var/(pop2.mean)
+pop3.id <- pop3.var/(pop3.mean)
+pop4.id <- pop4.var/(pop4.mean)
+pop5.id <- pop5.var/(pop5.mean)
+pop6.id <- pop6.var/(pop6.mean)
+pop7.id <- pop7.var/(pop7.mean)
+pop8.id <- pop8.var/(pop8.mean)
+## First Difference Variance
+pop1.first.diff.variance <- c()
+pop2.first.diff.variance <- c()
+pop3.first.diff.variance <- c()
+pop4.first.diff.variance <- c()
+pop5.first.diff.variance <- c()
+pop6.first.diff.variance <- c()
+pop7.first.diff.variance <- c()
+pop8.first.diff.variance <- c()
+for(i in 2:35){
+pop1.first.diff.variance[i - 1] <- pop1.var[i] - pop1.var[i - 1]
+pop2.first.diff.variance[i - 1] <- pop2.var[i] - pop2.var[i - 1]
+pop3.first.diff.variance[i - 1] <- pop3.var[i] - pop3.var[i - 1]
+pop4.first.diff.variance[i - 1] <- pop4.var[i] - pop4.var[i - 1]
+pop5.first.diff.variance[i - 1] <- pop5.var[i] - pop5.var[i - 1]
+pop6.first.diff.variance[i - 1] <- pop6.var[i] - pop6.var[i - 1]
+pop7.first.diff.variance[i - 1] <- pop7.var[i] - pop7.var[i - 1]
+pop8.first.diff.variance[i - 1] <- pop8.var[i] - pop8.var[i - 1]
+}
+## Autocorrelation and Autocovariance
+## Autocorrelation
+pop1.ac <- c()
+pop1.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub1.mod.4[c(window.start:window.end)]
+  pop1.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop1.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop2.ac <- c()
+pop2.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub2.mod.4[c(window.start:window.end)]
+  pop2.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop2.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop3.ac <- c()
+pop3.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub3.mod.4[c(window.start:window.end)]
+  pop3.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop3.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop4.ac <- c()
+pop4.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub4.mod.4[c(window.start:window.end)]
+  pop4.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop4.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop5.ac <- c()
+pop5.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub5.mod.4[c(window.start:window.end)]
+  pop5.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop5.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop6.ac <- c()
+pop6.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub6.mod.4[c(window.start:window.end)]
+  pop6.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop6.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop7.ac <- c()
+pop7.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub7.mod.4[c(window.start:window.end)]
+  pop7.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop7.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop8.ac <- c()
+pop8.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub8.mod.4[c(window.start:window.end)]
+  pop8.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop8.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+time.15 <- seq(1, 15, 1)
+constant.mean.tau<- c(cor(pop1.mean[1:15], time.15, method = "kendall"), cor(pop2.mean[1:15], time.15, method = "kendall"),
+                      cor(pop3.mean[1:15], time.15, method = "kendall"), cor(pop4.mean[1:15], time.15, method = "kendall"))
+warming.mean.tau <- c(cor(pop5.mean[1:15], time.15, method = "kendall"), cor(pop6.mean[1:15], time.15, method = "kendall"),
+                      cor(pop7.mean[1:15], time.15, method = "kendall"), cor(pop8.mean[1:15], time.15, method = "kendall"))
+constant.skewness.tau <- c(cor(pop1.skewness[1:15], time.15, method = "kendall"), cor(pop2.skewness[1:15], time.15, method = "kendall"),
+                          cor(pop3.skewness[1:15], time.15, method = "kendall"), cor(pop4.skewness[1:15], time.15, method = "kendall"))
+warming.skewness.tau <- c(cor(pop5.skewness[1:15], time.15, method = "kendall"), cor(pop6.skewness[1:15], time.15, method = "kendall"),
+                          cor(pop7.skewness[1:15], time.15, method = "kendall"), cor(pop8.skewness[1:15], time.15, method = "kendall"))
+constant.kurtosis.tau<- c(cor(pop1.kurtosis[1:15], time.15, method = "kendall"), cor(pop2.kurtosis[1:15], time.15, method = "kendall"),
+                          cor(pop3.kurtosis[1:15], time.15, method = "kendall"), cor(pop4.kurtosis[1:15], time.15, method = "kendall"))
+warming.kurtosis.tau <- c(cor(pop5.kurtosis[1:15], time.15, method = "kendall"), cor(pop6.kurtosis[1:15], time.15, method = "kendall"),
+                          cor(pop7.kurtosis[1:15], time.15, method = "kendall"), cor(pop8.kurtosis[1:15], time.15, method = "kendall"))
+constant.variance.tau<- c(cor(pop1.var[1:15], time.15, method = "kendall"), cor(pop2.var[1:15], time.15, method = "kendall"),
+                          cor(pop3.var[1:15], time.15, method = "kendall"), cor(pop4.var[1:15], time.15, method = "kendall"))
+warming.variance.tau<- c(cor(pop5.var[1:15], time.15, method = "kendall"), cor(pop6.var[1:15], time.15, method = "kendall"),
+                         cor(pop7.var[1:15], time.15, method = "kendall"), cor(pop8.var[1:15], time.15, method = "kendall"))
+constant.cv.tau<- c(cor(pop1.cv[1:15], time.15, method = "kendall"), cor(pop2.cv[1:15], time.15, method = "kendall"),
+                    cor(pop3.cv[1:15], time.15, method = "kendall"), cor(pop4.cv[1:15], time.15, method = "kendall"))
+warming.cv.tau <- c(cor(pop5.cv[1:15], time.15, method = "kendall"), cor(pop6.cv[1:15], time.15, method = "kendall"),
+                    cor(pop7.cv[1:15], time.15, method = "kendall"), cor(pop8.cv[1:15], time.15, method = "kendall"))
+constant.id.tau <- c(cor(pop1.id[1:15], time.15, method = "kendall"), cor(pop2.id[1:15], time.15, method = "kendall"),
+                    cor(pop3.id[1:15], time.15, method = "kendall"), cor(pop4.id[1:15], time.15, method = "kendall"))
+warming.id.tau <- c(cor(pop5.id[1:15], time.15, method = "kendall"), cor(pop6.id[1:15], time.15, method = "kendall"),
+                    cor(pop7.id[1:15], time.15, method = "kendall"), cor(pop8.id[1:15], time.15, method = "kendall"))
+constant.first.diff.variance.tau <- c(cor(pop1.first.diff.variance[1:15], time.15, method = "kendall"), cor(pop2.first.diff.variance[1:15], time.15, method = "kendall"),
+                                     cor(pop3.first.diff.variance[1:15], time.15, method = "kendall"), cor(pop4.first.diff.variance[1:15], time.15, method = "kendall"))
+warming.first.diff.variance.tau <- c(cor(pop5.first.diff.variance[1:15], time.15, method = "kendall"), cor(pop6.first.diff.variance[1:15], time.15, method = "kendall"),
+                                     cor(pop7.first.diff.variance[1:15], time.15, method = "kendall"), cor(pop8.first.diff.variance[1:15], time.15, method = "kendall"))
+constant.ac.tau <- c(cor(pop1.ac[1:15], time.15, method = "kendall"), cor(pop2.ac[1:15], time.15, method = "kendall"),
+                    cor(pop3.ac[1:15], time.15, method = "kendall"), cor(pop4.ac[1:15], time.15, method = "kendall"))
+warming.ac.tau <- c(cor(pop5.ac[1:15], time.15, method = "kendall"), cor(pop6.ac[1:15], time.15, method = "kendall"),
+                    cor(pop7.ac[1:15], time.15, method = "kendall"), cor(pop8.ac[1:15], time.15, method = "kendall"))
+constant.cov.tau <- c(cor(pop1.cov[1:15], time.15, method = "kendall"), cor(pop2.cov[1:15], time.15, method = "kendall"),
+                     cor(pop3.cov[1:15], time.15, method = "kendall"), cor(pop4.cov[1:15], time.15, method = "kendall"))
+warming.cov.tau <- c(cor(pop5.cov[1:15], time.15, method = "kendall"), cor(pop6.cov[1:15], time.15, method = "kendall"),
+                     cor(pop7.cov[1:15], time.15, method = "kendall"), cor(pop8.cov[1:15], time.15, method = "kendall"))
+AUC_mean_data <- calc_auc(warming.mean.tau,constant.mean.tau); AUC_mean_data
+AUC_skewness_data <- calc_auc(warming.skewness.tau,constant.skewness.tau); AUC_skewness_data
+AUC_kurtosis_data <- calc_auc(warming.kurtosis.tau,constant.kurtosis.tau); AUC_kurtosis_data
+AUC_variance_data <- calc_auc(warming.variance.tau,constant.variance.tau); AUC_variance_data
+AUC_cv_data <- calc_auc(warming.cv.tau,constant.cv.tau); AUC_cv_data
+AUC_id_data <- calc_auc(warming.id.tau,constant.id.tau); AUC_id_data
+AUC_first.diff.variance_data <- calc_auc(warming.first.diff.variance.tau,constant.first.diff.variance.tau); AUC_first.diff.variance_data
+AUC_ac_data <- calc_auc(warming.ac.tau,constant.ac.tau); AUC_ac_data
+AUC_cov_data <- calc_auc(warming.cov.tau,constant.cov.tau); AUC_cov_data
+AUC_decay.time_data <- calc_auc(warming.decay.time.tau,constant.decay.time.tau); AUC_decay.time_data
+AUC_data <- c(AUC_mean_data, 
+              AUC_skewness_data, 
+              AUC_kurtosis_data, 
+              AUC_variance_data,
+              AUC_cv_data,
+              AUC_id_data, 
+              AUC_first.diff.variance_data, 
+              AUC_ac_data, 
+              AUC_cov_data, 
+              AUC_decay.time_data)
+AUC_AdjEmp_4 <- data.frame(metrics, AUC_data)
+```
+
+## (5)
+
+```{r}
+## Standard deviation
+pop1.sd <- SlidingWindow(FUN = "sd", data = sub1.mod.5, window = 5, step = 1)
+pop2.sd <- SlidingWindow(FUN = "sd", data = sub2.mod.5, window = 5, step = 1)
+pop3.sd <- SlidingWindow(FUN = "sd", data = sub3.mod.5, window = 5, step = 1)
+pop4.sd <- SlidingWindow(FUN = "sd", data = sub4.mod.5, window = 5, step = 1)
+pop5.sd <- SlidingWindow(FUN = "sd", data = sub5.mod.5, window = 5, step = 1)
+pop6.sd <- SlidingWindow(FUN = "sd", data = sub6.mod.5, window = 5, step = 1)
+pop7.sd <- SlidingWindow(FUN = "sd", data = sub7.mod.5, window = 5, step = 1)
+pop8.sd <- SlidingWindow(FUN = "sd", data = sub8.mod.5, window = 5, step = 1)
+## Mean
+pop1.mean <- SlidingWindow(FUN = "mean", data = sub1.mod.5, window = 5, step = 1)
+pop2.mean <- SlidingWindow(FUN = "mean", data = sub2.mod.5, window = 5, step = 1)
+pop3.mean <- SlidingWindow(FUN = "mean", data = sub3.mod.5, window = 5, step = 1)
+pop4.mean <- SlidingWindow(FUN = "mean", data = sub4.mod.5, window = 5, step = 1)
+pop5.mean <- SlidingWindow(FUN = "mean", data = sub5.mod.5, window = 5, step = 1)
+pop6.mean <- SlidingWindow(FUN = "mean", data = sub6.mod.5, window = 5, step = 1)
+pop7.mean <- SlidingWindow(FUN = "mean", data = sub7.mod.5, window = 5, step = 1)
+pop8.mean <- SlidingWindow(FUN = "mean", data = sub8.mod.5, window = 5, step = 1)
+## Skewness
+pop1.skewness <- SlidingWindow(FUN = "skewness", data = sub1.mod.5, window = 5, step = 1)
+pop2.skewness <- SlidingWindow(FUN = "skewness", data = sub2.mod.5, window = 5, step = 1)
+pop3.skewness <- SlidingWindow(FUN = "skewness", data = sub3.mod.5, window = 5, step = 1)
+pop4.skewness <- SlidingWindow(FUN = "skewness", data = sub4.mod.5, window = 5, step = 1)
+pop5.skewness <- SlidingWindow(FUN = "skewness", data = sub5.mod.5, window = 5, step = 1)
+pop6.skewness <- SlidingWindow(FUN = "skewness", data = sub6.mod.5, window = 5, step = 1)
+pop7.skewness <- SlidingWindow(FUN = "skewness", data = sub7.mod.5, window = 5, step = 1)
+pop8.skewness <- SlidingWindow(FUN = "skewness", data = sub8.mod.5, window = 5, step = 1)
+## Kurtosis
+pop1.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub1.mod.5, window = 5, step = 1)
+pop2.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub2.mod.5, window = 5, step = 1)
+pop3.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub3.mod.5, window = 5, step = 1)
+pop4.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub4.mod.5, window = 5, step = 1)
+pop5.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub5.mod.5, window = 5, step = 1)
+pop6.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub6.mod.5, window = 5, step = 1)
+pop7.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub7.mod.5, window = 5, step = 1)
+pop8.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub8.mod.5, window = 5, step = 1)
+## Variation
+pop1.var <- pop1.sd^2
+pop2.var <- pop2.sd^2
+pop3.var <- pop3.sd^2
+pop4.var <- pop4.sd^2
+pop5.var <- pop5.sd^2
+pop6.var <- pop6.sd^2
+pop7.var <- pop7.sd^2
+pop8.var <- pop8.sd^2
+## Coefficient of Variation
+pop1.cv <- pop1.sd/(pop1.mean)
+pop2.cv <- pop2.sd/(pop2.mean)
+pop3.cv <- pop3.sd/(pop3.mean)
+pop4.cv <- pop4.sd/(pop4.mean)
+pop5.cv <- pop5.sd/(pop5.mean)
+pop6.cv <- pop6.sd/(pop6.mean)
+pop7.cv <- pop7.sd/(pop7.mean)
+pop8.cv <- pop8.sd/(pop8.mean)
+## Index of Dispersion
+pop1.id <- pop1.var/(pop1.mean)
+pop2.id <- pop2.var/(pop2.mean)
+pop3.id <- pop3.var/(pop3.mean)
+pop4.id <- pop4.var/(pop4.mean)
+pop5.id <- pop5.var/(pop5.mean)
+pop6.id <- pop6.var/(pop6.mean)
+pop7.id <- pop7.var/(pop7.mean)
+pop8.id <- pop8.var/(pop8.mean)
+## First Difference Variance
+pop1.first.diff.variance <- c()
+pop2.first.diff.variance <- c()
+pop3.first.diff.variance <- c()
+pop4.first.diff.variance <- c()
+pop5.first.diff.variance <- c()
+pop6.first.diff.variance <- c()
+pop7.first.diff.variance <- c()
+pop8.first.diff.variance <- c()
+for(i in 2:35){
+pop1.first.diff.variance[i - 1] <- pop1.var[i] - pop1.var[i - 1]
+pop2.first.diff.variance[i - 1] <- pop2.var[i] - pop2.var[i - 1]
+pop3.first.diff.variance[i - 1] <- pop3.var[i] - pop3.var[i - 1]
+pop4.first.diff.variance[i - 1] <- pop4.var[i] - pop4.var[i - 1]
+pop5.first.diff.variance[i - 1] <- pop5.var[i] - pop5.var[i - 1]
+pop6.first.diff.variance[i - 1] <- pop6.var[i] - pop6.var[i - 1]
+pop7.first.diff.variance[i - 1] <- pop7.var[i] - pop7.var[i - 1]
+pop8.first.diff.variance[i - 1] <- pop8.var[i] - pop8.var[i - 1]
+}
+## Autocorrelation and Autocovariance
+## Autocorrelation
+pop1.ac <- c()
+pop1.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub1.mod.5[c(window.start:window.end)]
+  pop1.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop1.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop2.ac <- c()
+pop2.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub2.mod.5[c(window.start:window.end)]
+  pop2.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop2.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop3.ac <- c()
+pop3.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub3.mod.5[c(window.start:window.end)]
+  pop3.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop3.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop4.ac <- c()
+pop4.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub4.mod.5[c(window.start:window.end)]
+  pop4.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop4.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop5.ac <- c()
+pop5.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub5.mod.5[c(window.start:window.end)]
+  pop5.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop5.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop6.ac <- c()
+pop6.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub6.mod.5[c(window.start:window.end)]
+  pop6.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop6.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop7.ac <- c()
+pop7.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub7.mod.5[c(window.start:window.end)]
+  pop7.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop7.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+pop8.ac <- c()
+pop8.cov <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  segment <- sub8.mod.5[c(window.start:window.end)]
+  pop8.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop8.cov[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+time.15 <- seq(1, 15, 1)
+constant.mean.tau<- c(cor(pop1.mean[1:15], time.15, method = "kendall"), cor(pop2.mean[1:15], time.15, method = "kendall"),
+                      cor(pop3.mean[1:15], time.15, method = "kendall"), cor(pop4.mean[1:15], time.15, method = "kendall"))
+warming.mean.tau <- c(cor(pop5.mean[1:15], time.15, method = "kendall"), cor(pop6.mean[1:15], time.15, method = "kendall"),
+                      cor(pop7.mean[1:15], time.15, method = "kendall"), cor(pop8.mean[1:15], time.15, method = "kendall"))
+constant.skewness.tau <- c(cor(pop1.skewness[1:15], time.15, method = "kendall"), cor(pop2.skewness[1:15], time.15, method = "kendall"),
+                          cor(pop3.skewness[1:15], time.15, method = "kendall"), cor(pop4.skewness[1:15], time.15, method = "kendall"))
+warming.skewness.tau <- c(cor(pop5.skewness[1:15], time.15, method = "kendall"), cor(pop6.skewness[1:15], time.15, method = "kendall"),
+                          cor(pop7.skewness[1:15], time.15, method = "kendall"), cor(pop8.skewness[1:15], time.15, method = "kendall"))
+constant.kurtosis.tau<- c(cor(pop1.kurtosis[1:15], time.15, method = "kendall"), cor(pop2.kurtosis[1:15], time.15, method = "kendall"),
+                          cor(pop3.kurtosis[1:15], time.15, method = "kendall"), cor(pop4.kurtosis[1:15], time.15, method = "kendall"))
+warming.kurtosis.tau <- c(cor(pop5.kurtosis[1:15], time.15, method = "kendall"), cor(pop6.kurtosis[1:15], time.15, method = "kendall"),
+                          cor(pop7.kurtosis[1:15], time.15, method = "kendall"), cor(pop8.kurtosis[1:15], time.15, method = "kendall"))
+constant.variance.tau<- c(cor(pop1.var[1:15], time.15, method = "kendall"), cor(pop2.var[1:15], time.15, method = "kendall"),
+                          cor(pop3.var[1:15], time.15, method = "kendall"), cor(pop4.var[1:15], time.15, method = "kendall"))
+warming.variance.tau<- c(cor(pop5.var[1:15], time.15, method = "kendall"), cor(pop6.var[1:15], time.15, method = "kendall"),
+                         cor(pop7.var[1:15], time.15, method = "kendall"), cor(pop8.var[1:15], time.15, method = "kendall"))
+constant.cv.tau<- c(cor(pop1.cv[1:15], time.15, method = "kendall"), cor(pop2.cv[1:15], time.15, method = "kendall"),
+                    cor(pop3.cv[1:15], time.15, method = "kendall"), cor(pop4.cv[1:15], time.15, method = "kendall"))
+warming.cv.tau <- c(cor(pop5.cv[1:15], time.15, method = "kendall"), cor(pop6.cv[1:15], time.15, method = "kendall"),
+                    cor(pop7.cv[1:15], time.15, method = "kendall"), cor(pop8.cv[1:15], time.15, method = "kendall"))
+constant.id.tau <- c(cor(pop1.id[1:15], time.15, method = "kendall"), cor(pop2.id[1:15], time.15, method = "kendall"),
+                    cor(pop3.id[1:15], time.15, method = "kendall"), cor(pop4.id[1:15], time.15, method = "kendall"))
+warming.id.tau <- c(cor(pop5.id[1:15], time.15, method = "kendall"), cor(pop6.id[1:15], time.15, method = "kendall"),
+                    cor(pop7.id[1:15], time.15, method = "kendall"), cor(pop8.id[1:15], time.15, method = "kendall"))
+constant.first.diff.variance.tau <- c(cor(pop1.first.diff.variance[1:15], time.15, method = "kendall"), cor(pop2.first.diff.variance[1:15], time.15, method = "kendall"),
+                                     cor(pop3.first.diff.variance[1:15], time.15, method = "kendall"), cor(pop4.first.diff.variance[1:15], time.15, method = "kendall"))
+warming.first.diff.variance.tau <- c(cor(pop5.first.diff.variance[1:15], time.15, method = "kendall"), cor(pop6.first.diff.variance[1:15], time.15, method = "kendall"),
+                                     cor(pop7.first.diff.variance[1:15], time.15, method = "kendall"), cor(pop8.first.diff.variance[1:15], time.15, method = "kendall"))
+constant.ac.tau <- c(cor(pop1.ac[1:15], time.15, method = "kendall"), cor(pop2.ac[1:15], time.15, method = "kendall"),
+                    cor(pop3.ac[1:15], time.15, method = "kendall"), cor(pop4.ac[1:15], time.15, method = "kendall"))
+warming.ac.tau <- c(cor(pop5.ac[1:15], time.15, method = "kendall"), cor(pop6.ac[1:15], time.15, method = "kendall"),
+                    cor(pop7.ac[1:15], time.15, method = "kendall"), cor(pop8.ac[1:15], time.15, method = "kendall"))
+constant.cov.tau <- c(cor(pop1.cov[1:15], time.15, method = "kendall"), cor(pop2.cov[1:15], time.15, method = "kendall"),
+                     cor(pop3.cov[1:15], time.15, method = "kendall"), cor(pop4.cov[1:15], time.15, method = "kendall"))
+warming.cov.tau <- c(cor(pop5.cov[1:15], time.15, method = "kendall"), cor(pop6.cov[1:15], time.15, method = "kendall"),
+                     cor(pop7.cov[1:15], time.15, method = "kendall"), cor(pop8.cov[1:15], time.15, method = "kendall"))
+AUC_mean_data <- calc_auc(warming.mean.tau,constant.mean.tau); AUC_mean_data
+AUC_skewness_data <- calc_auc(warming.skewness.tau,constant.skewness.tau); AUC_skewness_data
+AUC_kurtosis_data <- calc_auc(warming.kurtosis.tau,constant.kurtosis.tau); AUC_kurtosis_data
+AUC_variance_data <- calc_auc(warming.variance.tau,constant.variance.tau); AUC_variance_data
+AUC_cv_data <- calc_auc(warming.cv.tau,constant.cv.tau); AUC_cv_data
+AUC_id_data <- calc_auc(warming.id.tau,constant.id.tau); AUC_id_data
+AUC_first.diff.variance_data <- calc_auc(warming.first.diff.variance.tau,constant.first.diff.variance.tau); AUC_first.diff.variance_data
+AUC_ac_data <- calc_auc(warming.ac.tau,constant.ac.tau); AUC_ac_data
+AUC_cov_data <- calc_auc(warming.cov.tau,constant.cov.tau); AUC_cov_data
+AUC_decay.time_data <- calc_auc(warming.decay.time.tau,constant.decay.time.tau); AUC_decay.time_data
+AUC_data <- c(AUC_mean_data, 
+              AUC_skewness_data, 
+              AUC_kurtosis_data, 
+              AUC_variance_data,
+              AUC_cv_data,
+              AUC_id_data, 
+              AUC_first.diff.variance_data, 
+              AUC_ac_data, 
+              AUC_cov_data, 
+              AUC_decay.time_data)
+AUC_AdjEmp_5 <- data.frame(metrics, AUC_data)
+```
+
+```{r}
+AUC_AdjEmp_1; AUC_AdjEmp_2; AUC_AdjEmp_3; AUC_AdjEmp_4; AUC_AdjEmp_5
 ```
