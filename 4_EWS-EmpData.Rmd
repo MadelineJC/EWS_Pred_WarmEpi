@@ -2653,7 +2653,6 @@ saveRDS(AUC_data, "Objects/AUC_AdjEmpiricalData_ExPop5.rds")
 ```{r}
 cols <- c("orchid", rep("black", 2), rep("orchid", 4), "black", "orchid", "black")
 pts <- c(19, rep(8, 2), rep(19, 4), 8, 19, 8)
-par(mar = c(12, 4, 2, 2))
 plot(1:10, AUC_data$AUC_data, type = "p", 
      main = "Adjusted Empirical Data, Excluding Population 5", xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
      col = cols, pch = pts)
