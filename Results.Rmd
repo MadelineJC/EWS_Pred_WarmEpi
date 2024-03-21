@@ -333,7 +333,7 @@ plot(v1, AUC_Emp$AUC_data, type = "p",
      col = "red3", pch = 19)
 points(v2, AUC_Emp_Ex5$AUC_data, col = "red3", pch = 1)
 points(v3, AUC_AdjEmp$AUC_data, col = "goldenrod1", pch = 19)
-points(v4, AUC_AdjEmp_Ex5$AUC_data, col = "goldenrod1", pch = 1)
+# points(v4, AUC_AdjEmp_Ex5$AUC_data, col = "goldenrod1", pch = 1)
 points(v5, AUC_SmoothEmp_2$AUC_data, col = "springgreen4", pch = 17)
 points(v6, AUC_SmoothEmp_Ex5_2$AUC_data, col = "springgreen4", pch = 2)
 points(v7, AUC_SmoothEmp_3$AUC_data, col = "navy", pch = 17)
