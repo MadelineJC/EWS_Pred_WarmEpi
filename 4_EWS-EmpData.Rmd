@@ -1254,187 +1254,7 @@ pop1.decay.time
 
 Okay, now I think that the problem is that the windows over which skewness, etc. is being calculated, contain adjacent identical values, or, at least, values that are small enough for my computer to mistake for identical values.
 
-## (3.0) Adding Small, Random Values
-
-```{r}
-set.seed(123)
-add.ons <- runif(8*length(sub1$status.sum), min = 1e-12, max = 1e-8); length(add.ons) == length(unique(add.ons))
-
-sub1.mod <- sub1$status.sum + add.ons[1:40]
-sub2.mod <- sub2$status.sum + add.ons[41:80]
-sub3.mod <- sub3$status.sum + add.ons[81:120]
-sub4.mod <- sub4$status.sum + add.ons[121:160]
-sub5.mod <- sub5$status.sum + add.ons[161:200]
-sub6.mod <- sub6$status.sum + add.ons[201:240]
-sub7.mod <- sub7$status.sum + add.ons[241:280]
-sub8.mod <- sub8$status.sum + add.ons[281:320]
-
-par(mfrow = c(2, 4))
-plot(1:40, sub1$status.sum, col = "grey", lwd = 2,
-     type = "l", xlab = "", ylab = "", ylim = c(0, 5))
-lines(1:40, sub1.mod, col = "cornflowerblue", lwd = 2, lty = 2)
-plot(1:40, sub2$status.sum, col = "grey", lwd = 2,
-     type = "l", xlab = "", ylab = "", ylim = c(0, 5))
-lines(1:40, sub2.mod, col = "cornflowerblue", lwd = 2, lty = 2)
-plot(1:40, sub3$status.sum, col = "grey", lwd = 2,
-     type = "l", xlab = "", ylab = "", ylim = c(0, 5))
-lines(1:40, sub3.mod, col = "cornflowerblue", lwd = 2, lty = 2)
-plot(1:40, sub4$status.sum, col = "grey", lwd = 2,
-     type = "l", xlab = "", ylab = "", ylim = c(0, 5))
-lines(1:40, sub4.mod, col = "cornflowerblue", lwd = 2, lty = 2)
-plot(1:40, sub5$status.sum, col = "grey", lwd = 2,
-     type = "l", xlab = "", ylab = "", ylim = c(0, 5))
-lines(1:40, sub5.mod, col = "red3", lwd = 2, lty = 2)
-plot(1:40, sub6$status.sum, col = "grey", lwd = 2,
-     type = "l", xlab = "", ylab = "", ylim = c(0, 5))
-lines(1:40, sub6.mod, col = "red3", lwd = 2, lty = 2)
-plot(1:40, sub7$status.sum, col = "grey", lwd = 2,
-     type = "l", xlab = "", ylab = "", ylim = c(0, 5))
-lines(1:40, sub7.mod, col = "red3", lwd = 2, lty = 2)
-plot(1:40, sub8$status.sum, col = "grey", lwd = 2,
-     type = "l", xlab = "", ylab = "", ylim = c(0, 5))
-lines(1:40, sub8.mod, col = "red3", lwd = 2, lty = 2)
-
-## Skewness
-pop1.skewness <- SlidingWindow(FUN = "skewness", data = sub1.mod, window = 5, step = 1)
-pop2.skewness <- SlidingWindow(FUN = "skewness", data = sub2.mod, window = 5, step = 1)
-pop3.skewness <- SlidingWindow(FUN = "skewness", data = sub3.mod, window = 5, step = 1)
-pop4.skewness <- SlidingWindow(FUN = "skewness", data = sub4.mod, window = 5, step = 1)
-pop5.skewness <- SlidingWindow(FUN = "skewness", data = sub5.mod, window = 5, step = 1)
-pop6.skewness <- SlidingWindow(FUN = "skewness", data = sub6.mod, window = 5, step = 1)
-pop7.skewness <- SlidingWindow(FUN = "skewness", data = sub7.mod, window = 5, step = 1)
-pop8.skewness <- SlidingWindow(FUN = "skewness", data = sub8.mod, window = 5, step = 1)
-
-## Kurtosis
-pop1.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub1.mod, window = 5, step = 1)
-pop2.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub2.mod, window = 5, step = 1)
-pop3.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub3.mod, window = 5, step = 1)
-pop4.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub4.mod, window = 5, step = 1)
-pop5.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub5.mod, window = 5, step = 1)
-pop6.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub6.mod, window = 5, step = 1)
-pop7.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub7.mod, window = 5, step = 1)
-pop8.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub8.mod, window = 5, step = 1)
-
-## Autocorrelation
-pop1.ac <- c()
-for(i in 1:35){
-  window.start <- i
-  window.end <- i + 4
-  segment <- sub1.mod[c(window.start:window.end)]
-  pop1.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
-}
-pop2.ac <- c()
-for(i in 1:35){
-  window.start <- i
-  window.end <- i + 4
-  segment <- sub2.mod[c(window.start:window.end)]
-  pop2.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
-}
-pop3.ac <- c()
-for(i in 1:35){
-  window.start <- i
-  window.end <- i + 4
-  segment <- sub3.mod[c(window.start:window.end)]
-  pop3.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
-}
-pop4.ac <- c()
-for(i in 1:35){
-  window.start <- i
-  window.end <- i + 4
-  segment <- sub4.mod[c(window.start:window.end)]
-  pop4.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
-}
-pop5.ac <- c()
-for(i in 1:35){
-  window.start <- i
-  window.end <- i + 4
-  segment <- sub5.mod[c(window.start:window.end)]
-  pop5.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
-}
-pop6.ac <- c()
-for(i in 1:35){
-  window.start <- i
-  window.end <- i + 4
-  segment <- sub6.mod[c(window.start:window.end)]
-  pop6.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
-}
-pop7.ac <- c()
-for(i in 1:35){
-  window.start <- i
-  window.end <- i + 4
-  segment <- sub7.mod[c(window.start:window.end)]
-  pop7.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
-}
-pop8.ac <- c()
-for(i in 1:35){
-  window.start <- i
-  window.end <- i + 4
-  segment <- sub8.mod[c(window.start:window.end)]
-  pop8.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
-}
-
-## Decay time
-pop1.decay.time <- c()
-pop2.decay.time <- c()
-pop3.decay.time <- c()
-pop4.decay.time <- c()
-pop5.decay.time <- c()
-pop6.decay.time <- c()
-pop7.decay.time <- c()
-pop8.decay.time <- c()
-for(i in 1:35){
-  suppressWarnings(pop1.decay.time[i] <- -i/log(pop1.ac[i]))
-  suppressWarnings(pop2.decay.time[i] <- -i/log(pop2.ac[i]))
-  suppressWarnings(pop3.decay.time[i] <- -i/log(pop3.ac[i]))
-  suppressWarnings(pop4.decay.time[i] <- -i/log(pop4.ac[i]))
-  suppressWarnings(pop5.decay.time[i] <- -i/log(pop5.ac[i]))
-  suppressWarnings(pop6.decay.time[i] <- -i/log(pop6.ac[i]))
-  suppressWarnings(pop7.decay.time[i] <- -i/log(pop7.ac[i]))
-  suppressWarnings(pop8.decay.time[i] <- -i/log(pop8.ac[i]))
-}
-
-pop1.skewness
-pop1.kurtosis
-pop1.ac
-pop1.decay.time
-```
-
-### Kendall's $\tau$s and AUCs
-
-```{r}
-time.15 <- seq(1, 15, 1)
-
-## Skewness
-constant.skewness.tau<- c(cor(pop1.skewness[1:15], time.15, method = "kendall"), cor(pop2.skewness[1:15], time.15, method = "kendall"),
-                          cor(pop3.skewness[1:15], time.15, method = "kendall"), cor(pop4.skewness[1:15], time.15, method = "kendall"))
-warming.skewness.tau <- c(cor(pop5.skewness[1:15], time.15, method = "kendall"), cor(pop6.skewness[1:15], time.15, method = "kendall"),
-                          cor(pop7.skewness[1:15], time.15, method = "kendall"), cor(pop8.skewness[1:15], time.15, method = "kendall"))
-
-## Kurtosis
-constant.kurtosis.tau<- c(cor(pop1.kurtosis[1:15], time.15, method = "kendall"), cor(pop2.kurtosis[1:15], time.15, method = "kendall"),
-                          cor(pop3.kurtosis[1:15], time.15, method = "kendall"), cor(pop4.kurtosis[1:15], time.15, method = "kendall"))
-warming.kurtosis.tau <- c(cor(pop5.kurtosis[1:15], time.15, method = "kendall"), cor(pop6.kurtosis[1:15], time.15, method = "kendall"),
-                          cor(pop7.kurtosis[1:15], time.15, method = "kendall"), cor(pop8.kurtosis[1:15], time.15, method = "kendall"))
-
-## Autocorrelation
-constant.ac.tau<- c(cor(pop1.ac[1:15], time.15, method = "kendall"), cor(pop2.ac[1:15], time.15, method = "kendall"),
-                    cor(pop3.ac[1:15], time.15, method = "kendall"), cor(pop4.ac[1:15], time.15, method = "kendall"))
-warming.ac.tau <- c(cor(pop5.ac[1:15], time.15, method = "kendall"), cor(pop6.ac[1:15], time.15, method = "kendall"),
-                    cor(pop7.ac[1:15], time.15, method = "kendall"), cor(pop8.ac[1:15], time.15, method = "kendall"))
-
-## Decay time
-constant.decay.time.tau<- c(cor(pop1.decay.time[1:15], time.15, method = "kendall"), cor(pop2.decay.time[1:15], time.15, method = "kendall"),
-                            cor(pop3.decay.time[1:15], time.15, method = "kendall"), cor(pop4.decay.time[1:15], time.15, method = "kendall"))
-warming.decay.time.tau <- c(cor(pop5.decay.time[1:15], time.15, method = "kendall"), cor(pop6.decay.time[1:15], time.15, method = "kendall"),
-                            cor(pop7.decay.time[1:15], time.15, method = "kendall"), cor(pop8.decay.time[1:15], time.15, method = "kendall"))
-
-AUC_skewness_data <- calc_auc(warming.skewness.tau,constant.skewness.tau); AUC_skewness_data
-AUC_kurtosis_data <- calc_auc(warming.kurtosis.tau,constant.kurtosis.tau); AUC_kurtosis_data
-AUC_ac_data <- calc_auc(warming.ac.tau,constant.ac.tau); AUC_ac_data
-AUC_decay.time_data <- calc_auc(warming.decay.time.tau,constant.decay.time.tau); AUC_decay.time_data
-```
-
-## (3.1) Adding Smaller, Random Values
+## (3) Adding Small, Random Values
 
 Here, I'm making the add-on values smaller, and I'm only adding them to abundance values of 0, rather than to the whole time series.
 
@@ -1442,175 +1262,15 @@ Here, I'm making the add-on values smaller, and I'm only adding them to abundanc
 data <- as.matrix(cbind(sub1$status.sum, sub2$status.sum, sub3$status.sum, sub4$status.sum, sub5$status.sum, sub6$status.sum, sub7$status.sum, sub8$status.sum))
 
 set.seed(123)
-add.ons <- runif(length(which(data == 0)), min = 1e-12, max = 1e-11); length(add.ons) == length(unique(add.ons))
-
-data[data %in% 0] <- add.ons
-
-sub1.mod <- data[ , 1]
-sub2.mod <- data[ , 2]
-sub3.mod <- data[ , 3]
-sub4.mod <- data[ , 4]
-sub5.mod <- data[ , 5]
-sub6.mod <- data[ , 6]
-sub7.mod <- data[ , 7]
-sub8.mod <- data[ , 8]
-
-## Skewness
-pop1.skewness <- SlidingWindow(FUN = "skewness", data = sub1.mod, window = 5, step = 1)
-pop2.skewness <- SlidingWindow(FUN = "skewness", data = sub2.mod, window = 5, step = 1)
-pop3.skewness <- SlidingWindow(FUN = "skewness", data = sub3.mod, window = 5, step = 1)
-pop4.skewness <- SlidingWindow(FUN = "skewness", data = sub4.mod, window = 5, step = 1)
-pop5.skewness <- SlidingWindow(FUN = "skewness", data = sub5.mod, window = 5, step = 1)
-pop6.skewness <- SlidingWindow(FUN = "skewness", data = sub6.mod, window = 5, step = 1)
-pop7.skewness <- SlidingWindow(FUN = "skewness", data = sub7.mod, window = 5, step = 1)
-pop8.skewness <- SlidingWindow(FUN = "skewness", data = sub8.mod, window = 5, step = 1)
-
-## Kurtosis
-pop1.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub1.mod, window = 5, step = 1)
-pop2.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub2.mod, window = 5, step = 1)
-pop3.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub3.mod, window = 5, step = 1)
-pop4.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub4.mod, window = 5, step = 1)
-pop5.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub5.mod, window = 5, step = 1)
-pop6.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub6.mod, window = 5, step = 1)
-pop7.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub7.mod, window = 5, step = 1)
-pop8.kurtosis <- SlidingWindow(FUN = "kurtosis", data = sub8.mod, window = 5, step = 1)
-
-## Autocorrelation
-pop1.ac <- c()
-for(i in 1:35){
-  window.start <- i
-  window.end <- i + 4
-  segment <- sub1.mod[c(window.start:window.end)]
-  pop1.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
-}
-pop2.ac <- c()
-for(i in 1:35){
-  window.start <- i
-  window.end <- i + 4
-  segment <- sub2.mod[c(window.start:window.end)]
-  pop2.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
-}
-pop3.ac <- c()
-for(i in 1:35){
-  window.start <- i
-  window.end <- i + 4
-  segment <- sub3.mod[c(window.start:window.end)]
-  pop3.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
-}
-pop4.ac <- c()
-for(i in 1:35){
-  window.start <- i
-  window.end <- i + 4
-  segment <- sub4.mod[c(window.start:window.end)]
-  pop4.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
-}
-pop5.ac <- c()
-for(i in 1:35){
-  window.start <- i
-  window.end <- i + 4
-  segment <- sub5.mod[c(window.start:window.end)]
-  pop5.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
-}
-pop6.ac <- c()
-for(i in 1:35){
-  window.start <- i
-  window.end <- i + 4
-  segment <- sub6.mod[c(window.start:window.end)]
-  pop6.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
-}
-pop7.ac <- c()
-for(i in 1:35){
-  window.start <- i
-  window.end <- i + 4
-  segment <- sub7.mod[c(window.start:window.end)]
-  pop7.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
-}
-pop8.ac <- c()
-for(i in 1:35){
-  window.start <- i
-  window.end <- i + 4
-  segment <- sub8.mod[c(window.start:window.end)]
-  pop8.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
-}
-
-## Decay time
-pop1.decay.time <- c()
-pop2.decay.time <- c()
-pop3.decay.time <- c()
-pop4.decay.time <- c()
-pop5.decay.time <- c()
-pop6.decay.time <- c()
-pop7.decay.time <- c()
-pop8.decay.time <- c()
-for(i in 1:35){
-  suppressWarnings(pop1.decay.time[i] <- -i/log(pop1.ac[i]))
-  suppressWarnings(pop2.decay.time[i] <- -i/log(pop2.ac[i]))
-  suppressWarnings(pop3.decay.time[i] <- -i/log(pop3.ac[i]))
-  suppressWarnings(pop4.decay.time[i] <- -i/log(pop4.ac[i]))
-  suppressWarnings(pop5.decay.time[i] <- -i/log(pop5.ac[i]))
-  suppressWarnings(pop6.decay.time[i] <- -i/log(pop6.ac[i]))
-  suppressWarnings(pop7.decay.time[i] <- -i/log(pop7.ac[i]))
-  suppressWarnings(pop8.decay.time[i] <- -i/log(pop8.ac[i]))
-}
-
-pop1.skewness
-pop1.kurtosis
-pop1.ac
-pop1.decay.time
-```
-
-### Kendall's $\tau$s and AUCs
-
-```{r}
-time.15 <- seq(1, 15, 1)
-
-## Skewness
-constant.skewness.tau<- c(cor(pop1.skewness[1:15], time.15, method = "kendall"), cor(pop2.skewness[1:15], time.15, method = "kendall"),
-                          cor(pop3.skewness[1:15], time.15, method = "kendall"), cor(pop4.skewness[1:15], time.15, method = "kendall"))
-warming.skewness.tau <- c(cor(pop5.skewness[1:15], time.15, method = "kendall"), cor(pop6.skewness[1:15], time.15, method = "kendall"),
-                          cor(pop7.skewness[1:15], time.15, method = "kendall"), cor(pop8.skewness[1:15], time.15, method = "kendall"))
-
-## Kurtosis
-constant.kurtosis.tau<- c(cor(pop1.kurtosis[1:15], time.15, method = "kendall"), cor(pop2.kurtosis[1:15], time.15, method = "kendall"),
-                          cor(pop3.kurtosis[1:15], time.15, method = "kendall"), cor(pop4.kurtosis[1:15], time.15, method = "kendall"))
-warming.kurtosis.tau <- c(cor(pop5.kurtosis[1:15], time.15, method = "kendall"), cor(pop6.kurtosis[1:15], time.15, method = "kendall"),
-                          cor(pop7.kurtosis[1:15], time.15, method = "kendall"), cor(pop8.kurtosis[1:15], time.15, method = "kendall"))
-
-## Autocorrelation
-constant.ac.tau<- c(cor(pop1.ac[1:15], time.15, method = "kendall"), cor(pop2.ac[1:15], time.15, method = "kendall"),
-                    cor(pop3.ac[1:15], time.15, method = "kendall"), cor(pop4.ac[1:15], time.15, method = "kendall"))
-warming.ac.tau <- c(cor(pop5.ac[1:15], time.15, method = "kendall"), cor(pop6.ac[1:15], time.15, method = "kendall"),
-                    cor(pop7.ac[1:15], time.15, method = "kendall"), cor(pop8.ac[1:15], time.15, method = "kendall"))
-
-## Decay time
-constant.decay.time.tau<- c(cor(pop1.decay.time[1:15], time.15, method = "kendall"), cor(pop2.decay.time[1:15], time.15, method = "kendall"),
-                            cor(pop3.decay.time[1:15], time.15, method = "kendall"), cor(pop4.decay.time[1:15], time.15, method = "kendall"))
-warming.decay.time.tau <- c(cor(pop5.decay.time[1:15], time.15, method = "kendall"), cor(pop6.decay.time[1:15], time.15, method = "kendall"),
-                            cor(pop7.decay.time[1:15], time.15, method = "kendall"), cor(pop8.decay.time[1:15], time.15, method = "kendall"))
-
-AUC_skewness_data <- calc_auc(warming.skewness.tau,constant.skewness.tau); AUC_skewness_data
-AUC_kurtosis_data <- calc_auc(warming.kurtosis.tau,constant.kurtosis.tau); AUC_kurtosis_data
-AUC_ac_data <- calc_auc(warming.ac.tau,constant.ac.tau); AUC_ac_data
-AUC_decay.time_data <- calc_auc(warming.decay.time.tau,constant.decay.time.tau); AUC_decay.time_data
-```
-
-Hmm, interesting that these AUCs are so different from the previously calculated AUCs. Looks like tiny changes in data result in large differences in AUC. We should make the added values as small as possible.
-
-### Sensitivity Analysis
-
-```{r}
-data <- as.matrix(cbind(sub1$status.sum, sub2$status.sum, sub3$status.sum, sub4$status.sum, sub5$status.sum, sub6$status.sum, sub7$status.sum, sub8$status.sum))
-
-set.seed(123)
 
 ## Adding to 0s only
-# add.ons <- runif(length(which(data == 0)), min = 1e-22, max = 1e-21); length(add.ons) == length(unique(add.ons))
-# data[data %in% 0] <- add.ons
+add.ons <- runif(length(which(data == 0)), min = 1e-22, max = 1e-21); length(add.ons) == length(unique(add.ons))
+data[data %in% 0] <- add.ons
 ## Adding to all values
-timepts <- nrow(data)*ncol(data)
-add.ons <- runif(timepts, min = 1e-22, max = 1e-21); length(add.ons) == length(unique(add.ons))
-add.ons <- matrix(add.ons, nrow = 40)
-data <- data + add.ons
+# timepts <- nrow(data)*ncol(data)
+# add.ons <- runif(timepts, min = 1e-22, max = 1e-21); length(add.ons) == length(unique(add.ons))
+# add.ons <- matrix(add.ons, nrow = 40)
+# data <- data + add.ons
 
 sub1.mod <- data[ , 1]
 sub2.mod <- data[ , 2]
@@ -1751,16 +1411,16 @@ AUC_ac_data <- calc_auc(warming.ac.tau,constant.ac.tau); AUC_ac_data
 AUC_decay.time_data <- calc_auc(warming.decay.time.tau,constant.decay.time.tau); AUC_decay.time_data
 ```
 
-Summary:
+### Results of Sensitivity Analysis #1
 
 |                     | Random values between 1e-12 and 1e-8 added to all abundances | Random values between 1e-12 and 1e-11 added to all 0s | Random values between 1e-16 and 1e-15 added to all 0s | Random values between 1e-18 and 1e-17 added to all 0s | Random values between 1e-20 and 1e-19 added to all 0s | Random values between 1e-22 and 1e-21 added to all 0s |
-|---------------------|--------------------------------------------------------------|-------------------------------------------------------|-------------------------------------------------------|-------------------------------------------------------|-------------------------------------------------------|-------------------------------------------------------|
+|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
 | **Skewness**        | 0.0625                                                       | 0.375                                                 | 0.3125                                                | 0.1875                                                | 0.1875                                                | 0.1875                                                |
 | **Kurtosis**        | 0.3125                                                       | 0.28125                                               | 0.25                                                  | 0.25                                                  | 0.25                                                  | 0.25                                                  |
 | **Autocorrelation** | 0.875                                                        | 0.96875                                               | 0.90625                                               | 0.875                                                 | 0.875                                                 | 0.875                                                 |
 | **Decay Time**      | NA                                                           | NA                                                    | NA                                                    | NA                                                    | NA                                                    | NA                                                    |
 
-Okay, great! This seems small enough, then.
+Hmm, interesting that these AUCs are so different from the previously calculated AUCs. Looks like tiny changes in data result in large differences in AUC. We should make the added values as small as possible.
 
 ### Summarizing and Plotting
 
@@ -1790,168 +1450,24 @@ abline(h = 0.5, lty = 3)
 axis(side = 1, at = 1:10, labels = metrics_full, las = 2)
 ```
 
-### Excluding Population 5
+### Sensitivity Analysis #2
 
-```{r}
-time.15 <- seq(1,15,1)
+Okay, we're going to (1) add small, random values to all 0s, and (2) re-calculate all AUCs. We're going to do this a few times, with different sets of small, random values to see if different small, random values, change the outcome.
 
-warming.mean.tau_without5 <- c(cor(pop6.mean[1:15], time.15, method = "kendall"),
-                               cor(pop7.mean[1:15], time.15, method = "kendall"), 
-                               cor(pop8.mean[1:15], time.15, method = "kendall"))
-
-warming.skewness.tau_without5 <- c(cor(pop6.skewness[1:15], time.15, method = "kendall"),
-                                   cor(pop7.skewness[1:15], time.15, method = "kendall"), 
-                                   cor(pop8.skewness[1:15], time.15, method = "kendall"))
-
-
-warming.kurtosis.tau_without5 <- c(cor(pop6.kurtosis[1:15], time.15, method = "kendall"),
-                                   cor(pop7.kurtosis[1:15], time.15, method = "kendall"), 
-                                   cor(pop8.kurtosis[1:15], time.15, method = "kendall"))
-
-warming.variance.tau_without5 <- c(cor(pop6.var[1:15], time.15, method = "kendall"),
-                                   cor(pop7.var[1:15], time.15, method = "kendall"), 
-                                   cor(pop8.var[1:15], time.15, method = "kendall"))
-
-warming.cv.tau_without5 <- c(cor(pop6.cv[1:15], time.15, method = "kendall"),
-                             cor(pop7.cv[1:15], time.15, method = "kendall"), 
-                             cor(pop8.cv[1:15], time.15, method = "kendall"))
-
-warming.id.tau_without5 <- c(cor(pop6.id[1:15], time.15, method = "kendall"),
-                             cor(pop7.id[1:15], time.15, method = "kendall"), 
-                             cor(pop8.id[1:15], time.15, method = "kendall"))
-
-warming.ac.tau_without5 <- c(cor(pop6.ac[1:15], time.15, method = "kendall"),
-                             cor(pop7.ac[1:15], time.15, method = "kendall"), 
-                             cor(pop8.ac[1:15], time.15, method = "kendall"))
-
-
-warming.cov.tau_without5 <- c(cor(pop6.cov[1:15], time.15, method = "kendall"),
-                              cor(pop7.cov[1:15], time.15, method = "kendall"), 
-                              cor(pop8.cov[1:15], time.15, method = "kendall"))
-
-warming.first.diff.variance.tau_without5 <- c(cor(pop6.first.diff.variance[1:15], time.15, method = "kendall"),
-                                              cor(pop7.first.diff.variance[1:15], time.15, method = "kendall"),
-                                              cor(pop8.first.diff.variance[1:15], time.15, method = "kendall"))
-
-warming.decay.time.tau_without5 <- c(cor(pop6.decay.time[1:15], time.15, method = "kendall"),
-                                     cor(pop7.decay.time[1:15], time.15, method = "kendall"), 
-                                     cor(pop8.decay.time[1:15], time.15, method = "kendall"))
-
-AUC_mean_data_without5 <- calc_auc(warming.mean.tau_without5,constant.mean.tau); AUC_mean_data_without5 
-AUC_skewness_data_without5 <- calc_auc(warming.skewness.tau_without5,constant.skewness.tau); AUC_skewness_data_without5 
-AUC_kurtosis_data_without5 <- calc_auc(warming.kurtosis.tau_without5, constant.kurtosis.tau); AUC_kurtosis_data_without5 
-AUC_variance_data_without5 <- calc_auc(warming.variance.tau_without5,constant.variance.tau); AUC_variance_data_without5 
-AUC_cv_data_without5 <- calc_auc(warming.cv.tau_without5,constant.cv.tau); AUC_cv_data_without5
-AUC_id_data_without5 <- calc_auc(warming.id.tau_without5,constant.id.tau); AUC_id_data_without5 
-AUC_first.diff.variance_data_without5 <- calc_auc(warming.first.diff.variance.tau_without5,constant.first.diff.variance.tau); AUC_first.diff.variance_data_without5 
-AUC_ac_data_without5 <- calc_auc(warming.ac.tau_without5,constant.ac.tau); AUC_ac_data_without5 
-AUC_cov_data_without5 <- calc_auc(warming.cov.tau_without5,constant.cov.tau); AUC_cov_data_without5 
-AUC_decay.time_data_without5 <- calc_auc(warming.decay.time.tau_without5,constant.decay.time.tau); AUC_decay.time_data_without5 
-
-AUC_data <- c(AUC_mean_data_without5,
-              AUC_skewness_data_without5,
-              AUC_kurtosis_data_without5,
-              AUC_variance_data_without5,
-              AUC_cv_data_without5,
-              AUC_id_data_without5,
-              AUC_first.diff.variance_data_without5,
-              AUC_ac_data_without5,
-              AUC_cov_data_without5,
-              AUC_decay.time_data_without5)
-
-AUC_df_without5 <- data.frame(metrics, AUC_data); AUC_df_without5
-saveRDS(AUC_df_without5, "Objects/AUC_AdjEmpiricalData_ExPop5.rds")
-```
-
-## Troubleshooting Missing Decay Time
-
-Okay, so, decay time is defined as follows:
-
-$\bar{\tau}_t=-\delta/ln[AC_t(\delta)]$
-
-```{r}
-pop1.decay.time
-pop2.decay.time
-pop3.decay.time
-pop4.decay.time
-pop5.decay.time
-pop6.decay.time
-pop7.decay.time
-pop8.decay.time
-```
-
-Values too close to 0?
-
-```{r}
-log(1e-22) # Nope, R can compute this.
-```
-
-Negative values?
-
-```{r}
-pop5.ac # This has negatives, which will give NaNs when log'd
-ac.neg <- which(pop5.ac < 0)
-dt.nan <- which(is.nan(pop5.decay.time) == TRUE)
-ac.neg == dt.nan
-```
-
-Yup, this is the issue. Now, why aren't we seeing this in the simulation results?
-
-There are negative values in the simulated time series (1.26%).
-
-```{r}
-ac.neg <- which(constant.sims.cor.15[1:45, 6] < 0)
-dt.nan <- which(is.nan(constant.sims.decay.time.15[ , 6]) == TRUE)
-ac.neg == dt.nan
-```
-
-Okay, so, negative AC values are yielding NaNs.
-
-If we calculate $\tau$, we get one value for each simulation. Some values are `NA`. Do simulations that include at least one `NaN` produce `NA` values?
-
-```{r}
-which(is.na(constant.sims.decay.time.15.tau[1:10])) # 1, 3, 4, 6, 9
-length(which(is.nan(constant.sims.decay.time.15[ , 1]) == TRUE)) # 1
-length(which(is.nan(constant.sims.decay.time.15[ , 2]) == TRUE)) # 0
-length(which(is.nan(constant.sims.decay.time.15[ , 3]) == TRUE)) # 2
-length(which(is.nan(constant.sims.decay.time.15[ , 4]) == TRUE)) # 1
-length(which(is.nan(constant.sims.decay.time.15[ , 5]) == TRUE)) # 0
-length(which(is.nan(constant.sims.decay.time.15[ , 6]) == TRUE)) # 4
-length(which(is.nan(constant.sims.decay.time.15[ , 7]) == TRUE)) # 0
-length(which(is.nan(constant.sims.decay.time.15[ , 8]) == TRUE)) # 0
-length(which(is.nan(constant.sims.decay.time.15[ , 9]) == TRUE)) # 6
-length(which(is.nan(constant.sims.decay.time.15[ , 10]) == TRUE)) # 0
-```
-
-Okay, so, I think we figured it put. If there are any `NaN`s in the decay time vector (a given time series), you'll get an `NA` as your $\tau$, and an `NA` as your AUC. When we calculate AUC, these time series are removed.
-
-So, because we have `NaN`s in every decay time vector (in each of 8 populations), we get a $\tau$ vector of all `NA`s, and no measurement of AUC. (Reminder that an `NaN` in the decay time vector means that the measure of autocorrelation was negative.)
-
-```{r}
-length(which(is.nan(pop1.decay.time)) == TRUE)
-length(which(is.nan(pop2.decay.time)) == TRUE)
-length(which(is.nan(pop3.decay.time)) == TRUE)
-length(which(is.nan(pop4.decay.time)) == TRUE)
-length(which(is.nan(pop5.decay.time)) == TRUE)
-length(which(is.nan(pop6.decay.time)) == TRUE)
-length(which(is.nan(pop7.decay.time)) == TRUE)
-length(which(is.nan(pop8.decay.time)) == TRUE)
-```
-
-# Is this justified?
-
-Okay, to determine this, we're going to (1) Add small, random values to every data point, and (2) re-calculate all AUC. We're going to do this a few times, with different sets of small, random values.
+-   Okay, I tried this, and I think choosing random values within an order of magnitude gives different outputs because we're using a sliding window, so relative (within-window) differences matter more than "global" differences. So, what I've done is choose one random value, and generated a second by adding a small value to the first value. I then added those values, in alternating order, to all 0s.
 
 ```{r}
 data <- as.matrix(cbind(sub1$status.sum, sub2$status.sum, sub3$status.sum, sub4$status.sum, sub5$status.sum, sub6$status.sum, sub7$status.sum, sub8$status.sum))
 
-timepts <- nrow(data)*ncol(data)
+nums.needed <- length(which(data == 0))
 data.list <- c()
 for (i in 1:5){
   set.seed(i)
-  add.ons <- runif(timepts, min = 1e-22, max = 1e-21); length(add.ons) == length(unique(add.ons))
-  add.ons <- matrix(add.ons, nrow = 40)
-  data.list[[i]] <- data + add.ons
+  add.ons <- runif(1, min = 1e-28, max = 1.5e-28); add.ons <- c(add.ons, add.ons + 1e-30)
+  add.ons <- c(rep(add.ons, nums.needed/2), add.ons[1])
+  data[data %in% 0] <- add.ons
+  data.list[[i]] <- data
+  data <- as.matrix(cbind(sub1$status.sum, sub2$status.sum, sub3$status.sum, sub4$status.sum, sub5$status.sum, sub6$status.sum, sub7$status.sum, sub8$status.sum))
 }
 
 sub1.mod.1 <- data.list[[1]][ , 1]; sub2.mod.1 <- data.list[[1]][ , 2]; sub3.mod.1 <- data.list[[1]][ , 3]; sub4.mod.1 <- data.list[[1]][ , 4]
@@ -1966,7 +1482,7 @@ sub1.mod.5 <- data.list[[5]][ , 1]; sub2.mod.5 <- data.list[[5]][ , 2]; sub3.mod
 sub5.mod.5 <- data.list[[5]][ , 5]; sub6.mod.5 <- data.list[[5]][ , 6]; sub7.mod.5 <- data.list[[5]][ , 7]; sub8.mod.5 <- data.list[[5]][ , 8]
 ```
 
-## (1)
+#### (1)
 
 ```{r}
 ## Standard deviation
@@ -2185,7 +1701,7 @@ AUC_data <- c(AUC_mean_data,
 AUC_AdjEmp_1 <- data.frame(metrics, AUC_data)
 ```
 
-## (2)
+#### (2)
 
 ```{r}
 ## Standard deviation
@@ -2404,7 +1920,7 @@ AUC_data <- c(AUC_mean_data,
 AUC_AdjEmp_2 <- data.frame(metrics, AUC_data)
 ```
 
-## (3)
+#### (3)
 
 ```{r}
 ## Standard deviation
@@ -2623,7 +2139,7 @@ AUC_data <- c(AUC_mean_data,
 AUC_AdjEmp_3 <- data.frame(metrics, AUC_data)
 ```
 
-## (4)
+#### (4)
 
 ```{r}
 ## Standard deviation
@@ -2842,7 +2358,7 @@ AUC_data <- c(AUC_mean_data,
 AUC_AdjEmp_4 <- data.frame(metrics, AUC_data)
 ```
 
-## (5)
+#### (5)
 
 ```{r}
 ## Standard deviation
@@ -3061,6 +2577,99 @@ AUC_data <- c(AUC_mean_data,
 AUC_AdjEmp_5 <- data.frame(metrics, AUC_data)
 ```
 
+#### Results of Sensitivity Analysis #2
+
 ```{r}
 AUC_AdjEmp_1; AUC_AdjEmp_2; AUC_AdjEmp_3; AUC_AdjEmp_4; AUC_AdjEmp_5
+AUC_AdjEmp_1 == AUC_AdjEmp_2; AUC_AdjEmp_1 == AUC_AdjEmp_3; AUC_AdjEmp_1 == AUC_AdjEmp_4; AUC_AdjEmp_1 == AUC_AdjEmp_5
+
+saveRDS(AUC_AdjEmp_1, "Objects/AUC_AdjEmpiricalData.rds")
+```
+
+#### Summarizing and Plotting
+
+```{r}
+cols <- c("orchid", rep("black", 2), rep("orchid", 4), "black", "orchid", "black")
+pts <- c(19, rep(8, 2), rep(19, 4), 8, 19, 8)
+par(mar = c(12, 4, 2, 2))
+plot(1:10, AUC_data, type = "p", 
+     main = "Adjusted Empirical Data, All Populations", xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = cols, pch = pts)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2)
+```
+
+## Troubleshooting Missing Decay Time
+
+Okay, so, decay time is defined as follows:
+
+$\bar{\tau}_t=-\delta/ln[AC_t(\delta)]$
+
+```{r}
+pop1.decay.time
+pop2.decay.time
+pop3.decay.time
+pop4.decay.time
+pop5.decay.time
+pop6.decay.time
+pop7.decay.time
+pop8.decay.time
+```
+
+Values too close to 0?
+
+```{r}
+log(1e-22) # Nope, R can compute this.
+```
+
+Negative values?
+
+```{r}
+pop5.ac # This has negatives, which will give NaNs when log'd
+ac.neg <- which(pop5.ac < 0)
+dt.nan <- which(is.nan(pop5.decay.time) == TRUE)
+ac.neg == dt.nan
+```
+
+Yup, this is the issue. Now, why aren't we seeing this in the simulation results?
+
+There are negative values in the simulated time series (1.26%).
+
+```{r}
+ac.neg <- which(constant.sims.cor.15[1:45, 6] < 0)
+dt.nan <- which(is.nan(constant.sims.decay.time.15[ , 6]) == TRUE)
+ac.neg == dt.nan
+```
+
+Okay, so, negative AC values are yielding NaNs.
+
+If we calculate $\tau$, we get one value for each simulation. Some values are `NA`. Do simulations that include at least one `NaN` produce `NA` values?
+
+```{r}
+which(is.na(constant.sims.decay.time.15.tau[1:10])) # 1, 3, 4, 6, 9
+length(which(is.nan(constant.sims.decay.time.15[ , 1]) == TRUE)) # 1
+length(which(is.nan(constant.sims.decay.time.15[ , 2]) == TRUE)) # 0
+length(which(is.nan(constant.sims.decay.time.15[ , 3]) == TRUE)) # 2
+length(which(is.nan(constant.sims.decay.time.15[ , 4]) == TRUE)) # 1
+length(which(is.nan(constant.sims.decay.time.15[ , 5]) == TRUE)) # 0
+length(which(is.nan(constant.sims.decay.time.15[ , 6]) == TRUE)) # 4
+length(which(is.nan(constant.sims.decay.time.15[ , 7]) == TRUE)) # 0
+length(which(is.nan(constant.sims.decay.time.15[ , 8]) == TRUE)) # 0
+length(which(is.nan(constant.sims.decay.time.15[ , 9]) == TRUE)) # 6
+length(which(is.nan(constant.sims.decay.time.15[ , 10]) == TRUE)) # 0
+```
+
+Okay, so, I think we figured it put. If there are any `NaN`s in the decay time vector (a given time series), you'll get an `NA` as your $\tau$, and an `NA` as your AUC. When we calculate AUC, these time series are removed.
+
+So, because we have `NaN`s in every decay time vector (in each of 8 populations), we get a $\tau$ vector of all `NA`s, and no measurement of AUC. (Reminder that an `NaN` in the decay time vector means that the measure of autocorrelation was negative.)
+
+```{r}
+length(which(is.nan(pop1.decay.time)) == TRUE)
+length(which(is.nan(pop2.decay.time)) == TRUE)
+length(which(is.nan(pop3.decay.time)) == TRUE)
+length(which(is.nan(pop4.decay.time)) == TRUE)
+length(which(is.nan(pop5.decay.time)) == TRUE)
+length(which(is.nan(pop6.decay.time)) == TRUE)
+length(which(is.nan(pop7.decay.time)) == TRUE)
+length(which(is.nan(pop8.decay.time)) == TRUE)
 ```
