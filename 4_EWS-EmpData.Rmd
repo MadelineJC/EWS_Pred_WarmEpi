@@ -407,16 +407,16 @@ warming.decay.time.tau <- c(cor(pop5.decay.time[1:15], time.15, method = "kendal
 Calculating AUC:
 
 ```{r}
-AUC_mean_data <- calc_auc(warming.mean.tau,constant.mean.tau); AUC_mean_data
-AUC_skewness_data <- calc_auc(warming.skewness.tau,constant.skewness.tau); AUC_skewness_data
-AUC_kurtosis_data <- calc_auc(warming.kurtosis.tau,constant.kurtosis.tau); AUC_kurtosis_data
-AUC_variance_data <- calc_auc(warming.variance.tau,constant.variance.tau); AUC_variance_data
-AUC_cv_data <- calc_auc(warming.cv.tau,constant.cv.tau); AUC_cv_data
-AUC_id_data <- calc_auc(warming.id.tau,constant.id.tau); AUC_id_data
-AUC_first.diff.variance_data <- calc_auc(warming.first.diff.variance.tau,constant.first.diff.variance.tau); AUC_first.diff.variance_data
-AUC_ac_data <- calc_auc(warming.ac.tau,constant.ac.tau); AUC_ac_data
-AUC_cov_data <- calc_auc(warming.cov.tau,constant.cov.tau); AUC_cov_data
-AUC_decay.time_data <- calc_auc(warming.decay.time.tau,constant.decay.time.tau); AUC_decay.time_data
+AUC_mean_data <- calc_auc(warming.mean.tau, constant.mean.tau); AUC_mean_data
+AUC_skewness_data <- calc_auc(warming.skewness.tau, constant.skewness.tau); AUC_skewness_data
+AUC_kurtosis_data <- calc_auc(warming.kurtosis.tau, constant.kurtosis.tau); AUC_kurtosis_data
+AUC_variance_data <- calc_auc(warming.variance.tau, constant.variance.tau); AUC_variance_data
+AUC_cv_data <- calc_auc(warming.cv.tau, constant.cv.tau); AUC_cv_data
+AUC_id_data <- calc_auc(warming.id.tau, constant.id.tau); AUC_id_data
+AUC_first.diff.variance_data <- calc_auc(warming.first.diff.variance.tau, constant.first.diff.variance.tau); AUC_first.diff.variance_data
+AUC_ac_data <- calc_auc(warming.ac.tau, constant.ac.tau); AUC_ac_data
+AUC_cov_data <- calc_auc(warming.cov.tau, constant.cov.tau); AUC_cov_data
+AUC_decay.time_data <- calc_auc(warming.decay.time.tau, constant.decay.time.tau); AUC_decay.time_data
 ```
 
 ## Summarize Outputs
@@ -1405,10 +1405,10 @@ constant.decay.time.tau<- c(cor(pop1.decay.time[1:15], time.15, method = "kendal
 warming.decay.time.tau <- c(cor(pop5.decay.time[1:15], time.15, method = "kendall"), cor(pop6.decay.time[1:15], time.15, method = "kendall"),
                             cor(pop7.decay.time[1:15], time.15, method = "kendall"), cor(pop8.decay.time[1:15], time.15, method = "kendall"))
 
-AUC_skewness_data <- calc_auc(warming.skewness.tau,constant.skewness.tau); AUC_skewness_data
-AUC_kurtosis_data <- calc_auc(warming.kurtosis.tau,constant.kurtosis.tau); AUC_kurtosis_data
-AUC_ac_data <- calc_auc(warming.ac.tau,constant.ac.tau); AUC_ac_data
-AUC_decay.time_data <- calc_auc(warming.decay.time.tau,constant.decay.time.tau); AUC_decay.time_data
+AUC_skewness_data <- calc_auc(warming.skewness.tau, constant.skewness.tau); AUC_skewness_data
+AUC_kurtosis_data <- calc_auc(warming.kurtosis.tau, constant.kurtosis.tau); AUC_kurtosis_data
+AUC_ac_data <- calc_auc(warming.ac.tau, constant.ac.tau); AUC_ac_data
+AUC_decay.time_data <- calc_auc(warming.decay.time.tau, constant.decay.time.tau); AUC_decay.time_data
 ```
 
 ### Results of Sensitivity Analysis #1
@@ -1437,9 +1437,6 @@ AUC_data <- c(AUC_mean_data,
               AUC_ac_data, 
               AUC_cov_data, 
               AUC_decay.time_data)
-
-AUC_df <- data.frame(metrics, AUC_data); AUC_df
-saveRDS(AUC_df, "Objects/AUC_AdjEmpiricalData.rds")
 
 cols <- c("orchid", rep("black", 2), rep("orchid", 4), "black", "orchid", "black")
 pts <- c(19, rep(8, 2), rep(19, 4), 8, 19, 8)
@@ -1678,16 +1675,15 @@ constant.cov.tau <- c(cor(pop1.cov[1:15], time.15, method = "kendall"), cor(pop2
                      cor(pop3.cov[1:15], time.15, method = "kendall"), cor(pop4.cov[1:15], time.15, method = "kendall"))
 warming.cov.tau <- c(cor(pop5.cov[1:15], time.15, method = "kendall"), cor(pop6.cov[1:15], time.15, method = "kendall"),
                      cor(pop7.cov[1:15], time.15, method = "kendall"), cor(pop8.cov[1:15], time.15, method = "kendall"))
-AUC_mean_data <- calc_auc(warming.mean.tau,constant.mean.tau); AUC_mean_data
-AUC_skewness_data <- calc_auc(warming.skewness.tau,constant.skewness.tau); AUC_skewness_data
-AUC_kurtosis_data <- calc_auc(warming.kurtosis.tau,constant.kurtosis.tau); AUC_kurtosis_data
-AUC_variance_data <- calc_auc(warming.variance.tau,constant.variance.tau); AUC_variance_data
-AUC_cv_data <- calc_auc(warming.cv.tau,constant.cv.tau); AUC_cv_data
-AUC_id_data <- calc_auc(warming.id.tau,constant.id.tau); AUC_id_data
-AUC_first.diff.variance_data <- calc_auc(warming.first.diff.variance.tau,constant.first.diff.variance.tau); AUC_first.diff.variance_data
-AUC_ac_data <- calc_auc(warming.ac.tau,constant.ac.tau); AUC_ac_data
-AUC_cov_data <- calc_auc(warming.cov.tau,constant.cov.tau); AUC_cov_data
-AUC_decay.time_data <- calc_auc(warming.decay.time.tau,constant.decay.time.tau); AUC_decay.time_data
+AUC_mean_data <- calc_auc(warming.mean.tau, constant.mean.tau); AUC_mean_data
+AUC_skewness_data <- calc_auc(warming.skewness.tau, constant.skewness.tau); AUC_skewness_data
+AUC_kurtosis_data <- calc_auc(warming.kurtosis.tau, constant.kurtosis.tau); AUC_kurtosis_data
+AUC_variance_data <- calc_auc(warming.variance.tau, constant.variance.tau); AUC_variance_data
+AUC_cv_data <- calc_auc(warming.cv.tau, constant.cv.tau); AUC_cv_data
+AUC_id_data <- calc_auc(warming.id.tau, constant.id.tau); AUC_id_data
+AUC_first.diff.variance_data <- calc_auc(warming.first.diff.variance.tau, constant.first.diff.variance.tau); AUC_first.diff.variance_data
+AUC_ac_data <- calc_auc(warming.ac.tau, constant.ac.tau); AUC_ac_data
+AUC_cov_data <- calc_auc(warming.cov.tau, constant.cov.tau); AUC_cov_data
 AUC_data <- c(AUC_mean_data, 
               AUC_skewness_data, 
               AUC_kurtosis_data, 
@@ -1697,7 +1693,7 @@ AUC_data <- c(AUC_mean_data,
               AUC_first.diff.variance_data, 
               AUC_ac_data, 
               AUC_cov_data, 
-              AUC_decay.time_data)
+              NA)
 AUC_AdjEmp_1 <- data.frame(metrics, AUC_data)
 ```
 
@@ -1897,16 +1893,15 @@ constant.cov.tau <- c(cor(pop1.cov[1:15], time.15, method = "kendall"), cor(pop2
                      cor(pop3.cov[1:15], time.15, method = "kendall"), cor(pop4.cov[1:15], time.15, method = "kendall"))
 warming.cov.tau <- c(cor(pop5.cov[1:15], time.15, method = "kendall"), cor(pop6.cov[1:15], time.15, method = "kendall"),
                      cor(pop7.cov[1:15], time.15, method = "kendall"), cor(pop8.cov[1:15], time.15, method = "kendall"))
-AUC_mean_data <- calc_auc(warming.mean.tau,constant.mean.tau); AUC_mean_data
-AUC_skewness_data <- calc_auc(warming.skewness.tau,constant.skewness.tau); AUC_skewness_data
-AUC_kurtosis_data <- calc_auc(warming.kurtosis.tau,constant.kurtosis.tau); AUC_kurtosis_data
-AUC_variance_data <- calc_auc(warming.variance.tau,constant.variance.tau); AUC_variance_data
-AUC_cv_data <- calc_auc(warming.cv.tau,constant.cv.tau); AUC_cv_data
-AUC_id_data <- calc_auc(warming.id.tau,constant.id.tau); AUC_id_data
-AUC_first.diff.variance_data <- calc_auc(warming.first.diff.variance.tau,constant.first.diff.variance.tau); AUC_first.diff.variance_data
-AUC_ac_data <- calc_auc(warming.ac.tau,constant.ac.tau); AUC_ac_data
-AUC_cov_data <- calc_auc(warming.cov.tau,constant.cov.tau); AUC_cov_data
-AUC_decay.time_data <- calc_auc(warming.decay.time.tau,constant.decay.time.tau); AUC_decay.time_data
+AUC_mean_data <- calc_auc(warming.mean.tau, constant.mean.tau); AUC_mean_data
+AUC_skewness_data <- calc_auc(warming.skewness.tau, constant.skewness.tau); AUC_skewness_data
+AUC_kurtosis_data <- calc_auc(warming.kurtosis.tau, constant.kurtosis.tau); AUC_kurtosis_data
+AUC_variance_data <- calc_auc(warming.variance.tau, constant.variance.tau); AUC_variance_data
+AUC_cv_data <- calc_auc(warming.cv.tau, constant.cv.tau); AUC_cv_data
+AUC_id_data <- calc_auc(warming.id.tau, constant.id.tau); AUC_id_data
+AUC_first.diff.variance_data <- calc_auc(warming.first.diff.variance.tau, constant.first.diff.variance.tau); AUC_first.diff.variance_data
+AUC_ac_data <- calc_auc(warming.ac.tau, constant.ac.tau); AUC_ac_data
+AUC_cov_data <- calc_auc(warming.cov.tau, constant.cov.tau); AUC_cov_data
 AUC_data <- c(AUC_mean_data, 
               AUC_skewness_data, 
               AUC_kurtosis_data, 
@@ -1916,7 +1911,7 @@ AUC_data <- c(AUC_mean_data,
               AUC_first.diff.variance_data, 
               AUC_ac_data, 
               AUC_cov_data, 
-              AUC_decay.time_data)
+              NA)
 AUC_AdjEmp_2 <- data.frame(metrics, AUC_data)
 ```
 
@@ -2116,16 +2111,15 @@ constant.cov.tau <- c(cor(pop1.cov[1:15], time.15, method = "kendall"), cor(pop2
                      cor(pop3.cov[1:15], time.15, method = "kendall"), cor(pop4.cov[1:15], time.15, method = "kendall"))
 warming.cov.tau <- c(cor(pop5.cov[1:15], time.15, method = "kendall"), cor(pop6.cov[1:15], time.15, method = "kendall"),
                      cor(pop7.cov[1:15], time.15, method = "kendall"), cor(pop8.cov[1:15], time.15, method = "kendall"))
-AUC_mean_data <- calc_auc(warming.mean.tau,constant.mean.tau); AUC_mean_data
-AUC_skewness_data <- calc_auc(warming.skewness.tau,constant.skewness.tau); AUC_skewness_data
-AUC_kurtosis_data <- calc_auc(warming.kurtosis.tau,constant.kurtosis.tau); AUC_kurtosis_data
-AUC_variance_data <- calc_auc(warming.variance.tau,constant.variance.tau); AUC_variance_data
-AUC_cv_data <- calc_auc(warming.cv.tau,constant.cv.tau); AUC_cv_data
-AUC_id_data <- calc_auc(warming.id.tau,constant.id.tau); AUC_id_data
-AUC_first.diff.variance_data <- calc_auc(warming.first.diff.variance.tau,constant.first.diff.variance.tau); AUC_first.diff.variance_data
-AUC_ac_data <- calc_auc(warming.ac.tau,constant.ac.tau); AUC_ac_data
-AUC_cov_data <- calc_auc(warming.cov.tau,constant.cov.tau); AUC_cov_data
-AUC_decay.time_data <- calc_auc(warming.decay.time.tau,constant.decay.time.tau); AUC_decay.time_data
+AUC_mean_data <- calc_auc(warming.mean.tau, constant.mean.tau); AUC_mean_data
+AUC_skewness_data <- calc_auc(warming.skewness.tau, constant.skewness.tau); AUC_skewness_data
+AUC_kurtosis_data <- calc_auc(warming.kurtosis.tau, constant.kurtosis.tau); AUC_kurtosis_data
+AUC_variance_data <- calc_auc(warming.variance.tau, constant.variance.tau); AUC_variance_data
+AUC_cv_data <- calc_auc(warming.cv.tau, constant.cv.tau); AUC_cv_data
+AUC_id_data <- calc_auc(warming.id.tau, constant.id.tau); AUC_id_data
+AUC_first.diff.variance_data <- calc_auc(warming.first.diff.variance.tau, constant.first.diff.variance.tau); AUC_first.diff.variance_data
+AUC_ac_data <- calc_auc(warming.ac.tau, constant.ac.tau); AUC_ac_data
+AUC_cov_data <- calc_auc(warming.cov.tau, constant.cov.tau); AUC_cov_data
 AUC_data <- c(AUC_mean_data, 
               AUC_skewness_data, 
               AUC_kurtosis_data, 
@@ -2135,7 +2129,7 @@ AUC_data <- c(AUC_mean_data,
               AUC_first.diff.variance_data, 
               AUC_ac_data, 
               AUC_cov_data, 
-              AUC_decay.time_data)
+              NA)
 AUC_AdjEmp_3 <- data.frame(metrics, AUC_data)
 ```
 
@@ -2335,16 +2329,15 @@ constant.cov.tau <- c(cor(pop1.cov[1:15], time.15, method = "kendall"), cor(pop2
                      cor(pop3.cov[1:15], time.15, method = "kendall"), cor(pop4.cov[1:15], time.15, method = "kendall"))
 warming.cov.tau <- c(cor(pop5.cov[1:15], time.15, method = "kendall"), cor(pop6.cov[1:15], time.15, method = "kendall"),
                      cor(pop7.cov[1:15], time.15, method = "kendall"), cor(pop8.cov[1:15], time.15, method = "kendall"))
-AUC_mean_data <- calc_auc(warming.mean.tau,constant.mean.tau); AUC_mean_data
-AUC_skewness_data <- calc_auc(warming.skewness.tau,constant.skewness.tau); AUC_skewness_data
-AUC_kurtosis_data <- calc_auc(warming.kurtosis.tau,constant.kurtosis.tau); AUC_kurtosis_data
-AUC_variance_data <- calc_auc(warming.variance.tau,constant.variance.tau); AUC_variance_data
-AUC_cv_data <- calc_auc(warming.cv.tau,constant.cv.tau); AUC_cv_data
-AUC_id_data <- calc_auc(warming.id.tau,constant.id.tau); AUC_id_data
-AUC_first.diff.variance_data <- calc_auc(warming.first.diff.variance.tau,constant.first.diff.variance.tau); AUC_first.diff.variance_data
-AUC_ac_data <- calc_auc(warming.ac.tau,constant.ac.tau); AUC_ac_data
-AUC_cov_data <- calc_auc(warming.cov.tau,constant.cov.tau); AUC_cov_data
-AUC_decay.time_data <- calc_auc(warming.decay.time.tau,constant.decay.time.tau); AUC_decay.time_data
+AUC_mean_data <- calc_auc(warming.mean.tau, constant.mean.tau); AUC_mean_data
+AUC_skewness_data <- calc_auc(warming.skewness.tau, constant.skewness.tau); AUC_skewness_data
+AUC_kurtosis_data <- calc_auc(warming.kurtosis.tau, constant.kurtosis.tau); AUC_kurtosis_data
+AUC_variance_data <- calc_auc(warming.variance.tau, constant.variance.tau); AUC_variance_data
+AUC_cv_data <- calc_auc(warming.cv.tau, constant.cv.tau); AUC_cv_data
+AUC_id_data <- calc_auc(warming.id.tau, constant.id.tau); AUC_id_data
+AUC_first.diff.variance_data <- calc_auc(warming.first.diff.variance.tau, constant.first.diff.variance.tau); AUC_first.diff.variance_data
+AUC_ac_data <- calc_auc(warming.ac.tau, constant.ac.tau); AUC_ac_data
+AUC_cov_data <- calc_auc(warming.cov.tau, constant.cov.tau); AUC_cov_data
 AUC_data <- c(AUC_mean_data, 
               AUC_skewness_data, 
               AUC_kurtosis_data, 
@@ -2354,7 +2347,7 @@ AUC_data <- c(AUC_mean_data,
               AUC_first.diff.variance_data, 
               AUC_ac_data, 
               AUC_cov_data, 
-              AUC_decay.time_data)
+              NA)
 AUC_AdjEmp_4 <- data.frame(metrics, AUC_data)
 ```
 
@@ -2554,16 +2547,15 @@ constant.cov.tau <- c(cor(pop1.cov[1:15], time.15, method = "kendall"), cor(pop2
                      cor(pop3.cov[1:15], time.15, method = "kendall"), cor(pop4.cov[1:15], time.15, method = "kendall"))
 warming.cov.tau <- c(cor(pop5.cov[1:15], time.15, method = "kendall"), cor(pop6.cov[1:15], time.15, method = "kendall"),
                      cor(pop7.cov[1:15], time.15, method = "kendall"), cor(pop8.cov[1:15], time.15, method = "kendall"))
-AUC_mean_data <- calc_auc(warming.mean.tau,constant.mean.tau); AUC_mean_data
-AUC_skewness_data <- calc_auc(warming.skewness.tau,constant.skewness.tau); AUC_skewness_data
-AUC_kurtosis_data <- calc_auc(warming.kurtosis.tau,constant.kurtosis.tau); AUC_kurtosis_data
-AUC_variance_data <- calc_auc(warming.variance.tau,constant.variance.tau); AUC_variance_data
-AUC_cv_data <- calc_auc(warming.cv.tau,constant.cv.tau); AUC_cv_data
-AUC_id_data <- calc_auc(warming.id.tau,constant.id.tau); AUC_id_data
-AUC_first.diff.variance_data <- calc_auc(warming.first.diff.variance.tau,constant.first.diff.variance.tau); AUC_first.diff.variance_data
-AUC_ac_data <- calc_auc(warming.ac.tau,constant.ac.tau); AUC_ac_data
-AUC_cov_data <- calc_auc(warming.cov.tau,constant.cov.tau); AUC_cov_data
-AUC_decay.time_data <- calc_auc(warming.decay.time.tau,constant.decay.time.tau); AUC_decay.time_data
+AUC_mean_data <- calc_auc(warming.mean.tau, constant.mean.tau); AUC_mean_data
+AUC_skewness_data <- calc_auc(warming.skewness.tau, constant.skewness.tau); AUC_skewness_data
+AUC_kurtosis_data <- calc_auc(warming.kurtosis.tau, constant.kurtosis.tau); AUC_kurtosis_data
+AUC_variance_data <- calc_auc(warming.variance.tau, constant.variance.tau); AUC_variance_data
+AUC_cv_data <- calc_auc(warming.cv.tau, constant.cv.tau); AUC_cv_data
+AUC_id_data <- calc_auc(warming.id.tau, constant.id.tau); AUC_id_data
+AUC_first.diff.variance_data <- calc_auc(warming.first.diff.variance.tau, constant.first.diff.variance.tau); AUC_first.diff.variance_data
+AUC_ac_data <- calc_auc(warming.ac.tau, constant.ac.tau); AUC_ac_data
+AUC_cov_data <- calc_auc(warming.cov.tau, constant.cov.tau); AUC_cov_data
 AUC_data <- c(AUC_mean_data, 
               AUC_skewness_data, 
               AUC_kurtosis_data, 
@@ -2573,7 +2565,7 @@ AUC_data <- c(AUC_mean_data,
               AUC_first.diff.variance_data, 
               AUC_ac_data, 
               AUC_cov_data, 
-              AUC_decay.time_data)
+              NA)
 AUC_AdjEmp_5 <- data.frame(metrics, AUC_data)
 ```
 
@@ -2592,8 +2584,77 @@ saveRDS(AUC_AdjEmp_1, "Objects/AUC_AdjEmpiricalData.rds")
 cols <- c("orchid", rep("black", 2), rep("orchid", 4), "black", "orchid", "black")
 pts <- c(19, rep(8, 2), rep(19, 4), 8, 19, 8)
 par(mar = c(12, 4, 2, 2))
-plot(1:10, AUC_data, type = "p", 
+plot(1:10, AUC_AdjEmp_1$AUC_data, type = "p", 
      main = "Adjusted Empirical Data, All Populations", xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = cols, pch = pts)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2)
+```
+
+### Excluding Population 5
+
+```{r}
+time.15 <- seq(1,15,1)
+warming.mean.tau_without5 <- c(cor(pop6.mean[1:15], time.15, method = "kendall"),
+                               cor(pop7.mean[1:15], time.15, method = "kendall"), 
+                               cor(pop8.mean[1:15], time.15, method = "kendall"))
+warming.skewness.tau_without5 <- c(cor(pop6.skewness[1:15], time.15, method = "kendall"),
+                                   cor(pop7.skewness[1:15], time.15, method = "kendall"), 
+                                   cor(pop8.skewness[1:15], time.15, method = "kendall"))
+warming.kurtosis.tau_without5 <- c(cor(pop6.kurtosis[1:15], time.15, method = "kendall"),
+                                   cor(pop7.kurtosis[1:15], time.15, method = "kendall"), 
+                                   cor(pop8.kurtosis[1:15], time.15, method = "kendall"))
+warming.variance.tau_without5 <- c(cor(pop6.var[1:15], time.15, method = "kendall"),
+                                   cor(pop7.var[1:15], time.15, method = "kendall"), 
+                                   cor(pop8.var[1:15], time.15, method = "kendall"))
+warming.cv.tau_without5 <- c(cor(pop6.cv[1:15], time.15, method = "kendall"),
+                             cor(pop7.cv[1:15], time.15, method = "kendall"), 
+                             cor(pop8.cv[1:15], time.15, method = "kendall"))
+warming.id.tau_without5 <- c(cor(pop6.id[1:15], time.15, method = "kendall"),
+                             cor(pop7.id[1:15], time.15, method = "kendall"), 
+                             cor(pop8.id[1:15], time.15, method = "kendall"))
+warming.ac.tau_without5 <- c(cor(pop6.ac[1:15], time.15, method = "kendall"),
+                             cor(pop7.ac[1:15], time.15, method = "kendall"), 
+                             cor(pop8.ac[1:15], time.15, method = "kendall"))
+warming.cov.tau_without5 <- c(cor(pop6.cov[1:15], time.15, method = "kendall"),
+                              cor(pop7.cov[1:15], time.15, method = "kendall"), 
+                              cor(pop8.cov[1:15], time.15, method = "kendall"))
+warming.first.diff.variance.tau_without5 <- c(cor(pop6.first.diff.variance[1:15], time.15, method = "kendall"),
+                                              cor(pop7.first.diff.variance[1:15], time.15, method = "kendall"),
+                                              cor(pop8.first.diff.variance[1:15], time.15, method = "kendall"))
+warming.decay.time.tau_without5 <- c(cor(pop6.decay.time[1:15], time.15, method = "kendall"),
+                                     cor(pop7.decay.time[1:15], time.15, method = "kendall"), 
+                                     cor(pop8.decay.time[1:15], time.15, method = "kendall"))
+AUC_mean_data <- calc_auc(warming.mean.tau_without5, constant.mean.tau); AUC_mean_data
+AUC_skewness_data <- calc_auc(warming.skewness.tau_without5, constant.skewness.tau); AUC_skewness_data
+AUC_kurtosis_data <- calc_auc(warming.kurtosis.tau_without5, constant.kurtosis.tau); AUC_kurtosis_data
+AUC_variance_data <- calc_auc(warming.variance.tau_without5, constant.variance.tau); AUC_variance_data
+AUC_cv_data <- calc_auc(warming.cv.tau_without5, constant.cv.tau); AUC_cv_data
+AUC_id_data <- calc_auc(warming.id.tau_without5, constant.id.tau); AUC_id_data
+AUC_first.diff.variance_data <- calc_auc(warming.first.diff.variance.tau_without5, constant.first.diff.variance.tau); AUC_first.diff.variance_data
+AUC_ac_data <- calc_auc(warming.ac.tau_without5, constant.ac.tau); AUC_ac_data
+AUC_cov_data <- calc_auc(warming.cov.tau_without5, constant.cov.tau); AUC_cov_data
+AUC_data <- c(AUC_mean_data, 
+              AUC_skewness_data, 
+              AUC_kurtosis_data, 
+              AUC_variance_data,
+              AUC_cv_data,
+              AUC_id_data, 
+              AUC_first.diff.variance_data, 
+              AUC_ac_data, 
+              AUC_cov_data, 
+              NA)
+AUC_data <- data.frame(metrics, AUC_data); AUC_data
+saveRDS(AUC_data, "Objects/AUC_AdjEmpiricalData_ExPop5.rds")
+```
+
+#### Plotting
+
+```{r}
+cols <- c("orchid", rep("black", 2), rep("orchid", 4), "black", "orchid", "black")
+pts <- c(19, rep(8, 2), rep(19, 4), 8, 19, 8)
+plot(1:10, AUC_data$AUC_data, type = "p", 
+     main = "Adjusted Empirical Data, Excluding Population 5", xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
      col = cols, pch = pts)
 abline(h = 0.5, lty = 3)
 axis(side = 1, at = 1:10, labels = metrics_full, las = 2)
