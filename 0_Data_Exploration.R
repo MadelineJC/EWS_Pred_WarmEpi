@@ -40,7 +40,7 @@ rising_pop3 <- subset(rising, population == 3)
 rising_pop4 <- subset(rising, population == 4)
 
 ## Some plots
-colours1 <- c("#F28C28", "#FFAC1C", "#FFC000", "#FFE5B4")
+colours1 <- c("navy", "royalblue", "lightblue", "lightblue1")
 colours2 <- c("#9F2B68", "#DE3163", "#FF69B4", "#F8C8DC")
 
 par(mfrow = c(1, 1))
@@ -62,7 +62,7 @@ plot(rising$day, rising$intensity,
      pch = 17, col = adjustcolor(colours2[factor(rising$population)], alpha.f = 0.7),
      main = "Rising Temperature", xlab = "Day", ylab = "Infection Burden",
      ylim = c(0, 200))
-legend("topleft", legend = c("Population 1", "Population 2", "Population 3", "Population 4"),
+legend("topleft", legend = c("Population 5", "Population 6", "Population 7", "Population 8"),
        pch = 16, col = colours2, cex = 1, pt.cex = 2, bty = "n", x.intersp = 0.5)
 
 
