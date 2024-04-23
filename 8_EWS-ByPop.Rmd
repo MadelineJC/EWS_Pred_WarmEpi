@@ -1650,3 +1650,94 @@ ggplot(raw.sim.decay.time.15.tau, aes(x = treatment, y = k.tau)) +
 ## Raw, Empirical Data
 
 Okay, now we have to figure out if we're doing data cloning or whatever.
+
+So, in Harris et al. (2020), this is what they did:
+
+```{r}
+kericho <- read.csv("/Users/mjarviscross/Desktop/Github/Kericho-EWS/kericho.csv")
+
+# Approach to criticality
+test<-kericho$BBK[204:340] # 137 of 455 observations; in our case, we restrict to the first 55 days (emergence at ~60)
+
+# Generate 10,000 null permutations
+obs <- list(length = 10001)
+obs[[10001]] <- test # Original
+  
+set.seed(10022016) 
+for (i in 1:10000){
+  obs[[i]] <- sample(test, length(test), replace = FALSE)
+} 
+
+plot(obs[[1]], type = "l")
+lines(obs[[2]], lty = 2)
+lines(obs[[3]], lty = 3)
+```
+
+On our data:
+
+```{r}
+data <- read.csv("Kirk_Data/Epidemics_Data_Dryad/Kirk_et_al_epidemics_sampling_data.csv")
+
+sub1 <- subset(data.sum, population == 1)
+sub2 <- subset(data.sum, population == 2)
+sub3 <- subset(data.sum, population == 3)
+sub4 <- subset(data.sum, population == 4)
+sub5 <- subset(data.sum, population == 5)
+sub6 <- subset(data.sum, population == 6)
+sub7 <- subset(data.sum, population == 7)
+sub8 <- subset(data.sum, population == 8)
+
+sub1 <- sub1$status.sum
+sub2 <- sub2$status.sum
+sub3 <- sub3$status.sum
+sub4 <- sub4$status.sum
+sub5 <- sub5$status.sum
+sub6 <- sub6$status.sum
+sub7 <- sub7$status.sum
+sub8 <- sub8$status.sum
+
+# Observation 20 is Day 60, so let's cut it off there
+sub1.crit <- sub1[1:20]
+sub2.crit <- sub2[1:20]
+sub3.crit <- sub3[1:20]
+sub4.crit <- sub4[1:20]
+sub5.crit <- sub5[1:20]
+sub6.crit <- sub6[1:20]
+sub7.crit <- sub7[1:20]
+sub8.crit <- sub8[1:20]
+
+sub1.nulls <- list(); sub1.nulls[[1]] <- sub1.crit
+sub2.nulls <- list(); sub2.nulls[[1]] <- sub2.crit
+sub3.nulls <- list(); sub3.nulls[[1]] <- sub3.crit
+sub4.nulls <- list(); sub4.nulls[[1]] <- sub4.crit
+sub5.nulls <- list(); sub5.nulls[[1]] <- sub5.crit
+sub6.nulls <- list(); sub6.nulls[[1]] <- sub6.crit
+sub7.nulls <- list(); sub7.nulls[[1]] <- sub7.crit
+sub8.nulls <- list(); sub8.nulls[[1]] <- sub8.crit
+
+set.seed(123) 
+for (i in 1:10000){
+  sub1.nulls[[i + 1]] <- sample(sub1.crit, length(sub1.crit), replace = FALSE)
+  sub2.nulls[[i + 1]] <- sample(sub2.crit, length(sub2.crit), replace = FALSE)
+  sub3.nulls[[i + 1]] <- sample(sub3.crit, length(sub3.crit), replace = FALSE)
+  sub4.nulls[[i + 1]] <- sample(sub4.crit, length(sub4.crit), replace = FALSE)
+  sub5.nulls[[i + 1]] <- sample(sub5.crit, length(sub5.crit), replace = FALSE)
+  sub6.nulls[[i + 1]] <- sample(sub6.crit, length(sub6.crit), replace = FALSE)
+  sub7.nulls[[i + 1]] <- sample(sub7.crit, length(sub7.crit), replace = FALSE)
+  sub8.nulls[[i + 1]] <- sample(sub8.crit, length(sub8.crit), replace = FALSE)
+} 
+
+plot(sub4.nulls[[1]], type = "l", col = "red3")
+lines(sub4.nulls[[2]], col = "orange")
+lines(sub4.nulls[[3]], col = "goldenrod1")
+lines(sub4.nulls[[4]], col = "forestgreen")
+lines(sub4.nulls[[5]], col = "cornflowerblue")
+lines(sub4.crit, lwd = 2)
+
+plot(sub8.nulls[[1]], type = "l", col = "red3")
+lines(sub8.nulls[[2]], col = "orange")
+lines(sub8.nulls[[3]], col = "goldenrod1")
+lines(sub8.nulls[[4]], col = "forestgreen")
+lines(sub8.nulls[[5]], col = "cornflowerblue")
+lines(sub8.crit, lwd = 2)
+```
