@@ -1242,6 +1242,7 @@ raw.sim.mean.15.tau <- data.frame(
   Treatment = Treatment, 
   k.tau = k.tau
 )
+saveRDS(raw.sim.mean.15.tau, "Objects/raw.sim.mean.15.tau.rds")
 
 cols <- c(rep("#117864", 512), rep("#AA336A", 512))
 cols.pt <- c(rep("#A2D9CE", 1000), rep("#F6799D", 1000))
@@ -1284,6 +1285,7 @@ raw.sim.variance.15.tau <- data.frame(
   Treatment = Treatment, 
   k.tau = k.tau
 )
+saveRDS(raw.sim.variance.15.tau, "Objects/raw.sim.variance.15.tau.rds")
 
 cols <- c(rep("#117864", 512), rep("#AA336A", 512))
 cols.pt <- c(rep("#A2D9CE", 1000), rep("#F6799D", 1000))
@@ -1326,6 +1328,7 @@ raw.sim.skewness.15.tau <- data.frame(
   Treatment = Treatment, 
   k.tau = k.tau
 )
+saveRDS(raw.sim.skewness.15.tau, "Objects/raw.sim.skewness.15.tau.rds")
 
 cols <- c(rep("#117864", 512), rep("#AA336A", 512))
 cols.pt <- c(rep("#A2D9CE", 1000), rep("#F6799D", 1000))
@@ -1368,6 +1371,7 @@ raw.sim.kurtosis.15.tau <- data.frame(
   Treatment = Treatment, 
   k.tau = k.tau
 )
+saveRDS(raw.sim.kurtosis.15.tau, "Objects/raw.sim.kurtosis.15.tau.rds")
 
 cols <- c(rep("#117864", 512), rep("#AA336A", 512))
 cols.pt <- c(rep("#A2D9CE", 1000), rep("#F6799D", 1000))
@@ -1410,6 +1414,7 @@ raw.sim.cv.15.tau <- data.frame(
   Treatment = Treatment, 
   k.tau = k.tau
 )
+saveRDS(raw.sim.cv.15.tau, "Objects/raw.sim.cv.15.tau.rds")
 
 cols <- c(rep("#117864", 512), rep("#AA336A", 512))
 cols.pt <- c(rep("#A2D9CE", 1000), rep("#F6799D", 1000))
@@ -1452,6 +1457,7 @@ raw.sim.id.15.tau <- data.frame(
   Treatment = Treatment, 
   k.tau = k.tau
 )
+saveRDS(raw.sim.id.15.tau, "Objects/raw.sim.id.15.tau.rds")
 
 cols <- c(rep("#117864", 512), rep("#AA336A", 512))
 cols.pt <- c(rep("#A2D9CE", 1000), rep("#F6799D", 1000))
@@ -1494,6 +1500,7 @@ raw.sim.first.diff.variance.15.tau <- data.frame(
   Treatment = Treatment, 
   k.tau = k.tau
 )
+saveRDS(raw.sim.first.diff.variance.15.tau, "Objects/raw.sim.first.diff.variance.15.tau.rds")
 
 cols <- c(rep("#117864", 512), rep("#AA336A", 512))
 cols.pt <- c(rep("#A2D9CE", 1000), rep("#F6799D", 1000))
@@ -1536,6 +1543,7 @@ raw.sim.cor.15.tau <- data.frame(
   Treatment = Treatment, 
   k.tau = k.tau
 )
+saveRDS(raw.sim.cor.15.tau, "Objects/raw.sim.cor.15.tau.rds")
 
 cols <- c(rep("#117864", 512), rep("#AA336A", 512))
 cols.pt <- c(rep("#A2D9CE", 1000), rep("#F6799D", 1000))
@@ -1578,6 +1586,7 @@ raw.sim.cov.15.tau <- data.frame(
   Treatment = Treatment, 
   k.tau = k.tau
 )
+saveRDS(raw.sim.cov.15.tau, "Objects/raw.sim.cov.15.tau.rds")
 
 cols <- c(rep("#117864", 512), rep("#AA336A", 512))
 cols.pt <- c(rep("#A2D9CE", 1000), rep("#F6799D", 1000))
@@ -1619,6 +1628,7 @@ raw.sim.decay.time.15.tau <- data.frame(
   Treatment = Treatment, 
   k.tau = k.tau
 )
+saveRDS(raw.sim.decay.time.15.tau, "Objects/raw.sim.decay.time.15.tau.rds")
 
 cols <- c(rep("#117864", 512), rep("#AA336A", 512))
 cols.pt <- c(rep("#A2D9CE", 1000), rep("#F6799D", 1000))

@@ -1,4 +1,9 @@
-# Results
+```{r}
+library(ggplot2)
+library(cowplot)
+```
+
+# COMPARATIVE & AGGREGATED
 
 # Raw
 
@@ -410,4 +415,265 @@ ggplot(smooth_df, aes(x = metric, y = smooth_3_aucs, colour = metric)) +
   labs(x = "", y = "AUC") +
   scale_x_discrete(labels = metrics_full) +
   ylim(0, 1)
+```
+
+# BY POPULATION
+
+# Raw, Simulated
+
+```{r}
+cols <- c(rep("#1434A4", 512), rep("#AA336A", 512))
+cols.pt <- c(rep("#A7C7E7", 1000), rep("#F6799D", 1000))
+```
+
+```{r}
+## Mean
+raw.sim.mean.15.tau <- readRDS("Objects/raw.sim.mean.15.tau.rds")
+med.const.sims.mean.15.tau <- median(constant.sims.mean.15.tau)
+med.warm.sims.mean.15.tau <- median(warming.sims.mean.15.tau)
+dens <- ggplot(data = raw.sim.mean.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#AA336A")) +
+  geom_vline(xintercept = med.const.sims.mean.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.mean.15.tau, colour = "#AA336A") +
+  xlab("Kendall's Tau") +
+  ylab("Density (Mean)") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+violin <- ggplot(raw.sim.mean.15.tau, aes(x = treatment, y = k.tau)) + 
+  geom_violin(fill = cols, colour = cols) +
+  geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
+  stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
+  xlab("Mean") +
+  ylab("Kendall's Tau") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+plot_grid(dens, violin, align = "h", labels = "AUTO")
+
+## Variance
+raw.sim.variance.15.tau <- readRDS("Objects/raw.sim.variance.15.tau.rds")
+med.const.sims.variance.15.tau <- median(constant.sims.variance.15.tau)
+med.warm.sims.variance.15.tau <- median(warming.sims.variance.15.tau)
+dens <- ggplot(data = raw.sim.variance.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#AA336A")) +
+  geom_vline(xintercept = med.const.sims.variance.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.variance.15.tau, colour = "#AA336A") +
+  xlab("Kendall's Tau") +
+  ylab("Density (Variance)") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+violin <- ggplot(raw.sim.variance.15.tau, aes(x = treatment, y = k.tau)) + 
+  geom_violin(fill = cols, colour = cols) +
+  geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
+  stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
+  xlab("Variance") +
+  ylab("Kendall's Tau") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+plot_grid(dens, violin, align = "h", labels = "AUTO")
+
+## Skewness
+raw.sim.skewness.15.tau <- readRDS("Objects/raw.sim.skewness.15.tau.rds")
+med.const.sims.skewness.15.tau <- median(constant.sims.skewness.15.tau)
+med.warm.sims.skewness.15.tau <- median(warming.sims.skewness.15.tau)
+dens <- ggplot(data = raw.sim.skewness.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#AA336A")) +
+  geom_vline(xintercept = med.const.sims.skewness.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.skewness.15.tau, colour = "#AA336A") +
+  xlab("Kendall's Tau") +
+  ylab("Density (Skewness)") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+violin <- ggplot(raw.sim.skewness.15.tau, aes(x = treatment, y = k.tau)) + 
+  geom_violin(fill = cols, colour = cols) +
+  geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
+  stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
+  xlab("Skewness") +
+  ylab("Kendall's Tau") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+plot_grid(dens, violin, align = "h", labels = "AUTO")
+
+## Kurtosis
+raw.sim.kurtosis.15.tau <- readRDS("Objects/raw.sim.kurtosis.15.tau.rds")
+med.const.sims.kurtosis.15.tau <- median(constant.sims.kurtosis.15.tau)
+med.warm.sims.kurtosis.15.tau <- median(warming.sims.kurtosis.15.tau)
+dens <- ggplot(data = raw.sim.kurtosis.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#AA336A")) +
+  geom_vline(xintercept = med.const.sims.kurtosis.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.kurtosis.15.tau, colour = "#AA336A") +
+  xlab("Kendall's Tau") +
+  ylab("Density (Kurtosis)") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+violin <- ggplot(raw.sim.kurtosis.15.tau, aes(x = treatment, y = k.tau)) + 
+  geom_violin(fill = cols, colour = cols) +
+  geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
+  stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
+  xlab("Kurtosis") +
+  ylab("Kendall's Tau") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+plot_grid(dens, violin, align = "h", labels = "AUTO")
+
+## Co-Efficient of Variation
+raw.sim.cv.15.tau <- readRDS("Objects/raw.sim.cv.15.tau.rds")
+med.const.sims.cv.15.tau <- median(constant.sims.cv.15.tau)
+med.warm.sims.cv.15.tau <- median(warming.sims.cv.15.tau)
+dens <- ggplot(data = raw.sim.cv.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#AA336A")) +
+  geom_vline(xintercept = med.const.sims.cv.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.cv.15.tau, colour = "#AA336A") +
+  xlab("Kendall's Tau") +
+  ylab("Density (Co-Efficient of Variation)") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+violin <- ggplot(raw.sim.cv.15.tau, aes(x = treatment, y = k.tau)) + 
+  geom_violin(fill = cols, colour = cols) +
+  geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
+  stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
+  xlab("Co-Efficient of Variation") +
+  ylab("Kendall's Tau") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+plot_grid(dens, violin, align = "h", labels = "AUTO")
+
+## Index of Dispersion
+raw.sim.id.15.tau <- readRDS("Objects/raw.sim.id.15.tau.rds")
+med.const.sims.id.15.tau <- median(constant.sims.id.15.tau)
+med.warm.sims.id.15.tau <- median(warming.sims.id.15.tau)
+dens <- ggplot(data = raw.sim.id.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#AA336A")) +
+  geom_vline(xintercept = med.const.sims.id.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.id.15.tau, colour = "#AA336A") +
+  xlab("Kendall's Tau") +
+  ylab("Density (Index of Dispersion)") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+violin <- ggplot(raw.sim.id.15.tau, aes(x = treatment, y = k.tau)) + 
+  geom_violin(fill = cols, colour = cols) +
+  geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
+  stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
+  xlab("Index of Dispersion") +
+  ylab("Kendall's Tau") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+plot_grid(dens, violin, align = "h", labels = "AUTO")
+
+## First Difference Variance
+raw.sim.first.diff.variance.15.tau <- readRDS("Objects/raw.sim.first.diff.variance.15.tau.rds")
+med.const.sims.first.diff.variance.15.tau <- median(constant.sims.first.diff.variance.15.tau)
+med.warm.sims.first.diff.variance.15.tau <- median(warming.sims.first.diff.variance.15.tau)
+dens <- ggplot(data = raw.sim.first.diff.variance.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#AA336A")) +
+  geom_vline(xintercept = med.const.sims.first.diff.variance.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.first.diff.variance.15.tau, colour = "#AA336A") +
+  xlab("Kendall's Tau") +
+  ylab("Density (First Difference Variance)") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+violin <- ggplot(raw.sim.first.diff.variance.15.tau, aes(x = treatment, y = k.tau)) + 
+  geom_violin(fill = cols, colour = cols) +
+  geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
+  stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
+  xlab("First Difference Variance") +
+  ylab("Kendall's Tau") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+plot_grid(dens, violin, align = "h", labels = "AUTO")
+
+## Autocorrelation
+raw.sim.cor.15.tau <- readRDS("Objects/raw.sim.cor.15.tau.rds")
+med.const.sims.cor.15.tau <- median(constant.sims.cor.15.tau)
+med.warm.sims.cor.15.tau <- median(warming.sims.cor.15.tau)
+dens <- ggplot(data = raw.sim.cor.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#AA336A")) +
+  geom_vline(xintercept = med.const.sims.cor.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.cor.15.tau, colour = "#AA336A") +
+  xlab("Kendall's Tau") +
+  ylab("Density (Autocorrelation)") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+violin <- ggplot(raw.sim.cor.15.tau, aes(x = treatment, y = k.tau)) + 
+  geom_violin(fill = cols, colour = cols) +
+  geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
+  stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
+  xlab("Autocorrelation") +
+  ylab("Kendall's Tau") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+plot_grid(dens, violin, align = "h", labels = "AUTO")
+
+## Autocovariance
+raw.sim.cov.15.tau <- readRDS("Objects/raw.sim.cov.15.tau.rds")
+med.const.sims.cov.15.tau <- median(constant.sims.cov.15.tau)
+med.warm.sims.cov.15.tau <- median(warming.sims.cov.15.tau)
+dens <- ggplot(data = raw.sim.cov.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#AA336A")) +
+  geom_vline(xintercept = med.const.sims.cov.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.cov.15.tau, colour = "#AA336A") +
+  xlab("Kendall's Tau") +
+  ylab("Density (Autocovariance)") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+violin <- ggplot(raw.sim.cov.15.tau, aes(x = treatment, y = k.tau)) + 
+  geom_violin(fill = cols, colour = cols) +
+  geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
+  stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
+  xlab("Autocovariance") +
+  ylab("Kendall's Tau") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+plot_grid(dens, violin, align = "h", labels = "AUTO")
+
+## Decay Time
+raw.sim.decay.time.15.tau <- readRDS("Objects/raw.sim.decay.time.15.tau.rds")
+med.const.sims.decay.time.15.tau <- median(constant.sims.decay.time.15.tau)
+med.warm.sims.decay.time.15.tau <- median(warming.sims.decay.time.15.tau)
+dens <- ggplot(data = raw.sim.decay.time.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#AA336A")) +
+  geom_vline(xintercept = med.const.sims.decay.time.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.decay.time.15.tau, colour = "#AA336A") +
+  xlab("Kendall's Tau") +
+  ylab("Density (Decay Time)") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+violin <- ggplot(raw.sim.decay.time.15.tau, aes(x = treatment, y = k.tau)) + 
+  geom_violin(fill = cols, colour = cols) +
+  geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
+  stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
+  xlab("Decay Time") +
+  ylab("Kendall's Tau") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+plot_grid(dens, violin, align = "h", labels = "AUTO")
 ```
