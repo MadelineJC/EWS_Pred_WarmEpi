@@ -1716,25 +1716,25 @@ sub6.crit <- sub6[1:20]
 sub7.crit <- sub7[1:20]
 sub8.crit <- sub8[1:20]
 
-sub1.nulls <- list(); sub1.nulls[[1]] <- sub1.crit
-sub2.nulls <- list(); sub2.nulls[[1]] <- sub2.crit
-sub3.nulls <- list(); sub3.nulls[[1]] <- sub3.crit
-sub4.nulls <- list(); sub4.nulls[[1]] <- sub4.crit
-sub5.nulls <- list(); sub5.nulls[[1]] <- sub5.crit
-sub6.nulls <- list(); sub6.nulls[[1]] <- sub6.crit
-sub7.nulls <- list(); sub7.nulls[[1]] <- sub7.crit
-sub8.nulls <- list(); sub8.nulls[[1]] <- sub8.crit
+sub1.nulls <- list()
+sub2.nulls <- list()
+sub3.nulls <- list()
+sub4.nulls <- list()
+sub5.nulls <- list()
+sub6.nulls <- list()
+sub7.nulls <- list()
+sub8.nulls <- list()
 
 set.seed(123) 
-for (i in 1:10000){
-  sub1.nulls[[i + 1]] <- sample(sub1.crit, length(sub1.crit), replace = FALSE)
-  sub2.nulls[[i + 1]] <- sample(sub2.crit, length(sub2.crit), replace = FALSE)
-  sub3.nulls[[i + 1]] <- sample(sub3.crit, length(sub3.crit), replace = FALSE)
-  sub4.nulls[[i + 1]] <- sample(sub4.crit, length(sub4.crit), replace = FALSE)
-  sub5.nulls[[i + 1]] <- sample(sub5.crit, length(sub5.crit), replace = FALSE)
-  sub6.nulls[[i + 1]] <- sample(sub6.crit, length(sub6.crit), replace = FALSE)
-  sub7.nulls[[i + 1]] <- sample(sub7.crit, length(sub7.crit), replace = FALSE)
-  sub8.nulls[[i + 1]] <- sample(sub8.crit, length(sub8.crit), replace = FALSE)
+for (i in 1:1000){
+  sub1.nulls[[i]] <- sample(sub1.crit, length(sub1.crit), replace = FALSE)
+  sub2.nulls[[i]] <- sample(sub2.crit, length(sub2.crit), replace = FALSE)
+  sub3.nulls[[i]] <- sample(sub3.crit, length(sub3.crit), replace = FALSE)
+  sub4.nulls[[i]] <- sample(sub4.crit, length(sub4.crit), replace = FALSE)
+  sub5.nulls[[i]] <- sample(sub5.crit, length(sub5.crit), replace = FALSE)
+  sub6.nulls[[i]] <- sample(sub6.crit, length(sub6.crit), replace = FALSE)
+  sub7.nulls[[i]] <- sample(sub7.crit, length(sub7.crit), replace = FALSE)
+  sub8.nulls[[i]] <- sample(sub8.crit, length(sub8.crit), replace = FALSE)
 } 
 
 plot(sub4.nulls[[1]], type = "l", col = "red3")
@@ -1751,3 +1751,349 @@ lines(sub8.nulls[[4]], col = "forestgreen")
 lines(sub8.nulls[[5]], col = "cornflowerblue")
 lines(sub8.crit, lwd = 2)
 ```
+
+### Calculating Metrics
+
+#### Mean, Standard Deviation, Skewness, Kurtosis
+
+```{r}
+sub1.nulls.mean <- list(); sub1.nulls.sd <- list(); sub1.nulls.sk <- list(); sub1.nulls.kt <- list()
+sub2.nulls.mean <- list(); sub2.nulls.sd <- list(); sub2.nulls.sk <- list(); sub2.nulls.kt <- list()
+sub3.nulls.mean <- list(); sub3.nulls.sd <- list(); sub3.nulls.sk <- list(); sub3.nulls.kt <- list()
+sub4.nulls.mean <- list(); sub4.nulls.sd <- list(); sub4.nulls.sk <- list(); sub4.nulls.kt <- list()
+sub5.nulls.mean <- list(); sub5.nulls.sd <- list(); sub5.nulls.sk <- list(); sub5.nulls.kt <- list()
+sub6.nulls.mean <- list(); sub6.nulls.sd <- list(); sub6.nulls.sk <- list(); sub6.nulls.kt <- list()
+sub7.nulls.mean <- list(); sub7.nulls.sd <- list(); sub7.nulls.sk <- list(); sub7.nulls.kt <- list()
+sub8.nulls.mean <- list(); sub8.nulls.sd <- list(); sub8.nulls.sk <- list(); sub8.nulls.kt <- list()
+
+for (i in 1:length(sub1.nulls)){
+  sub1.nulls.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub1.nulls[[i]], window = 5, step = 1)
+  sub1.nulls.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub1.nulls[[i]], window = 5, step = 1)
+  sub1.nulls.sk[[i]] <- SlidingWindow(FUN = "skewness", data = sub1.nulls[[i]], window = 5, step = 1)
+  sub1.nulls.kt[[i]] <- SlidingWindow(FUN = "kurtosis", data = sub1.nulls[[i]], window = 5, step = 1)
+  
+  sub2.nulls.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub2.nulls[[i]], window = 5, step = 1)
+  sub2.nulls.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub2.nulls[[i]], window = 5, step = 1)
+  sub2.nulls.sk[[i]] <- SlidingWindow(FUN = "skewness", data = sub2.nulls[[i]], window = 5, step = 1)
+  sub2.nulls.kt[[i]] <- SlidingWindow(FUN = "kurtosis", data = sub2.nulls[[i]], window = 5, step = 1)
+  
+  sub3.nulls.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub3.nulls[[i]], window = 5, step = 1)
+  sub3.nulls.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub3.nulls[[i]], window = 5, step = 1)
+  sub3.nulls.sk[[i]] <- SlidingWindow(FUN = "skewness", data = sub3.nulls[[i]], window = 5, step = 1)
+  sub3.nulls.kt[[i]] <- SlidingWindow(FUN = "kurtosis", data = sub3.nulls[[i]], window = 5, step = 1)
+  
+  sub4.nulls.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub4.nulls[[i]], window = 5, step = 1)
+  sub4.nulls.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub4.nulls[[i]], window = 5, step = 1)
+  sub4.nulls.sk[[i]] <- SlidingWindow(FUN = "skewness", data = sub4.nulls[[i]], window = 5, step = 1)
+  sub4.nulls.kt[[i]] <- SlidingWindow(FUN = "kurtosis", data = sub4.nulls[[i]], window = 5, step = 1)
+  
+  sub5.nulls.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub5.nulls[[i]], window = 5, step = 1)
+  sub5.nulls.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub5.nulls[[i]], window = 5, step = 1)
+  sub5.nulls.sk[[i]] <- SlidingWindow(FUN = "skewness", data = sub5.nulls[[i]], window = 5, step = 1)
+  sub5.nulls.kt[[i]] <- SlidingWindow(FUN = "kurtosis", data = sub5.nulls[[i]], window = 5, step = 1)
+  
+  sub6.nulls.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub6.nulls[[i]], window = 5, step = 1)
+  sub6.nulls.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub6.nulls[[i]], window = 5, step = 1)
+  sub6.nulls.sk[[i]] <- SlidingWindow(FUN = "skewness", data = sub6.nulls[[i]], window = 5, step = 1)
+  sub6.nulls.kt[[i]] <- SlidingWindow(FUN = "kurtosis", data = sub6.nulls[[i]], window = 5, step = 1)
+  
+  sub7.nulls.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub7.nulls[[i]], window = 5, step = 1)
+  sub7.nulls.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub7.nulls[[i]], window = 5, step = 1)
+  sub7.nulls.sk[[i]] <- SlidingWindow(FUN = "skewness", data = sub7.nulls[[i]], window = 5, step = 1)
+  sub7.nulls.kt[[i]] <- SlidingWindow(FUN = "kurtosis", data = sub7.nulls[[i]], window = 5, step = 1)
+  
+  sub8.nulls.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub8.nulls[[i]], window = 5, step = 1)
+  sub8.nulls.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub8.nulls[[i]], window = 5, step = 1)
+  sub8.nulls.sk[[i]] <- SlidingWindow(FUN = "skewness", data = sub8.nulls[[i]], window = 5, step = 1)
+  sub8.nulls.kt[[i]] <- SlidingWindow(FUN = "kurtosis", data = sub8.nulls[[i]], window = 5, step = 1)
+}
+```
+
+#### Variance
+
+```{r}
+sub1.nulls.var <- list(); sub2.nulls.var <- list(); sub3.nulls.var <- list(); sub4.nulls.var <- list()
+sub5.nulls.var <- list(); sub6.nulls.var <- list(); sub7.nulls.var <- list(); sub8.nulls.var <- list()
+for (i in 1:1000){
+  sub1.nulls.var[[i]] <- sub1.nulls.sd[[i]]^2
+  sub2.nulls.var[[i]] <- sub2.nulls.sd[[i]]^2
+  sub3.nulls.var[[i]] <- sub3.nulls.sd[[i]]^2
+  sub4.nulls.var[[i]] <- sub4.nulls.sd[[i]]^2
+  sub5.nulls.var[[i]] <- sub5.nulls.sd[[i]]^2
+  sub6.nulls.var[[i]] <- sub6.nulls.sd[[i]]^2
+  sub7.nulls.var[[i]] <- sub7.nulls.sd[[i]]^2
+  sub8.nulls.var[[i]] <- sub8.nulls.sd[[i]]^2
+}
+```
+
+#### Co-Efficient of Variation
+
+```{r}
+sub1.nulls.cv <- list(); sub2.nulls.cv <- list(); sub3.nulls.cv <- list(); sub4.nulls.cv <- list()
+sub5.nulls.cv <- list(); sub6.nulls.cv <- list(); sub7.nulls.cv <- list(); sub8.nulls.cv <- list()
+for (i in 1:1000){
+  sub1.nulls.cv[[i]] <- sub1.nulls.sd[[i]]/(sub1.nulls.mean[[i]] + 1e-10)
+  sub2.nulls.cv[[i]] <- sub2.nulls.sd[[i]]/(sub2.nulls.mean[[i]] + 1e-10)
+  sub3.nulls.cv[[i]] <- sub3.nulls.sd[[i]]/(sub3.nulls.mean[[i]] + 1e-10)
+  sub4.nulls.cv[[i]] <- sub4.nulls.sd[[i]]/(sub4.nulls.mean[[i]] + 1e-10)
+  sub5.nulls.cv[[i]] <- sub5.nulls.sd[[i]]/(sub5.nulls.mean[[i]] + 1e-10)
+  sub6.nulls.cv[[i]] <- sub6.nulls.sd[[i]]/(sub6.nulls.mean[[i]] + 1e-10)
+  sub7.nulls.cv[[i]] <- sub7.nulls.sd[[i]]/(sub7.nulls.mean[[i]] + 1e-10)
+  sub8.nulls.cv[[i]] <- sub8.nulls.sd[[i]]/(sub8.nulls.mean[[i]] + 1e-10)
+}
+```
+
+#### Index of Dispersion
+
+```{r}
+sub1.nulls.id <- list(); sub2.nulls.id <- list(); sub3.nulls.id <- list(); sub4.nulls.id <- list()
+sub5.nulls.id <- list(); sub6.nulls.id <- list(); sub7.nulls.id <- list(); sub8.nulls.id <- list()
+for (i in 1:1000){
+  sub1.nulls.id[[i]] <- sub1.nulls.var[[i]]/(sub1.nulls.mean[[i]] + 1e-10)
+  sub2.nulls.id[[i]] <- sub2.nulls.var[[i]]/(sub2.nulls.mean[[i]] + 1e-10)
+  sub3.nulls.id[[i]] <- sub3.nulls.var[[i]]/(sub3.nulls.mean[[i]] + 1e-10)
+  sub4.nulls.id[[i]] <- sub4.nulls.var[[i]]/(sub4.nulls.mean[[i]] + 1e-10)
+  sub5.nulls.id[[i]] <- sub5.nulls.var[[i]]/(sub5.nulls.mean[[i]] + 1e-10)
+  sub6.nulls.id[[i]] <- sub6.nulls.var[[i]]/(sub6.nulls.mean[[i]] + 1e-10)
+  sub7.nulls.id[[i]] <- sub7.nulls.var[[i]]/(sub7.nulls.mean[[i]] + 1e-10)
+  sub8.nulls.id[[i]] <- sub8.nulls.var[[i]]/(sub8.nulls.mean[[i]] + 1e-10)
+}
+```
+
+#### First Difference Variance
+
+```{r}
+sub1.nulls.fdv <- list(); sub2.nulls.fdv <- list(); sub3.nulls.fdv <- list(); sub4.nulls.fdv <- list()
+sub5.nulls.fdv <- list(); sub6.nulls.fdv <- list(); sub7.nulls.fdv <- list(); sub8.nulls.fdv <- list()
+
+for (i in 1:1000){
+  sub1.nulls.fdv.temp <- c()
+  sub2.nulls.fdv.temp <- c()
+  sub3.nulls.fdv.temp <- c()
+  sub4.nulls.fdv.temp <- c()
+  sub5.nulls.fdv.temp <- c()
+  sub6.nulls.fdv.temp <- c()
+  sub7.nulls.fdv.temp <- c()
+  sub8.nulls.fdv.temp <- c()
+  for (j in 2:15){
+    sub1.nulls.fdv.temp[j - 1] <- sub1.nulls.var[[i]][j] - sub1.nulls.var[[i]][j - 1]
+    sub2.nulls.fdv.temp[j - 1] <- sub2.nulls.var[[i]][j] - sub2.nulls.var[[i]][j - 1]
+    sub3.nulls.fdv.temp[j - 1] <- sub3.nulls.var[[i]][j] - sub3.nulls.var[[i]][j - 1]
+    sub4.nulls.fdv.temp[j - 1] <- sub4.nulls.var[[i]][j] - sub4.nulls.var[[i]][j - 1]
+    sub5.nulls.fdv.temp[j - 1] <- sub5.nulls.var[[i]][j] - sub5.nulls.var[[i]][j - 1]
+    sub6.nulls.fdv.temp[j - 1] <- sub6.nulls.var[[i]][j] - sub6.nulls.var[[i]][j - 1]
+    sub7.nulls.fdv.temp[j - 1] <- sub7.nulls.var[[i]][j] - sub7.nulls.var[[i]][j - 1]
+    sub8.nulls.fdv.temp[j - 1] <- sub8.nulls.var[[i]][j] - sub8.nulls.var[[i]][j - 1]
+  }
+  sub1.nulls.fdv[[i]] <- sub1.nulls.fdv.temp
+  sub2.nulls.fdv[[i]] <- sub2.nulls.fdv.temp
+  sub3.nulls.fdv[[i]] <- sub3.nulls.fdv.temp
+  sub4.nulls.fdv[[i]] <- sub4.nulls.fdv.temp
+  sub5.nulls.fdv[[i]] <- sub5.nulls.fdv.temp
+  sub6.nulls.fdv[[i]] <- sub6.nulls.fdv.temp
+  sub7.nulls.fdv[[i]] <- sub7.nulls.fdv.temp
+  sub8.nulls.fdv[[i]] <- sub8.nulls.fdv.temp
+}
+```
+
+#### Autocorrelation
+
+```{r}
+
+```
+
+#### Autocovariance
+
+```{r}
+
+```
+
+#### Decay Time
+
+```{r}
+
+```
+
+### Kendall's Tau
+
+#### Mean
+
+```{r}
+sub1.null.mean.tau <- c(); sub2.null.mean.tau <- c(); sub3.null.mean.tau <- c(); sub4.null.mean.tau <- c()
+sub5.null.mean.tau <- c(); sub6.null.mean.tau <- c(); sub7.null.mean.tau <- c(); sub8.null.mean.tau <- c()
+t <- seq(1, 15, 1)
+for (i in 1:1000){
+  sub1.null.mean.tau[i] <- cor(sub1.nulls.mean[[i]], t, method = "kendall")
+  sub2.null.mean.tau[i] <- cor(sub2.nulls.mean[[i]], t, method = "kendall")
+  sub3.null.mean.tau[i] <- cor(sub3.nulls.mean[[i]], t, method = "kendall")
+  sub4.null.mean.tau[i] <- cor(sub4.nulls.mean[[i]], t, method = "kendall")
+  sub5.null.mean.tau[i] <- cor(sub5.nulls.mean[[i]], t, method = "kendall")
+  sub6.null.mean.tau[i] <- cor(sub6.nulls.mean[[i]], t, method = "kendall")
+  sub7.null.mean.tau[i] <- cor(sub7.nulls.mean[[i]], t, method = "kendall")
+  sub8.null.mean.tau[i] <- cor(sub8.nulls.mean[[i]], t, method = "kendall")
+}
+```
+
+#### Skewness
+
+```{r}
+sub1.null.sk.tau <- c(); sub2.null.sk.tau <- c(); sub3.null.sk.tau <- c(); sub4.null.sk.tau <- c()
+sub5.null.sk.tau <- c(); sub6.null.sk.tau <- c(); sub7.null.sk.tau <- c(); sub8.null.sk.tau <- c()
+t <- seq(1, 15, 1)
+for (i in 1:1000){
+  sub1.null.sk.tau[i] <- cor(sub1.nulls.sk[[i]], t, method = "kendall")
+  sub2.null.sk.tau[i] <- cor(sub2.nulls.sk[[i]], t, method = "kendall")
+  sub3.null.sk.tau[i] <- cor(sub3.nulls.sk[[i]], t, method = "kendall")
+  sub4.null.sk.tau[i] <- cor(sub4.nulls.sk[[i]], t, method = "kendall")
+  sub5.null.sk.tau[i] <- cor(sub5.nulls.sk[[i]], t, method = "kendall")
+  sub6.null.sk.tau[i] <- cor(sub6.nulls.sk[[i]], t, method = "kendall")
+  sub7.null.sk.tau[i] <- cor(sub7.nulls.sk[[i]], t, method = "kendall")
+  sub8.null.sk.tau[i] <- cor(sub8.nulls.sk[[i]], t, method = "kendall")
+}
+```
+
+#### Kurtosis
+
+```{r}
+sub1.null.kt.tau <- c(); sub2.null.kt.tau <- c(); sub3.null.kt.tau <- c(); sub4.null.kt.tau <- c()
+sub5.null.kt.tau <- c(); sub6.null.kt.tau <- c(); sub7.null.kt.tau <- c(); sub8.null.kt.tau <- c()
+t <- seq(1, 15, 1)
+for (i in 1:1000){
+  sub1.null.kt.tau[i] <- cor(sub1.nulls.kt[[i]], t, method = "kendall")
+  sub2.null.kt.tau[i] <- cor(sub2.nulls.kt[[i]], t, method = "kendall")
+  sub3.null.kt.tau[i] <- cor(sub3.nulls.kt[[i]], t, method = "kendall")
+  sub4.null.kt.tau[i] <- cor(sub4.nulls.kt[[i]], t, method = "kendall")
+  sub5.null.kt.tau[i] <- cor(sub5.nulls.kt[[i]], t, method = "kendall")
+  sub6.null.kt.tau[i] <- cor(sub6.nulls.kt[[i]], t, method = "kendall")
+  sub7.null.kt.tau[i] <- cor(sub7.nulls.kt[[i]], t, method = "kendall")
+  sub8.null.kt.tau[i] <- cor(sub8.nulls.kt[[i]], t, method = "kendall")
+}
+```
+
+#### Variance
+
+```{r}
+sub1.null.var.tau <- c(); sub2.null.var.tau <- c(); sub3.null.var.tau <- c(); sub4.null.var.tau <- c()
+sub5.null.var.tau <- c(); sub6.null.var.tau <- c(); sub7.null.var.tau <- c(); sub8.null.var.tau <- c()
+t <- seq(1, 15, 1)
+for (i in 1:1000){
+  sub1.null.var.tau[i] <- cor(sub1.nulls.var[[i]], t, method = "kendall")
+  sub2.null.var.tau[i] <- cor(sub2.nulls.var[[i]], t, method = "kendall")
+  sub3.null.var.tau[i] <- cor(sub3.nulls.var[[i]], t, method = "kendall")
+  sub4.null.var.tau[i] <- cor(sub4.nulls.var[[i]], t, method = "kendall")
+  sub5.null.var.tau[i] <- cor(sub5.nulls.var[[i]], t, method = "kendall")
+  sub6.null.var.tau[i] <- cor(sub6.nulls.var[[i]], t, method = "kendall")
+  sub7.null.var.tau[i] <- cor(sub7.nulls.var[[i]], t, method = "kendall")
+  sub8.null.var.tau[i] <- cor(sub8.nulls.var[[i]], t, method = "kendall")
+}
+```
+
+#### Co-Efficient of Variation
+
+```{r}
+sub1.null.cv.tau <- c(); sub2.null.cv.tau <- c(); sub3.null.cv.tau <- c(); sub4.null.cv.tau <- c()
+sub5.null.cv.tau <- c(); sub6.null.cv.tau <- c(); sub7.null.cv.tau <- c(); sub8.null.cv.tau <- c()
+t <- seq(1, 15, 1)
+for (i in 1:1000){
+  sub1.null.cv.tau[i] <- cor(sub1.nulls.cv[[i]], t, method = "kendall")
+  sub2.null.cv.tau[i] <- cor(sub2.nulls.cv[[i]], t, method = "kendall")
+  sub3.null.cv.tau[i] <- cor(sub3.nulls.cv[[i]], t, method = "kendall")
+  sub4.null.cv.tau[i] <- cor(sub4.nulls.cv[[i]], t, method = "kendall")
+  sub5.null.cv.tau[i] <- cor(sub5.nulls.cv[[i]], t, method = "kendall")
+  sub6.null.cv.tau[i] <- cor(sub6.nulls.cv[[i]], t, method = "kendall")
+  sub7.null.cv.tau[i] <- cor(sub7.nulls.cv[[i]], t, method = "kendall")
+  sub8.null.cv.tau[i] <- cor(sub8.nulls.cv[[i]], t, method = "kendall")
+}
+```
+
+#### Index of Dispersion
+
+```{r}
+sub1.null.id.tau <- c(); sub2.null.id.tau <- c(); sub3.null.id.tau <- c(); sub4.null.id.tau <- c()
+sub5.null.id.tau <- c(); sub6.null.id.tau <- c(); sub7.null.id.tau <- c(); sub8.null.id.tau <- c()
+t <- seq(1, 15, 1)
+for (i in 1:1000){
+  sub1.null.id.tau[i] <- cor(sub1.nulls.id[[i]], t, method = "kendall")
+  sub2.null.id.tau[i] <- cor(sub2.nulls.id[[i]], t, method = "kendall")
+  sub3.null.id.tau[i] <- cor(sub3.nulls.id[[i]], t, method = "kendall")
+  sub4.null.id.tau[i] <- cor(sub4.nulls.id[[i]], t, method = "kendall")
+  sub5.null.id.tau[i] <- cor(sub5.nulls.id[[i]], t, method = "kendall")
+  sub6.null.id.tau[i] <- cor(sub6.nulls.id[[i]], t, method = "kendall")
+  sub7.null.id.tau[i] <- cor(sub7.nulls.id[[i]], t, method = "kendall")
+  sub8.null.id.tau[i] <- cor(sub8.nulls.id[[i]], t, method = "kendall")
+}
+```
+
+#### First Difference Variance
+
+```{r}
+sub1.null.fdv.tau <- c(); sub2.null.fdv.tau <- c(); sub3.null.fdv.tau <- c(); sub4.null.fdv.tau <- c()
+sub5.null.fdv.tau <- c(); sub6.null.fdv.tau <- c(); sub7.null.fdv.tau <- c(); sub8.null.fdv.tau <- c()
+t <- seq(1, 14, 1)
+for (i in 1:1000){
+  sub1.null.fdv.tau[i] <- cor(sub1.nulls.fdv[[i]], t, method = "kendall")
+  sub2.null.fdv.tau[i] <- cor(sub2.nulls.fdv[[i]], t, method = "kendall")
+  sub3.null.fdv.tau[i] <- cor(sub3.nulls.fdv[[i]], t, method = "kendall")
+  sub4.null.fdv.tau[i] <- cor(sub4.nulls.fdv[[i]], t, method = "kendall")
+  sub5.null.fdv.tau[i] <- cor(sub5.nulls.fdv[[i]], t, method = "kendall")
+  sub6.null.fdv.tau[i] <- cor(sub6.nulls.fdv[[i]], t, method = "kendall")
+  sub7.null.fdv.tau[i] <- cor(sub7.nulls.fdv[[i]], t, method = "kendall")
+  sub8.null.fdv.tau[i] <- cor(sub8.nulls.fdv[[i]], t, method = "kendall")
+}
+```
+
+#### Autocorrelation
+
+```{r}
+sub1.null.ac.tau <- c(); sub2.null.ac.tau <- c(); sub3.null.ac.tau <- c(); sub4.null.ac.tau <- c()
+sub5.null.ac.tau <- c(); sub6.null.ac.tau <- c(); sub7.null.ac.tau <- c(); sub8.null.ac.tau <- c()
+t <- seq(1, 15, 1)
+for (i in 1:1000){
+  sub1.null.ac.tau[i] <- cor(sub1.nulls.ac[[i]], t, method = "kendall")
+  sub2.null.ac.tau[i] <- cor(sub2.nulls.ac[[i]], t, method = "kendall")
+  sub3.null.ac.tau[i] <- cor(sub3.nulls.ac[[i]], t, method = "kendall")
+  sub4.null.ac.tau[i] <- cor(sub4.nulls.ac[[i]], t, method = "kendall")
+  sub5.null.ac.tau[i] <- cor(sub5.nulls.ac[[i]], t, method = "kendall")
+  sub6.null.ac.tau[i] <- cor(sub6.nulls.ac[[i]], t, method = "kendall")
+  sub7.null.ac.tau[i] <- cor(sub7.nulls.ac[[i]], t, method = "kendall")
+  sub8.null.ac.tau[i] <- cor(sub8.nulls.ac[[i]], t, method = "kendall")
+}
+```
+
+#### Autocovariance
+
+```{r}
+sub1.null.acv.tau <- c(); sub2.null.acv.tau <- c(); sub3.null.acv.tau <- c(); sub4.null.acv.tau <- c()
+sub5.null.acv.tau <- c(); sub6.null.acv.tau <- c(); sub7.null.acv.tau <- c(); sub8.null.acv.tau <- c()
+t <- seq(1, 15, 1)
+for (i in 1:1000){
+  sub1.null.acv.tau[i] <- cor(sub1.nulls.acv[[i]], t, method = "kendall")
+  sub2.null.acv.tau[i] <- cor(sub2.nulls.acv[[i]], t, method = "kendall")
+  sub3.null.acv.tau[i] <- cor(sub3.nulls.acv[[i]], t, method = "kendall")
+  sub4.null.acv.tau[i] <- cor(sub4.nulls.acv[[i]], t, method = "kendall")
+  sub5.null.acv.tau[i] <- cor(sub5.nulls.acv[[i]], t, method = "kendall")
+  sub6.null.acv.tau[i] <- cor(sub6.nulls.acv[[i]], t, method = "kendall")
+  sub7.null.acv.tau[i] <- cor(sub7.nulls.acv[[i]], t, method = "kendall")
+  sub8.null.acv.tau[i] <- cor(sub8.nulls.acv[[i]], t, method = "kendall")
+}
+```
+
+#### Decay Time
+
+```{r}
+sub1.null.dt.tau <- c(); sub2.null.dt.tau <- c(); sub3.null.dt.tau <- c(); sub4.null.dt.tau <- c()
+sub5.null.dt.tau <- c(); sub6.null.dt.tau <- c(); sub7.null.dt.tau <- c(); sub8.null.dt.tau <- c()
+t <- seq(1, 15, 1)
+for (i in 1:1000){
+  sub1.null.dt.tau[i] <- cor(sub1.nulls.dt[[i]], t, method = "kendall")
+  sub2.null.dt.tau[i] <- cor(sub2.nulls.dt[[i]], t, method = "kendall")
+  sub3.null.dt.tau[i] <- cor(sub3.nulls.dt[[i]], t, method = "kendall")
+  sub4.null.dt.tau[i] <- cor(sub4.nulls.dt[[i]], t, method = "kendall")
+  sub5.null.dt.tau[i] <- cor(sub5.nulls.dt[[i]], t, method = "kendall")
+  sub6.null.dt.tau[i] <- cor(sub6.nulls.dt[[i]], t, method = "kendall")
+  sub7.null.dt.tau[i] <- cor(sub7.nulls.dt[[i]], t, method = "kendall")
+  sub8.null.dt.tau[i] <- cor(sub8.nulls.dt[[i]], t, method = "kendall")
+}
+```
+
+## Visualization

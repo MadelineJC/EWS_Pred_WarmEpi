@@ -677,3 +677,5 @@ violin <- ggplot(raw.sim.decay.time.15.tau, aes(x = treatment, y = k.tau)) +
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
 plot_grid(dens, violin, align = "h", labels = "AUTO")
 ```
+
+# Raw, Empirical
