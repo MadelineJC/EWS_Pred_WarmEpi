@@ -440,7 +440,7 @@ dens <- ggplot(data = raw.sim.mean.15.tau, aes(x = k.tau, group = Treatment, fil
   ylab("Density (Mean)") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
-violin <- ggplot(raw.sim.mean.15.tau, aes(x = treatment, y = k.tau)) + 
+violin <- ggplot(raw.sim.mean.15.tau, aes(x = Treatment, y = k.tau)) + 
   geom_violin(fill = cols, colour = cols) +
   geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
   stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
@@ -465,7 +465,7 @@ dens <- ggplot(data = raw.sim.variance.15.tau, aes(x = k.tau, group = Treatment,
   ylab("Density (Variance)") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
-violin <- ggplot(raw.sim.variance.15.tau, aes(x = treatment, y = k.tau)) + 
+violin <- ggplot(raw.sim.variance.15.tau, aes(x = Treatment, y = k.tau)) + 
   geom_violin(fill = cols, colour = cols) +
   geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
   stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
@@ -490,7 +490,7 @@ dens <- ggplot(data = raw.sim.skewness.15.tau, aes(x = k.tau, group = Treatment,
   ylab("Density (Skewness)") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
-violin <- ggplot(raw.sim.skewness.15.tau, aes(x = treatment, y = k.tau)) + 
+violin <- ggplot(raw.sim.skewness.15.tau, aes(x = Treatment, y = k.tau)) + 
   geom_violin(fill = cols, colour = cols) +
   geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
   stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
@@ -515,7 +515,7 @@ dens <- ggplot(data = raw.sim.kurtosis.15.tau, aes(x = k.tau, group = Treatment,
   ylab("Density (Kurtosis)") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
-violin <- ggplot(raw.sim.kurtosis.15.tau, aes(x = treatment, y = k.tau)) + 
+violin <- ggplot(raw.sim.kurtosis.15.tau, aes(x = Treatment, y = k.tau)) + 
   geom_violin(fill = cols, colour = cols) +
   geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
   stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
@@ -540,7 +540,7 @@ dens <- ggplot(data = raw.sim.cv.15.tau, aes(x = k.tau, group = Treatment, fill 
   ylab("Density (Co-Efficient of Variation)") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
-violin <- ggplot(raw.sim.cv.15.tau, aes(x = treatment, y = k.tau)) + 
+violin <- ggplot(raw.sim.cv.15.tau, aes(x = Treatment, y = k.tau)) + 
   geom_violin(fill = cols, colour = cols) +
   geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
   stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
@@ -565,7 +565,7 @@ dens <- ggplot(data = raw.sim.id.15.tau, aes(x = k.tau, group = Treatment, fill 
   ylab("Density (Index of Dispersion)") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
-violin <- ggplot(raw.sim.id.15.tau, aes(x = treatment, y = k.tau)) + 
+violin <- ggplot(raw.sim.id.15.tau, aes(x = Treatment, y = k.tau)) + 
   geom_violin(fill = cols, colour = cols) +
   geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
   stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
@@ -590,7 +590,7 @@ dens <- ggplot(data = raw.sim.first.diff.variance.15.tau, aes(x = k.tau, group =
   ylab("Density (First Difference Variance)") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
-violin <- ggplot(raw.sim.first.diff.variance.15.tau, aes(x = treatment, y = k.tau)) + 
+violin <- ggplot(raw.sim.first.diff.variance.15.tau, aes(x = Treatment, y = k.tau)) + 
   geom_violin(fill = cols, colour = cols) +
   geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
   stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
@@ -615,7 +615,7 @@ dens <- ggplot(data = raw.sim.cor.15.tau, aes(x = k.tau, group = Treatment, fill
   ylab("Density (Autocorrelation)") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
-violin <- ggplot(raw.sim.cor.15.tau, aes(x = treatment, y = k.tau)) + 
+violin <- ggplot(raw.sim.cor.15.tau, aes(x = Treatment, y = k.tau)) + 
   geom_violin(fill = cols, colour = cols) +
   geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
   stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
@@ -640,7 +640,7 @@ dens <- ggplot(data = raw.sim.cov.15.tau, aes(x = k.tau, group = Treatment, fill
   ylab("Density (Autocovariance)") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
-violin <- ggplot(raw.sim.cov.15.tau, aes(x = treatment, y = k.tau)) + 
+violin <- ggplot(raw.sim.cov.15.tau, aes(x = Treatment, y = k.tau)) + 
   geom_violin(fill = cols, colour = cols) +
   geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
   stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
@@ -665,7 +665,7 @@ dens <- ggplot(data = raw.sim.decay.time.15.tau, aes(x = k.tau, group = Treatmen
   ylab("Density (Decay Time)") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
-violin <- ggplot(raw.sim.decay.time.15.tau, aes(x = treatment, y = k.tau)) + 
+violin <- ggplot(raw.sim.decay.time.15.tau, aes(x = Treatment, y = k.tau)) + 
   geom_violin(fill = cols, colour = cols) +
   geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
   stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 

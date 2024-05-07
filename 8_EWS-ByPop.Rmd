@@ -13,6 +13,7 @@ require(ecp)
 require(strucchange)
 require(TTR)
 require(moments)
+require(tidyverse)
 ```
 
 # SUB-GROUPING SIMULATED DATA
@@ -57,145 +58,145 @@ warming.incidence.daily <- cbind(warming1[ ,2:101], warming2[ ,2:101], warming3[
 ## Standard Deviation, Mean, Skewness, Kurtosis
 constant.sims.sd.15 <- matrix(nrow = 105, ncol = num.of.sims)
 constant.sims.mean.15 <- matrix(nrow = 105, ncol = num.of.sims)
-constant.sims.skewness.15 <- matrix(nrow = 105, ncol = num.of.sims)
-constant.sims.kurtosis.15 <- matrix(nrow = 105, ncol = num.of.sims)
+constant.sims.sk.15 <- matrix(nrow = 105, ncol = num.of.sims)
+constant.sims.kt.15 <- matrix(nrow = 105, ncol = num.of.sims)
 warming.sims.sd.15 <- matrix(nrow = 105, ncol = num.of.sims)
 warming.sims.mean.15 <- matrix(nrow = 105, ncol = num.of.sims)
-warming.sims.skewness.15 <- matrix(nrow = 105, ncol = num.of.sims)
-warming.sims.kurtosis.15 <- matrix(nrow = 105, ncol = num.of.sims)
+warming.sims.sk.15 <- matrix(nrow = 105, ncol = num.of.sims)
+warming.sims.kt.15 <- matrix(nrow = 105, ncol = num.of.sims)
 for(i in 1:num.of.sims){
   constant.sims.sd.15[ ,i] <- SlidingWindow(FUN = "sd", data = constant.incidence.daily[,i], window = 15,step = 1)
   constant.sims.mean.15[ ,i] <- SlidingWindow(FUN = "mean", data = constant.incidence.daily[,i], window = 15, step = 1)
-  constant.sims.skewness.15[ ,i] <- SlidingWindow(FUN = "skewness", data = constant.incidence.daily[ ,i], window = 15, step = 1)
-  constant.sims.kurtosis.15[ ,i] <- SlidingWindow(FUN = "kurtosis", data = constant.incidence.daily[ ,i], window = 15, step = 1)
+  constant.sims.sk.15[ ,i] <- SlidingWindow(FUN = "skewness", data = constant.incidence.daily[ ,i], window = 15, step = 1)
+  constant.sims.kt.15[ ,i] <- SlidingWindow(FUN = "kurtosis", data = constant.incidence.daily[ ,i], window = 15, step = 1)
 }
 for(i in 1:num.of.sims){
   warming.sims.sd.15[ ,i] <- SlidingWindow(FUN = "sd", data = warming.incidence.daily[,i], window = 15,step = 1)
   warming.sims.mean.15[ ,i] <- SlidingWindow(FUN = "mean", data = warming.incidence.daily[,i], window = 15, step = 1)
-  warming.sims.skewness.15[ ,i] <- SlidingWindow(FUN = "skewness", data = warming.incidence.daily[ ,i], window = 15, step = 1)
-  warming.sims.kurtosis.15[ ,i] <- SlidingWindow(FUN = "kurtosis", data = warming.incidence.daily[ ,i], window = 15, step = 1)
+  warming.sims.sk.15[ ,i] <- SlidingWindow(FUN = "skewness", data = warming.incidence.daily[ ,i], window = 15, step = 1)
+  warming.sims.kt.15[ ,i] <- SlidingWindow(FUN = "kurtosis", data = warming.incidence.daily[ ,i], window = 15, step = 1)
 }
 
 ## Variance
-constant.sims.variance.15 <- constant.sims.sd.15*constant.sims.sd.15
-warming.sims.variance.15 <- warming.sims.sd.15*warming.sims.sd.15
+constant.sims.var.15 <- constant.sims.sd.15*constant.sims.sd.15
+warming.sims.var.15 <- warming.sims.sd.15*warming.sims.sd.15
 
 ## Co-Efficient of Variation
 constant.sims.cv.15 <- constant.sims.sd.15/constant.sims.mean.15
 warming.sims.cv.15 <- warming.sims.sd.15/warming.sims.mean.15
 
 ## Index of Dispersion
-constant.sims.id.15 <- constant.sims.variance.15/constant.sims.mean.15
-warming.sims.id.15 <- warming.sims.variance.15/warming.sims.mean.15
+constant.sims.id.15 <- constant.sims.var.15/constant.sims.mean.15
+warming.sims.id.15 <- warming.sims.var.15/warming.sims.mean.15
 
 ## First Difference Variance
-constant.sims.first.diff.variance.15 <- matrix(ncol = num.of.sims, nrow = 105)
-warming.sims.first.diff.variance.15 <- matrix(ncol = num.of.sims, nrow = 105)
+constant.sims.fdv.15 <- matrix(ncol = num.of.sims, nrow = 105)
+warming.sims.fdv.15 <- matrix(ncol = num.of.sims, nrow = 105)
 for(i in 1:num.of.sims){
   for(j in 2:105){
-    constant.sims.first.diff.variance.15[j - 1,i] <- constant.sims.variance.15[j,i] - constant.sims.variance.15[j - 1,i]
-    warming.sims.first.diff.variance.15[j - 1,i] <- warming.sims.variance.15[j,i] - warming.sims.variance.15[j - 1,i]
+    constant.sims.fdv.15[j - 1,i] <- constant.sims.var.15[j,i] - constant.sims.var.15[j - 1,i]
+    warming.sims.fdv.15[j - 1,i] <- warming.sims.var.15[j,i] - warming.sims.var.15[j - 1,i]
   }
 }
 
 ## Autocorrelation and Autocovariance
 constant.sims.cor.15 <- matrix(ncol = num.of.sims, nrow = 120)
-constant.sims.cov.15 <- matrix(ncol = num.of.sims, nrow = 120)
+constant.sims.acv.15 <- matrix(ncol = num.of.sims, nrow = 120)
 for(j in 1:num.of.sims){
   for(i in 1:105){
     window.start <- i
     window.end <- i + 14
     segment <- constant.incidence.daily[c(window.start:window.end),j]
     constant.sims.cor.15[i, j] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
-    constant.sims.cov.15[i, j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+    constant.sims.acv.15[i, j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
   }
 }
 warming.sims.cor.15 <- matrix(ncol = num.of.sims,nrow = 120)
-warming.sims.cov.15 <- matrix(ncol = num.of.sims,nrow = 120)
+warming.sims.acv.15 <- matrix(ncol = num.of.sims,nrow = 120)
 for(j in 1:num.of.sims){
   for(i in 1:105){
     window.start <- i
     window.end <- i + 14
     segment <- warming.incidence.daily[c(window.start:window.end),j]
     warming.sims.cor.15[i, j] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
-    warming.sims.cov.15[i, j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+    warming.sims.acv.15[i, j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
   }
 }
 
 ## Decay Time
-constant.sims.decay.time.15 <- matrix(ncol = num.of.sims, nrow = 45)
-warming.sims.decay.time.15 <- matrix(nco = num.of.sims, nrow = 45)
+constant.sims.dt.15 <- matrix(ncol = num.of.sims, nrow = 45)
+warming.sims.dt.15 <- matrix(nco = num.of.sims, nrow = 45)
 for(i in 1:num.of.sims){
   for(j in 1:45){
-    suppressWarnings(constant.sims.decay.time.15[j, i] <- -j/log(constant.sims.cor.15[j, i]))
-    suppressWarnings(warming.sims.decay.time.15[j, i] <- -j/log(warming.sims.cor.15[j, i]))
+    suppressWarnings(constant.sims.dt.15[j, i] <- -j/log(constant.sims.cor.15[j, i]))
+    suppressWarnings(warming.sims.dt.15[j, i] <- -j/log(warming.sims.cor.15[j, i]))
   }
 }
 
 ## Kendall's Tau
-constant.sims.variance.15 <- constant.sims.variance.15[1:45, ]
+constant.sims.var.15 <- constant.sims.var.15[1:45, ]
 constant.sims.mean.15 <- constant.sims.mean.15[1:45, ]
 constant.sims.cv.15 <- constant.sims.cv.15[1:45, ]
-constant.sims.skewness.15 <- constant.sims.skewness.15[1:45, ]
-constant.sims.kurtosis.15 <- constant.sims.kurtosis.15[1:45, ]
+constant.sims.sk.15 <- constant.sims.sk.15[1:45, ]
+constant.sims.kt.15 <- constant.sims.kt.15[1:45, ]
 constant.sims.id.15 <- constant.sims.id.15[1:45, ]
 constant.sims.cor.15 <- constant.sims.cor.15[1:45, ]
-constant.sims.cov.15 <- constant.sims.cov.15[1:45, ]
-constant.sims.first.diff.variance.15 <- constant.sims.first.diff.variance.15[1:45, ]
-constant.sims.decay.time.15 <- constant.sims.decay.time.15[1:45, ]
-warming.sims.variance.15 <- warming.sims.variance.15[1:45, ]
+constant.sims.acv.15 <- constant.sims.acv.15[1:45, ]
+constant.sims.fdv.15 <- constant.sims.fdv.15[1:45, ]
+constant.sims.dt.15 <- constant.sims.dt.15[1:45, ]
+warming.sims.var.15 <- warming.sims.var.15[1:45, ]
 warming.sims.mean.15 <- warming.sims.mean.15[1:45, ]
 warming.sims.cv.15 <- warming.sims.cv.15[1:45, ]
-warming.sims.skewness.15 <- warming.sims.skewness.15[1:45, ]
-warming.sims.kurtosis.15 <- warming.sims.kurtosis.15[1:45, ]
+warming.sims.sk.15 <- warming.sims.sk.15[1:45, ]
+warming.sims.kt.15 <- warming.sims.kt.15[1:45, ]
 warming.sims.id.15 <- warming.sims.id.15[1:45, ]
 warming.sims.cor.15 <- warming.sims.cor.15[1:45, ]
-warming.sims.cov.15 <- warming.sims.cov.15[1:45, ]
-warming.sims.first.diff.variance.15 <-  warming.sims.first.diff.variance.15[1:45, ]
-warming.sims.decay.time.15 <-  warming.sims.decay.time.15[1:45, ]
-constant.sims.variance.15.tau <- c()
+warming.sims.acv.15 <- warming.sims.acv.15[1:45, ]
+warming.sims.fdv.15 <-  warming.sims.fdv.15[1:45, ]
+warming.sims.dt.15 <-  warming.sims.dt.15[1:45, ]
+constant.sims.var.15.tau <- c()
 constant.sims.mean.15.tau <- c()
 constant.sims.cv.15.tau <- c()
-constant.sims.skewness.15.tau <- c()
-constant.sims.kurtosis.15.tau <- c()
+constant.sims.sk.15.tau <- c()
+constant.sims.kt.15.tau <- c()
 constant.sims.id.15.tau <- c()
 constant.sims.cor.15.tau <- c()
-constant.sims.cov.15.tau <- c()
-constant.sims.first.diff.variance.15.tau <- c()
-constant.sims.decay.time.15.tau <- c()
-warming.sims.variance.15.tau <- c()
+constant.sims.acv.15.tau <- c()
+constant.sims.fdv.15.tau <- c()
+constant.sims.dt.15.tau <- c()
+warming.sims.var.15.tau <- c()
 warming.sims.mean.15.tau <- c()
 warming.sims.cv.15.tau <- c()
-warming.sims.skewness.15.tau <- c()
-warming.sims.kurtosis.15.tau <- c()
+warming.sims.sk.15.tau <- c()
+warming.sims.kt.15.tau <- c()
 warming.sims.id.15.tau <- c()
 warming.sims.cor.15.tau <- c()
-warming.sims.cov.15.tau <- c()
-warming.sims.first.diff.variance.15.tau <- c()
-warming.sims.decay.time.15.tau <- c()
+warming.sims.acv.15.tau <- c()
+warming.sims.fdv.15.tau <- c()
+warming.sims.dt.15.tau <- c()
 time.15 <- c(1:45)
 for(i in 1:num.of.sims){
   constant.sims.mean.15.tau[i] <- cor(constant.sims.mean.15[ , i], time.15, method = "kendall")
-  constant.sims.skewness.15.tau[i] <- cor(constant.sims.skewness.15[ , i], time.15, method = "kendall")
-  constant.sims.kurtosis.15.tau[i] <- cor(constant.sims.kurtosis.15[ , i], time.15, method = "kendall")
-  constant.sims.variance.15.tau[i] <- cor(constant.sims.variance.15[ , i], time.15, method = "kendall")
+  constant.sims.sk.15.tau[i] <- cor(constant.sims.sk.15[ , i], time.15, method = "kendall")
+  constant.sims.kt.15.tau[i] <- cor(constant.sims.kt.15[ , i], time.15, method = "kendall")
+  constant.sims.var.15.tau[i] <- cor(constant.sims.var.15[ , i], time.15, method = "kendall")
   constant.sims.cv.15.tau[i] <- cor(constant.sims.cv.15[ , i], time.15, method = "kendall")
   constant.sims.id.15.tau[i] <- cor(constant.sims.id.15[ , i], time.15, method = "kendall")
-  constant.sims.first.diff.variance.15.tau[i] <- cor(constant.sims.first.diff.variance.15[ , i], time.15, method = "kendall")
+  constant.sims.fdv.15.tau[i] <- cor(constant.sims.fdv.15[ , i], time.15, method = "kendall")
   constant.sims.cor.15.tau[i] <- cor(constant.sims.cor.15[ , i], time.15, method = "kendall")
-  constant.sims.cov.15.tau[i] <- cor(constant.sims.cov.15[ , i], time.15, method = "kendall")
-  constant.sims.decay.time.15.tau[i] <- cor(constant.sims.decay.time.15[ , i], time.15, method = "kendall")
+  constant.sims.acv.15.tau[i] <- cor(constant.sims.acv.15[ , i], time.15, method = "kendall")
+  constant.sims.dt.15.tau[i] <- cor(constant.sims.dt.15[ , i], time.15, method = "kendall")
   
   warming.sims.mean.15.tau[i] <- cor(warming.sims.mean.15[ , i], time.15, method = "kendall")
-  warming.sims.skewness.15.tau[i] <- cor(warming.sims.skewness.15[ , i], time.15, method = "kendall")
-  warming.sims.kurtosis.15.tau[i] <- cor(warming.sims.kurtosis.15[ , i], time.15, method = "kendall")
-  warming.sims.variance.15.tau[i] <- cor(warming.sims.variance.15[ , i], time.15, method = "kendall")
+  warming.sims.sk.15.tau[i] <- cor(warming.sims.sk.15[ , i], time.15, method = "kendall")
+  warming.sims.kt.15.tau[i] <- cor(warming.sims.kt.15[ , i], time.15, method = "kendall")
+  warming.sims.var.15.tau[i] <- cor(warming.sims.var.15[ , i], time.15, method = "kendall")
   warming.sims.cv.15.tau[i] <- cor(warming.sims.cv.15[ , i], time.15, method = "kendall")
   warming.sims.id.15.tau[i] <- cor(warming.sims.id.15[ , i], time.15, method = "kendall")
-  warming.sims.first.diff.variance.15.tau[i] <- cor(warming.sims.first.diff.variance.15[ , i], time.15, method = "kendall")
+  warming.sims.fdv.15.tau[i] <- cor(warming.sims.fdv.15[ , i], time.15, method = "kendall")
   warming.sims.cor.15.tau[i] <- cor(warming.sims.cor.15[ , i], time.15, method = "kendall")
-  warming.sims.cov.15.tau[i] <- cor(warming.sims.cov.15[ , i], time.15, method = "kendall")
-  warming.sims.decay.time.15.tau[i] <- cor(warming.sims.decay.time.15[ , i], time.15, method = "kendall")
+  warming.sims.acv.15.tau[i] <- cor(warming.sims.acv.15[ , i], time.15, method = "kendall")
+  warming.sims.dt.15.tau[i] <- cor(warming.sims.dt.15[ , i], time.15, method = "kendall")
 }
 ```
 
@@ -240,29 +241,29 @@ for (i in 1:10){
 ### Skewness
 
 ```{r}
-c.grp1 <- constant.sims.skewness.15.tau[1:100]
-c.grp2 <- constant.sims.skewness.15.tau[101:200]
-c.grp3 <- constant.sims.skewness.15.tau[201:300]
-c.grp4 <- constant.sims.skewness.15.tau[301:400]
-c.grp5 <- constant.sims.skewness.15.tau[401:500]
-c.grp6 <- constant.sims.skewness.15.tau[501:600]
-c.grp7 <- constant.sims.skewness.15.tau[601:700]
-c.grp8 <- constant.sims.skewness.15.tau[701:800]
-c.grp9 <- constant.sims.skewness.15.tau[801:900]
-c.grp10 <- constant.sims.skewness.15.tau[901:1000]
+c.grp1 <- constant.sims.sk.15.tau[1:100]
+c.grp2 <- constant.sims.sk.15.tau[101:200]
+c.grp3 <- constant.sims.sk.15.tau[201:300]
+c.grp4 <- constant.sims.sk.15.tau[301:400]
+c.grp5 <- constant.sims.sk.15.tau[401:500]
+c.grp6 <- constant.sims.sk.15.tau[501:600]
+c.grp7 <- constant.sims.sk.15.tau[601:700]
+c.grp8 <- constant.sims.sk.15.tau[701:800]
+c.grp9 <- constant.sims.sk.15.tau[801:900]
+c.grp10 <- constant.sims.sk.15.tau[901:1000]
 const.taus <- cbind(c.grp1, c.grp2, c.grp3, c.grp4, c.grp5,
                     c.grp6, c.grp7, c.grp8, c.grp9, c.grp10)
 
-w.grp1 <- warming.sims.skewness.15.tau[1:100]
-w.grp2 <- warming.sims.skewness.15.tau[101:200]
-w.grp3 <- warming.sims.skewness.15.tau[201:300]
-w.grp4 <- warming.sims.skewness.15.tau[301:400]
-w.grp5 <- warming.sims.skewness.15.tau[401:500]
-w.grp6 <- warming.sims.skewness.15.tau[501:600]
-w.grp7 <- warming.sims.skewness.15.tau[601:700]
-w.grp8 <- warming.sims.skewness.15.tau[701:800]
-w.grp9 <- warming.sims.skewness.15.tau[801:900]
-w.grp10 <- warming.sims.skewness.15.tau[901:1000]
+w.grp1 <- warming.sims.sk.15.tau[1:100]
+w.grp2 <- warming.sims.sk.15.tau[101:200]
+w.grp3 <- warming.sims.sk.15.tau[201:300]
+w.grp4 <- warming.sims.sk.15.tau[301:400]
+w.grp5 <- warming.sims.sk.15.tau[401:500]
+w.grp6 <- warming.sims.sk.15.tau[501:600]
+w.grp7 <- warming.sims.sk.15.tau[601:700]
+w.grp8 <- warming.sims.sk.15.tau[701:800]
+w.grp9 <- warming.sims.sk.15.tau[801:900]
+w.grp10 <- warming.sims.sk.15.tau[901:1000]
 warm.taus <- cbind(w.grp1, w.grp2, w.grp3, w.grp4, w.grp5,
                    w.grp6, w.grp7, w.grp8, w.grp9, w.grp10)
 
@@ -276,29 +277,29 @@ for (i in 1:10){
 ### Kurtosis
 
 ```{r}
-c.grp1 <- constant.sims.kurtosis.15.tau[1:100]
-c.grp2 <- constant.sims.kurtosis.15.tau[101:200]
-c.grp3 <- constant.sims.kurtosis.15.tau[201:300]
-c.grp4 <- constant.sims.kurtosis.15.tau[301:400]
-c.grp5 <- constant.sims.kurtosis.15.tau[401:500]
-c.grp6 <- constant.sims.kurtosis.15.tau[501:600]
-c.grp7 <- constant.sims.kurtosis.15.tau[601:700]
-c.grp8 <- constant.sims.kurtosis.15.tau[701:800]
-c.grp9 <- constant.sims.kurtosis.15.tau[801:900]
-c.grp10 <- constant.sims.kurtosis.15.tau[901:1000]
+c.grp1 <- constant.sims.kt.15.tau[1:100]
+c.grp2 <- constant.sims.kt.15.tau[101:200]
+c.grp3 <- constant.sims.kt.15.tau[201:300]
+c.grp4 <- constant.sims.kt.15.tau[301:400]
+c.grp5 <- constant.sims.kt.15.tau[401:500]
+c.grp6 <- constant.sims.kt.15.tau[501:600]
+c.grp7 <- constant.sims.kt.15.tau[601:700]
+c.grp8 <- constant.sims.kt.15.tau[701:800]
+c.grp9 <- constant.sims.kt.15.tau[801:900]
+c.grp10 <- constant.sims.kt.15.tau[901:1000]
 const.taus <- cbind(c.grp1, c.grp2, c.grp3, c.grp4, c.grp5,
                     c.grp6, c.grp7, c.grp8, c.grp9, c.grp10)
 
-w.grp1 <- warming.sims.kurtosis.15.tau[1:100]
-w.grp2 <- warming.sims.kurtosis.15.tau[101:200]
-w.grp3 <- warming.sims.kurtosis.15.tau[201:300]
-w.grp4 <- warming.sims.kurtosis.15.tau[301:400]
-w.grp5 <- warming.sims.kurtosis.15.tau[401:500]
-w.grp6 <- warming.sims.kurtosis.15.tau[501:600]
-w.grp7 <- warming.sims.kurtosis.15.tau[601:700]
-w.grp8 <- warming.sims.kurtosis.15.tau[701:800]
-w.grp9 <- warming.sims.kurtosis.15.tau[801:900]
-w.grp10 <- warming.sims.kurtosis.15.tau[901:1000]
+w.grp1 <- warming.sims.kt.15.tau[1:100]
+w.grp2 <- warming.sims.kt.15.tau[101:200]
+w.grp3 <- warming.sims.kt.15.tau[201:300]
+w.grp4 <- warming.sims.kt.15.tau[301:400]
+w.grp5 <- warming.sims.kt.15.tau[401:500]
+w.grp6 <- warming.sims.kt.15.tau[501:600]
+w.grp7 <- warming.sims.kt.15.tau[601:700]
+w.grp8 <- warming.sims.kt.15.tau[701:800]
+w.grp9 <- warming.sims.kt.15.tau[801:900]
+w.grp10 <- warming.sims.kt.15.tau[901:1000]
 warm.taus <- cbind(w.grp1, w.grp2, w.grp3, w.grp4, w.grp5,
                    w.grp6, w.grp7, w.grp8, w.grp9, w.grp10)
 
@@ -312,29 +313,29 @@ for (i in 1:10){
 ### Variance
 
 ```{r}
-c.grp1 <- constant.sims.variance.15.tau[1:100]
-c.grp2 <- constant.sims.variance.15.tau[101:200]
-c.grp3 <- constant.sims.variance.15.tau[201:300]
-c.grp4 <- constant.sims.variance.15.tau[301:400]
-c.grp5 <- constant.sims.variance.15.tau[401:500]
-c.grp6 <- constant.sims.variance.15.tau[501:600]
-c.grp7 <- constant.sims.variance.15.tau[601:700]
-c.grp8 <- constant.sims.variance.15.tau[701:800]
-c.grp9 <- constant.sims.variance.15.tau[801:900]
-c.grp10 <- constant.sims.variance.15.tau[901:1000]
+c.grp1 <- constant.sims.var.15.tau[1:100]
+c.grp2 <- constant.sims.var.15.tau[101:200]
+c.grp3 <- constant.sims.var.15.tau[201:300]
+c.grp4 <- constant.sims.var.15.tau[301:400]
+c.grp5 <- constant.sims.var.15.tau[401:500]
+c.grp6 <- constant.sims.var.15.tau[501:600]
+c.grp7 <- constant.sims.var.15.tau[601:700]
+c.grp8 <- constant.sims.var.15.tau[701:800]
+c.grp9 <- constant.sims.var.15.tau[801:900]
+c.grp10 <- constant.sims.var.15.tau[901:1000]
 const.taus <- cbind(c.grp1, c.grp2, c.grp3, c.grp4, c.grp5,
                     c.grp6, c.grp7, c.grp8, c.grp9, c.grp10)
 
-w.grp1 <- warming.sims.variance.15.tau[1:100]
-w.grp2 <- warming.sims.variance.15.tau[101:200]
-w.grp3 <- warming.sims.variance.15.tau[201:300]
-w.grp4 <- warming.sims.variance.15.tau[301:400]
-w.grp5 <- warming.sims.variance.15.tau[401:500]
-w.grp6 <- warming.sims.variance.15.tau[501:600]
-w.grp7 <- warming.sims.variance.15.tau[601:700]
-w.grp8 <- warming.sims.variance.15.tau[701:800]
-w.grp9 <- warming.sims.variance.15.tau[801:900]
-w.grp10 <- warming.sims.variance.15.tau[901:1000]
+w.grp1 <- warming.sims.var.15.tau[1:100]
+w.grp2 <- warming.sims.var.15.tau[101:200]
+w.grp3 <- warming.sims.var.15.tau[201:300]
+w.grp4 <- warming.sims.var.15.tau[301:400]
+w.grp5 <- warming.sims.var.15.tau[401:500]
+w.grp6 <- warming.sims.var.15.tau[501:600]
+w.grp7 <- warming.sims.var.15.tau[601:700]
+w.grp8 <- warming.sims.var.15.tau[701:800]
+w.grp9 <- warming.sims.var.15.tau[801:900]
+w.grp10 <- warming.sims.var.15.tau[901:1000]
 warm.taus <- cbind(w.grp1, w.grp2, w.grp3, w.grp4, w.grp5,
                    w.grp6, w.grp7, w.grp8, w.grp9, w.grp10)
 
@@ -420,29 +421,29 @@ for (i in 1:10){
 ### First Difference Variance
 
 ```{r}
-c.grp1 <- constant.sims.first.diff.variance.15.tau[1:100]
-c.grp2 <- constant.sims.first.diff.variance.15.tau[101:200]
-c.grp3 <- constant.sims.first.diff.variance.15.tau[201:300]
-c.grp4 <- constant.sims.first.diff.variance.15.tau[301:400]
-c.grp5 <- constant.sims.first.diff.variance.15.tau[401:500]
-c.grp6 <- constant.sims.first.diff.variance.15.tau[501:600]
-c.grp7 <- constant.sims.first.diff.variance.15.tau[601:700]
-c.grp8 <- constant.sims.first.diff.variance.15.tau[701:800]
-c.grp9 <- constant.sims.first.diff.variance.15.tau[801:900]
-c.grp10 <- constant.sims.first.diff.variance.15.tau[901:1000]
+c.grp1 <- constant.sims.fdv.15.tau[1:100]
+c.grp2 <- constant.sims.fdv.15.tau[101:200]
+c.grp3 <- constant.sims.fdv.15.tau[201:300]
+c.grp4 <- constant.sims.fdv.15.tau[301:400]
+c.grp5 <- constant.sims.fdv.15.tau[401:500]
+c.grp6 <- constant.sims.fdv.15.tau[501:600]
+c.grp7 <- constant.sims.fdv.15.tau[601:700]
+c.grp8 <- constant.sims.fdv.15.tau[701:800]
+c.grp9 <- constant.sims.fdv.15.tau[801:900]
+c.grp10 <- constant.sims.fdv.15.tau[901:1000]
 const.taus <- cbind(c.grp1, c.grp2, c.grp3, c.grp4, c.grp5,
                     c.grp6, c.grp7, c.grp8, c.grp9, c.grp10)
 
-w.grp1 <- warming.sims.first.diff.variance.15.tau[1:100]
-w.grp2 <- warming.sims.first.diff.variance.15.tau[101:200]
-w.grp3 <- warming.sims.first.diff.variance.15.tau[201:300]
-w.grp4 <- warming.sims.first.diff.variance.15.tau[301:400]
-w.grp5 <- warming.sims.first.diff.variance.15.tau[401:500]
-w.grp6 <- warming.sims.first.diff.variance.15.tau[501:600]
-w.grp7 <- warming.sims.first.diff.variance.15.tau[601:700]
-w.grp8 <- warming.sims.first.diff.variance.15.tau[701:800]
-w.grp9 <- warming.sims.first.diff.variance.15.tau[801:900]
-w.grp10 <- warming.sims.first.diff.variance.15.tau[901:1000]
+w.grp1 <- warming.sims.fdv.15.tau[1:100]
+w.grp2 <- warming.sims.fdv.15.tau[101:200]
+w.grp3 <- warming.sims.fdv.15.tau[201:300]
+w.grp4 <- warming.sims.fdv.15.tau[301:400]
+w.grp5 <- warming.sims.fdv.15.tau[401:500]
+w.grp6 <- warming.sims.fdv.15.tau[501:600]
+w.grp7 <- warming.sims.fdv.15.tau[601:700]
+w.grp8 <- warming.sims.fdv.15.tau[701:800]
+w.grp9 <- warming.sims.fdv.15.tau[801:900]
+w.grp10 <- warming.sims.fdv.15.tau[901:1000]
 warm.taus <- cbind(w.grp1, w.grp2, w.grp3, w.grp4, w.grp5,
                    w.grp6, w.grp7, w.grp8, w.grp9, w.grp10)
 
@@ -492,29 +493,29 @@ for (i in 1:10){
 ### Autocovariance
 
 ```{r}
-c.grp1 <- constant.sims.cov.15.tau[1:100]
-c.grp2 <- constant.sims.cov.15.tau[101:200]
-c.grp3 <- constant.sims.cov.15.tau[201:300]
-c.grp4 <- constant.sims.cov.15.tau[301:400]
-c.grp5 <- constant.sims.cov.15.tau[401:500]
-c.grp6 <- constant.sims.cov.15.tau[501:600]
-c.grp7 <- constant.sims.cov.15.tau[601:700]
-c.grp8 <- constant.sims.cov.15.tau[701:800]
-c.grp9 <- constant.sims.cov.15.tau[801:900]
-c.grp10 <- constant.sims.cov.15.tau[901:1000]
+c.grp1 <- constant.sims.acv.15.tau[1:100]
+c.grp2 <- constant.sims.acv.15.tau[101:200]
+c.grp3 <- constant.sims.acv.15.tau[201:300]
+c.grp4 <- constant.sims.acv.15.tau[301:400]
+c.grp5 <- constant.sims.acv.15.tau[401:500]
+c.grp6 <- constant.sims.acv.15.tau[501:600]
+c.grp7 <- constant.sims.acv.15.tau[601:700]
+c.grp8 <- constant.sims.acv.15.tau[701:800]
+c.grp9 <- constant.sims.acv.15.tau[801:900]
+c.grp10 <- constant.sims.acv.15.tau[901:1000]
 const.taus <- cbind(c.grp1, c.grp2, c.grp3, c.grp4, c.grp5,
                     c.grp6, c.grp7, c.grp8, c.grp9, c.grp10)
 
-w.grp1 <- warming.sims.cov.15.tau[1:100]
-w.grp2 <- warming.sims.cov.15.tau[101:200]
-w.grp3 <- warming.sims.cov.15.tau[201:300]
-w.grp4 <- warming.sims.cov.15.tau[301:400]
-w.grp5 <- warming.sims.cov.15.tau[401:500]
-w.grp6 <- warming.sims.cov.15.tau[501:600]
-w.grp7 <- warming.sims.cov.15.tau[601:700]
-w.grp8 <- warming.sims.cov.15.tau[701:800]
-w.grp9 <- warming.sims.cov.15.tau[801:900]
-w.grp10 <- warming.sims.cov.15.tau[901:1000]
+w.grp1 <- warming.sims.acv.15.tau[1:100]
+w.grp2 <- warming.sims.acv.15.tau[101:200]
+w.grp3 <- warming.sims.acv.15.tau[201:300]
+w.grp4 <- warming.sims.acv.15.tau[301:400]
+w.grp5 <- warming.sims.acv.15.tau[401:500]
+w.grp6 <- warming.sims.acv.15.tau[501:600]
+w.grp7 <- warming.sims.acv.15.tau[601:700]
+w.grp8 <- warming.sims.acv.15.tau[701:800]
+w.grp9 <- warming.sims.acv.15.tau[801:900]
+w.grp10 <- warming.sims.acv.15.tau[901:1000]
 warm.taus <- cbind(w.grp1, w.grp2, w.grp3, w.grp4, w.grp5,
                    w.grp6, w.grp7, w.grp8, w.grp9, w.grp10)
 
@@ -528,29 +529,29 @@ for (i in 1:10){
 ### Decay Time
 
 ```{r}
-c.grp1 <- constant.sims.decay.time.15.tau[1:100]
-c.grp2 <- constant.sims.decay.time.15.tau[101:200]
-c.grp3 <- constant.sims.decay.time.15.tau[201:300]
-c.grp4 <- constant.sims.decay.time.15.tau[301:400]
-c.grp5 <- constant.sims.decay.time.15.tau[401:500]
-c.grp6 <- constant.sims.decay.time.15.tau[501:600]
-c.grp7 <- constant.sims.decay.time.15.tau[601:700]
-c.grp8 <- constant.sims.decay.time.15.tau[701:800]
-c.grp9 <- constant.sims.decay.time.15.tau[801:900]
-c.grp10 <- constant.sims.decay.time.15.tau[901:1000]
+c.grp1 <- constant.sims.dt.15.tau[1:100]
+c.grp2 <- constant.sims.dt.15.tau[101:200]
+c.grp3 <- constant.sims.dt.15.tau[201:300]
+c.grp4 <- constant.sims.dt.15.tau[301:400]
+c.grp5 <- constant.sims.dt.15.tau[401:500]
+c.grp6 <- constant.sims.dt.15.tau[501:600]
+c.grp7 <- constant.sims.dt.15.tau[601:700]
+c.grp8 <- constant.sims.dt.15.tau[701:800]
+c.grp9 <- constant.sims.dt.15.tau[801:900]
+c.grp10 <- constant.sims.dt.15.tau[901:1000]
 const.taus <- cbind(c.grp1, c.grp2, c.grp3, c.grp4, c.grp5,
                     c.grp6, c.grp7, c.grp8, c.grp9, c.grp10)
 
-w.grp1 <- warming.sims.decay.time.15.tau[1:100]
-w.grp2 <- warming.sims.decay.time.15.tau[101:200]
-w.grp3 <- warming.sims.decay.time.15.tau[201:300]
-w.grp4 <- warming.sims.decay.time.15.tau[301:400]
-w.grp5 <- warming.sims.decay.time.15.tau[401:500]
-w.grp6 <- warming.sims.decay.time.15.tau[501:600]
-w.grp7 <- warming.sims.decay.time.15.tau[601:700]
-w.grp8 <- warming.sims.decay.time.15.tau[701:800]
-w.grp9 <- warming.sims.decay.time.15.tau[801:900]
-w.grp10 <- warming.sims.decay.time.15.tau[901:1000]
+w.grp1 <- warming.sims.dt.15.tau[1:100]
+w.grp2 <- warming.sims.dt.15.tau[101:200]
+w.grp3 <- warming.sims.dt.15.tau[201:300]
+w.grp4 <- warming.sims.dt.15.tau[301:400]
+w.grp5 <- warming.sims.dt.15.tau[401:500]
+w.grp6 <- warming.sims.dt.15.tau[501:600]
+w.grp7 <- warming.sims.dt.15.tau[601:700]
+w.grp8 <- warming.sims.dt.15.tau[701:800]
+w.grp9 <- warming.sims.dt.15.tau[801:900]
+w.grp10 <- warming.sims.dt.15.tau[901:1000]
 warm.taus <- cbind(w.grp1, w.grp2, w.grp3, w.grp4, w.grp5,
                    w.grp6, w.grp7, w.grp8, w.grp9, w.grp10)
 
@@ -601,176 +602,176 @@ smooth.sim.warm.b3 <- readRDS("Objects/smooth-sim-warm-b3.rds")
 # Making empty matricies
 constant.sims.sd.15 <- matrix(nrow = 105, ncol = num.of.sims)
 constant.sims.mean.15 <- matrix(nrow = 105, ncol = num.of.sims)
-constant.sims.skewness.15 <- matrix(nrow = 105, ncol = num.of.sims)
-constant.sims.kurtosis.15 <- matrix(nrow = 105, ncol = num.of.sims)
+constant.sims.sk.15 <- matrix(nrow = 105, ncol = num.of.sims)
+constant.sims.kt.15 <- matrix(nrow = 105, ncol = num.of.sims)
 warming.sims.sd.15 <- matrix(nrow = 105, ncol = num.of.sims)
 warming.sims.mean.15 <- matrix(nrow = 105, ncol = num.of.sims)
-warming.sims.skewness.15 <- matrix(nrow = 105, ncol = num.of.sims)
-warming.sims.kurtosis.15 <- matrix(nrow = 105, ncol = num.of.sims)
+warming.sims.sk.15 <- matrix(nrow = 105, ncol = num.of.sims)
+warming.sims.kt.15 <- matrix(nrow = 105, ncol = num.of.sims)
 for(i in 1:num.of.sims){
   constant.sims.sd.15[ ,i] <- SlidingWindow(FUN = "sd", data = smooth.sim.const.b3[,i], window = 15,step = 1)
   constant.sims.mean.15[ ,i] <- SlidingWindow(FUN = "mean", data = smooth.sim.const.b3[,i], window = 15, step = 1)
-  constant.sims.skewness.15[ ,i] <- SlidingWindow(FUN = "skewness", data = smooth.sim.const.b3[,i], window = 15, step = 1)
-  constant.sims.kurtosis.15[ ,i] <- SlidingWindow(FUN = "kurtosis", data = smooth.sim.const.b3[,i], window = 15, step = 1)
+  constant.sims.sk.15[ ,i] <- SlidingWindow(FUN = "skewness", data = smooth.sim.const.b3[,i], window = 15, step = 1)
+  constant.sims.kt.15[ ,i] <- SlidingWindow(FUN = "kurtosis", data = smooth.sim.const.b3[,i], window = 15, step = 1)
 }
 for(i in 1:num.of.sims){
   warming.sims.sd.15[ ,i] <- SlidingWindow(FUN = "sd", data = smooth.sim.warm.b3[,i], window = 15,step = 1)
   warming.sims.mean.15[ ,i] <- SlidingWindow(FUN = "mean", data = smooth.sim.warm.b3[,i], window = 15, step = 1)
-  warming.sims.skewness.15[ ,i] <- SlidingWindow(FUN = "skewness", data = smooth.sim.warm.b3[,i], window = 15, step = 1)
-  warming.sims.kurtosis.15[ ,i] <- SlidingWindow(FUN = "kurtosis", data = smooth.sim.warm.b3[,i], window = 15, step = 1)
+  warming.sims.sk.15[ ,i] <- SlidingWindow(FUN = "skewness", data = smooth.sim.warm.b3[,i], window = 15, step = 1)
+  warming.sims.kt.15[ ,i] <- SlidingWindow(FUN = "kurtosis", data = smooth.sim.warm.b3[,i], window = 15, step = 1)
 }
 
 ## Variance
-constant.sims.variance.15 <- constant.sims.sd.15*constant.sims.sd.15
-warming.sims.variance.15 <- warming.sims.sd.15*warming.sims.sd.15
+constant.sims.var.15 <- constant.sims.sd.15*constant.sims.sd.15
+warming.sims.var.15 <- warming.sims.sd.15*warming.sims.sd.15
 
 ## Co-Efficient of Variation
 constant.sims.cv.15 <- constant.sims.sd.15/constant.sims.mean.15
 warming.sims.cv.15 <- warming.sims.sd.15/warming.sims.mean.15
 
 ## Index of Dispersion
-constant.sims.id.15 <- constant.sims.variance.15/constant.sims.mean.15
-warming.sims.id.15 <- warming.sims.variance.15/warming.sims.mean.15
+constant.sims.id.15 <- constant.sims.var.15/constant.sims.mean.15
+warming.sims.id.15 <- warming.sims.var.15/warming.sims.mean.15
 
 ## First Difference Variance
-constant.sims.first.diff.variance.15 <- matrix(ncol = num.of.sims, nrow = 105)
-warming.sims.first.diff.variance.15 <- matrix(ncol = num.of.sims, nrow = 105)
+constant.sims.fdv.15 <- matrix(ncol = num.of.sims, nrow = 105)
+warming.sims.fdv.15 <- matrix(ncol = num.of.sims, nrow = 105)
 for(i in 1:num.of.sims){
   for(j in 2:105){
-    constant.sims.first.diff.variance.15[j - 1,i] <- constant.sims.variance.15[j,i] - constant.sims.variance.15[j - 1,i]
-    warming.sims.first.diff.variance.15[j - 1,i] <- warming.sims.variance.15[j,i] - warming.sims.variance.15[j - 1,i]
+    constant.sims.fdv.15[j - 1,i] <- constant.sims.var.15[j,i] - constant.sims.var.15[j - 1,i]
+    warming.sims.fdv.15[j - 1,i] <- warming.sims.var.15[j,i] - warming.sims.var.15[j - 1,i]
   }
 }
-constant.sims.first.diff.variance.15 <- constant.sims.first.diff.variance.15[1:104, ]
-warming.sims.first.diff.variance.15 <- warming.sims.first.diff.variance.15[1:104, ]
+constant.sims.fdv.15 <- constant.sims.fdv.15[1:104, ]
+warming.sims.fdv.15 <- warming.sims.fdv.15[1:104, ]
 
 ## Autocorrelation and Autocovariance
 constant.sims.cor.15 <- matrix(ncol = num.of.sims, nrow = 120)
-constant.sims.cov.15 <- matrix(ncol = num.of.sims, nrow = 120)
+constant.sims.acv.15 <- matrix(ncol = num.of.sims, nrow = 120)
 for(j in 1:num.of.sims){
   for(i in 1:105){
     window.start <- i
     window.end <- i + 14
     segment <- smooth.sim.const.b3[c(window.start:window.end),j]
     constant.sims.cor.15[i,j] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
-    constant.sims.cov.15[i,j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+    constant.sims.acv.15[i,j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
   }
 }
 warming.sims.cor.15 <- matrix(ncol=num.of.sims,nrow = 120)
-warming.sims.cov.15 <- matrix(ncol=num.of.sims,nrow = 120)
+warming.sims.acv.15 <- matrix(ncol=num.of.sims,nrow = 120)
 for(j in 1:num.of.sims){
   for(i in 1:105){
     window.start <- i
     window.end <- i + 14
     segment <- smooth.sim.warm.b3[c(window.start:window.end),j]
     warming.sims.cor.15[i,j] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
-    warming.sims.cov.15[i,j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+    warming.sims.acv.15[i,j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
   }
 }
 
 ## Decay Time
-constant.sims.decay.time.15 <- matrix(ncol = num.of.sims, nrow = 45)
-warming.sims.decay.time.15 <- matrix(nco = num.of.sims, nrow = 45)
+constant.sims.dt.15 <- matrix(ncol = num.of.sims, nrow = 45)
+warming.sims.dt.15 <- matrix(nco = num.of.sims, nrow = 45)
 for(i in 1:num.of.sims){
   for(j in 1:45){
-    suppressWarnings(constant.sims.decay.time.15[j, i] <- -j/log(constant.sims.cor.15[j, i]))
-    suppressWarnings(warming.sims.decay.time.15[j, i] <- -j/log(warming.sims.cor.15[j, i]))
+    suppressWarnings(constant.sims.dt.15[j, i] <- -j/log(constant.sims.cor.15[j, i]))
+    suppressWarnings(warming.sims.dt.15[j, i] <- -j/log(warming.sims.cor.15[j, i]))
   }
 }
 
 ## Kendall's Tau
-constant.sims.variance.15 <- constant.sims.variance.15[1:45, ]
+constant.sims.var.15 <- constant.sims.var.15[1:45, ]
 constant.sims.mean.15 <- constant.sims.mean.15[1:45, ]
 constant.sims.cv.15 <- constant.sims.cv.15[1:45, ]
-constant.sims.skewness.15 <-  constant.sims.skewness.15[1:45, ]
-constant.sims.kurtosis.15 <-  constant.sims.kurtosis.15[1:45, ]
+constant.sims.sk.15 <-  constant.sims.sk.15[1:45, ]
+constant.sims.kt.15 <-  constant.sims.kt.15[1:45, ]
 constant.sims.id.15 <-  constant.sims.id.15[1:45, ]
 constant.sims.cor.15 <-  constant.sims.cor.15[1:45, ]
-constant.sims.cov.15 <-  constant.sims.cov.15[1:45, ]
-constant.sims.first.diff.variance.15 <-  constant.sims.first.diff.variance.15[1:45, ]
-constant.sims.decay.time.15 <-  constant.sims.decay.time.15[1:45, ]
-warming.sims.variance.15 <- warming.sims.variance.15[1:45, ]
+constant.sims.acv.15 <-  constant.sims.acv.15[1:45, ]
+constant.sims.fdv.15 <-  constant.sims.fdv.15[1:45, ]
+constant.sims.dt.15 <-  constant.sims.dt.15[1:45, ]
+warming.sims.var.15 <- warming.sims.var.15[1:45, ]
 warming.sims.mean.15 <- warming.sims.mean.15[1:45, ]
 warming.sims.cv.15 <- warming.sims.cv.15[1:45, ]
-warming.sims.skewness.15 <-  warming.sims.skewness.15[1:45, ]
-warming.sims.kurtosis.15 <-  warming.sims.kurtosis.15[1:45, ]
+warming.sims.sk.15 <-  warming.sims.sk.15[1:45, ]
+warming.sims.kt.15 <-  warming.sims.kt.15[1:45, ]
 warming.sims.id.15 <-  warming.sims.id.15[1:45, ]
 warming.sims.cor.15 <-  warming.sims.cor.15[1:45, ]
-warming.sims.cov.15 <-  warming.sims.cov.15[1:45, ]
-warming.sims.first.diff.variance.15 <-  warming.sims.first.diff.variance.15[1:45, ]
-warming.sims.decay.time.15 <-  warming.sims.decay.time.15[1:45, ]
-constant.sims.variance.15.tau <- c()
+warming.sims.acv.15 <-  warming.sims.acv.15[1:45, ]
+warming.sims.fdv.15 <-  warming.sims.fdv.15[1:45, ]
+warming.sims.dt.15 <-  warming.sims.dt.15[1:45, ]
+constant.sims.var.15.tau <- c()
 constant.sims.mean.15.tau <- c()
 constant.sims.cv.15.tau <- c()
-constant.sims.skewness.15.tau <-  c()
-constant.sims.kurtosis.15.tau <- c()
+constant.sims.sk.15.tau <-  c()
+constant.sims.kt.15.tau <- c()
 constant.sims.id.15.tau <- c()
 constant.sims.cor.15.tau <- c()
-constant.sims.cov.15.tau <- c()
-constant.sims.first.diff.variance.15.tau <-  c()
-constant.sims.decay.time.15.tau <- c()
-warming.sims.variance.15.tau <- c()
+constant.sims.acv.15.tau <- c()
+constant.sims.fdv.15.tau <-  c()
+constant.sims.dt.15.tau <- c()
+warming.sims.var.15.tau <- c()
 warming.sims.mean.15.tau <- c()
 warming.sims.cv.15.tau <- c()
-warming.sims.skewness.15.tau <-  c()
-warming.sims.kurtosis.15.tau <- c()
+warming.sims.sk.15.tau <-  c()
+warming.sims.kt.15.tau <- c()
 warming.sims.id.15.tau <-  c()
 warming.sims.cor.15.tau <-  c()
-warming.sims.cov.15.tau <-  c()
-warming.sims.first.diff.variance.15.tau <-  c()
-warming.sims.decay.time.15.tau <-  c()
+warming.sims.acv.15.tau <-  c()
+warming.sims.fdv.15.tau <-  c()
+warming.sims.dt.15.tau <-  c()
 time.15 <- c(1:45)
 for(i in 1:num.of.sims){
   constant.sims.mean.15.tau[i] <- cor(constant.sims.mean.15[ , i], time.15, method = "kendall")
-  constant.sims.skewness.15.tau[i] <- cor(constant.sims.skewness.15[ , i], time.15, method = "kendall")
-  constant.sims.kurtosis.15.tau[i] <- cor(constant.sims.kurtosis.15[ , i], time.15, method = "kendall")
-  constant.sims.variance.15.tau[i] <- cor(constant.sims.variance.15[ , i], time.15, method = "kendall")
+  constant.sims.sk.15.tau[i] <- cor(constant.sims.sk.15[ , i], time.15, method = "kendall")
+  constant.sims.kt.15.tau[i] <- cor(constant.sims.kt.15[ , i], time.15, method = "kendall")
+  constant.sims.var.15.tau[i] <- cor(constant.sims.var.15[ , i], time.15, method = "kendall")
   constant.sims.cv.15.tau[i] <- cor(constant.sims.cv.15[ , i], time.15, method = "kendall")
   constant.sims.id.15.tau[i] <- cor(constant.sims.id.15[ , i], time.15, method = "kendall")
-  constant.sims.first.diff.variance.15.tau[i] <- cor(constant.sims.first.diff.variance.15[ , i], time.15, method = "kendall")
+  constant.sims.fdv.15.tau[i] <- cor(constant.sims.fdv.15[ , i], time.15, method = "kendall")
   constant.sims.cor.15.tau[i] <- cor(constant.sims.cor.15[ , i], time.15, method = "kendall")
-  constant.sims.cov.15.tau[i] <- cor(constant.sims.cov.15[ , i], time.15, method = "kendall")
-  constant.sims.decay.time.15.tau[i] <- cor(constant.sims.decay.time.15[ , i], time.15, method = "kendall")
+  constant.sims.acv.15.tau[i] <- cor(constant.sims.acv.15[ , i], time.15, method = "kendall")
+  constant.sims.dt.15.tau[i] <- cor(constant.sims.dt.15[ , i], time.15, method = "kendall")
   
   warming.sims.mean.15.tau[i] <- cor(warming.sims.mean.15[ , i], time.15, method = "kendall")
-  warming.sims.skewness.15.tau[i] <- cor(warming.sims.skewness.15[ , i], time.15, method = "kendall")
-  warming.sims.kurtosis.15.tau[i] <- cor(warming.sims.kurtosis.15[ , i], time.15, method = "kendall")
-  warming.sims.variance.15.tau[i] <- cor(warming.sims.variance.15[ , i], time.15, method = "kendall")
+  warming.sims.sk.15.tau[i] <- cor(warming.sims.sk.15[ , i], time.15, method = "kendall")
+  warming.sims.kt.15.tau[i] <- cor(warming.sims.kt.15[ , i], time.15, method = "kendall")
+  warming.sims.var.15.tau[i] <- cor(warming.sims.var.15[ , i], time.15, method = "kendall")
   warming.sims.cv.15.tau[i] <- cor(warming.sims.cv.15[ , i], time.15, method = "kendall")
   warming.sims.id.15.tau[i] <- cor(warming.sims.id.15[ , i], time.15, method = "kendall")
-  warming.sims.first.diff.variance.15.tau[i] <- cor(warming.sims.first.diff.variance.15[ , i], time.15, method = "kendall")
+  warming.sims.fdv.15.tau[i] <- cor(warming.sims.fdv.15[ , i], time.15, method = "kendall")
   warming.sims.cor.15.tau[i] <- cor(warming.sims.cor.15[ , i], time.15, method = "kendall")
-  warming.sims.cov.15.tau[i] <- cor(warming.sims.cov.15[ , i], time.15, method = "kendall")
-  warming.sims.decay.time.15.tau[i] <- cor(warming.sims.decay.time.15[ , i], time.15, method = "kendall")
+  warming.sims.acv.15.tau[i] <- cor(warming.sims.acv.15[ , i], time.15, method = "kendall")
+  warming.sims.dt.15.tau[i] <- cor(warming.sims.dt.15[ , i], time.15, method = "kendall")
 }
 ```
 
 ## Calculating AUCs by Grouping
 
 ```{r}
-c.grp1 <- constant.sims.variance.15.tau[1:100]
-c.grp2 <- constant.sims.variance.15.tau[101:200]
-c.grp3 <- constant.sims.variance.15.tau[201:300]
-c.grp4 <- constant.sims.variance.15.tau[301:400]
-c.grp5 <- constant.sims.variance.15.tau[401:500]
-c.grp6 <- constant.sims.variance.15.tau[501:600]
-c.grp7 <- constant.sims.variance.15.tau[601:700]
-c.grp8 <- constant.sims.variance.15.tau[701:800]
-c.grp9 <- constant.sims.variance.15.tau[801:900]
-c.grp10 <- constant.sims.variance.15.tau[901:1000]
+c.grp1 <- constant.sims.var.15.tau[1:100]
+c.grp2 <- constant.sims.var.15.tau[101:200]
+c.grp3 <- constant.sims.var.15.tau[201:300]
+c.grp4 <- constant.sims.var.15.tau[301:400]
+c.grp5 <- constant.sims.var.15.tau[401:500]
+c.grp6 <- constant.sims.var.15.tau[501:600]
+c.grp7 <- constant.sims.var.15.tau[601:700]
+c.grp8 <- constant.sims.var.15.tau[701:800]
+c.grp9 <- constant.sims.var.15.tau[801:900]
+c.grp10 <- constant.sims.var.15.tau[901:1000]
 const.taus <- cbind(c.grp1, c.grp2, c.grp3, c.grp4, c.grp5,
                     c.grp6, c.grp7, c.grp8, c.grp9, c.grp10)
 
-w.grp1 <- warming.sims.variance.15.tau[1:100]
-w.grp2 <- warming.sims.variance.15.tau[101:200]
-w.grp3 <- warming.sims.variance.15.tau[201:300]
-w.grp4 <- warming.sims.variance.15.tau[301:400]
-w.grp5 <- warming.sims.variance.15.tau[401:500]
-w.grp6 <- warming.sims.variance.15.tau[501:600]
-w.grp7 <- warming.sims.variance.15.tau[601:700]
-w.grp8 <- warming.sims.variance.15.tau[701:800]
-w.grp9 <- warming.sims.variance.15.tau[801:900]
-w.grp10 <- warming.sims.variance.15.tau[901:1000]
+w.grp1 <- warming.sims.var.15.tau[1:100]
+w.grp2 <- warming.sims.var.15.tau[101:200]
+w.grp3 <- warming.sims.var.15.tau[201:300]
+w.grp4 <- warming.sims.var.15.tau[301:400]
+w.grp5 <- warming.sims.var.15.tau[401:500]
+w.grp6 <- warming.sims.var.15.tau[501:600]
+w.grp7 <- warming.sims.var.15.tau[601:700]
+w.grp8 <- warming.sims.var.15.tau[701:800]
+w.grp9 <- warming.sims.var.15.tau[801:900]
+w.grp10 <- warming.sims.var.15.tau[901:1000]
 warm.taus <- cbind(w.grp1, w.grp2, w.grp3, w.grp4, w.grp5,
                    w.grp6, w.grp7, w.grp8, w.grp9, w.grp10)
 
@@ -820,29 +821,29 @@ for (i in 1:10){
 ### Skewness
 
 ```{r}
-c.grp1 <- constant.sims.skewness.15.tau[1:100]
-c.grp2 <- constant.sims.skewness.15.tau[101:200]
-c.grp3 <- constant.sims.skewness.15.tau[201:300]
-c.grp4 <- constant.sims.skewness.15.tau[301:400]
-c.grp5 <- constant.sims.skewness.15.tau[401:500]
-c.grp6 <- constant.sims.skewness.15.tau[501:600]
-c.grp7 <- constant.sims.skewness.15.tau[601:700]
-c.grp8 <- constant.sims.skewness.15.tau[701:800]
-c.grp9 <- constant.sims.skewness.15.tau[801:900]
-c.grp10 <- constant.sims.skewness.15.tau[901:1000]
+c.grp1 <- constant.sims.sk.15.tau[1:100]
+c.grp2 <- constant.sims.sk.15.tau[101:200]
+c.grp3 <- constant.sims.sk.15.tau[201:300]
+c.grp4 <- constant.sims.sk.15.tau[301:400]
+c.grp5 <- constant.sims.sk.15.tau[401:500]
+c.grp6 <- constant.sims.sk.15.tau[501:600]
+c.grp7 <- constant.sims.sk.15.tau[601:700]
+c.grp8 <- constant.sims.sk.15.tau[701:800]
+c.grp9 <- constant.sims.sk.15.tau[801:900]
+c.grp10 <- constant.sims.sk.15.tau[901:1000]
 const.taus <- cbind(c.grp1, c.grp2, c.grp3, c.grp4, c.grp5,
                     c.grp6, c.grp7, c.grp8, c.grp9, c.grp10)
 
-w.grp1 <- warming.sims.skewness.15.tau[1:100]
-w.grp2 <- warming.sims.skewness.15.tau[101:200]
-w.grp3 <- warming.sims.skewness.15.tau[201:300]
-w.grp4 <- warming.sims.skewness.15.tau[301:400]
-w.grp5 <- warming.sims.skewness.15.tau[401:500]
-w.grp6 <- warming.sims.skewness.15.tau[501:600]
-w.grp7 <- warming.sims.skewness.15.tau[601:700]
-w.grp8 <- warming.sims.skewness.15.tau[701:800]
-w.grp9 <- warming.sims.skewness.15.tau[801:900]
-w.grp10 <- warming.sims.skewness.15.tau[901:1000]
+w.grp1 <- warming.sims.sk.15.tau[1:100]
+w.grp2 <- warming.sims.sk.15.tau[101:200]
+w.grp3 <- warming.sims.sk.15.tau[201:300]
+w.grp4 <- warming.sims.sk.15.tau[301:400]
+w.grp5 <- warming.sims.sk.15.tau[401:500]
+w.grp6 <- warming.sims.sk.15.tau[501:600]
+w.grp7 <- warming.sims.sk.15.tau[601:700]
+w.grp8 <- warming.sims.sk.15.tau[701:800]
+w.grp9 <- warming.sims.sk.15.tau[801:900]
+w.grp10 <- warming.sims.sk.15.tau[901:1000]
 warm.taus <- cbind(w.grp1, w.grp2, w.grp3, w.grp4, w.grp5,
                    w.grp6, w.grp7, w.grp8, w.grp9, w.grp10)
 
@@ -856,29 +857,29 @@ for (i in 1:10){
 ### Kurtosis
 
 ```{r}
-c.grp1 <- constant.sims.kurtosis.15.tau[1:100]
-c.grp2 <- constant.sims.kurtosis.15.tau[101:200]
-c.grp3 <- constant.sims.kurtosis.15.tau[201:300]
-c.grp4 <- constant.sims.kurtosis.15.tau[301:400]
-c.grp5 <- constant.sims.kurtosis.15.tau[401:500]
-c.grp6 <- constant.sims.kurtosis.15.tau[501:600]
-c.grp7 <- constant.sims.kurtosis.15.tau[601:700]
-c.grp8 <- constant.sims.kurtosis.15.tau[701:800]
-c.grp9 <- constant.sims.kurtosis.15.tau[801:900]
-c.grp10 <- constant.sims.kurtosis.15.tau[901:1000]
+c.grp1 <- constant.sims.kt.15.tau[1:100]
+c.grp2 <- constant.sims.kt.15.tau[101:200]
+c.grp3 <- constant.sims.kt.15.tau[201:300]
+c.grp4 <- constant.sims.kt.15.tau[301:400]
+c.grp5 <- constant.sims.kt.15.tau[401:500]
+c.grp6 <- constant.sims.kt.15.tau[501:600]
+c.grp7 <- constant.sims.kt.15.tau[601:700]
+c.grp8 <- constant.sims.kt.15.tau[701:800]
+c.grp9 <- constant.sims.kt.15.tau[801:900]
+c.grp10 <- constant.sims.kt.15.tau[901:1000]
 const.taus <- cbind(c.grp1, c.grp2, c.grp3, c.grp4, c.grp5,
                     c.grp6, c.grp7, c.grp8, c.grp9, c.grp10)
 
-w.grp1 <- warming.sims.kurtosis.15.tau[1:100]
-w.grp2 <- warming.sims.kurtosis.15.tau[101:200]
-w.grp3 <- warming.sims.kurtosis.15.tau[201:300]
-w.grp4 <- warming.sims.kurtosis.15.tau[301:400]
-w.grp5 <- warming.sims.kurtosis.15.tau[401:500]
-w.grp6 <- warming.sims.kurtosis.15.tau[501:600]
-w.grp7 <- warming.sims.kurtosis.15.tau[601:700]
-w.grp8 <- warming.sims.kurtosis.15.tau[701:800]
-w.grp9 <- warming.sims.kurtosis.15.tau[801:900]
-w.grp10 <- warming.sims.kurtosis.15.tau[901:1000]
+w.grp1 <- warming.sims.kt.15.tau[1:100]
+w.grp2 <- warming.sims.kt.15.tau[101:200]
+w.grp3 <- warming.sims.kt.15.tau[201:300]
+w.grp4 <- warming.sims.kt.15.tau[301:400]
+w.grp5 <- warming.sims.kt.15.tau[401:500]
+w.grp6 <- warming.sims.kt.15.tau[501:600]
+w.grp7 <- warming.sims.kt.15.tau[601:700]
+w.grp8 <- warming.sims.kt.15.tau[701:800]
+w.grp9 <- warming.sims.kt.15.tau[801:900]
+w.grp10 <- warming.sims.kt.15.tau[901:1000]
 warm.taus <- cbind(w.grp1, w.grp2, w.grp3, w.grp4, w.grp5,
                    w.grp6, w.grp7, w.grp8, w.grp9, w.grp10)
 
@@ -892,29 +893,29 @@ for (i in 1:10){
 ### Variance
 
 ```{r}
-c.grp1 <- constant.sims.variance.15.tau[1:100]
-c.grp2 <- constant.sims.variance.15.tau[101:200]
-c.grp3 <- constant.sims.variance.15.tau[201:300]
-c.grp4 <- constant.sims.variance.15.tau[301:400]
-c.grp5 <- constant.sims.variance.15.tau[401:500]
-c.grp6 <- constant.sims.variance.15.tau[501:600]
-c.grp7 <- constant.sims.variance.15.tau[601:700]
-c.grp8 <- constant.sims.variance.15.tau[701:800]
-c.grp9 <- constant.sims.variance.15.tau[801:900]
-c.grp10 <- constant.sims.variance.15.tau[901:1000]
+c.grp1 <- constant.sims.var.15.tau[1:100]
+c.grp2 <- constant.sims.var.15.tau[101:200]
+c.grp3 <- constant.sims.var.15.tau[201:300]
+c.grp4 <- constant.sims.var.15.tau[301:400]
+c.grp5 <- constant.sims.var.15.tau[401:500]
+c.grp6 <- constant.sims.var.15.tau[501:600]
+c.grp7 <- constant.sims.var.15.tau[601:700]
+c.grp8 <- constant.sims.var.15.tau[701:800]
+c.grp9 <- constant.sims.var.15.tau[801:900]
+c.grp10 <- constant.sims.var.15.tau[901:1000]
 const.taus <- cbind(c.grp1, c.grp2, c.grp3, c.grp4, c.grp5,
                     c.grp6, c.grp7, c.grp8, c.grp9, c.grp10)
 
-w.grp1 <- warming.sims.variance.15.tau[1:100]
-w.grp2 <- warming.sims.variance.15.tau[101:200]
-w.grp3 <- warming.sims.variance.15.tau[201:300]
-w.grp4 <- warming.sims.variance.15.tau[301:400]
-w.grp5 <- warming.sims.variance.15.tau[401:500]
-w.grp6 <- warming.sims.variance.15.tau[501:600]
-w.grp7 <- warming.sims.variance.15.tau[601:700]
-w.grp8 <- warming.sims.variance.15.tau[701:800]
-w.grp9 <- warming.sims.variance.15.tau[801:900]
-w.grp10 <- warming.sims.variance.15.tau[901:1000]
+w.grp1 <- warming.sims.var.15.tau[1:100]
+w.grp2 <- warming.sims.var.15.tau[101:200]
+w.grp3 <- warming.sims.var.15.tau[201:300]
+w.grp4 <- warming.sims.var.15.tau[301:400]
+w.grp5 <- warming.sims.var.15.tau[401:500]
+w.grp6 <- warming.sims.var.15.tau[501:600]
+w.grp7 <- warming.sims.var.15.tau[601:700]
+w.grp8 <- warming.sims.var.15.tau[701:800]
+w.grp9 <- warming.sims.var.15.tau[801:900]
+w.grp10 <- warming.sims.var.15.tau[901:1000]
 warm.taus <- cbind(w.grp1, w.grp2, w.grp3, w.grp4, w.grp5,
                    w.grp6, w.grp7, w.grp8, w.grp9, w.grp10)
 
@@ -1000,29 +1001,29 @@ for (i in 1:10){
 ### First Difference Variance
 
 ```{r}
-c.grp1 <- constant.sims.first.diff.variance.15.tau[1:100]
-c.grp2 <- constant.sims.first.diff.variance.15.tau[101:200]
-c.grp3 <- constant.sims.first.diff.variance.15.tau[201:300]
-c.grp4 <- constant.sims.first.diff.variance.15.tau[301:400]
-c.grp5 <- constant.sims.first.diff.variance.15.tau[401:500]
-c.grp6 <- constant.sims.first.diff.variance.15.tau[501:600]
-c.grp7 <- constant.sims.first.diff.variance.15.tau[601:700]
-c.grp8 <- constant.sims.first.diff.variance.15.tau[701:800]
-c.grp9 <- constant.sims.first.diff.variance.15.tau[801:900]
-c.grp10 <- constant.sims.first.diff.variance.15.tau[901:1000]
+c.grp1 <- constant.sims.fdv.15.tau[1:100]
+c.grp2 <- constant.sims.fdv.15.tau[101:200]
+c.grp3 <- constant.sims.fdv.15.tau[201:300]
+c.grp4 <- constant.sims.fdv.15.tau[301:400]
+c.grp5 <- constant.sims.fdv.15.tau[401:500]
+c.grp6 <- constant.sims.fdv.15.tau[501:600]
+c.grp7 <- constant.sims.fdv.15.tau[601:700]
+c.grp8 <- constant.sims.fdv.15.tau[701:800]
+c.grp9 <- constant.sims.fdv.15.tau[801:900]
+c.grp10 <- constant.sims.fdv.15.tau[901:1000]
 const.taus <- cbind(c.grp1, c.grp2, c.grp3, c.grp4, c.grp5,
                     c.grp6, c.grp7, c.grp8, c.grp9, c.grp10)
 
-w.grp1 <- warming.sims.first.diff.variance.15.tau[1:100]
-w.grp2 <- warming.sims.first.diff.variance.15.tau[101:200]
-w.grp3 <- warming.sims.first.diff.variance.15.tau[201:300]
-w.grp4 <- warming.sims.first.diff.variance.15.tau[301:400]
-w.grp5 <- warming.sims.first.diff.variance.15.tau[401:500]
-w.grp6 <- warming.sims.first.diff.variance.15.tau[501:600]
-w.grp7 <- warming.sims.first.diff.variance.15.tau[601:700]
-w.grp8 <- warming.sims.first.diff.variance.15.tau[701:800]
-w.grp9 <- warming.sims.first.diff.variance.15.tau[801:900]
-w.grp10 <- warming.sims.first.diff.variance.15.tau[901:1000]
+w.grp1 <- warming.sims.fdv.15.tau[1:100]
+w.grp2 <- warming.sims.fdv.15.tau[101:200]
+w.grp3 <- warming.sims.fdv.15.tau[201:300]
+w.grp4 <- warming.sims.fdv.15.tau[301:400]
+w.grp5 <- warming.sims.fdv.15.tau[401:500]
+w.grp6 <- warming.sims.fdv.15.tau[501:600]
+w.grp7 <- warming.sims.fdv.15.tau[601:700]
+w.grp8 <- warming.sims.fdv.15.tau[701:800]
+w.grp9 <- warming.sims.fdv.15.tau[801:900]
+w.grp10 <- warming.sims.fdv.15.tau[901:1000]
 warm.taus <- cbind(w.grp1, w.grp2, w.grp3, w.grp4, w.grp5,
                    w.grp6, w.grp7, w.grp8, w.grp9, w.grp10)
 
@@ -1072,29 +1073,29 @@ for (i in 1:10){
 ### Autocovariance
 
 ```{r}
-c.grp1 <- constant.sims.cov.15.tau[1:100]
-c.grp2 <- constant.sims.cov.15.tau[101:200]
-c.grp3 <- constant.sims.cov.15.tau[201:300]
-c.grp4 <- constant.sims.cov.15.tau[301:400]
-c.grp5 <- constant.sims.cov.15.tau[401:500]
-c.grp6 <- constant.sims.cov.15.tau[501:600]
-c.grp7 <- constant.sims.cov.15.tau[601:700]
-c.grp8 <- constant.sims.cov.15.tau[701:800]
-c.grp9 <- constant.sims.cov.15.tau[801:900]
-c.grp10 <- constant.sims.cov.15.tau[901:1000]
+c.grp1 <- constant.sims.acv.15.tau[1:100]
+c.grp2 <- constant.sims.acv.15.tau[101:200]
+c.grp3 <- constant.sims.acv.15.tau[201:300]
+c.grp4 <- constant.sims.acv.15.tau[301:400]
+c.grp5 <- constant.sims.acv.15.tau[401:500]
+c.grp6 <- constant.sims.acv.15.tau[501:600]
+c.grp7 <- constant.sims.acv.15.tau[601:700]
+c.grp8 <- constant.sims.acv.15.tau[701:800]
+c.grp9 <- constant.sims.acv.15.tau[801:900]
+c.grp10 <- constant.sims.acv.15.tau[901:1000]
 const.taus <- cbind(c.grp1, c.grp2, c.grp3, c.grp4, c.grp5,
                     c.grp6, c.grp7, c.grp8, c.grp9, c.grp10)
 
-w.grp1 <- warming.sims.cov.15.tau[1:100]
-w.grp2 <- warming.sims.cov.15.tau[101:200]
-w.grp3 <- warming.sims.cov.15.tau[201:300]
-w.grp4 <- warming.sims.cov.15.tau[301:400]
-w.grp5 <- warming.sims.cov.15.tau[401:500]
-w.grp6 <- warming.sims.cov.15.tau[501:600]
-w.grp7 <- warming.sims.cov.15.tau[601:700]
-w.grp8 <- warming.sims.cov.15.tau[701:800]
-w.grp9 <- warming.sims.cov.15.tau[801:900]
-w.grp10 <- warming.sims.cov.15.tau[901:1000]
+w.grp1 <- warming.sims.acv.15.tau[1:100]
+w.grp2 <- warming.sims.acv.15.tau[101:200]
+w.grp3 <- warming.sims.acv.15.tau[201:300]
+w.grp4 <- warming.sims.acv.15.tau[301:400]
+w.grp5 <- warming.sims.acv.15.tau[401:500]
+w.grp6 <- warming.sims.acv.15.tau[501:600]
+w.grp7 <- warming.sims.acv.15.tau[601:700]
+w.grp8 <- warming.sims.acv.15.tau[701:800]
+w.grp9 <- warming.sims.acv.15.tau[801:900]
+w.grp10 <- warming.sims.acv.15.tau[901:1000]
 warm.taus <- cbind(w.grp1, w.grp2, w.grp3, w.grp4, w.grp5,
                    w.grp6, w.grp7, w.grp8, w.grp9, w.grp10)
 
@@ -1108,29 +1109,29 @@ for (i in 1:10){
 ### Decay Time
 
 ```{r}
-c.grp1 <- constant.sims.decay.time.15.tau[1:100]
-c.grp2 <- constant.sims.decay.time.15.tau[101:200]
-c.grp3 <- constant.sims.decay.time.15.tau[201:300]
-c.grp4 <- constant.sims.decay.time.15.tau[301:400]
-c.grp5 <- constant.sims.decay.time.15.tau[401:500]
-c.grp6 <- constant.sims.decay.time.15.tau[501:600]
-c.grp7 <- constant.sims.decay.time.15.tau[601:700]
-c.grp8 <- constant.sims.decay.time.15.tau[701:800]
-c.grp9 <- constant.sims.decay.time.15.tau[801:900]
-c.grp10 <- constant.sims.decay.time.15.tau[901:1000]
+c.grp1 <- constant.sims.dt.15.tau[1:100]
+c.grp2 <- constant.sims.dt.15.tau[101:200]
+c.grp3 <- constant.sims.dt.15.tau[201:300]
+c.grp4 <- constant.sims.dt.15.tau[301:400]
+c.grp5 <- constant.sims.dt.15.tau[401:500]
+c.grp6 <- constant.sims.dt.15.tau[501:600]
+c.grp7 <- constant.sims.dt.15.tau[601:700]
+c.grp8 <- constant.sims.dt.15.tau[701:800]
+c.grp9 <- constant.sims.dt.15.tau[801:900]
+c.grp10 <- constant.sims.dt.15.tau[901:1000]
 const.taus <- cbind(c.grp1, c.grp2, c.grp3, c.grp4, c.grp5,
                     c.grp6, c.grp7, c.grp8, c.grp9, c.grp10)
 
-w.grp1 <- warming.sims.decay.time.15.tau[1:100]
-w.grp2 <- warming.sims.decay.time.15.tau[101:200]
-w.grp3 <- warming.sims.decay.time.15.tau[201:300]
-w.grp4 <- warming.sims.decay.time.15.tau[301:400]
-w.grp5 <- warming.sims.decay.time.15.tau[401:500]
-w.grp6 <- warming.sims.decay.time.15.tau[501:600]
-w.grp7 <- warming.sims.decay.time.15.tau[601:700]
-w.grp8 <- warming.sims.decay.time.15.tau[701:800]
-w.grp9 <- warming.sims.decay.time.15.tau[801:900]
-w.grp10 <- warming.sims.decay.time.15.tau[901:1000]
+w.grp1 <- warming.sims.dt.15.tau[1:100]
+w.grp2 <- warming.sims.dt.15.tau[101:200]
+w.grp3 <- warming.sims.dt.15.tau[201:300]
+w.grp4 <- warming.sims.dt.15.tau[301:400]
+w.grp5 <- warming.sims.dt.15.tau[401:500]
+w.grp6 <- warming.sims.dt.15.tau[501:600]
+w.grp7 <- warming.sims.dt.15.tau[601:700]
+w.grp8 <- warming.sims.dt.15.tau[701:800]
+w.grp9 <- warming.sims.dt.15.tau[801:900]
+w.grp10 <- warming.sims.dt.15.tau[901:1000]
 warm.taus <- cbind(w.grp1, w.grp2, w.grp3, w.grp4, w.grp5,
                    w.grp6, w.grp7, w.grp8, w.grp9, w.grp10)
 
@@ -1196,26 +1197,26 @@ Okay, so it looks like they just calculated Kendall's $\tau$, and then did some 
 # Raw, Simulated Data (Sliding Window = 15 Days)
 
 ```{r, eval = FALSE}
-constant.sims.variance.15.tau
+constant.sims.var.15.tau
 constant.sims.mean.15.tau
 constant.sims.cv.15.tau
-constant.sims.skewness.15.tau
-constant.sims.kurtosis.15.tau
+constant.sims.sk.15.tau
+constant.sims.kt.15.tau
 constant.sims.id.15.tau
 constant.sims.cor.15.tau
-constant.sims.cov.15.tau
-constant.sims.first.diff.variance.15.tau
-constant.sims.decay.time.15.tau
-warming.sims.variance.15.tau
+constant.sims.acv.15.tau
+constant.sims.fdv.15.tau
+constant.sims.dt.15.tau
+warming.sims.var.15.tau
 warming.sims.mean.15.tau
 warming.sims.cv.15.tau
-warming.sims.skewness.15.tau
-warming.sims.kurtosis.15.tau
+warming.sims.sk.15.tau
+warming.sims.kt.15.tau
 warming.sims.id.15.tau
 warming.sims.cor.15.tau
-warming.sims.cov.15.tau
-warming.sims.first.diff.variance.15.tau
-warming.sims.decay.time.15.tau
+warming.sims.acv.15.tau
+warming.sims.fdv.15.tau
+warming.sims.dt.15.tau
 ```
 
 Loading some more packages for plotting:
@@ -1259,7 +1260,7 @@ ggplot(data = raw.sim.mean.15.tau, aes(x = k.tau, group = Treatment, fill = Trea
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
-ggplot(raw.sim.mean.15.tau, aes(x = treatment, y = k.tau)) + 
+ggplot(raw.sim.mean.15.tau, aes(x = Treatment, y = k.tau)) + 
   geom_violin(fill = cols, colour = cols) +
   geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
   stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
@@ -1274,35 +1275,35 @@ ggplot(raw.sim.mean.15.tau, aes(x = treatment, y = k.tau)) +
 ## Skewness
 
 ```{r}
-summary(constant.sims.skewness.15.tau); summary(warming.sims.skewness.15.tau)
-(length(warming.sims.skewness.15.tau) - length(which(warming.sims.skewness.15.tau < 0)))/length(warming.sims.skewness.15.tau)
-(length(warming.sims.skewness.15.tau) - length(which(warming.sims.skewness.15.tau < median(constant.sims.skewness.15.tau))))/length(warming.sims.skewness.15.tau)
+summary(constant.sims.sk.15.tau); summary(warming.sims.sk.15.tau)
+(length(warming.sims.sk.15.tau) - length(which(warming.sims.sk.15.tau < 0)))/length(warming.sims.sk.15.tau)
+(length(warming.sims.sk.15.tau) - length(which(warming.sims.sk.15.tau < median(constant.sims.sk.15.tau))))/length(warming.sims.sk.15.tau)
 
-raw.sim.skewness.15.tau <- data.frame(cbind(constant.sims.skewness.15.tau, warming.sims.skewness.15.tau))
+raw.sim.sk.15.tau <- data.frame(cbind(constant.sims.sk.15.tau, warming.sims.sk.15.tau))
 Treatment <- c(rep("Constant", 1000), rep("Warming", 1000))
-k.tau <- c(constant.sims.skewness.15.tau, warming.sims.skewness.15.tau)
-raw.sim.skewness.15.tau <- data.frame(
+k.tau <- c(constant.sims.sk.15.tau, warming.sims.sk.15.tau)
+raw.sim.sk.15.tau <- data.frame(
   Treatment = Treatment, 
   k.tau = k.tau
 )
-saveRDS(raw.sim.skewness.15.tau, "Objects/raw.sim.skewness.15.tau.rds")
+saveRDS(raw.sim.sk.15.tau, "Objects/raw.sim.sk.15.tau.rds")
 
 cols <- c(rep("#1434A4", 512), rep("#C21E56", 512))
 cols.pt <- c(rep("#A7C7E7", 1000), rep("#F6799D", 1000))
 
-med.const.sims.skewness.15.tau <- median(constant.sims.skewness.15.tau)
-med.warm.sims.skewness.15.tau <- median(warming.sims.skewness.15.tau)
-ggplot(data = raw.sim.skewness.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+med.const.sims.sk.15.tau <- median(constant.sims.sk.15.tau)
+med.warm.sims.sk.15.tau <- median(warming.sims.sk.15.tau)
+ggplot(data = raw.sim.sk.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
   geom_density(alpha = 0.4, colour = cols) +
   scale_fill_manual(values = c("#1434A4", "#C21E56")) +
-  geom_vline(xintercept = med.const.sims.skewness.15.tau, colour = "#1434A4") +
-  geom_vline(xintercept = med.warm.sims.skewness.15.tau, colour = "#C21E56") +
+  geom_vline(xintercept = med.const.sims.sk.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.sk.15.tau, colour = "#C21E56") +
   xlab("Kendall's Tau") +
   ylab("Density (Skewness)") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
-ggplot(raw.sim.skewness.15.tau, aes(x = treatment, y = k.tau)) + 
+ggplot(raw.sim.sk.15.tau, aes(x = Treatment, y = k.tau)) + 
   geom_violin(fill = cols, colour = cols) +
   geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
   stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
@@ -1317,35 +1318,35 @@ ggplot(raw.sim.skewness.15.tau, aes(x = treatment, y = k.tau)) +
 ## Kurtosis
 
 ```{r}
-summary(constant.sims.kurtosis.15.tau); summary(warming.sims.kurtosis.15.tau)
-(length(warming.sims.kurtosis.15.tau) - length(which(warming.sims.kurtosis.15.tau < 0)))/length(warming.sims.kurtosis.15.tau)
-(length(warming.sims.kurtosis.15.tau) - length(which(warming.sims.kurtosis.15.tau < median(constant.sims.kurtosis.15.tau))))/length(warming.sims.kurtosis.15.tau)
+summary(constant.sims.kt.15.tau); summary(warming.sims.kt.15.tau)
+(length(warming.sims.kt.15.tau) - length(which(warming.sims.kt.15.tau < 0)))/length(warming.sims.kt.15.tau)
+(length(warming.sims.kt.15.tau) - length(which(warming.sims.kt.15.tau < median(constant.sims.kt.15.tau))))/length(warming.sims.kt.15.tau)
 
-raw.sim.kurtosis.15.tau <- data.frame(cbind(constant.sims.kurtosis.15.tau, warming.sims.kurtosis.15.tau))
+raw.sim.kt.15.tau <- data.frame(cbind(constant.sims.kt.15.tau, warming.sims.kt.15.tau))
 Treatment <- c(rep("Constant", 1000), rep("Warming", 1000))
-k.tau <- c(constant.sims.kurtosis.15.tau, warming.sims.kurtosis.15.tau)
-raw.sim.kurtosis.15.tau <- data.frame(
+k.tau <- c(constant.sims.kt.15.tau, warming.sims.kt.15.tau)
+raw.sim.kt.15.tau <- data.frame(
   Treatment = Treatment, 
   k.tau = k.tau
 )
-saveRDS(raw.sim.kurtosis.15.tau, "Objects/raw.sim.kurtosis.15.tau.rds")
+saveRDS(raw.sim.kt.15.tau, "Objects/raw.sim.kt.15.tau.rds")
 
 cols <- c(rep("#1434A4", 512), rep("#C21E56", 512))
 cols.pt <- c(rep("#A7C7E7", 1000), rep("#F6799D", 1000))
 
-med.const.sims.kurtosis.15.tau <- median(constant.sims.kurtosis.15.tau)
-med.warm.sims.kurtosis.15.tau <- median(warming.sims.kurtosis.15.tau)
-ggplot(data = raw.sim.kurtosis.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+med.const.sims.kt.15.tau <- median(constant.sims.kt.15.tau)
+med.warm.sims.kt.15.tau <- median(warming.sims.kt.15.tau)
+ggplot(data = raw.sim.kt.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
   geom_density(alpha = 0.4, colour = cols) +
   scale_fill_manual(values = c("#1434A4", "#C21E56")) +
-  geom_vline(xintercept = med.const.sims.kurtosis.15.tau, colour = "#1434A4") +
-  geom_vline(xintercept = med.warm.sims.kurtosis.15.tau, colour = "#C21E56") +
+  geom_vline(xintercept = med.const.sims.kt.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.kt.15.tau, colour = "#C21E56") +
   xlab("Kendall's Tau") +
   ylab("Density (Kurtosis)") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
-ggplot(raw.sim.kurtosis.15.tau, aes(x = treatment, y = k.tau)) + 
+ggplot(raw.sim.kt.15.tau, aes(x = Treatment, y = k.tau)) + 
   geom_violin(fill = cols, colour = cols) +
   geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
   stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
@@ -1360,35 +1361,35 @@ ggplot(raw.sim.kurtosis.15.tau, aes(x = treatment, y = k.tau)) +
 ## Variance
 
 ```{r}
-summary(constant.sims.variance.15.tau); summary(warming.sims.variance.15.tau)
-(length(warming.sims.variance.15.tau) - length(which(warming.sims.variance.15.tau < 0)))/length(warming.sims.variance.15.tau)
-(length(warming.sims.variance.15.tau) - length(which(warming.sims.variance.15.tau < median(constant.sims.variance.15.tau))))/length(warming.sims.variance.15.tau)
+summary(constant.sims.var.15.tau); summary(warming.sims.var.15.tau)
+(length(warming.sims.var.15.tau) - length(which(warming.sims.var.15.tau < 0)))/length(warming.sims.var.15.tau)
+(length(warming.sims.var.15.tau) - length(which(warming.sims.var.15.tau < median(constant.sims.var.15.tau))))/length(warming.sims.var.15.tau)
 
-raw.sim.variance.15.tau <- data.frame(cbind(constant.sims.variance.15.tau, warming.sims.variance.15.tau))
+raw.sim.var.15.tau <- data.frame(cbind(constant.sims.var.15.tau, warming.sims.var.15.tau))
 Treatment <- c(rep("Constant", 1000), rep("Warming", 1000))
-k.tau <- c(constant.sims.variance.15.tau, warming.sims.variance.15.tau)
-raw.sim.variance.15.tau <- data.frame(
+k.tau <- c(constant.sims.var.15.tau, warming.sims.var.15.tau)
+raw.sim.var.15.tau <- data.frame(
   Treatment = Treatment, 
   k.tau = k.tau
 )
-saveRDS(raw.sim.variance.15.tau, "Objects/raw.sim.variance.15.tau.rds")
+saveRDS(raw.sim.var.15.tau, "Objects/raw.sim.var.15.tau.rds")
 
 cols <- c(rep("#1434A4", 512), rep("#C21E56", 512))
 cols.pt <- c(rep("#A7C7E7", 1000), rep("#F6799D", 1000))
 
-med.const.sims.variance.15.tau <- median(constant.sims.variance.15.tau)
-med.warm.sims.variance.15.tau <- median(warming.sims.variance.15.tau)
-ggplot(data = raw.sim.variance.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+med.const.sims.var.15.tau <- median(constant.sims.var.15.tau)
+med.warm.sims.var.15.tau <- median(warming.sims.var.15.tau)
+ggplot(data = raw.sim.var.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
   geom_density(alpha = 0.4, colour = cols) +
   scale_fill_manual(values = c("#1434A4", "#C21E56")) +
-  geom_vline(xintercept = med.const.sims.variance.15.tau, colour = "#1434A4") +
-  geom_vline(xintercept = med.warm.sims.variance.15.tau, colour = "#C21E56") +
+  geom_vline(xintercept = med.const.sims.var.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.var.15.tau, colour = "#C21E56") +
   xlab("Kendall's Tau") +
   ylab("Density (Variance)") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
-ggplot(raw.sim.variance.15.tau, aes(x = treatment, y = k.tau)) + 
+ggplot(raw.sim.var.15.tau, aes(x = Treatment, y = k.tau)) + 
   geom_violin(fill = cols, colour = cols) +
   geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
   stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
@@ -1431,7 +1432,7 @@ ggplot(data = raw.sim.cv.15.tau, aes(x = k.tau, group = Treatment, fill = Treatm
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
-ggplot(raw.sim.cv.15.tau, aes(x = treatment, y = k.tau)) + 
+ggplot(raw.sim.cv.15.tau, aes(x = Treatment, y = k.tau)) + 
   geom_violin(fill = cols, colour = cols) +
   geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
   stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
@@ -1474,7 +1475,7 @@ ggplot(data = raw.sim.id.15.tau, aes(x = k.tau, group = Treatment, fill = Treatm
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
-ggplot(raw.sim.id.15.tau, aes(x = treatment, y = k.tau)) + 
+ggplot(raw.sim.id.15.tau, aes(x = Treatment, y = k.tau)) + 
   geom_violin(fill = cols, colour = cols) +
   geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
   stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
@@ -1489,35 +1490,35 @@ ggplot(raw.sim.id.15.tau, aes(x = treatment, y = k.tau)) +
 ## First Difference Variance
 
 ```{r}
-summary(constant.sims.first.diff.variance.15.tau); summary(warming.sims.first.diff.variance.15.tau)
-(length(warming.sims.first.diff.variance.15.tau) - length(which(warming.sims.first.diff.variance.15.tau < 0)))/length(warming.sims.first.diff.variance.15.tau)
-(length(warming.sims.first.diff.variance.15.tau) - length(which(warming.sims.first.diff.variance.15.tau < median(constant.sims.first.diff.variance.15.tau))))/length(warming.sims.first.diff.variance.15.tau)
+summary(constant.sims.fdv.15.tau); summary(warming.sims.fdv.15.tau)
+(length(warming.sims.fdv.15.tau) - length(which(warming.sims.fdv.15.tau < 0)))/length(warming.sims.fdv.15.tau)
+(length(warming.sims.fdv.15.tau) - length(which(warming.sims.fdv.15.tau < median(constant.sims.fdv.15.tau))))/length(warming.sims.fdv.15.tau)
 
-raw.sim.first.diff.variance.15.tau <- data.frame(cbind(constant.sims.first.diff.variance.15.tau, warming.sims.first.diff.variance.15.tau))
+raw.sim.fdv.15.tau <- data.frame(cbind(constant.sims.fdv.15.tau, warming.sims.fdv.15.tau))
 Treatment <- c(rep("Constant", 1000), rep("Warming", 1000))
-k.tau <- c(constant.sims.first.diff.variance.15.tau, warming.sims.first.diff.variance.15.tau)
-raw.sim.first.diff.variance.15.tau <- data.frame(
+k.tau <- c(constant.sims.fdv.15.tau, warming.sims.fdv.15.tau)
+raw.sim.fdv.15.tau <- data.frame(
   Treatment = Treatment, 
   k.tau = k.tau
 )
-saveRDS(raw.sim.first.diff.variance.15.tau, "Objects/raw.sim.first.diff.variance.15.tau.rds")
+saveRDS(raw.sim.fdv.15.tau, "Objects/raw.sim.fdv.15.tau.rds")
 
 cols <- c(rep("#1434A4", 512), rep("#C21E56", 512))
 cols.pt <- c(rep("#A7C7E7", 1000), rep("#F6799D", 1000))
 
-med.const.sims.first.diff.variance.15.tau <- median(constant.sims.first.diff.variance.15.tau)
-med.warm.sims.first.diff.variance.15.tau <- median(warming.sims.first.diff.variance.15.tau)
-ggplot(data = raw.sim.first.diff.variance.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+med.const.sims.fdv.15.tau <- median(constant.sims.fdv.15.tau)
+med.warm.sims.fdv.15.tau <- median(warming.sims.fdv.15.tau)
+ggplot(data = raw.sim.fdv.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
   geom_density(alpha = 0.4, colour = cols) +
   scale_fill_manual(values = c("#1434A4", "#C21E56")) +
-  geom_vline(xintercept = med.const.sims.first.diff.variance.15.tau, colour = "#1434A4") +
-  geom_vline(xintercept = med.warm.sims.first.diff.variance.15.tau, colour = "#C21E56") +
+  geom_vline(xintercept = med.const.sims.fdv.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.fdv.15.tau, colour = "#C21E56") +
   xlab("Kendall's Tau") +
   ylab("Density (First Difference Variance)") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
-ggplot(raw.sim.first.diff.variance.15.tau, aes(x = treatment, y = k.tau)) + 
+ggplot(raw.sim.fdv.15.tau, aes(x = Treatment, y = k.tau)) + 
   geom_violin(fill = cols, colour = cols) +
   geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
   stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
@@ -1560,7 +1561,7 @@ ggplot(data = raw.sim.cor.15.tau, aes(x = k.tau, group = Treatment, fill = Treat
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
-ggplot(raw.sim.cor.15.tau, aes(x = treatment, y = k.tau)) + 
+ggplot(raw.sim.cor.15.tau, aes(x = Treatment, y = k.tau)) + 
   geom_violin(fill = cols, colour = cols) +
   geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
   stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
@@ -1575,35 +1576,35 @@ ggplot(raw.sim.cor.15.tau, aes(x = treatment, y = k.tau)) +
 ## Autocovariance
 
 ```{r}
-summary(constant.sims.cov.15.tau); summary(warming.sims.cov.15.tau)
-(length(warming.sims.cov.15.tau) - length(which(warming.sims.cov.15.tau < 0)))/length(warming.sims.cov.15.tau)
-(length(warming.sims.cov.15.tau) - length(which(warming.sims.cov.15.tau < median(constant.sims.cov.15.tau))))/length(warming.sims.cov.15.tau)
+summary(constant.sims.acv.15.tau); summary(warming.sims.acv.15.tau)
+(length(warming.sims.acv.15.tau) - length(which(warming.sims.acv.15.tau < 0)))/length(warming.sims.acv.15.tau)
+(length(warming.sims.acv.15.tau) - length(which(warming.sims.acv.15.tau < median(constant.sims.acv.15.tau))))/length(warming.sims.acv.15.tau)
 
-raw.sim.cov.15.tau <- data.frame(cbind(constant.sims.cov.15.tau, warming.sims.cov.15.tau))
+raw.sim.acv.15.tau <- data.frame(cbind(constant.sims.acv.15.tau, warming.sims.acv.15.tau))
 Treatment <- c(rep("Constant", 1000), rep("Warming", 1000))
-k.tau <- c(constant.sims.cov.15.tau, warming.sims.cov.15.tau)
-raw.sim.cov.15.tau <- data.frame(
+k.tau <- c(constant.sims.acv.15.tau, warming.sims.acv.15.tau)
+raw.sim.acv.15.tau <- data.frame(
   Treatment = Treatment, 
   k.tau = k.tau
 )
-saveRDS(raw.sim.cov.15.tau, "Objects/raw.sim.cov.15.tau.rds")
+saveRDS(raw.sim.acv.15.tau, "Objects/raw.sim.acv.15.tau.rds")
 
 cols <- c(rep("#1434A4", 512), rep("#C21E56", 512))
 cols.pt <- c(rep("#A7C7E7", 1000), rep("#F6799D", 1000))
 
-med.const.sims.cov.15.tau <- median(constant.sims.cov.15.tau)
-med.warm.sims.cov.15.tau <- median(warming.sims.cov.15.tau)
-ggplot(data = raw.sim.cov.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+med.const.sims.acv.15.tau <- median(constant.sims.acv.15.tau)
+med.warm.sims.acv.15.tau <- median(warming.sims.acv.15.tau)
+ggplot(data = raw.sim.acv.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
   geom_density(alpha = 0.4, colour = cols) +
   scale_fill_manual(values = c("#1434A4", "#C21E56")) +
-  geom_vline(xintercept = med.const.sims.cov.15.tau, colour = "#1434A4") +
-  geom_vline(xintercept = med.warm.sims.cov.15.tau, colour = "#C21E56") +
+  geom_vline(xintercept = med.const.sims.acv.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.acv.15.tau, colour = "#C21E56") +
   xlab("Kendall's Tau") +
   ylab("Density (Autocovariance)") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
-ggplot(raw.sim.cov.15.tau, aes(x = treatment, y = k.tau)) + 
+ggplot(raw.sim.acv.15.tau, aes(x = Treatment, y = k.tau)) + 
   geom_violin(fill = cols, colour = cols) +
   geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
   stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
@@ -1618,34 +1619,34 @@ ggplot(raw.sim.cov.15.tau, aes(x = treatment, y = k.tau)) +
 ## Decay Time
 
 ```{r}
-summary(constant.sims.decay.time.15.tau); summary(warming.sims.decay.time.15.tau)
-(length(warming.sims.decay.time.15.tau) - length(which(warming.sims.decay.time.15.tau < median(constant.sims.decay.time.15.tau))))/length(warming.sims.decay.time.15.tau)
+summary(constant.sims.dt.15.tau); summary(warming.sims.dt.15.tau)
+(length(warming.sims.dt.15.tau) - length(which(warming.sims.dt.15.tau < median(constant.sims.dt.15.tau))))/length(warming.sims.dt.15.tau)
 
-raw.sim.decay.time.15.tau <- data.frame(cbind(constant.sims.decay.time.15.tau, warming.sims.decay.time.15.tau))
+raw.sim.dt.15.tau <- data.frame(cbind(constant.sims.dt.15.tau, warming.sims.dt.15.tau))
 Treatment <- c(rep("Constant", 1000), rep("Warming", 1000))
-k.tau <- c(constant.sims.decay.time.15.tau, warming.sims.decay.time.15.tau)
-raw.sim.decay.time.15.tau <- data.frame(
+k.tau <- c(constant.sims.dt.15.tau, warming.sims.dt.15.tau)
+raw.sim.dt.15.tau <- data.frame(
   Treatment = Treatment, 
   k.tau = k.tau
 )
-saveRDS(raw.sim.decay.time.15.tau, "Objects/raw.sim.decay.time.15.tau.rds")
+saveRDS(raw.sim.dt.15.tau, "Objects/raw.sim.dt.15.tau.rds")
 
 cols <- c(rep("#1434A4", 512), rep("#C21E56", 512))
 cols.pt <- c(rep("#A7C7E7", 1000), rep("#F6799D", 1000))
 
-med.const.sims.decay.time.15.tau <- median(constant.sims.decay.time.15.tau)
-med.warm.sims.decay.time.15.tau <- median(warming.sims.decay.time.15.tau)
-ggplot(data = raw.sim.decay.time.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+med.const.sims.dt.15.tau <- median(constant.sims.dt.15.tau)
+med.warm.sims.dt.15.tau <- median(warming.sims.dt.15.tau)
+ggplot(data = raw.sim.dt.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
   geom_density(alpha = 0.4, colour = cols) +
   scale_fill_manual(values = c("#1434A4", "#C21E56")) +
-  geom_vline(xintercept = med.const.sims.decay.time.15.tau, colour = "#1434A4") +
-  geom_vline(xintercept = med.warm.sims.decay.time.15.tau, colour = "#C21E56") +
+  geom_vline(xintercept = med.const.sims.dt.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.dt.15.tau, colour = "#C21E56") +
   xlab("Kendall's Tau") +
   ylab("Density (Decay Time)") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
-ggplot(raw.sim.decay.time.15.tau, aes(x = treatment, y = k.tau)) + 
+ggplot(raw.sim.dt.15.tau, aes(x = Treatment, y = k.tau)) + 
   geom_violin(fill = cols, colour = cols) +
   geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
   stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
@@ -1901,19 +1902,127 @@ for (i in 1:1000){
 ### Autocorrelation
 
 ```{r}
+sub1.nulls.ac <- list(); sub2.nulls.ac <- list(); sub3.nulls.ac <- list(); sub4.nulls.ac <- list()
+sub5.nulls.ac <- list(); sub6.nulls.ac <- list(); sub7.nulls.ac <- list(); sub8.nulls.ac <- list()
 
+for (i in 1:1000){
+  sub1.nulls.ac.temp <- c()
+  sub2.nulls.ac.temp <- c()
+  sub3.nulls.ac.temp <- c()
+  sub4.nulls.ac.temp <- c()
+  sub5.nulls.ac.temp <- c()
+  sub6.nulls.ac.temp <- c()
+  sub7.nulls.ac.temp <- c()
+  sub8.nulls.ac.temp <- c()
+  for (j in 1:15){
+    window.start <- j; window.end <- j + 4
+    sub1.nulls.ac.temp[j] <- acf(sub1.nulls[[i]][c(window.start:window.end)], 
+                                 plot = FALSE, type = "correlation")[[1]][2] 
+    sub2.nulls.ac.temp[j] <- acf(sub2.nulls[[i]][c(window.start:window.end)], 
+                                 plot = FALSE, type = "correlation")[[1]][2] 
+    sub3.nulls.ac.temp[j] <- acf(sub3.nulls[[i]][c(window.start:window.end)], 
+                                 plot = FALSE, type = "correlation")[[1]][2] 
+    sub4.nulls.ac.temp[j] <- acf(sub4.nulls[[i]][c(window.start:window.end)], 
+                                 plot = FALSE, type = "correlation")[[1]][2] 
+    sub5.nulls.ac.temp[j] <- acf(sub5.nulls[[i]][c(window.start:window.end)], 
+                                 plot = FALSE, type = "correlation")[[1]][2] 
+    sub6.nulls.ac.temp[j] <- acf(sub6.nulls[[i]][c(window.start:window.end)], 
+                                 plot = FALSE, type = "correlation")[[1]][2] 
+    sub7.nulls.ac.temp[j] <- acf(sub7.nulls[[i]][c(window.start:window.end)], 
+                                 plot = FALSE, type = "correlation")[[1]][2] 
+    sub8.nulls.ac.temp[j] <- acf(sub8.nulls[[i]][c(window.start:window.end)], 
+                                 plot = FALSE, type = "correlation")[[1]][2] 
+  }
+  sub1.nulls.ac[[i]] <- sub1.nulls.ac.temp
+  sub2.nulls.ac[[i]] <- sub2.nulls.ac.temp
+  sub3.nulls.ac[[i]] <- sub3.nulls.ac.temp
+  sub4.nulls.ac[[i]] <- sub4.nulls.ac.temp
+  sub5.nulls.ac[[i]] <- sub5.nulls.ac.temp
+  sub6.nulls.ac[[i]] <- sub6.nulls.ac.temp
+  sub7.nulls.ac[[i]] <- sub7.nulls.ac.temp
+  sub8.nulls.ac[[i]] <- sub8.nulls.ac.temp
+}
 ```
 
 ### Autocovariance
 
 ```{r}
+sub1.nulls.acv <- list(); sub2.nulls.acv <- list(); sub3.nulls.acv <- list(); sub4.nulls.acv <- list()
+sub5.nulls.acv <- list(); sub6.nulls.acv <- list(); sub7.nulls.acv <- list(); sub8.nulls.acv <- list()
 
+for (i in 1:1000){
+  sub1.nulls.acv.temp <- c()
+  sub2.nulls.acv.temp <- c()
+  sub3.nulls.acv.temp <- c()
+  sub4.nulls.acv.temp <- c()
+  sub5.nulls.acv.temp <- c()
+  sub6.nulls.acv.temp <- c()
+  sub7.nulls.acv.temp <- c()
+  sub8.nulls.acv.temp <- c()
+  for (j in 1:15){
+    window.start <- j; window.end <- j + 4
+    sub1.nulls.acv.temp[j] <- acf(sub1.nulls[[i]][c(window.start:window.end)], 
+                                 plot = FALSE, type = "covariance")[[1]][2] 
+    sub2.nulls.acv.temp[j] <- acf(sub2.nulls[[i]][c(window.start:window.end)], 
+                                 plot = FALSE, type = "covariance")[[1]][2] 
+    sub3.nulls.acv.temp[j] <- acf(sub3.nulls[[i]][c(window.start:window.end)], 
+                                 plot = FALSE, type = "covariance")[[1]][2] 
+    sub4.nulls.acv.temp[j] <- acf(sub4.nulls[[i]][c(window.start:window.end)], 
+                                 plot = FALSE, type = "covariance")[[1]][2] 
+    sub5.nulls.acv.temp[j] <- acf(sub5.nulls[[i]][c(window.start:window.end)], 
+                                 plot = FALSE, type = "covariance")[[1]][2] 
+    sub6.nulls.acv.temp[j] <- acf(sub6.nulls[[i]][c(window.start:window.end)], 
+                                 plot = FALSE, type = "covariance")[[1]][2] 
+    sub7.nulls.acv.temp[j] <- acf(sub7.nulls[[i]][c(window.start:window.end)], 
+                                 plot = FALSE, type = "covariance")[[1]][2] 
+    sub8.nulls.acv.temp[j] <- acf(sub8.nulls[[i]][c(window.start:window.end)], 
+                                 plot = FALSE, type = "covariance")[[1]][2] 
+  }
+  sub1.nulls.acv[[i]] <- sub1.nulls.acv.temp
+  sub2.nulls.acv[[i]] <- sub2.nulls.acv.temp
+  sub3.nulls.acv[[i]] <- sub3.nulls.acv.temp
+  sub4.nulls.acv[[i]] <- sub4.nulls.acv.temp
+  sub5.nulls.acv[[i]] <- sub5.nulls.acv.temp
+  sub6.nulls.acv[[i]] <- sub6.nulls.acv.temp
+  sub7.nulls.acv[[i]] <- sub7.nulls.acv.temp
+  sub8.nulls.acv[[i]] <- sub8.nulls.acv.temp
+}
 ```
 
 ### Decay Time
 
 ```{r}
+sub1.nulls.dt <- list(); sub2.nulls.dt <- list(); sub3.nulls.dt <- list(); sub4.nulls.dt <- list()
+sub5.nulls.dt <- list(); sub6.nulls.dt <- list(); sub7.nulls.dt <- list(); sub8.nulls.dt <- list()
 
+for (i in 1:1000){
+  sub1.nulls.dt.temp <- c()
+  sub2.nulls.dt.temp <- c()
+  sub3.nulls.dt.temp <- c()
+  sub4.nulls.dt.temp <- c()
+  sub5.nulls.dt.temp <- c()
+  sub6.nulls.dt.temp <- c()
+  sub7.nulls.dt.temp <- c()
+  sub8.nulls.dt.temp <- c()
+  for (j in 1:15){
+    suppressWarnings(sub1.nulls.dt.temp[j] <- -j/log(sub1.nulls.ac[[i]][j]))
+    suppressWarnings(sub2.nulls.dt.temp[j] <- -j/log(sub2.nulls.ac[[i]][j]))
+    suppressWarnings(sub3.nulls.dt.temp[j] <- -j/log(sub3.nulls.ac[[i]][j]))
+    suppressWarnings(sub4.nulls.dt.temp[j] <- -j/log(sub4.nulls.ac[[i]][j]))
+    suppressWarnings(sub5.nulls.dt.temp[j] <- -j/log(sub5.nulls.ac[[i]][j]))
+    suppressWarnings(sub6.nulls.dt.temp[j] <- -j/log(sub6.nulls.ac[[i]][j]))
+    suppressWarnings(sub7.nulls.dt.temp[j] <- -j/log(sub7.nulls.ac[[i]][j]))
+    suppressWarnings(sub8.nulls.dt.temp[j] <- -j/log(sub8.nulls.ac[[i]][j]))
+  }
+  sub1.nulls.dt[[i]] <- sub1.nulls.dt.temp
+  sub2.nulls.dt[[i]] <- sub2.nulls.dt.temp
+  sub3.nulls.dt[[i]] <- sub3.nulls.dt.temp
+  sub4.nulls.dt[[i]] <- sub4.nulls.dt.temp
+  sub5.nulls.dt[[i]] <- sub5.nulls.dt.temp
+  sub6.nulls.dt[[i]] <- sub6.nulls.dt.temp
+  sub7.nulls.dt[[i]] <- sub7.nulls.dt.temp
+  sub8.nulls.dt[[i]] <- sub8.nulls.dt.temp
+}
 ```
 
 ## Kendall's Tau
@@ -2114,32 +2223,32 @@ sub6.mean.tau <- warming.mean.tau[2]
 sub7.mean.tau <- warming.mean.tau[3]
 sub8.mean.tau <- warming.mean.tau[4]
 
-sub1.sk.tau <- constant.skewness.tau[1]
-sub2.sk.tau <- constant.skewness.tau[2]
-sub3.sk.tau <- constant.skewness.tau[3]
-sub4.sk.tau <- constant.skewness.tau[4]
-sub5.sk.tau <- warming.skewness.tau[1]
-sub6.sk.tau <- warming.skewness.tau[2]
-sub7.sk.tau <- warming.skewness.tau[3]
-sub8.sk.tau <- warming.skewness.tau[4]
+sub1.sk.tau <- constant.sk.tau[1]
+sub2.sk.tau <- constant.sk.tau[2]
+sub3.sk.tau <- constant.sk.tau[3]
+sub4.sk.tau <- constant.sk.tau[4]
+sub5.sk.tau <- warming.sk.tau[1]
+sub6.sk.tau <- warming.sk.tau[2]
+sub7.sk.tau <- warming.sk.tau[3]
+sub8.sk.tau <- warming.sk.tau[4]
 
-sub1.kt.tau <- constant.kurtosis.tau[1]
-sub2.kt.tau <- constant.kurtosis.tau[2]
-sub3.kt.tau <- constant.kurtosis.tau[3]
-sub4.kt.tau <- constant.kurtosis.tau[4]
-sub5.kt.tau <- warming.kurtosis.tau[1]
-sub6.kt.tau <- warming.kurtosis.tau[2]
-sub7.kt.tau <- warming.kurtosis.tau[3]
-sub8.kt.tau <- warming.kurtosis.tau[4]
+sub1.kt.tau <- constant.kt.tau[1]
+sub2.kt.tau <- constant.kt.tau[2]
+sub3.kt.tau <- constant.kt.tau[3]
+sub4.kt.tau <- constant.kt.tau[4]
+sub5.kt.tau <- warming.kt.tau[1]
+sub6.kt.tau <- warming.kt.tau[2]
+sub7.kt.tau <- warming.kt.tau[3]
+sub8.kt.tau <- warming.kt.tau[4]
 
-sub1.var.tau <- constant.variance.tau[1]
-sub2.var.tau <- constant.variance.tau[2]
-sub3.var.tau <- constant.variance.tau[3]
-sub4.var.tau <- constant.variance.tau[4]
-sub5.var.tau <- warming.variance.tau[1]
-sub6.var.tau <- warming.variance.tau[2]
-sub7.var.tau <- warming.variance.tau[3]
-sub8.var.tau <- warming.variance.tau[4]
+sub1.var.tau <- constant.var.tau[1]
+sub2.var.tau <- constant.var.tau[2]
+sub3.var.tau <- constant.var.tau[3]
+sub4.var.tau <- constant.var.tau[4]
+sub5.var.tau <- warming.var.tau[1]
+sub6.var.tau <- warming.var.tau[2]
+sub7.var.tau <- warming.var.tau[3]
+sub8.var.tau <- warming.var.tau[4]
 
 sub1.cv.tau <- constant.cv.tau[1]
 sub2.cv.tau <- constant.cv.tau[2]
@@ -2159,14 +2268,14 @@ sub6.id.tau <- warming.id.tau[2]
 sub7.id.tau <- warming.id.tau[3]
 sub8.id.tau <- warming.id.tau[4]
 
-sub1.fdv.tau <- constant.first.diff.variance.tau[1]
-sub2.fdv.tau <- constant.first.diff.variance.tau[2]
-sub3.fdv.tau <- constant.first.diff.variance.tau[3]
-sub4.fdv.tau <- constant.first.diff.variance.tau[4]
-sub5.fdv.tau <- warming.first.diff.variance.tau[1]
-sub6.fdv.tau <- warming.first.diff.variance.tau[2]
-sub7.fdv.tau <- warming.first.diff.variance.tau[3]
-sub8.fdv.tau <- warming.first.diff.variance.tau[4]
+sub1.fdv.tau <- constant.fdv.tau[1]
+sub2.fdv.tau <- constant.fdv.tau[2]
+sub3.fdv.tau <- constant.fdv.tau[3]
+sub4.fdv.tau <- constant.fdv.tau[4]
+sub5.fdv.tau <- warming.fdv.tau[1]
+sub6.fdv.tau <- warming.fdv.tau[2]
+sub7.fdv.tau <- warming.fdv.tau[3]
+sub8.fdv.tau <- warming.fdv.tau[4]
 
 sub1.ac.tau <- constant.ac.tau[1]
 sub2.ac.tau <- constant.ac.tau[2]
@@ -2177,23 +2286,23 @@ sub6.ac.tau <- warming.ac.tau[2]
 sub7.ac.tau <- warming.ac.tau[3]
 sub8.ac.tau <- warming.ac.tau[4]
 
-sub1.acv.tau <- constant.cov.tau[1]
-sub2.acv.tau <- constant.cov.tau[2]
-sub3.acv.tau <- constant.cov.tau[3]
-sub4.acv.tau <- constant.cov.tau[4]
-sub5.acv.tau <- warming.cov.tau[1]
-sub6.acv.tau <- warming.cov.tau[2]
-sub7.acv.tau <- warming.cov.tau[3]
-sub8.acv.tau <- warming.cov.tau[4]
+sub1.acv.tau <- constant.acv.tau[1]
+sub2.acv.tau <- constant.acv.tau[2]
+sub3.acv.tau <- constant.acv.tau[3]
+sub4.acv.tau <- constant.acv.tau[4]
+sub5.acv.tau <- warming.acv.tau[1]
+sub6.acv.tau <- warming.acv.tau[2]
+sub7.acv.tau <- warming.acv.tau[3]
+sub8.acv.tau <- warming.acv.tau[4]
 
-sub1.dt.tau <- constant.decay.time.tau[1]
-sub2.dt.tau <- constant.decay.time.tau[2]
-sub3.dt.tau <- constant.decay.time.tau[3]
-sub4.dt.tau <- constant.decay.time.tau[4]
-sub5.dt.tau <- warming.decay.time.tau[1]
-sub6.dt.tau <- warming.decay.time.tau[2]
-sub7.dt.tau <- warming.decay.time.tau[3]
-sub8.dt.tau <- warming.decay.time.tau[4]
+sub1.dt.tau <- constant.dt.tau[1]
+sub2.dt.tau <- constant.dt.tau[2]
+sub3.dt.tau <- constant.dt.tau[3]
+sub4.dt.tau <- constant.dt.tau[4]
+sub5.dt.tau <- warming.dt.tau[1]
+sub6.dt.tau <- warming.dt.tau[2]
+sub7.dt.tau <- warming.dt.tau[3]
+sub8.dt.tau <- warming.dt.tau[4]
 ```
 
 ### Mean
@@ -2465,8 +2574,3 @@ ggplot(null.dt.tau.df, aes(x = subpop, y = null.dt.tau)) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
 ```
-
-
-
-
-
