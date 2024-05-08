@@ -375,6 +375,7 @@ number.of.sims = 4
 ### 10ºC
 
 ```{r}
+x10 <- c(S = 169, I = 0, D = 0, E = 0)
 constant <- NULL
 set.seed <- (1234)
 for(i in 1:number.of.sims){

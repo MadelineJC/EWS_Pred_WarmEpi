@@ -1,0 +1,43 @@
+# Assessing EWS with Individuals Sampled from Simulations
+
+# Required Packages
+
+```{r, include = FALSE}
+require(scales)
+require(evobiR)
+require(gdata)
+require(doBy)
+require(ecp)
+require(strucchange)
+require(TTR)
+require(moments)
+require(tidyverse)
+```
+
+# Data
+
+```{r}
+## Constant temperature
+constant1 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.1.csv")
+constant2 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.2.csv")
+constant3 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.3.csv")
+constant4 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.4.csv")
+constant5 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.5.csv")
+constant6 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.6.csv")
+constant7 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.7.csv")
+constant8 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.8.csv")
+constant9 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.9.csv")
+constant10 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.10.csv")
+
+## Variable temperature
+warming1 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.1.csv")
+warming2 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.2.csv")
+warming3 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.3.csv")
+warming4 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.4.csv")
+warming5 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.5.csv")
+warming6 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.6.csv")
+warming7 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.7.csv")
+warming8 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.8.csv")
+warming9 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.9.csv")
+warming10 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.10.csv")
+```
