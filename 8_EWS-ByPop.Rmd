@@ -1658,12 +1658,6 @@ ggplot(raw.sim.dt.15.tau, aes(x = Treatment, y = k.tau)) +
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
 ```
 
-## \*\*\*False-Positive Rate
-
-```{r}
-
-```
-
 # Raw, Empirical Data
 
 ## Data Wrangling
@@ -2594,14 +2588,14 @@ sub6.null.mean.tau <- sub6.null.mean.tau[!is.na(sub6.null.mean.tau)]
 sub7.null.mean.tau <- sub7.null.mean.tau[!is.na(sub7.null.mean.tau)]
 sub8.null.mean.tau <- sub8.null.mean.tau[!is.na(sub8.null.mean.tau)]
 # Percent of "bootstraps" with larger value of tau than found in empirical data
-sub1.mean.fpr.gt <- length(which(sub1.null.mean.tau > sub1.mean.tau))/length(sub1.null.mean.tau)
-sub2.mean.fpr.gt <- length(which(sub2.null.mean.tau > sub2.mean.tau))/length(sub2.null.mean.tau)
-sub3.mean.fpr.gt <- length(which(sub3.null.mean.tau > sub3.mean.tau))/length(sub3.null.mean.tau)
-sub4.mean.fpr.gt <- length(which(sub4.null.mean.tau > sub4.mean.tau))/length(sub4.null.mean.tau)
-sub5.mean.fpr.gt <- length(which(sub5.null.mean.tau > sub5.mean.tau))/length(sub5.null.mean.tau)
-sub6.mean.fpr.gt <- length(which(sub6.null.mean.tau > sub6.mean.tau))/length(sub6.null.mean.tau)
-sub7.mean.fpr.gt <- length(which(sub7.null.mean.tau > sub7.mean.tau))/length(sub7.null.mean.tau)
-sub8.mean.fpr.gt <- length(which(sub8.null.mean.tau > sub8.mean.tau))/length(sub8.null.mean.tau)
+sub1.mean.fpr.gt <- length(which(sub1.null.mean.tau >= sub1.mean.tau))/length(sub1.null.mean.tau)
+sub2.mean.fpr.gt <- length(which(sub2.null.mean.tau >= sub2.mean.tau))/length(sub2.null.mean.tau)
+sub3.mean.fpr.gt <- length(which(sub3.null.mean.tau >= sub3.mean.tau))/length(sub3.null.mean.tau)
+sub4.mean.fpr.gt <- length(which(sub4.null.mean.tau >= sub4.mean.tau))/length(sub4.null.mean.tau)
+sub5.mean.fpr.gt <- length(which(sub5.null.mean.tau >= sub5.mean.tau))/length(sub5.null.mean.tau)
+sub6.mean.fpr.gt <- length(which(sub6.null.mean.tau >= sub6.mean.tau))/length(sub6.null.mean.tau)
+sub7.mean.fpr.gt <- length(which(sub7.null.mean.tau >= sub7.mean.tau))/length(sub7.null.mean.tau)
+sub8.mean.fpr.gt <- length(which(sub8.null.mean.tau >= sub8.mean.tau))/length(sub8.null.mean.tau)
 
 sub1.null.mean.tau <- sub1.null.mean.tau[!is.na(sub1.null.mean.tau)]
 sub2.null.mean.tau <- sub2.null.mean.tau[!is.na(sub2.null.mean.tau)]
@@ -2612,14 +2606,14 @@ sub6.null.mean.tau <- sub6.null.mean.tau[!is.na(sub6.null.mean.tau)]
 sub7.null.mean.tau <- sub7.null.mean.tau[!is.na(sub7.null.mean.tau)]
 sub8.null.mean.tau <- sub8.null.mean.tau[!is.na(sub8.null.mean.tau)]
 # Percent of "bootstraps" with smaller value of tau than found in empirical data
-sub1.mean.fpr.lt <- length(which(sub1.null.mean.tau < sub1.mean.tau))/length(sub1.null.mean.tau)
-sub2.mean.fpr.lt <- length(which(sub2.null.mean.tau < sub2.mean.tau))/length(sub2.null.mean.tau)
-sub3.mean.fpr.lt <- length(which(sub3.null.mean.tau < sub3.mean.tau))/length(sub3.null.mean.tau)
-sub4.mean.fpr.lt <- length(which(sub4.null.mean.tau < sub4.mean.tau))/length(sub4.null.mean.tau)
-sub5.mean.fpr.lt <- length(which(sub5.null.mean.tau < sub5.mean.tau))/length(sub5.null.mean.tau)
-sub6.mean.fpr.lt <- length(which(sub6.null.mean.tau < sub6.mean.tau))/length(sub6.null.mean.tau)
-sub7.mean.fpr.lt <- length(which(sub7.null.mean.tau < sub7.mean.tau))/length(sub7.null.mean.tau)
-sub8.mean.fpr.lt <- length(which(sub8.null.mean.tau < sub8.mean.tau))/length(sub8.null.mean.tau)
+sub1.mean.fpr.lt <- length(which(sub1.null.mean.tau <= sub1.mean.tau))/length(sub1.null.mean.tau)
+sub2.mean.fpr.lt <- length(which(sub2.null.mean.tau <= sub2.mean.tau))/length(sub2.null.mean.tau)
+sub3.mean.fpr.lt <- length(which(sub3.null.mean.tau <= sub3.mean.tau))/length(sub3.null.mean.tau)
+sub4.mean.fpr.lt <- length(which(sub4.null.mean.tau <= sub4.mean.tau))/length(sub4.null.mean.tau)
+sub5.mean.fpr.lt <- length(which(sub5.null.mean.tau <= sub5.mean.tau))/length(sub5.null.mean.tau)
+sub6.mean.fpr.lt <- length(which(sub6.null.mean.tau <= sub6.mean.tau))/length(sub6.null.mean.tau)
+sub7.mean.fpr.lt <- length(which(sub7.null.mean.tau <= sub7.mean.tau))/length(sub7.null.mean.tau)
+sub8.mean.fpr.lt <- length(which(sub8.null.mean.tau <= sub8.mean.tau))/length(sub8.null.mean.tau)
 
 ## Skewness
 sub1.null.sk.tau <- sub1.null.sk.tau[!is.na(sub1.null.sk.tau)]
@@ -2630,14 +2624,14 @@ sub5.null.sk.tau <- sub5.null.sk.tau[!is.na(sub5.null.sk.tau)]
 sub6.null.sk.tau <- sub6.null.sk.tau[!is.na(sub6.null.sk.tau)]
 sub7.null.sk.tau <- sub7.null.sk.tau[!is.na(sub7.null.sk.tau)]
 sub8.null.sk.tau <- sub8.null.sk.tau[!is.na(sub8.null.sk.tau)]
-sub1.sk.fpr.gt <- length(which(sub1.null.sk.tau > sub1.sk.tau))/length(sub1.null.sk.tau)
-sub2.sk.fpr.gt <- length(which(sub2.null.sk.tau > sub2.sk.tau))/length(sub2.null.sk.tau)
-sub3.sk.fpr.gt <- length(which(sub3.null.sk.tau > sub3.sk.tau))/length(sub3.null.sk.tau)
-sub4.sk.fpr.gt <- length(which(sub4.null.sk.tau > sub4.sk.tau))/length(sub4.null.sk.tau)
-sub5.sk.fpr.gt <- length(which(sub5.null.sk.tau > sub5.sk.tau))/length(sub5.null.sk.tau)
-sub6.sk.fpr.gt <- length(which(sub6.null.sk.tau > sub6.sk.tau))/length(sub6.null.sk.tau)
-sub7.sk.fpr.gt <- length(which(sub7.null.sk.tau > sub7.sk.tau))/length(sub7.null.sk.tau)
-sub8.sk.fpr.gt <- length(which(sub8.null.sk.tau > sub8.sk.tau))/length(sub8.null.sk.tau)
+sub1.sk.fpr.gt <- length(which(sub1.null.sk.tau >= sub1.sk.tau))/length(sub1.null.sk.tau)
+sub2.sk.fpr.gt <- length(which(sub2.null.sk.tau >= sub2.sk.tau))/length(sub2.null.sk.tau)
+sub3.sk.fpr.gt <- length(which(sub3.null.sk.tau >= sub3.sk.tau))/length(sub3.null.sk.tau)
+sub4.sk.fpr.gt <- length(which(sub4.null.sk.tau >= sub4.sk.tau))/length(sub4.null.sk.tau)
+sub5.sk.fpr.gt <- length(which(sub5.null.sk.tau >= sub5.sk.tau))/length(sub5.null.sk.tau)
+sub6.sk.fpr.gt <- length(which(sub6.null.sk.tau >= sub6.sk.tau))/length(sub6.null.sk.tau)
+sub7.sk.fpr.gt <- length(which(sub7.null.sk.tau >= sub7.sk.tau))/length(sub7.null.sk.tau)
+sub8.sk.fpr.gt <- length(which(sub8.null.sk.tau >= sub8.sk.tau))/length(sub8.null.sk.tau)
 
 sub1.null.sk.tau <- sub1.null.sk.tau[!is.na(sub1.null.sk.tau)]
 sub2.null.sk.tau <- sub2.null.sk.tau[!is.na(sub2.null.sk.tau)]
@@ -2647,14 +2641,14 @@ sub5.null.sk.tau <- sub5.null.sk.tau[!is.na(sub5.null.sk.tau)]
 sub6.null.sk.tau <- sub6.null.sk.tau[!is.na(sub6.null.sk.tau)]
 sub7.null.sk.tau <- sub7.null.sk.tau[!is.na(sub7.null.sk.tau)]
 sub8.null.sk.tau <- sub8.null.sk.tau[!is.na(sub8.null.sk.tau)]
-sub1.sk.fpr.lt <- length(which(sub1.null.sk.tau < sub1.sk.tau))/length(sub1.null.sk.tau)
-sub2.sk.fpr.lt <- length(which(sub2.null.sk.tau < sub2.sk.tau))/length(sub2.null.sk.tau)
-sub3.sk.fpr.lt <- length(which(sub3.null.sk.tau < sub3.sk.tau))/length(sub3.null.sk.tau)
-sub4.sk.fpr.lt <- length(which(sub4.null.sk.tau < sub4.sk.tau))/length(sub4.null.sk.tau)
-sub5.sk.fpr.lt <- length(which(sub5.null.sk.tau < sub5.sk.tau))/length(sub5.null.sk.tau)
-sub6.sk.fpr.lt <- length(which(sub6.null.sk.tau < sub6.sk.tau))/length(sub6.null.sk.tau)
-sub7.sk.fpr.lt <- length(which(sub7.null.sk.tau < sub7.sk.tau))/length(sub7.null.sk.tau)
-sub8.sk.fpr.lt <- length(which(sub8.null.sk.tau < sub8.sk.tau))/length(sub8.null.sk.tau)
+sub1.sk.fpr.lt <- length(which(sub1.null.sk.tau <= sub1.sk.tau))/length(sub1.null.sk.tau)
+sub2.sk.fpr.lt <- length(which(sub2.null.sk.tau <= sub2.sk.tau))/length(sub2.null.sk.tau)
+sub3.sk.fpr.lt <- length(which(sub3.null.sk.tau <= sub3.sk.tau))/length(sub3.null.sk.tau)
+sub4.sk.fpr.lt <- length(which(sub4.null.sk.tau <= sub4.sk.tau))/length(sub4.null.sk.tau)
+sub5.sk.fpr.lt <- length(which(sub5.null.sk.tau <= sub5.sk.tau))/length(sub5.null.sk.tau)
+sub6.sk.fpr.lt <- length(which(sub6.null.sk.tau <= sub6.sk.tau))/length(sub6.null.sk.tau)
+sub7.sk.fpr.lt <- length(which(sub7.null.sk.tau <= sub7.sk.tau))/length(sub7.null.sk.tau)
+sub8.sk.fpr.lt <- length(which(sub8.null.sk.tau <= sub8.sk.tau))/length(sub8.null.sk.tau)
 
 ## Kurtosis
 sub1.null.kt.tau <- sub1.null.kt.tau[!is.na(sub1.null.kt.tau)]
@@ -2665,14 +2659,14 @@ sub5.null.kt.tau <- sub5.null.kt.tau[!is.na(sub5.null.kt.tau)]
 sub6.null.kt.tau <- sub6.null.kt.tau[!is.na(sub6.null.kt.tau)]
 sub7.null.kt.tau <- sub7.null.kt.tau[!is.na(sub7.null.kt.tau)]
 sub8.null.kt.tau <- sub8.null.kt.tau[!is.na(sub8.null.kt.tau)]
-sub1.kt.fpr.gt <- length(which(sub1.null.kt.tau > sub1.kt.tau))/length(sub1.null.kt.tau)
-sub2.kt.fpr.gt <- length(which(sub2.null.kt.tau > sub2.kt.tau))/length(sub2.null.kt.tau)
-sub3.kt.fpr.gt <- length(which(sub3.null.kt.tau > sub3.kt.tau))/length(sub3.null.kt.tau)
-sub4.kt.fpr.gt <- length(which(sub4.null.kt.tau > sub4.kt.tau))/length(sub4.null.kt.tau)
-sub5.kt.fpr.gt <- length(which(sub5.null.kt.tau > sub5.kt.tau))/length(sub5.null.kt.tau)
-sub6.kt.fpr.gt <- length(which(sub6.null.kt.tau > sub6.kt.tau))/length(sub6.null.kt.tau)
-sub7.kt.fpr.gt <- length(which(sub7.null.kt.tau > sub7.kt.tau))/length(sub7.null.kt.tau)
-sub8.kt.fpr.gt <- length(which(sub8.null.kt.tau > sub8.kt.tau))/length(sub8.null.kt.tau)
+sub1.kt.fpr.gt <- length(which(sub1.null.kt.tau >= sub1.kt.tau))/length(sub1.null.kt.tau)
+sub2.kt.fpr.gt <- length(which(sub2.null.kt.tau >= sub2.kt.tau))/length(sub2.null.kt.tau)
+sub3.kt.fpr.gt <- length(which(sub3.null.kt.tau >= sub3.kt.tau))/length(sub3.null.kt.tau)
+sub4.kt.fpr.gt <- length(which(sub4.null.kt.tau >= sub4.kt.tau))/length(sub4.null.kt.tau)
+sub5.kt.fpr.gt <- length(which(sub5.null.kt.tau >= sub5.kt.tau))/length(sub5.null.kt.tau)
+sub6.kt.fpr.gt <- length(which(sub6.null.kt.tau >= sub6.kt.tau))/length(sub6.null.kt.tau)
+sub7.kt.fpr.gt <- length(which(sub7.null.kt.tau >= sub7.kt.tau))/length(sub7.null.kt.tau)
+sub8.kt.fpr.gt <- length(which(sub8.null.kt.tau >= sub8.kt.tau))/length(sub8.null.kt.tau)
 
 sub1.null.kt.tau <- sub1.null.kt.tau[!is.na(sub1.null.kt.tau)]
 sub2.null.kt.tau <- sub2.null.kt.tau[!is.na(sub2.null.kt.tau)]
@@ -2682,14 +2676,14 @@ sub5.null.kt.tau <- sub5.null.kt.tau[!is.na(sub5.null.kt.tau)]
 sub6.null.kt.tau <- sub6.null.kt.tau[!is.na(sub6.null.kt.tau)]
 sub7.null.kt.tau <- sub7.null.kt.tau[!is.na(sub7.null.kt.tau)]
 sub8.null.kt.tau <- sub8.null.kt.tau[!is.na(sub8.null.kt.tau)]
-sub1.kt.fpr.lt <- length(which(sub1.null.kt.tau < sub1.kt.tau))/length(sub1.null.kt.tau)
-sub2.kt.fpr.lt <- length(which(sub2.null.kt.tau < sub2.kt.tau))/length(sub2.null.kt.tau)
-sub3.kt.fpr.lt <- length(which(sub3.null.kt.tau < sub3.kt.tau))/length(sub3.null.kt.tau)
-sub4.kt.fpr.lt <- length(which(sub4.null.kt.tau < sub4.kt.tau))/length(sub4.null.kt.tau)
-sub5.kt.fpr.lt <- length(which(sub5.null.kt.tau < sub5.kt.tau))/length(sub5.null.kt.tau)
-sub6.kt.fpr.lt <- length(which(sub6.null.kt.tau < sub6.kt.tau))/length(sub6.null.kt.tau)
-sub7.kt.fpr.lt <- length(which(sub7.null.kt.tau < sub7.kt.tau))/length(sub7.null.kt.tau)
-sub8.kt.fpr.lt <- length(which(sub8.null.kt.tau < sub8.kt.tau))/length(sub8.null.kt.tau)
+sub1.kt.fpr.lt <- length(which(sub1.null.kt.tau <= sub1.kt.tau))/length(sub1.null.kt.tau)
+sub2.kt.fpr.lt <- length(which(sub2.null.kt.tau <= sub2.kt.tau))/length(sub2.null.kt.tau)
+sub3.kt.fpr.lt <- length(which(sub3.null.kt.tau <= sub3.kt.tau))/length(sub3.null.kt.tau)
+sub4.kt.fpr.lt <- length(which(sub4.null.kt.tau <= sub4.kt.tau))/length(sub4.null.kt.tau)
+sub5.kt.fpr.lt <- length(which(sub5.null.kt.tau <= sub5.kt.tau))/length(sub5.null.kt.tau)
+sub6.kt.fpr.lt <- length(which(sub6.null.kt.tau <= sub6.kt.tau))/length(sub6.null.kt.tau)
+sub7.kt.fpr.lt <- length(which(sub7.null.kt.tau <= sub7.kt.tau))/length(sub7.null.kt.tau)
+sub8.kt.fpr.lt <- length(which(sub8.null.kt.tau <= sub8.kt.tau))/length(sub8.null.kt.tau)
 
 ## Variance
 sub1.null.var.tau <- sub1.null.var.tau[!is.na(sub1.null.var.tau)]
@@ -2700,14 +2694,14 @@ sub5.null.var.tau <- sub5.null.var.tau[!is.na(sub5.null.var.tau)]
 sub6.null.var.tau <- sub6.null.var.tau[!is.na(sub6.null.var.tau)]
 sub7.null.var.tau <- sub7.null.var.tau[!is.na(sub7.null.var.tau)]
 sub8.null.var.tau <- sub8.null.var.tau[!is.na(sub8.null.var.tau)]
-sub1.var.fpr.gt <- length(which(sub1.null.var.tau > sub1.var.tau))/length(sub1.null.var.tau)
-sub2.var.fpr.gt <- length(which(sub2.null.var.tau > sub2.var.tau))/length(sub2.null.var.tau)
-sub3.var.fpr.gt <- length(which(sub3.null.var.tau > sub3.var.tau))/length(sub3.null.var.tau)
-sub4.var.fpr.gt <- length(which(sub4.null.var.tau > sub4.var.tau))/length(sub4.null.var.tau)
-sub5.var.fpr.gt <- length(which(sub5.null.var.tau > sub5.var.tau))/length(sub5.null.var.tau)
-sub6.var.fpr.gt <- length(which(sub6.null.var.tau > sub6.var.tau))/length(sub6.null.var.tau)
-sub7.var.fpr.gt <- length(which(sub7.null.var.tau > sub7.var.tau))/length(sub7.null.var.tau)
-sub8.var.fpr.gt <- length(which(sub8.null.var.tau > sub8.var.tau))/length(sub8.null.var.tau)
+sub1.var.fpr.gt <- length(which(sub1.null.var.tau >= sub1.var.tau))/length(sub1.null.var.tau)
+sub2.var.fpr.gt <- length(which(sub2.null.var.tau >= sub2.var.tau))/length(sub2.null.var.tau)
+sub3.var.fpr.gt <- length(which(sub3.null.var.tau >= sub3.var.tau))/length(sub3.null.var.tau)
+sub4.var.fpr.gt <- length(which(sub4.null.var.tau >= sub4.var.tau))/length(sub4.null.var.tau)
+sub5.var.fpr.gt <- length(which(sub5.null.var.tau >= sub5.var.tau))/length(sub5.null.var.tau)
+sub6.var.fpr.gt <- length(which(sub6.null.var.tau >= sub6.var.tau))/length(sub6.null.var.tau)
+sub7.var.fpr.gt <- length(which(sub7.null.var.tau >= sub7.var.tau))/length(sub7.null.var.tau)
+sub8.var.fpr.gt <- length(which(sub8.null.var.tau >= sub8.var.tau))/length(sub8.null.var.tau)
 
 sub1.null.var.tau <- sub1.null.var.tau[!is.na(sub1.null.var.tau)]
 sub2.null.var.tau <- sub2.null.var.tau[!is.na(sub2.null.var.tau)]
@@ -2717,14 +2711,14 @@ sub5.null.var.tau <- sub5.null.var.tau[!is.na(sub5.null.var.tau)]
 sub6.null.var.tau <- sub6.null.var.tau[!is.na(sub6.null.var.tau)]
 sub7.null.var.tau <- sub7.null.var.tau[!is.na(sub7.null.var.tau)]
 sub8.null.var.tau <- sub8.null.var.tau[!is.na(sub8.null.var.tau)]
-sub1.var.fpr.lt <- length(which(sub1.null.var.tau < sub1.var.tau))/length(sub1.null.var.tau)
-sub2.var.fpr.lt <- length(which(sub2.null.var.tau < sub2.var.tau))/length(sub2.null.var.tau)
-sub3.var.fpr.lt <- length(which(sub3.null.var.tau < sub3.var.tau))/length(sub3.null.var.tau)
-sub4.var.fpr.lt <- length(which(sub4.null.var.tau < sub4.var.tau))/length(sub4.null.var.tau)
-sub5.var.fpr.lt <- length(which(sub5.null.var.tau < sub5.var.tau))/length(sub5.null.var.tau)
-sub6.var.fpr.lt <- length(which(sub6.null.var.tau < sub6.var.tau))/length(sub6.null.var.tau)
-sub7.var.fpr.lt <- length(which(sub7.null.var.tau < sub7.var.tau))/length(sub7.null.var.tau)
-sub8.var.fpr.lt <- length(which(sub8.null.var.tau < sub8.var.tau))/length(sub8.null.var.tau)
+sub1.var.fpr.lt <- length(which(sub1.null.var.tau <= sub1.var.tau))/length(sub1.null.var.tau)
+sub2.var.fpr.lt <- length(which(sub2.null.var.tau <= sub2.var.tau))/length(sub2.null.var.tau)
+sub3.var.fpr.lt <- length(which(sub3.null.var.tau <= sub3.var.tau))/length(sub3.null.var.tau)
+sub4.var.fpr.lt <- length(which(sub4.null.var.tau <= sub4.var.tau))/length(sub4.null.var.tau)
+sub5.var.fpr.lt <- length(which(sub5.null.var.tau <= sub5.var.tau))/length(sub5.null.var.tau)
+sub6.var.fpr.lt <- length(which(sub6.null.var.tau <= sub6.var.tau))/length(sub6.null.var.tau)
+sub7.var.fpr.lt <- length(which(sub7.null.var.tau <= sub7.var.tau))/length(sub7.null.var.tau)
+sub8.var.fpr.lt <- length(which(sub8.null.var.tau <= sub8.var.tau))/length(sub8.null.var.tau)
 
 ## Co-Efficient of Variation
 sub1.null.cv.tau <- sub1.null.cv.tau[!is.na(sub1.null.cv.tau)]
@@ -2735,14 +2729,14 @@ sub5.null.cv.tau <- sub5.null.cv.tau[!is.na(sub5.null.cv.tau)]
 sub6.null.cv.tau <- sub6.null.cv.tau[!is.na(sub6.null.cv.tau)]
 sub7.null.cv.tau <- sub7.null.cv.tau[!is.na(sub7.null.cv.tau)]
 sub8.null.cv.tau <- sub8.null.cv.tau[!is.na(sub8.null.cv.tau)]
-sub1.cv.fpr.gt <- length(which(sub1.null.cv.tau > sub1.cv.tau))/length(sub1.null.cv.tau)
-sub2.cv.fpr.gt <- length(which(sub2.null.cv.tau > sub2.cv.tau))/length(sub2.null.cv.tau)
-sub3.cv.fpr.gt <- length(which(sub3.null.cv.tau > sub3.cv.tau))/length(sub3.null.cv.tau)
-sub4.cv.fpr.gt <- length(which(sub4.null.cv.tau > sub4.cv.tau))/length(sub4.null.cv.tau)
-sub5.cv.fpr.gt <- length(which(sub5.null.cv.tau > sub5.cv.tau))/length(sub5.null.cv.tau)
-sub6.cv.fpr.gt <- length(which(sub6.null.cv.tau > sub6.cv.tau))/length(sub6.null.cv.tau)
-sub7.cv.fpr.gt <- length(which(sub7.null.cv.tau > sub7.cv.tau))/length(sub7.null.cv.tau)
-sub8.cv.fpr.gt <- length(which(sub8.null.cv.tau > sub8.cv.tau))/length(sub8.null.cv.tau)
+sub1.cv.fpr.gt <- length(which(sub1.null.cv.tau >= sub1.cv.tau))/length(sub1.null.cv.tau)
+sub2.cv.fpr.gt <- length(which(sub2.null.cv.tau >= sub2.cv.tau))/length(sub2.null.cv.tau)
+sub3.cv.fpr.gt <- length(which(sub3.null.cv.tau >= sub3.cv.tau))/length(sub3.null.cv.tau)
+sub4.cv.fpr.gt <- length(which(sub4.null.cv.tau >= sub4.cv.tau))/length(sub4.null.cv.tau)
+sub5.cv.fpr.gt <- length(which(sub5.null.cv.tau >= sub5.cv.tau))/length(sub5.null.cv.tau)
+sub6.cv.fpr.gt <- length(which(sub6.null.cv.tau >= sub6.cv.tau))/length(sub6.null.cv.tau)
+sub7.cv.fpr.gt <- length(which(sub7.null.cv.tau >= sub7.cv.tau))/length(sub7.null.cv.tau)
+sub8.cv.fpr.gt <- length(which(sub8.null.cv.tau >= sub8.cv.tau))/length(sub8.null.cv.tau)
 
 sub1.null.cv.tau <- sub1.null.cv.tau[!is.na(sub1.null.cv.tau)]
 sub2.null.cv.tau <- sub2.null.cv.tau[!is.na(sub2.null.cv.tau)]
@@ -2752,14 +2746,14 @@ sub5.null.cv.tau <- sub5.null.cv.tau[!is.na(sub5.null.cv.tau)]
 sub6.null.cv.tau <- sub6.null.cv.tau[!is.na(sub6.null.cv.tau)]
 sub7.null.cv.tau <- sub7.null.cv.tau[!is.na(sub7.null.cv.tau)]
 sub8.null.cv.tau <- sub8.null.cv.tau[!is.na(sub8.null.cv.tau)]
-sub1.cv.fpr.lt <- length(which(sub1.null.cv.tau < sub1.cv.tau))/length(sub1.null.cv.tau)
-sub2.cv.fpr.lt <- length(which(sub2.null.cv.tau < sub2.cv.tau))/length(sub2.null.cv.tau)
-sub3.cv.fpr.lt <- length(which(sub3.null.cv.tau < sub3.cv.tau))/length(sub3.null.cv.tau)
-sub4.cv.fpr.lt <- length(which(sub4.null.cv.tau < sub4.cv.tau))/length(sub4.null.cv.tau)
-sub5.cv.fpr.lt <- length(which(sub5.null.cv.tau < sub5.cv.tau))/length(sub5.null.cv.tau)
-sub6.cv.fpr.lt <- length(which(sub6.null.cv.tau < sub6.cv.tau))/length(sub6.null.cv.tau)
-sub7.cv.fpr.lt <- length(which(sub7.null.cv.tau < sub7.cv.tau))/length(sub7.null.cv.tau)
-sub8.cv.fpr.lt <- length(which(sub8.null.cv.tau < sub8.cv.tau))/length(sub8.null.cv.tau)
+sub1.cv.fpr.lt <- length(which(sub1.null.cv.tau <= sub1.cv.tau))/length(sub1.null.cv.tau)
+sub2.cv.fpr.lt <- length(which(sub2.null.cv.tau <= sub2.cv.tau))/length(sub2.null.cv.tau)
+sub3.cv.fpr.lt <- length(which(sub3.null.cv.tau <= sub3.cv.tau))/length(sub3.null.cv.tau)
+sub4.cv.fpr.lt <- length(which(sub4.null.cv.tau <= sub4.cv.tau))/length(sub4.null.cv.tau)
+sub5.cv.fpr.lt <- length(which(sub5.null.cv.tau <= sub5.cv.tau))/length(sub5.null.cv.tau)
+sub6.cv.fpr.lt <- length(which(sub6.null.cv.tau <= sub6.cv.tau))/length(sub6.null.cv.tau)
+sub7.cv.fpr.lt <- length(which(sub7.null.cv.tau <= sub7.cv.tau))/length(sub7.null.cv.tau)
+sub8.cv.fpr.lt <- length(which(sub8.null.cv.tau <= sub8.cv.tau))/length(sub8.null.cv.tau)
 
 ## Index of Dispersion
 sub1.null.id.tau <- sub1.null.id.tau[!is.na(sub1.null.id.tau)]
@@ -2770,14 +2764,14 @@ sub5.null.id.tau <- sub5.null.id.tau[!is.na(sub5.null.id.tau)]
 sub6.null.id.tau <- sub6.null.id.tau[!is.na(sub6.null.id.tau)]
 sub7.null.id.tau <- sub7.null.id.tau[!is.na(sub7.null.id.tau)]
 sub8.null.id.tau <- sub8.null.id.tau[!is.na(sub8.null.id.tau)]
-sub1.id.fpr.gt <- length(which(sub1.null.id.tau > sub1.id.tau))/length(sub1.null.id.tau)
-sub2.id.fpr.gt <- length(which(sub2.null.id.tau > sub2.id.tau))/length(sub2.null.id.tau)
-sub3.id.fpr.gt <- length(which(sub3.null.id.tau > sub3.id.tau))/length(sub3.null.id.tau)
-sub4.id.fpr.gt <- length(which(sub4.null.id.tau > sub4.id.tau))/length(sub4.null.id.tau)
-sub5.id.fpr.gt <- length(which(sub5.null.id.tau > sub5.id.tau))/length(sub5.null.id.tau)
-sub6.id.fpr.gt <- length(which(sub6.null.id.tau > sub6.id.tau))/length(sub6.null.id.tau)
-sub7.id.fpr.gt <- length(which(sub7.null.id.tau > sub7.id.tau))/length(sub7.null.id.tau)
-sub8.id.fpr.gt <- length(which(sub8.null.id.tau > sub8.id.tau))/length(sub8.null.id.tau)
+sub1.id.fpr.gt <- length(which(sub1.null.id.tau >= sub1.id.tau))/length(sub1.null.id.tau)
+sub2.id.fpr.gt <- length(which(sub2.null.id.tau >= sub2.id.tau))/length(sub2.null.id.tau)
+sub3.id.fpr.gt <- length(which(sub3.null.id.tau >= sub3.id.tau))/length(sub3.null.id.tau)
+sub4.id.fpr.gt <- length(which(sub4.null.id.tau >= sub4.id.tau))/length(sub4.null.id.tau)
+sub5.id.fpr.gt <- length(which(sub5.null.id.tau >= sub5.id.tau))/length(sub5.null.id.tau)
+sub6.id.fpr.gt <- length(which(sub6.null.id.tau >= sub6.id.tau))/length(sub6.null.id.tau)
+sub7.id.fpr.gt <- length(which(sub7.null.id.tau >= sub7.id.tau))/length(sub7.null.id.tau)
+sub8.id.fpr.gt <- length(which(sub8.null.id.tau >= sub8.id.tau))/length(sub8.null.id.tau)
 
 sub1.null.id.tau <- sub1.null.id.tau[!is.na(sub1.null.id.tau)]
 sub2.null.id.tau <- sub2.null.id.tau[!is.na(sub2.null.id.tau)]
@@ -2787,14 +2781,14 @@ sub5.null.id.tau <- sub5.null.id.tau[!is.na(sub5.null.id.tau)]
 sub6.null.id.tau <- sub6.null.id.tau[!is.na(sub6.null.id.tau)]
 sub7.null.id.tau <- sub7.null.id.tau[!is.na(sub7.null.id.tau)]
 sub8.null.id.tau <- sub8.null.id.tau[!is.na(sub8.null.id.tau)]
-sub1.id.fpr.lt <- length(which(sub1.null.id.tau < sub1.id.tau))/length(sub1.null.id.tau)
-sub2.id.fpr.lt <- length(which(sub2.null.id.tau < sub2.id.tau))/length(sub2.null.id.tau)
-sub3.id.fpr.lt <- length(which(sub3.null.id.tau < sub3.id.tau))/length(sub3.null.id.tau)
-sub4.id.fpr.lt <- length(which(sub4.null.id.tau < sub4.id.tau))/length(sub4.null.id.tau)
-sub5.id.fpr.lt <- length(which(sub5.null.id.tau < sub5.id.tau))/length(sub5.null.id.tau)
-sub6.id.fpr.lt <- length(which(sub6.null.id.tau < sub6.id.tau))/length(sub6.null.id.tau)
-sub7.id.fpr.lt <- length(which(sub7.null.id.tau < sub7.id.tau))/length(sub7.null.id.tau)
-sub8.id.fpr.lt <- length(which(sub8.null.id.tau < sub8.id.tau))/length(sub8.null.id.tau)
+sub1.id.fpr.lt <- length(which(sub1.null.id.tau <= sub1.id.tau))/length(sub1.null.id.tau)
+sub2.id.fpr.lt <- length(which(sub2.null.id.tau <= sub2.id.tau))/length(sub2.null.id.tau)
+sub3.id.fpr.lt <- length(which(sub3.null.id.tau <= sub3.id.tau))/length(sub3.null.id.tau)
+sub4.id.fpr.lt <- length(which(sub4.null.id.tau <= sub4.id.tau))/length(sub4.null.id.tau)
+sub5.id.fpr.lt <- length(which(sub5.null.id.tau <= sub5.id.tau))/length(sub5.null.id.tau)
+sub6.id.fpr.lt <- length(which(sub6.null.id.tau <= sub6.id.tau))/length(sub6.null.id.tau)
+sub7.id.fpr.lt <- length(which(sub7.null.id.tau <= sub7.id.tau))/length(sub7.null.id.tau)
+sub8.id.fpr.lt <- length(which(sub8.null.id.tau <= sub8.id.tau))/length(sub8.null.id.tau)
 
 ## First Difference Variance
 sub1.null.fdv.tau <- sub1.null.fdv.tau[!is.na(sub1.null.fdv.tau)]
@@ -2805,14 +2799,14 @@ sub5.null.fdv.tau <- sub5.null.fdv.tau[!is.na(sub5.null.fdv.tau)]
 sub6.null.fdv.tau <- sub6.null.fdv.tau[!is.na(sub6.null.fdv.tau)]
 sub7.null.fdv.tau <- sub7.null.fdv.tau[!is.na(sub7.null.fdv.tau)]
 sub8.null.fdv.tau <- sub8.null.fdv.tau[!is.na(sub8.null.fdv.tau)]
-sub1.fdv.fpr.gt <- length(which(sub1.null.fdv.tau > sub1.fdv.tau))/length(sub1.null.fdv.tau)
-sub2.fdv.fpr.gt <- length(which(sub2.null.fdv.tau > sub2.fdv.tau))/length(sub2.null.fdv.tau)
-sub3.fdv.fpr.gt <- length(which(sub3.null.fdv.tau > sub3.fdv.tau))/length(sub3.null.fdv.tau)
-sub4.fdv.fpr.gt <- length(which(sub4.null.fdv.tau > sub4.fdv.tau))/length(sub4.null.fdv.tau)
-sub5.fdv.fpr.gt <- length(which(sub5.null.fdv.tau > sub5.fdv.tau))/length(sub5.null.fdv.tau)
-sub6.fdv.fpr.gt <- length(which(sub6.null.fdv.tau > sub6.fdv.tau))/length(sub6.null.fdv.tau)
-sub7.fdv.fpr.gt <- length(which(sub7.null.fdv.tau > sub7.fdv.tau))/length(sub7.null.fdv.tau)
-sub8.fdv.fpr.gt <- length(which(sub8.null.fdv.tau > sub8.fdv.tau))/length(sub8.null.fdv.tau)
+sub1.fdv.fpr.gt <- length(which(sub1.null.fdv.tau >= sub1.fdv.tau))/length(sub1.null.fdv.tau)
+sub2.fdv.fpr.gt <- length(which(sub2.null.fdv.tau >= sub2.fdv.tau))/length(sub2.null.fdv.tau)
+sub3.fdv.fpr.gt <- length(which(sub3.null.fdv.tau >= sub3.fdv.tau))/length(sub3.null.fdv.tau)
+sub4.fdv.fpr.gt <- length(which(sub4.null.fdv.tau >= sub4.fdv.tau))/length(sub4.null.fdv.tau)
+sub5.fdv.fpr.gt <- length(which(sub5.null.fdv.tau >= sub5.fdv.tau))/length(sub5.null.fdv.tau)
+sub6.fdv.fpr.gt <- length(which(sub6.null.fdv.tau >= sub6.fdv.tau))/length(sub6.null.fdv.tau)
+sub7.fdv.fpr.gt <- length(which(sub7.null.fdv.tau >= sub7.fdv.tau))/length(sub7.null.fdv.tau)
+sub8.fdv.fpr.gt <- length(which(sub8.null.fdv.tau >= sub8.fdv.tau))/length(sub8.null.fdv.tau)
 
 sub1.null.fdv.tau <- sub1.null.fdv.tau[!is.na(sub1.null.fdv.tau)]
 sub2.null.fdv.tau <- sub2.null.fdv.tau[!is.na(sub2.null.fdv.tau)]
@@ -2822,14 +2816,14 @@ sub5.null.fdv.tau <- sub5.null.fdv.tau[!is.na(sub5.null.fdv.tau)]
 sub6.null.fdv.tau <- sub6.null.fdv.tau[!is.na(sub6.null.fdv.tau)]
 sub7.null.fdv.tau <- sub7.null.fdv.tau[!is.na(sub7.null.fdv.tau)]
 sub8.null.fdv.tau <- sub8.null.fdv.tau[!is.na(sub8.null.fdv.tau)]
-sub1.fdv.fpr.lt <- length(which(sub1.null.fdv.tau < sub1.fdv.tau))/length(sub1.null.fdv.tau)
-sub2.fdv.fpr.lt <- length(which(sub2.null.fdv.tau < sub2.fdv.tau))/length(sub2.null.fdv.tau)
-sub3.fdv.fpr.lt <- length(which(sub3.null.fdv.tau < sub3.fdv.tau))/length(sub3.null.fdv.tau)
-sub4.fdv.fpr.lt <- length(which(sub4.null.fdv.tau < sub4.fdv.tau))/length(sub4.null.fdv.tau)
-sub5.fdv.fpr.lt <- length(which(sub5.null.fdv.tau < sub5.fdv.tau))/length(sub5.null.fdv.tau)
-sub6.fdv.fpr.lt <- length(which(sub6.null.fdv.tau < sub6.fdv.tau))/length(sub6.null.fdv.tau)
-sub7.fdv.fpr.lt <- length(which(sub7.null.fdv.tau < sub7.fdv.tau))/length(sub7.null.fdv.tau)
-sub8.fdv.fpr.lt <- length(which(sub8.null.fdv.tau < sub8.fdv.tau))/length(sub8.null.fdv.tau)
+sub1.fdv.fpr.lt <- length(which(sub1.null.fdv.tau <= sub1.fdv.tau))/length(sub1.null.fdv.tau)
+sub2.fdv.fpr.lt <- length(which(sub2.null.fdv.tau <= sub2.fdv.tau))/length(sub2.null.fdv.tau)
+sub3.fdv.fpr.lt <- length(which(sub3.null.fdv.tau <= sub3.fdv.tau))/length(sub3.null.fdv.tau)
+sub4.fdv.fpr.lt <- length(which(sub4.null.fdv.tau <= sub4.fdv.tau))/length(sub4.null.fdv.tau)
+sub5.fdv.fpr.lt <- length(which(sub5.null.fdv.tau <= sub5.fdv.tau))/length(sub5.null.fdv.tau)
+sub6.fdv.fpr.lt <- length(which(sub6.null.fdv.tau <= sub6.fdv.tau))/length(sub6.null.fdv.tau)
+sub7.fdv.fpr.lt <- length(which(sub7.null.fdv.tau <= sub7.fdv.tau))/length(sub7.null.fdv.tau)
+sub8.fdv.fpr.lt <- length(which(sub8.null.fdv.tau <= sub8.fdv.tau))/length(sub8.null.fdv.tau)
 
 ## Autocorrelation
 sub1.null.ac.tau <- sub1.null.ac.tau[!is.na(sub1.null.ac.tau)]
@@ -2840,14 +2834,14 @@ sub5.null.ac.tau <- sub5.null.ac.tau[!is.na(sub5.null.ac.tau)]
 sub6.null.ac.tau <- sub6.null.ac.tau[!is.na(sub6.null.ac.tau)]
 sub7.null.ac.tau <- sub7.null.ac.tau[!is.na(sub7.null.ac.tau)]
 sub8.null.ac.tau <- sub8.null.ac.tau[!is.na(sub8.null.ac.tau)]
-sub1.ac.fpr.gt <- length(which(sub1.null.ac.tau > sub1.ac.tau))/length(sub1.null.ac.tau)
-sub2.ac.fpr.gt <- length(which(sub2.null.ac.tau > sub2.ac.tau))/length(sub2.null.ac.tau)
-sub3.ac.fpr.gt <- length(which(sub3.null.ac.tau > sub3.ac.tau))/length(sub3.null.ac.tau)
-sub4.ac.fpr.gt <- length(which(sub4.null.ac.tau > sub4.ac.tau))/length(sub4.null.ac.tau)
-sub5.ac.fpr.gt <- length(which(sub5.null.ac.tau > sub5.ac.tau))/length(sub5.null.ac.tau)
-sub6.ac.fpr.gt <- length(which(sub6.null.ac.tau > sub6.ac.tau))/length(sub6.null.ac.tau)
-sub7.ac.fpr.gt <- length(which(sub7.null.ac.tau > sub7.ac.tau))/length(sub7.null.ac.tau)
-sub8.ac.fpr.gt <- length(which(sub8.null.ac.tau > sub8.ac.tau))/length(sub8.null.ac.tau)
+sub1.ac.fpr.gt <- length(which(sub1.null.ac.tau >= sub1.ac.tau))/length(sub1.null.ac.tau)
+sub2.ac.fpr.gt <- length(which(sub2.null.ac.tau >= sub2.ac.tau))/length(sub2.null.ac.tau)
+sub3.ac.fpr.gt <- length(which(sub3.null.ac.tau >= sub3.ac.tau))/length(sub3.null.ac.tau)
+sub4.ac.fpr.gt <- length(which(sub4.null.ac.tau >= sub4.ac.tau))/length(sub4.null.ac.tau)
+sub5.ac.fpr.gt <- length(which(sub5.null.ac.tau >= sub5.ac.tau))/length(sub5.null.ac.tau)
+sub6.ac.fpr.gt <- length(which(sub6.null.ac.tau >= sub6.ac.tau))/length(sub6.null.ac.tau)
+sub7.ac.fpr.gt <- length(which(sub7.null.ac.tau >= sub7.ac.tau))/length(sub7.null.ac.tau)
+sub8.ac.fpr.gt <- length(which(sub8.null.ac.tau >= sub8.ac.tau))/length(sub8.null.ac.tau)
 
 sub1.null.ac.tau <- sub1.null.ac.tau[!is.na(sub1.null.ac.tau)]
 sub2.null.ac.tau <- sub2.null.ac.tau[!is.na(sub2.null.ac.tau)]
@@ -2857,14 +2851,14 @@ sub5.null.ac.tau <- sub5.null.ac.tau[!is.na(sub5.null.ac.tau)]
 sub6.null.ac.tau <- sub6.null.ac.tau[!is.na(sub6.null.ac.tau)]
 sub7.null.ac.tau <- sub7.null.ac.tau[!is.na(sub7.null.ac.tau)]
 sub8.null.ac.tau <- sub8.null.ac.tau[!is.na(sub8.null.ac.tau)]
-sub1.ac.fpr.lt <- length(which(sub1.null.ac.tau < sub1.ac.tau))/length(sub1.null.ac.tau)
-sub2.ac.fpr.lt <- length(which(sub2.null.ac.tau < sub2.ac.tau))/length(sub2.null.ac.tau)
-sub3.ac.fpr.lt <- length(which(sub3.null.ac.tau < sub3.ac.tau))/length(sub3.null.ac.tau)
-sub4.ac.fpr.lt <- length(which(sub4.null.ac.tau < sub4.ac.tau))/length(sub4.null.ac.tau)
-sub5.ac.fpr.lt <- length(which(sub5.null.ac.tau < sub5.ac.tau))/length(sub5.null.ac.tau)
-sub6.ac.fpr.lt <- length(which(sub6.null.ac.tau < sub6.ac.tau))/length(sub6.null.ac.tau)
-sub7.ac.fpr.lt <- length(which(sub7.null.ac.tau < sub7.ac.tau))/length(sub7.null.ac.tau)
-sub8.ac.fpr.lt <- length(which(sub8.null.ac.tau < sub8.ac.tau))/length(sub8.null.ac.tau)
+sub1.ac.fpr.lt <- length(which(sub1.null.ac.tau <= sub1.ac.tau))/length(sub1.null.ac.tau)
+sub2.ac.fpr.lt <- length(which(sub2.null.ac.tau <= sub2.ac.tau))/length(sub2.null.ac.tau)
+sub3.ac.fpr.lt <- length(which(sub3.null.ac.tau <= sub3.ac.tau))/length(sub3.null.ac.tau)
+sub4.ac.fpr.lt <- length(which(sub4.null.ac.tau <= sub4.ac.tau))/length(sub4.null.ac.tau)
+sub5.ac.fpr.lt <- length(which(sub5.null.ac.tau <= sub5.ac.tau))/length(sub5.null.ac.tau)
+sub6.ac.fpr.lt <- length(which(sub6.null.ac.tau <= sub6.ac.tau))/length(sub6.null.ac.tau)
+sub7.ac.fpr.lt <- length(which(sub7.null.ac.tau <= sub7.ac.tau))/length(sub7.null.ac.tau)
+sub8.ac.fpr.lt <- length(which(sub8.null.ac.tau <= sub8.ac.tau))/length(sub8.null.ac.tau)
 
 ## Autocovariance
 sub1.null.acv.tau <- sub1.null.acv.tau[!is.na(sub1.null.acv.tau)]
@@ -2875,14 +2869,14 @@ sub5.null.acv.tau <- sub5.null.acv.tau[!is.na(sub5.null.acv.tau)]
 sub6.null.acv.tau <- sub6.null.acv.tau[!is.na(sub6.null.acv.tau)]
 sub7.null.acv.tau <- sub7.null.acv.tau[!is.na(sub7.null.acv.tau)]
 sub8.null.acv.tau <- sub8.null.acv.tau[!is.na(sub8.null.acv.tau)]
-sub1.acv.fpr.gt <- length(which(sub1.null.acv.tau > sub1.acv.tau))/length(sub1.null.acv.tau)
-sub2.acv.fpr.gt <- length(which(sub2.null.acv.tau > sub2.acv.tau))/length(sub2.null.acv.tau)
-sub3.acv.fpr.gt <- length(which(sub3.null.acv.tau > sub3.acv.tau))/length(sub3.null.acv.tau)
-sub4.acv.fpr.gt <- length(which(sub4.null.acv.tau > sub4.acv.tau))/length(sub4.null.acv.tau)
-sub5.acv.fpr.gt <- length(which(sub5.null.acv.tau > sub5.acv.tau))/length(sub5.null.acv.tau)
-sub6.acv.fpr.gt <- length(which(sub6.null.acv.tau > sub6.acv.tau))/length(sub6.null.acv.tau)
-sub7.acv.fpr.gt <- length(which(sub7.null.acv.tau > sub7.acv.tau))/length(sub7.null.acv.tau)
-sub8.acv.fpr.gt <- length(which(sub8.null.acv.tau > sub8.acv.tau))/length(sub8.null.acv.tau)
+sub1.acv.fpr.gt <- length(which(sub1.null.acv.tau >= sub1.acv.tau))/length(sub1.null.acv.tau)
+sub2.acv.fpr.gt <- length(which(sub2.null.acv.tau >= sub2.acv.tau))/length(sub2.null.acv.tau)
+sub3.acv.fpr.gt <- length(which(sub3.null.acv.tau >= sub3.acv.tau))/length(sub3.null.acv.tau)
+sub4.acv.fpr.gt <- length(which(sub4.null.acv.tau >= sub4.acv.tau))/length(sub4.null.acv.tau)
+sub5.acv.fpr.gt <- length(which(sub5.null.acv.tau >= sub5.acv.tau))/length(sub5.null.acv.tau)
+sub6.acv.fpr.gt <- length(which(sub6.null.acv.tau >= sub6.acv.tau))/length(sub6.null.acv.tau)
+sub7.acv.fpr.gt <- length(which(sub7.null.acv.tau >= sub7.acv.tau))/length(sub7.null.acv.tau)
+sub8.acv.fpr.gt <- length(which(sub8.null.acv.tau >= sub8.acv.tau))/length(sub8.null.acv.tau)
 
 sub1.null.acv.tau <- sub1.null.acv.tau[!is.na(sub1.null.acv.tau)]
 sub2.null.acv.tau <- sub2.null.acv.tau[!is.na(sub2.null.acv.tau)]
@@ -2892,14 +2886,14 @@ sub5.null.acv.tau <- sub5.null.acv.tau[!is.na(sub5.null.acv.tau)]
 sub6.null.acv.tau <- sub6.null.acv.tau[!is.na(sub6.null.acv.tau)]
 sub7.null.acv.tau <- sub7.null.acv.tau[!is.na(sub7.null.acv.tau)]
 sub8.null.acv.tau <- sub8.null.acv.tau[!is.na(sub8.null.acv.tau)]
-sub1.acv.fpr.lt <- length(which(sub1.null.acv.tau < sub1.acv.tau))/length(sub1.null.acv.tau)
-sub2.acv.fpr.lt <- length(which(sub2.null.acv.tau < sub2.acv.tau))/length(sub2.null.acv.tau)
-sub3.acv.fpr.lt <- length(which(sub3.null.acv.tau < sub3.acv.tau))/length(sub3.null.acv.tau)
-sub4.acv.fpr.lt <- length(which(sub4.null.acv.tau < sub4.acv.tau))/length(sub4.null.acv.tau)
-sub5.acv.fpr.lt <- length(which(sub5.null.acv.tau < sub5.acv.tau))/length(sub5.null.acv.tau)
-sub6.acv.fpr.lt <- length(which(sub6.null.acv.tau < sub6.acv.tau))/length(sub6.null.acv.tau)
-sub7.acv.fpr.lt <- length(which(sub7.null.acv.tau < sub7.acv.tau))/length(sub7.null.acv.tau)
-sub8.acv.fpr.lt <- length(which(sub8.null.acv.tau < sub8.acv.tau))/length(sub8.null.acv.tau)
+sub1.acv.fpr.lt <- length(which(sub1.null.acv.tau <= sub1.acv.tau))/length(sub1.null.acv.tau)
+sub2.acv.fpr.lt <- length(which(sub2.null.acv.tau <= sub2.acv.tau))/length(sub2.null.acv.tau)
+sub3.acv.fpr.lt <- length(which(sub3.null.acv.tau <= sub3.acv.tau))/length(sub3.null.acv.tau)
+sub4.acv.fpr.lt <- length(which(sub4.null.acv.tau <= sub4.acv.tau))/length(sub4.null.acv.tau)
+sub5.acv.fpr.lt <- length(which(sub5.null.acv.tau <= sub5.acv.tau))/length(sub5.null.acv.tau)
+sub6.acv.fpr.lt <- length(which(sub6.null.acv.tau <= sub6.acv.tau))/length(sub6.null.acv.tau)
+sub7.acv.fpr.lt <- length(which(sub7.null.acv.tau <= sub7.acv.tau))/length(sub7.null.acv.tau)
+sub8.acv.fpr.lt <- length(which(sub8.null.acv.tau <= sub8.acv.tau))/length(sub8.null.acv.tau)
 
 ## Decay Time
 sub1.null.dt.tau <- sub1.null.dt.tau[!is.na(sub1.null.dt.tau)]
@@ -2910,14 +2904,14 @@ sub5.null.dt.tau <- sub5.null.dt.tau[!is.na(sub5.null.dt.tau)]
 sub6.null.dt.tau <- sub6.null.dt.tau[!is.na(sub6.null.dt.tau)]
 sub7.null.dt.tau <- sub7.null.dt.tau[!is.na(sub7.null.dt.tau)]
 sub8.null.dt.tau <- sub8.null.dt.tau[!is.na(sub8.null.dt.tau)]
-sub1.dt.fpr.gt <- length(which(sub1.null.dt.tau > sub1.dt.tau))/length(sub1.null.dt.tau)
-sub2.dt.fpr.gt <- length(which(sub2.null.dt.tau > sub2.dt.tau))/length(sub2.null.dt.tau)
-sub3.dt.fpr.gt <- length(which(sub3.null.dt.tau > sub3.dt.tau))/length(sub3.null.dt.tau)
-sub4.dt.fpr.gt <- length(which(sub4.null.dt.tau > sub4.dt.tau))/length(sub4.null.dt.tau)
-sub5.dt.fpr.gt <- length(which(sub5.null.dt.tau > sub5.dt.tau))/length(sub5.null.dt.tau)
-sub6.dt.fpr.gt <- length(which(sub6.null.dt.tau > sub6.dt.tau))/length(sub6.null.dt.tau)
-sub7.dt.fpr.gt <- length(which(sub7.null.dt.tau > sub7.dt.tau))/length(sub7.null.dt.tau)
-sub8.dt.fpr.gt <- length(which(sub8.null.dt.tau > sub8.dt.tau))/length(sub8.null.dt.tau)
+sub1.dt.fpr.gt <- length(which(sub1.null.dt.tau >= sub1.dt.tau))/length(sub1.null.dt.tau)
+sub2.dt.fpr.gt <- length(which(sub2.null.dt.tau >= sub2.dt.tau))/length(sub2.null.dt.tau)
+sub3.dt.fpr.gt <- length(which(sub3.null.dt.tau >= sub3.dt.tau))/length(sub3.null.dt.tau)
+sub4.dt.fpr.gt <- length(which(sub4.null.dt.tau >= sub4.dt.tau))/length(sub4.null.dt.tau)
+sub5.dt.fpr.gt <- length(which(sub5.null.dt.tau >= sub5.dt.tau))/length(sub5.null.dt.tau)
+sub6.dt.fpr.gt <- length(which(sub6.null.dt.tau >= sub6.dt.tau))/length(sub6.null.dt.tau)
+sub7.dt.fpr.gt <- length(which(sub7.null.dt.tau >= sub7.dt.tau))/length(sub7.null.dt.tau)
+sub8.dt.fpr.gt <- length(which(sub8.null.dt.tau >= sub8.dt.tau))/length(sub8.null.dt.tau)
 
 sub1.null.dt.tau <- sub1.null.dt.tau[!is.na(sub1.null.dt.tau)]
 sub2.null.dt.tau <- sub2.null.dt.tau[!is.na(sub2.null.dt.tau)]
@@ -2927,14 +2921,14 @@ sub5.null.dt.tau <- sub5.null.dt.tau[!is.na(sub5.null.dt.tau)]
 sub6.null.dt.tau <- sub6.null.dt.tau[!is.na(sub6.null.dt.tau)]
 sub7.null.dt.tau <- sub7.null.dt.tau[!is.na(sub7.null.dt.tau)]
 sub8.null.dt.tau <- sub8.null.dt.tau[!is.na(sub8.null.dt.tau)]
-sub1.dt.fpr.lt <- length(which(sub1.null.dt.tau < sub1.dt.tau))/length(sub1.null.dt.tau)
-sub2.dt.fpr.lt <- length(which(sub2.null.dt.tau < sub2.dt.tau))/length(sub2.null.dt.tau)
-sub3.dt.fpr.lt <- length(which(sub3.null.dt.tau < sub3.dt.tau))/length(sub3.null.dt.tau)
-sub4.dt.fpr.lt <- length(which(sub4.null.dt.tau < sub4.dt.tau))/length(sub4.null.dt.tau)
-sub5.dt.fpr.lt <- length(which(sub5.null.dt.tau < sub5.dt.tau))/length(sub5.null.dt.tau)
-sub6.dt.fpr.lt <- length(which(sub6.null.dt.tau < sub6.dt.tau))/length(sub6.null.dt.tau)
-sub7.dt.fpr.lt <- length(which(sub7.null.dt.tau < sub7.dt.tau))/length(sub7.null.dt.tau)
-sub8.dt.fpr.lt <- length(which(sub8.null.dt.tau < sub8.dt.tau))/length(sub8.null.dt.tau)
+sub1.dt.fpr.lt <- length(which(sub1.null.dt.tau <= sub1.dt.tau))/length(sub1.null.dt.tau)
+sub2.dt.fpr.lt <- length(which(sub2.null.dt.tau <= sub2.dt.tau))/length(sub2.null.dt.tau)
+sub3.dt.fpr.lt <- length(which(sub3.null.dt.tau <= sub3.dt.tau))/length(sub3.null.dt.tau)
+sub4.dt.fpr.lt <- length(which(sub4.null.dt.tau <= sub4.dt.tau))/length(sub4.null.dt.tau)
+sub5.dt.fpr.lt <- length(which(sub5.null.dt.tau <= sub5.dt.tau))/length(sub5.null.dt.tau)
+sub6.dt.fpr.lt <- length(which(sub6.null.dt.tau <= sub6.dt.tau))/length(sub6.null.dt.tau)
+sub7.dt.fpr.lt <- length(which(sub7.null.dt.tau <= sub7.dt.tau))/length(sub7.null.dt.tau)
+sub8.dt.fpr.lt <- length(which(sub8.null.dt.tau <= sub8.dt.tau))/length(sub8.null.dt.tau)
 ```
 
 ### Plotting
@@ -2948,7 +2942,7 @@ mean.lt <- c(sub1.mean.fpr.lt, sub2.mean.fpr.lt, sub3.mean.fpr.lt, sub4.mean.fpr
              sub5.mean.fpr.lt, sub6.mean.fpr.lt, sub7.mean.fpr.lt, sub8.mean.fpr.lt)
 plot(1:8, mean.gt, col = cols, pch = 0, main = "Mean", xlab = "Subpopulation", ylab = "False Positive Rate", ylim = c(0, 1))
 points(1:8, mean.lt, col = cols, pch = 2)
-abline(h = 0.1)
+abline(h = 0.05)
 legend("right", legend = c("Greater Than", "Less Than"), col = "black", pch = c(0, 2))
 
 sk.gt <- c(sub1.sk.fpr.gt, sub2.sk.fpr.gt, sub3.sk.fpr.gt, sub4.sk.fpr.gt,
@@ -2957,7 +2951,7 @@ sk.lt <- c(sub1.sk.fpr.lt, sub2.sk.fpr.lt, sub3.sk.fpr.lt, sub4.sk.fpr.lt,
              sub5.sk.fpr.lt, sub6.sk.fpr.lt, sub7.sk.fpr.lt, sub8.sk.fpr.lt)
 plot(1:8, sk.gt, col = cols, pch = 0, main = "Skewness", xlab = "Subpopulation", ylab = "False Positive Rate", ylim = c(0, 1))
 points(1:8, sk.lt, col = cols, pch = 2)
-abline(h = 0.1)
+abline(h = 0.05)
 legend("right", legend = c("Greater Than", "Less Than"), col = "black", pch = c(0, 2))
 
 kt.gt <- c(sub1.kt.fpr.gt, sub2.kt.fpr.gt, sub3.kt.fpr.gt, sub4.kt.fpr.gt,
@@ -2966,7 +2960,7 @@ kt.lt <- c(sub1.kt.fpr.lt, sub2.kt.fpr.lt, sub3.kt.fpr.lt, sub4.kt.fpr.lt,
              sub5.kt.fpr.lt, sub6.kt.fpr.lt, sub7.kt.fpr.lt, sub8.kt.fpr.lt)
 plot(1:8, kt.gt, col = cols, pch = 0, main = "Kurtosis", xlab = "Subpopulation", ylab = "False Positive Rate", ylim = c(0, 1))
 points(1:8, kt.lt, col = cols, pch = 2)
-abline(h = 0.1)
+abline(h = 0.05)
 legend("right", legend = c("Greater Than", "Less Than"), col = "black", pch = c(0, 2))
 
 var.gt <- c(sub1.var.fpr.gt, sub2.var.fpr.gt, sub3.var.fpr.gt, sub4.var.fpr.gt,
@@ -2975,7 +2969,7 @@ var.lt <- c(sub1.var.fpr.lt, sub2.var.fpr.lt, sub3.var.fpr.lt, sub4.var.fpr.lt,
              sub5.var.fpr.lt, sub6.var.fpr.lt, sub7.var.fpr.lt, sub8.var.fpr.lt)
 plot(1:8, var.gt, col = cols, pch = 0, main = "Variance", xlab = "Subpopulation", ylab = "False Positive Rate", ylim = c(0, 1))
 points(1:8, var.lt, col = cols, pch = 2)
-abline(h = 0.1)
+abline(h = 0.05)
 legend("right", legend = c("Greater Than", "Less Than"), col = "black", pch = c(0, 2))
 
 cv.gt <- c(sub1.cv.fpr.gt, sub2.cv.fpr.gt, sub3.cv.fpr.gt, sub4.cv.fpr.gt,
@@ -2984,7 +2978,7 @@ cv.lt <- c(sub1.cv.fpr.lt, sub2.cv.fpr.lt, sub3.cv.fpr.lt, sub4.cv.fpr.lt,
              sub5.cv.fpr.lt, sub6.cv.fpr.lt, sub7.cv.fpr.lt, sub8.cv.fpr.lt)
 plot(1:8, cv.gt, col = cols, pch = 0, main = "Co-Efficient of Variation", xlab = "Subpopulation", ylab = "False Positive Rate", ylim = c(0, 1))
 points(1:8, cv.lt, col = cols, pch = 2)
-abline(h = 0.1)
+abline(h = 0.05)
 legend("right", legend = c("Greater Than", "Less Than"), col = "black", pch = c(0, 2))
 
 id.gt <- c(sub1.id.fpr.gt, sub2.id.fpr.gt, sub3.id.fpr.gt, sub4.id.fpr.gt,
@@ -2993,7 +2987,7 @@ id.lt <- c(sub1.id.fpr.lt, sub2.id.fpr.lt, sub3.id.fpr.lt, sub4.id.fpr.lt,
              sub5.id.fpr.lt, sub6.id.fpr.lt, sub7.id.fpr.lt, sub8.id.fpr.lt)
 plot(1:8, id.gt, col = cols, pch = 0, main = "Index of Dispersion", xlab = "Subpopulation", ylab = "False Positive Rate", ylim = c(0, 1))
 points(1:8, id.lt, col = cols, pch = 2)
-abline(h = 0.1)
+abline(h = 0.05)
 legend("right", legend = c("Greater Than", "Less Than"), col = "black", pch = c(0, 2))
 
 fdv.gt <- c(sub1.fdv.fpr.gt, sub2.fdv.fpr.gt, sub3.fdv.fpr.gt, sub4.fdv.fpr.gt,
@@ -3002,7 +2996,7 @@ fdv.lt <- c(sub1.fdv.fpr.lt, sub2.fdv.fpr.lt, sub3.fdv.fpr.lt, sub4.fdv.fpr.lt,
              sub5.fdv.fpr.lt, sub6.fdv.fpr.lt, sub7.fdv.fpr.lt, sub8.fdv.fpr.lt)
 plot(1:8, fdv.gt, col = cols, pch = 0, main = "First Difference Variance", xlab = "Subpopulation", ylab = "False Positive Rate", ylim = c(0, 1))
 points(1:8, fdv.lt, col = cols, pch = 2)
-abline(h = 0.1)
+abline(h = 0.05)
 legend("right", legend = c("Greater Than", "Less Than"), col = "black", pch = c(0, 2))
 
 ac.gt <- c(sub1.ac.fpr.gt, sub2.ac.fpr.gt, sub3.ac.fpr.gt, sub4.ac.fpr.gt,
@@ -3011,7 +3005,7 @@ ac.lt <- c(sub1.ac.fpr.lt, sub2.ac.fpr.lt, sub3.ac.fpr.lt, sub4.ac.fpr.lt,
              sub5.ac.fpr.lt, sub6.ac.fpr.lt, sub7.ac.fpr.lt, sub8.ac.fpr.lt)
 plot(1:8, ac.gt, col = cols, pch = 0, main = "Autocorrelation", xlab = "Subpopulation", ylab = "False Positive Rate", ylim = c(0, 1))
 points(1:8, ac.lt, col = cols, pch = 2)
-abline(h = 0.1)
+abline(h = 0.05)
 legend("right", legend = c("Greater Than", "Less Than"), col = "black", pch = c(0, 2))
 
 acv.gt <- c(sub1.acv.fpr.gt, sub2.acv.fpr.gt, sub3.acv.fpr.gt, sub4.acv.fpr.gt,
@@ -3020,7 +3014,7 @@ acv.lt <- c(sub1.acv.fpr.lt, sub2.acv.fpr.lt, sub3.acv.fpr.lt, sub4.acv.fpr.lt,
              sub5.acv.fpr.lt, sub6.acv.fpr.lt, sub7.acv.fpr.lt, sub8.acv.fpr.lt)
 plot(1:8, acv.gt, col = cols, pch = 0, main = "Autocovariance", xlab = "Subpopulation", ylab = "False Positive Rate", ylim = c(0, 1))
 points(1:8, acv.lt, col = cols, pch = 2)
-abline(h = 0.1)
+abline(h = 0.05)
 legend("right", legend = c("Greater Than", "Less Than"), col = "black", pch = c(0, 2))
 
 dt.gt <- c(sub1.dt.fpr.gt, sub2.dt.fpr.gt, sub3.dt.fpr.gt, sub4.dt.fpr.gt,
@@ -3029,6 +3023,146 @@ dt.lt <- c(sub1.dt.fpr.lt, sub2.dt.fpr.lt, sub3.dt.fpr.lt, sub4.dt.fpr.lt,
              sub5.dt.fpr.lt, sub6.dt.fpr.lt, sub7.dt.fpr.lt, sub8.dt.fpr.lt)
 plot(1:8, dt.gt, col = cols, pch = 0, main = "Decay Time", xlab = "Subpopulation", ylab = "False Positive Rate", ylim = c(0, 1))
 points(1:8, dt.lt, col = cols, pch = 2)
-abline(h = 0.1)
+abline(h = 0.05)
 legend("right", legend = c("Greater Than", "Less Than"), col = "black", pch = c(0, 2))
+```
+
+# Comparing Control and Treatment Populations Directly
+
+```{r}
+emp.ktaus <- data.frame(
+  subpop = c("constant.1", "constant.2", "constant.3", "constant.4", "warming.1", "warming.2", "warming.3", "warming.4"),
+  mean = c(constant.mean.tau, warming.mean.tau),
+  sk = c(constant.sk.tau, warming.sk.tau),
+  kt = c(constant.kt.tau, warming.kt.tau),
+  var = c(constant.var.tau, warming.var.tau),
+  cv = c(constant.cv.tau, warming.cv.tau),
+  id = c(constant.id.tau, warming.id.tau),
+  fdv = c(constant.fdv.tau, warming.fdv.tau),
+  ac = c(constant.ac.tau, warming.ac.tau),
+  acv = c(constant.acv.tau, warming.acv.tau),
+  dt = c(constant.dt.tau, warming.dt.tau)
+)
+
+par(mfrow = c(3, 3))
+
+## Mean
+plot(1:4, rep(constant.mean.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
+     xaxt = "n", yaxt = "n",
+     main = "Mean", xlab = "Subpopulation", ylab = "Kendall's Tau",
+     ylim = c(-1, 1))
+points(1:4, rep(constant.mean.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.mean.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.mean.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, warming.mean.tau, pch = 19, col = alpha("#C21E56", 0.3))
+axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
+axis(2, at = c(-1, 0, 1))
+
+## Skewness
+plot(1:4, rep(constant.sk.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
+     xaxt = "n", yaxt = "n",
+     main = "Skewness", xlab = "Subpopulation", ylab = "Kendall's Tau",
+     ylim = c(-1, 1))
+points(1:4, rep(constant.sk.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.sk.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.sk.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, warming.sk.tau, pch = 19, col = alpha("#C21E56", 0.3))
+axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
+axis(2, at = c(-1, 0, 1))
+
+## Kurtosis
+plot(1:4, rep(constant.kt.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
+     xaxt = "n", yaxt = "n",
+     main = "Kurtosis", xlab = "Subpopulation", ylab = "Kendall's Tau",
+     ylim = c(-1, 1))
+points(1:4, rep(constant.kt.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.kt.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.kt.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, warming.kt.tau, pch = 19, col = alpha("#C21E56", 0.3))
+axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
+axis(2, at = c(-1, 0, 1))
+
+## Variance
+plot(1:4, rep(constant.var.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
+     xaxt = "n", yaxt = "n",
+     main = "Variance", xlab = "Subpopulation", ylab = "Kendall's Tau",
+     ylim = c(-1, 1))
+points(1:4, rep(constant.var.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.var.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.var.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, warming.var.tau, pch = 19, col = alpha("#C21E56", 0.3))
+axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
+axis(2, at = c(-1, 0, 1))
+
+## Co-Efficient of Variation
+plot(1:4, rep(constant.cv.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
+     xaxt = "n", yaxt = "n",
+     main = "Co-Efficient of Variation", xlab = "Subpopulation", ylab = "Kendall's Tau",
+     ylim = c(-1, 1))
+points(1:4, rep(constant.cv.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.cv.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.cv.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, warming.cv.tau, pch = 19, col = alpha("#C21E56", 0.3))
+axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
+axis(2, at = c(-1, 0, 1))
+
+## Index of Dispersion
+plot(1:4, rep(constant.id.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
+     xaxt = "n", yaxt = "n",
+     main = "Index of Dispersion", xlab = "Subpopulation", ylab = "Kendall's Tau",
+     ylim = c(-1, 1))
+points(1:4, rep(constant.id.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.id.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.id.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, warming.id.tau, pch = 19, col = alpha("#C21E56", 0.3))
+axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
+axis(2, at = c(-1, 0, 1))
+
+## First Difference Variance
+plot(1:4, rep(constant.fdv.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
+     xaxt = "n", yaxt = "n",
+     main = "First Difference Variance", xlab = "Subpopulation", ylab = "Kendall's Tau",
+     ylim = c(-1, 1))
+points(1:4, rep(constant.fdv.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.fdv.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.fdv.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, warming.fdv.tau, pch = 19, col = alpha("#C21E56", 0.3))
+axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
+axis(2, at = c(-1, 0, 1))
+
+## Autocorrelation
+plot(1:4, rep(constant.ac.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
+     xaxt = "n", yaxt = "n",
+     main = "Autocorrelation", xlab = "Subpopulation", ylab = "Kendall's Tau",
+     ylim = c(-1, 1))
+points(1:4, rep(constant.ac.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.ac.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.ac.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, warming.ac.tau, pch = 19, col = alpha("#C21E56", 0.3))
+axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
+axis(2, at = c(-1, 0, 1))
+
+## Autocovariance
+plot(1:4, rep(constant.acv.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
+     xaxt = "n", yaxt = "n",
+     main = "Autocovariance", xlab = "Subpopulation", ylab = "Kendall's Tau",
+     ylim = c(-1, 1))
+points(1:4, rep(constant.acv.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.acv.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.acv.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, warming.acv.tau, pch = 19, col = alpha("#C21E56", 0.3))
+axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
+axis(2, at = c(-1, 0, 1))
+
+# ## Decay Time
+# plot(1:4, rep(constant.dt.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
+#      xaxt = "n", yaxt = "n",
+#      main = "Decay Time", xlab = "Subpopulation", ylab = "Kendall's Tau",
+#      ylim = c(-1, 1))
+# points(1:4, rep(constant.dt.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
+# points(1:4, rep(constant.dt.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
+# points(1:4, rep(constant.dt.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
+# points(1:4, warming.dt.tau, pch = 19, col = alpha("#C21E56", 0.3))
+# axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
+# axis(2, at = c(-1, 0, 1))
 ```

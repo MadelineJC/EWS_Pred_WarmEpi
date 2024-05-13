@@ -679,3 +679,351 @@ plot_grid(dens, violin, align = "h", labels = "AUTO")
 ```
 
 # Raw, Empirical
+
+Run `8_EWS-ByPop.Rmd` to get these results!
+
+## With Null Distribution
+
+```{r}
+cols <- c(rep("#1434A4", 4000), rep("#C21E56", 4000))
+
+ggplot(null.mean.tau.df, aes(x = subpop, y = null.mean.tau)) + 
+  geom_violin() +
+  geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
+  geom_point(aes(y = real.tau), size = 4, shape = 8) + 
+  stat_summary(fun.y = median, geom = "point", size = 4, colour = "black", shape = 16) +
+  xlab("Subpopulation") +
+  ylab("Kendall's Tau (Mean)") +
+  theme(axis.text.x = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+ggplot(null.sk.tau.df, aes(x = subpop, y = null.sk.tau)) + 
+  geom_violin() +
+  geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
+  geom_point(aes(y = real.tau), size = 4, shape = 8) + 
+  stat_summary(fun.y = median, geom = "point", size = 4, colour = "black", shape = 16) +
+  xlab("Subpopulation") +
+  ylab("Kendall's Tau (Skewness)") +
+  theme(axis.text.x = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+ggplot(null.kt.tau.df, aes(x = subpop, y = null.kt.tau)) + 
+  geom_violin() +
+  geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
+  geom_point(aes(y = real.tau), size = 4, shape = 8) + 
+  stat_summary(fun.y = median, geom = "point", size = 4, colour = "black", shape = 16) +
+  xlab("Subpopulation") +
+  ylab("Kendall's Tau (Kurtosis)") +
+  theme(axis.text.x = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+ggplot(null.var.tau.df, aes(x = subpop, y = null.var.tau)) + 
+  geom_violin() +
+  geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
+  geom_point(aes(y = real.tau), size = 4, shape = 8) + 
+  stat_summary(fun.y = median, geom = "point", size = 4, colour = "black", shape = 16) +
+  xlab("Subpopulation") +
+  ylab("Kendall's Tau (Variance)") +
+  theme(axis.text.x = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+ggplot(null.cv.tau.df, aes(x = subpop, y = null.cv.tau)) + 
+  geom_violin() +
+  geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
+  geom_point(aes(y = real.tau), size = 4, shape = 8) + 
+  stat_summary(fun.y = median, geom = "point", size = 4, colour = "black", shape = 16) +
+  xlab("Subpopulation") +
+  ylab("Kendall's Tau (Co-Efficient of Variation)") +
+  theme(axis.text.x = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+ggplot(null.id.tau.df, aes(x = subpop, y = null.id.tau)) + 
+  geom_violin() +
+  geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
+  geom_point(aes(y = real.tau), size = 4, shape = 8) + 
+  stat_summary(fun.y = median, geom = "point", size = 4, colour = "black", shape = 16) +
+  xlab("Subpopulation") +
+  ylab("Kendall's Tau (Index of Dispersion") +
+  theme(axis.text.x = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+ggplot(null.fdv.tau.df, aes(x = subpop, y = null.fdv.tau)) + 
+  geom_violin() +
+  geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
+  geom_point(aes(y = real.tau), size = 4, shape = 8) + 
+  stat_summary(fun.y = median, geom = "point", size = 4, colour = "black", shape = 16) +
+  xlab("Subpopulation") +
+  ylab("Kendall's Tau (First Difference Variance)") +
+  theme(axis.text.x = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+ggplot(null.ac.tau.df, aes(x = subpop, y = null.ac.tau)) + 
+  geom_violin() +
+  geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
+  geom_point(aes(y = real.tau), size = 4, shape = 8) + 
+  stat_summary(fun.y = median, geom = "point", size = 4, colour = "black", shape = 16) +
+  xlab("Subpopulation") +
+  ylab("Kendall's Tau (Autocorrelation)") +
+  theme(axis.text.x = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+ggplot(null.acv.tau.df, aes(x = subpop, y = null.acv.tau)) + 
+  geom_violin() +
+  geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
+  geom_point(aes(y = real.tau), size = 4, shape = 8) + 
+  stat_summary(fun.y = median, geom = "point", size = 4, colour = "black", shape = 16) +
+  xlab("Subpopulation") +
+  ylab("Kendall's Tau (Autocovariance)") +
+  theme(axis.text.x = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+ggplot(null.dt.tau.df, aes(x = subpop, y = null.dt.tau)) + 
+  geom_violin() +
+  geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
+  geom_point(aes(y = real.tau), size = 4, shape = 8) + 
+  stat_summary(fun.y = median, geom = "point", size = 4, colour = "black", shape = 16) +
+  xlab("Subpopulation") +
+  ylab("Kendall's Tau (Decay Time)") +
+  theme(axis.text.x = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+```
+
+```{r}
+cols <- c(rep("#1434A4", 4), rep("#C21E56", 4))
+
+mean.gt <- c(sub1.mean.fpr.gt, sub2.mean.fpr.gt, sub3.mean.fpr.gt, sub4.mean.fpr.gt,
+          sub5.mean.fpr.gt, sub6.mean.fpr.gt, sub7.mean.fpr.gt, sub8.mean.fpr.gt)
+mean.lt <- c(sub1.mean.fpr.lt, sub2.mean.fpr.lt, sub3.mean.fpr.lt, sub4.mean.fpr.lt,
+             sub5.mean.fpr.lt, sub6.mean.fpr.lt, sub7.mean.fpr.lt, sub8.mean.fpr.lt)
+plot(1:8, mean.gt, col = cols, pch = 0, main = "Mean", xlab = "Subpopulation", ylab = "False Positive Rate", ylim = c(0, 1))
+points(1:8, mean.lt, col = cols, pch = 2)
+abline(h = 0.05)
+legend("right", legend = c("Greater Than", "Less Than"), col = "black", pch = c(0, 2))
+
+sk.gt <- c(sub1.sk.fpr.gt, sub2.sk.fpr.gt, sub3.sk.fpr.gt, sub4.sk.fpr.gt,
+          sub5.sk.fpr.gt, sub6.sk.fpr.gt, sub7.sk.fpr.gt, sub8.sk.fpr.gt)
+sk.lt <- c(sub1.sk.fpr.lt, sub2.sk.fpr.lt, sub3.sk.fpr.lt, sub4.sk.fpr.lt,
+             sub5.sk.fpr.lt, sub6.sk.fpr.lt, sub7.sk.fpr.lt, sub8.sk.fpr.lt)
+plot(1:8, sk.gt, col = cols, pch = 0, main = "Skewness", xlab = "Subpopulation", ylab = "False Positive Rate", ylim = c(0, 1))
+points(1:8, sk.lt, col = cols, pch = 2)
+abline(h = 0.05)
+legend("right", legend = c("Greater Than", "Less Than"), col = "black", pch = c(0, 2))
+
+kt.gt <- c(sub1.kt.fpr.gt, sub2.kt.fpr.gt, sub3.kt.fpr.gt, sub4.kt.fpr.gt,
+          sub5.kt.fpr.gt, sub6.kt.fpr.gt, sub7.kt.fpr.gt, sub8.kt.fpr.gt)
+kt.lt <- c(sub1.kt.fpr.lt, sub2.kt.fpr.lt, sub3.kt.fpr.lt, sub4.kt.fpr.lt,
+             sub5.kt.fpr.lt, sub6.kt.fpr.lt, sub7.kt.fpr.lt, sub8.kt.fpr.lt)
+plot(1:8, kt.gt, col = cols, pch = 0, main = "Kurtosis", xlab = "Subpopulation", ylab = "False Positive Rate", ylim = c(0, 1))
+points(1:8, kt.lt, col = cols, pch = 2)
+abline(h = 0.05)
+legend("right", legend = c("Greater Than", "Less Than"), col = "black", pch = c(0, 2))
+
+var.gt <- c(sub1.var.fpr.gt, sub2.var.fpr.gt, sub3.var.fpr.gt, sub4.var.fpr.gt,
+          sub5.var.fpr.gt, sub6.var.fpr.gt, sub7.var.fpr.gt, sub8.var.fpr.gt)
+var.lt <- c(sub1.var.fpr.lt, sub2.var.fpr.lt, sub3.var.fpr.lt, sub4.var.fpr.lt,
+             sub5.var.fpr.lt, sub6.var.fpr.lt, sub7.var.fpr.lt, sub8.var.fpr.lt)
+plot(1:8, var.gt, col = cols, pch = 0, main = "Variance", xlab = "Subpopulation", ylab = "False Positive Rate", ylim = c(0, 1))
+points(1:8, var.lt, col = cols, pch = 2)
+abline(h = 0.05)
+legend("right", legend = c("Greater Than", "Less Than"), col = "black", pch = c(0, 2))
+
+cv.gt <- c(sub1.cv.fpr.gt, sub2.cv.fpr.gt, sub3.cv.fpr.gt, sub4.cv.fpr.gt,
+          sub5.cv.fpr.gt, sub6.cv.fpr.gt, sub7.cv.fpr.gt, sub8.cv.fpr.gt)
+cv.lt <- c(sub1.cv.fpr.lt, sub2.cv.fpr.lt, sub3.cv.fpr.lt, sub4.cv.fpr.lt,
+             sub5.cv.fpr.lt, sub6.cv.fpr.lt, sub7.cv.fpr.lt, sub8.cv.fpr.lt)
+plot(1:8, cv.gt, col = cols, pch = 0, main = "Co-Efficient of Variation", xlab = "Subpopulation", ylab = "False Positive Rate", ylim = c(0, 1))
+points(1:8, cv.lt, col = cols, pch = 2)
+abline(h = 0.05)
+legend("right", legend = c("Greater Than", "Less Than"), col = "black", pch = c(0, 2))
+
+id.gt <- c(sub1.id.fpr.gt, sub2.id.fpr.gt, sub3.id.fpr.gt, sub4.id.fpr.gt,
+          sub5.id.fpr.gt, sub6.id.fpr.gt, sub7.id.fpr.gt, sub8.id.fpr.gt)
+id.lt <- c(sub1.id.fpr.lt, sub2.id.fpr.lt, sub3.id.fpr.lt, sub4.id.fpr.lt,
+             sub5.id.fpr.lt, sub6.id.fpr.lt, sub7.id.fpr.lt, sub8.id.fpr.lt)
+plot(1:8, id.gt, col = cols, pch = 0, main = "Index of Dispersion", xlab = "Subpopulation", ylab = "False Positive Rate", ylim = c(0, 1))
+points(1:8, id.lt, col = cols, pch = 2)
+abline(h = 0.05)
+legend("right", legend = c("Greater Than", "Less Than"), col = "black", pch = c(0, 2))
+
+fdv.gt <- c(sub1.fdv.fpr.gt, sub2.fdv.fpr.gt, sub3.fdv.fpr.gt, sub4.fdv.fpr.gt,
+          sub5.fdv.fpr.gt, sub6.fdv.fpr.gt, sub7.fdv.fpr.gt, sub8.fdv.fpr.gt)
+fdv.lt <- c(sub1.fdv.fpr.lt, sub2.fdv.fpr.lt, sub3.fdv.fpr.lt, sub4.fdv.fpr.lt,
+             sub5.fdv.fpr.lt, sub6.fdv.fpr.lt, sub7.fdv.fpr.lt, sub8.fdv.fpr.lt)
+plot(1:8, fdv.gt, col = cols, pch = 0, main = "First Difference Variance", xlab = "Subpopulation", ylab = "False Positive Rate", ylim = c(0, 1))
+points(1:8, fdv.lt, col = cols, pch = 2)
+abline(h = 0.05)
+legend("right", legend = c("Greater Than", "Less Than"), col = "black", pch = c(0, 2))
+
+ac.gt <- c(sub1.ac.fpr.gt, sub2.ac.fpr.gt, sub3.ac.fpr.gt, sub4.ac.fpr.gt,
+          sub5.ac.fpr.gt, sub6.ac.fpr.gt, sub7.ac.fpr.gt, sub8.ac.fpr.gt)
+ac.lt <- c(sub1.ac.fpr.lt, sub2.ac.fpr.lt, sub3.ac.fpr.lt, sub4.ac.fpr.lt,
+             sub5.ac.fpr.lt, sub6.ac.fpr.lt, sub7.ac.fpr.lt, sub8.ac.fpr.lt)
+plot(1:8, ac.gt, col = cols, pch = 0, main = "Autocorrelation", xlab = "Subpopulation", ylab = "False Positive Rate", ylim = c(0, 1))
+points(1:8, ac.lt, col = cols, pch = 2)
+abline(h = 0.05)
+legend("right", legend = c("Greater Than", "Less Than"), col = "black", pch = c(0, 2))
+
+acv.gt <- c(sub1.acv.fpr.gt, sub2.acv.fpr.gt, sub3.acv.fpr.gt, sub4.acv.fpr.gt,
+          sub5.acv.fpr.gt, sub6.acv.fpr.gt, sub7.acv.fpr.gt, sub8.acv.fpr.gt)
+acv.lt <- c(sub1.acv.fpr.lt, sub2.acv.fpr.lt, sub3.acv.fpr.lt, sub4.acv.fpr.lt,
+             sub5.acv.fpr.lt, sub6.acv.fpr.lt, sub7.acv.fpr.lt, sub8.acv.fpr.lt)
+plot(1:8, acv.gt, col = cols, pch = 0, main = "Autocovariance", xlab = "Subpopulation", ylab = "False Positive Rate", ylim = c(0, 1))
+points(1:8, acv.lt, col = cols, pch = 2)
+abline(h = 0.05)
+legend("right", legend = c("Greater Than", "Less Than"), col = "black", pch = c(0, 2))
+
+dt.gt <- c(sub1.dt.fpr.gt, sub2.dt.fpr.gt, sub3.dt.fpr.gt, sub4.dt.fpr.gt,
+          sub5.dt.fpr.gt, sub6.dt.fpr.gt, sub7.dt.fpr.gt, sub8.dt.fpr.gt)
+dt.lt <- c(sub1.dt.fpr.lt, sub2.dt.fpr.lt, sub3.dt.fpr.lt, sub4.dt.fpr.lt,
+             sub5.dt.fpr.lt, sub6.dt.fpr.lt, sub7.dt.fpr.lt, sub8.dt.fpr.lt)
+plot(1:8, dt.gt, col = cols, pch = 0, main = "Decay Time", xlab = "Subpopulation", ylab = "False Positive Rate", ylim = c(0, 1))
+points(1:8, dt.lt, col = cols, pch = 2)
+abline(h = 0.05)
+legend("right", legend = c("Greater Than", "Less Than"), col = "black", pch = c(0, 2))
+```
+
+## Direct Comparison
+
+```{r}
+par(mfrow = c(3, 3))
+
+## Mean
+plot(1:4, rep(constant.mean.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
+     xaxt = "n", yaxt = "n",
+     main = "Mean", xlab = "Subpopulation", ylab = "Kendall's Tau",
+     ylim = c(-1, 1))
+points(1:4, rep(constant.mean.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.mean.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.mean.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, warming.mean.tau, pch = 19, col = alpha("#C21E56", 0.3))
+axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
+axis(2, at = c(-1, 0, 1))
+
+## Skewness
+plot(1:4, rep(constant.sk.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
+     xaxt = "n", yaxt = "n",
+     main = "Skewness", xlab = "Subpopulation", ylab = "Kendall's Tau",
+     ylim = c(-1, 1))
+points(1:4, rep(constant.sk.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.sk.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.sk.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, warming.sk.tau, pch = 19, col = alpha("#C21E56", 0.3))
+axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
+axis(2, at = c(-1, 0, 1))
+
+## Kurtosis
+plot(1:4, rep(constant.kt.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
+     xaxt = "n", yaxt = "n",
+     main = "Kurtosis", xlab = "Subpopulation", ylab = "Kendall's Tau",
+     ylim = c(-1, 1))
+points(1:4, rep(constant.kt.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.kt.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.kt.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, warming.kt.tau, pch = 19, col = alpha("#C21E56", 0.3))
+axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
+axis(2, at = c(-1, 0, 1))
+
+## Variance
+plot(1:4, rep(constant.var.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
+     xaxt = "n", yaxt = "n",
+     main = "Variance", xlab = "Subpopulation", ylab = "Kendall's Tau",
+     ylim = c(-1, 1))
+points(1:4, rep(constant.var.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.var.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.var.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, warming.var.tau, pch = 19, col = alpha("#C21E56", 0.3))
+axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
+axis(2, at = c(-1, 0, 1))
+
+## Co-Efficient of Variation
+plot(1:4, rep(constant.cv.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
+     xaxt = "n", yaxt = "n",
+     main = "Co-Efficient of Variation", xlab = "Subpopulation", ylab = "Kendall's Tau",
+     ylim = c(-1, 1))
+points(1:4, rep(constant.cv.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.cv.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.cv.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, warming.cv.tau, pch = 19, col = alpha("#C21E56", 0.3))
+axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
+axis(2, at = c(-1, 0, 1))
+
+## Index of Dispersion
+plot(1:4, rep(constant.id.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
+     xaxt = "n", yaxt = "n",
+     main = "Index of Dispersion", xlab = "Subpopulation", ylab = "Kendall's Tau",
+     ylim = c(-1, 1))
+points(1:4, rep(constant.id.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.id.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.id.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, warming.id.tau, pch = 19, col = alpha("#C21E56", 0.3))
+axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
+axis(2, at = c(-1, 0, 1))
+
+## First Difference Variance
+plot(1:4, rep(constant.fdv.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
+     xaxt = "n", yaxt = "n",
+     main = "First Difference Variance", xlab = "Subpopulation", ylab = "Kendall's Tau",
+     ylim = c(-1, 1))
+points(1:4, rep(constant.fdv.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.fdv.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.fdv.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, warming.fdv.tau, pch = 19, col = alpha("#C21E56", 0.3))
+axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
+axis(2, at = c(-1, 0, 1))
+
+## Autocorrelation
+plot(1:4, rep(constant.ac.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
+     xaxt = "n", yaxt = "n",
+     main = "Autocorrelation", xlab = "Subpopulation", ylab = "Kendall's Tau",
+     ylim = c(-1, 1))
+points(1:4, rep(constant.ac.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.ac.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.ac.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, warming.ac.tau, pch = 19, col = alpha("#C21E56", 0.3))
+axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
+axis(2, at = c(-1, 0, 1))
+
+## Autocovariance
+plot(1:4, rep(constant.acv.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
+     xaxt = "n", yaxt = "n",
+     main = "Autocovariance", xlab = "Subpopulation", ylab = "Kendall's Tau",
+     ylim = c(-1, 1))
+points(1:4, rep(constant.acv.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.acv.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, rep(constant.acv.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
+points(1:4, warming.acv.tau, pch = 19, col = alpha("#C21E56", 0.3))
+axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
+axis(2, at = c(-1, 0, 1))
+
+# ## Decay Time
+# plot(1:4, rep(constant.dt.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
+#      xaxt = "n", yaxt = "n",
+#      main = "Decay Time", xlab = "Subpopulation", ylab = "Kendall's Tau",
+#      ylim = c(-1, 1))
+# points(1:4, rep(constant.dt.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
+# points(1:4, rep(constant.dt.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
+# points(1:4, rep(constant.dt.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
+# points(1:4, warming.dt.tau, pch = 19, col = alpha("#C21E56", 0.3))
+# axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
+# axis(2, at = c(-1, 0, 1))
+```
