@@ -29,6 +29,20 @@ constant8 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.1
 constant9 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.9.csv")
 constant10 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.10.csv")
 
+constant.sims <- data.frame(
+  time = seq(1, 120, 1),
+  constant1[ , 2:101], 
+  constant2[ , 2:101], 
+  constant3[ , 2:101], 
+  constant4[ , 2:101], 
+  constant5[ , 2:101], 
+  constant6[ , 2:101], 
+  constant7[ , 2:101], 
+  constant8[ , 2:101], 
+  constant9[ , 2:101], 
+  constant10[ , 2:101]
+)
+
 ## Variable temperature
 warming1 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.1.csv")
 warming2 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.2.csv")
@@ -40,4 +54,520 @@ warming7 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120
 warming8 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.8.csv")
 warming9 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.9.csv")
 warming10 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.10.csv")
+
+warming.sims <- data.frame(
+  time = seq(1, 120, 1),
+  warming1[ , 2:101], 
+  warming2[ , 2:101], 
+  warming3[ , 2:101], 
+  warming4[ , 2:101], 
+  warming5[ , 2:101], 
+  warming6[ , 2:101], 
+  warming7[ , 2:101], 
+  warming8[ , 2:101], 
+  warming9[ , 2:101], 
+  warming10[ , 2:101]
+)
+```
+
+# Sampling
+
+Okay, so, if we look at `2_EpidemicModel-Stochastic.Rmd`, we can see that the SIDE model starts with 169 susceptible individuals, so that's our population size. Since this is a compartmental model, that should be constant. **BUT! We need to think about a couple things:**
+
+-   **We don't know how many *Daphnia* were in the experimental population, so this might not be as comparative as we want it to be**
+
+    -   **The experimental populations also wouldn't have stayed at a constant size, so the denominator should change...**
+
+-   **Devin chose "large" individuals to enable quantification of parasite load; we're not doing "biased" sampling here**
+
+-   **Need to make sure that there's no addition/removal happening in this model**
+
+```{r}
+rbinom(12, 1, 9/169) # Where 12 is the number of samples, 9 is the true prevalence, and 169 is N
+
+# We want to count the number of 1s, and use that as our sampled prevalence
+set.seed(123); infec.samp <- rbinom(12, 1, 9/169)
+samp.prev <- length(which(infec.samp == 1))
+
+## Okay, let's write a loop to take a look at this
+
+N <- 169
+
+## Constant
+constant.sims.sampled.prev <- c()
+for (i in 2:1001){
+  prev.vec <- c()
+  for (j in 1:120){
+    set.seed(1); infec.samp <- rbinom(12, 1, constant.sims[j, i]/N)
+    prev.vec[j] <- length(which(infec.samp == 1))
+  }
+  constant.sims.sampled.prev <- cbind(constant.sims.sampled.prev, prev.vec)
+}
+
+## Warming
+warming.sims.sampled.prev <- c()
+for (i in 2:1001){
+  prev.vec <- c()
+  for (j in 1:120){
+    set.seed(1); infec.samp <- rbinom(12, 1, warming.sims[j, i]/N)
+    prev.vec[j] <- length(which(infec.samp == 1))
+  }
+  warming.sims.sampled.prev <- cbind(warming.sims.sampled.prev, prev.vec)
+}
+```
+
+# Plotting
+
+Let's plot these to see what we're looking at!
+
+```{r}
+## Empirical Data
+data <- read.csv("Kirk_Data/Epidemics_Data_Dryad/Kirk_et_al_epidemics_sampling_data.csv")
+sub1 <- subset(data.sum, population == 1)
+sub2 <- subset(data.sum, population == 2)
+sub3 <- subset(data.sum, population == 3)
+sub4 <- subset(data.sum, population == 4)
+sub5 <- subset(data.sum, population == 5)
+sub6 <- subset(data.sum, population == 6)
+sub7 <- subset(data.sum, population == 7)
+sub8 <- subset(data.sum, population == 8)
+
+## Simulated Data w/ Sampling (15 populations of 1000)
+plot(1:120, constant.sims.sampled.prev[ , 1], type = "l", col = alpha("#1434A4", 0.3),
+     ylim = c(0, 8),
+     main = "Constant", xlab = "Day", ylab = "Prevalence")
+for (i in 2:15){
+  lines(1:120, constant.sims.sampled.prev[ , i], col = alpha("#1434A4", 0.3))
+}
+lines(seq(1, 120, 3), sub1$status.sum, col = alpha("black", 0.6), lty = 3)
+lines(seq(1, 120, 3), sub2$status.sum, col = alpha("black", 0.6), lty = 3)
+lines(seq(1, 120, 3), sub3$status.sum, col = alpha("black", 0.6), lty = 3)
+lines(seq(1, 120, 3), sub4$status.sum, col = alpha("black", 0.6), lty = 3)
+
+plot(1:120, warming.sims.sampled.prev[ , 1], type = "l", col = alpha("#C21E56", 0.3),
+     ylim = c(0, 8),
+     main = "Warming", xlab = "Day", ylab = "Prevalence")
+for (i in 2:15){
+  lines(1:120, warming.sims.sampled.prev[ , i], col = alpha("#C21E56", 0.3))
+}
+lines(seq(1, 120, 3), sub5$status.sum, col = alpha("black", 0.6), lty = 3)
+lines(seq(1, 120, 3), sub6$status.sum, col = alpha("black", 0.6), lty = 3)
+lines(seq(1, 120, 3), sub7$status.sum, col = alpha("black", 0.6), lty = 3)
+lines(seq(1, 120, 3), sub8$status.sum, col = alpha("black", 0.6), lty = 3)
+```
+
+Okay, that looks pretty good, and importantly, we're seeing a lot of zeros.
+
+**NOTE: We could also remove the data such that we're "sampling" every third day?**
+
+```{r}
+samp.days <- seq(1, 120, 3)
+constant.sims.sampled.prev.40 <- c()
+for (i in 1:1000){
+  prev.vec <- c()
+  prev.vec <- constant.sims.sampled.prev[samp.days, i]
+  constant.sims.sampled.prev.40 <- cbind(constant.sims.sampled.prev.40, prev.vec)
+}
+warming.sims.sampled.prev.40 <- c()
+for (i in 1:1000){
+  prev.vec <- c()
+  prev.vec <- warming.sims.sampled.prev[samp.days, i]
+  warming.sims.sampled.prev.40 <- cbind(warming.sims.sampled.prev.40, prev.vec)
+}
+
+## Plotting
+plot(seq(1, 120, 3), constant.sims.sampled.prev.40[ , 1], type = "l", col = alpha("#1434A4", 0.3),
+     ylim = c(0, 8),
+     main = "Constant", xlab = "Day", ylab = "Prevalence")
+for (i in 2:15){
+  lines(seq(1, 120, 3), constant.sims.sampled.prev.40[ , i], col = alpha("#1434A4", 0.3))
+}
+lines(seq(1, 120, 3), sub1$status.sum, col = alpha("black", 0.6), lty = 3)
+lines(seq(1, 120, 3), sub2$status.sum, col = alpha("black", 0.6), lty = 3)
+lines(seq(1, 120, 3), sub3$status.sum, col = alpha("black", 0.6), lty = 3)
+lines(seq(1, 120, 3), sub4$status.sum, col = alpha("black", 0.6), lty = 3)
+
+plot(seq(1, 120, 3), warming.sims.sampled.prev.40[ , 1], type = "l", col = alpha("#C21E56", 0.3),
+     ylim = c(0, 8),
+     main = "Warming", xlab = "Day", ylab = "Prevalence")
+for (i in 2:15){
+  lines(seq(1, 120, 3), warming.sims.sampled.prev.40[ , i], col = alpha("#C21E56", 0.3))
+}
+lines(seq(1, 120, 3), sub5$status.sum, col = alpha("black", 0.6), lty = 3)
+lines(seq(1, 120, 3), sub6$status.sum, col = alpha("black", 0.6), lty = 3)
+lines(seq(1, 120, 3), sub7$status.sum, col = alpha("black", 0.6), lty = 3)
+lines(seq(1, 120, 3), sub8$status.sum, col = alpha("black", 0.6), lty = 3)
+```
+
+# Computing EWS
+
+## Metrics 
+
+```{r}
+num.of.sims <- 10^3
+
+# SD, Mean, Skewness, Kurtosis
+constant.sims.sd.15 <- matrix(nrow = 35, ncol = num.of.sims)
+constant.sims.mean.15 <- matrix(nrow = 35, ncol = num.of.sims)
+constant.sims.sk.15 <- matrix(nrow = 35, ncol = num.of.sims)
+constant.sims.kt.15 <- matrix(nrow = 35, ncol = num.of.sims)
+
+warming.sims.sd.15 <- matrix(nrow = 35, ncol = num.of.sims)
+warming.sims.mean.15 <- matrix(nrow = 35, ncol = num.of.sims)
+warming.sims.sk.15 <- matrix(nrow = 35, ncol = num.of.sims)
+warming.sims.kt.15 <- matrix(nrow = 35, ncol = num.of.sims)
+
+for(i in 1:num.of.sims){
+  constant.sims.sd.15[ ,i] <- SlidingWindow(FUN = "sd", data = constant.sims.sampled.prev.40[ ,i], window = 5, step = 1)
+  constant.sims.mean.15[ ,i] <- SlidingWindow(FUN = "mean", data = constant.sims.sampled.prev.40[ ,i], window = 5, step = 1)
+  constant.sims.sk.15[ ,i] <- SlidingWindow(FUN = "skewness", data = constant.sims.sampled.prev.40[ ,i], window = 5, step = 1)
+  constant.sims.kt.15[ ,i] <- SlidingWindow(FUN = "kurtosis", data = constant.sims.sampled.prev.40[ ,i], window = 5, step = 1)
+}
+
+for(i in 1:num.of.sims){
+  warming.sims.sd.15[ ,i] <- SlidingWindow(FUN = "sd", data = warming.sims.sampled.prev.40[ ,i], window = 5, step = 1)
+  warming.sims.mean.15[ ,i] <- SlidingWindow(FUN = "mean", data = warming.sims.sampled.prev.40[ ,i], window = 5, step = 1)
+  warming.sims.sk.15[ ,i] <- SlidingWindow(FUN = "skewness", data = warming.sims.sampled.prev.40[ ,i], window = 5, step = 1)
+  warming.sims.kt.15[ ,i] <- SlidingWindow(FUN = "kurtosis", data = warming.sims.sampled.prev.40[ ,i], window = 5, step = 1)
+}
+
+## Variance
+constant.sims.var.15 <- constant.sims.sd.15*constant.sims.sd.15
+warming.sims.var.15 <- warming.sims.sd.15*warming.sims.sd.15
+
+## Co-Efficient of Variation
+constant.sims.cv.15 <- constant.sims.sd.15/constant.sims.mean.15
+warming.sims.cv.15 <- warming.sims.sd.15/warming.sims.mean.15
+
+## Index of Dispersion
+constant.sims.id.15 <- constant.sims.var.15/constant.sims.mean.15
+warming.sims.id.15 <- warming.sims.var.15/warming.sims.mean.15
+
+## First Difference Variance
+constant.sims.fdv.15 <- matrix(ncol = num.of.sims, nrow = 35)
+warming.sims.fdv.15 <- matrix(ncol = num.of.sims, nrow = 35)
+
+for(i in 1:num.of.sims){
+  for(j in 2:35){
+    constant.sims.fdv.15[j - 1,i] <- constant.sims.var.15[j,i] - constant.sims.var.15[j - 1,i]
+    warming.sims.fdv.15[j - 1,i] <- warming.sims.var.15[j,i] - warming.sims.var.15[j - 1,i]
+  }
+}
+constant.sims.fdv.15 <- constant.sims.fdv.15[1:34, ]
+warming.sims.fdv.15 <- warming.sims.fdv.15[1:34, ]
+
+## Autocorrelation and Autocovariance
+constant.sims.ac.15 <- matrix(ncol = num.of.sims, nrow = 40)
+constant.sims.acv.15 <- matrix(ncol = num.of.sims, nrow = 40)
+
+for(j in 1:num.of.sims){
+  for(i in 1:35){
+    window.start <- i
+    window.end <- i + 4
+    
+    segment <- constant.sims.sampled.prev.40[c(window.start:window.end),j]
+    
+    constant.sims.ac.15[i, j] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+    constant.sims.acv.15[i, j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+  }
+}
+
+warming.sims.ac.15 <- matrix(ncol = num.of.sims,nrow = 40)
+warming.sims.acv.15 <- matrix(ncol = num.of.sims,nrow = 40)
+
+for(j in 1:num.of.sims){
+  for(i in 1:35){
+    window.start <- i
+    window.end <- i + 4
+    
+    segment <- warming.sims.sampled.prev.40[c(window.start:window.end),j]
+    
+    warming.sims.ac.15[i, j] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+    warming.sims.acv.15[i, j] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+  }
+}
+
+## Decay Time
+constant.sims.dt.15 <- matrix(ncol = num.of.sims, nrow = 35)
+warming.sims.dt.15 <- matrix(nco = num.of.sims, nrow = 35)
+
+for(i in 1:num.of.sims){
+  for(j in 1:35){
+    suppressWarnings(constant.sims.dt.15[j, i] <- -j/log(constant.sims.ac.15[j, i]))
+    suppressWarnings(warming.sims.dt.15[j, i] <- -j/log(warming.sims.ac.15[j, i]))
+  }
+}
+```
+
+## Kendall's Tau
+
+```{r}
+constant.sims.var.15 <- constant.sims.var.15[1:15, ]
+constant.sims.mean.15 <- constant.sims.mean.15[1:15, ]
+constant.sims.cv.15 <- constant.sims.cv.15[1:15, ]
+constant.sims.sk.15 <- constant.sims.sk.15[1:15, ]
+constant.sims.kt.15 <- constant.sims.kt.15[1:15, ]
+constant.sims.id.15 <- constant.sims.id.15[1:15, ]
+constant.sims.ac.15 <- constant.sims.ac.15[1:15, ]
+constant.sims.acv.15 <- constant.sims.acv.15[1:15, ]
+constant.sims.fdv.15 <- constant.sims.fdv.15[1:15, ]
+constant.sims.dt.15 <- constant.sims.dt.15[1:15, ]
+
+warming.sims.var.15 <- warming.sims.var.15[1:15, ]
+warming.sims.mean.15 <- warming.sims.mean.15[1:15, ]
+warming.sims.cv.15 <- warming.sims.cv.15[1:15, ]
+warming.sims.sk.15 <- warming.sims.sk.15[1:15, ]
+warming.sims.kt.15 <- warming.sims.kt.15[1:15, ]
+warming.sims.id.15 <- warming.sims.id.15[1:15, ]
+warming.sims.ac.15 <- warming.sims.ac.15[1:15, ]
+warming.sims.acv.15 <- warming.sims.acv.15[1:15, ]
+warming.sims.fdv.15 <- warming.sims.fdv.15[1:15, ]
+warming.sims.dt.15 <- warming.sims.dt.15[1:15, ]
+
+constant.sims.var.15.tau <- c()
+constant.sims.mean.15.tau <- c()
+constant.sims.cv.15.tau <- c()
+constant.sims.sk.15.tau <- c()
+constant.sims.kt.15.tau <- c()
+constant.sims.id.15.tau <- c()
+constant.sims.ac.15.tau <- c()
+constant.sims.acv.15.tau <- c()
+constant.sims.fdv.15.tau <- c()
+constant.sims.dt.15.tau <- c()
+
+warming.sims.var.15.tau <- c()
+warming.sims.mean.15.tau <- c()
+warming.sims.cv.15.tau <- c()
+warming.sims.sk.15.tau <- c()
+warming.sims.kt.15.tau <- c()
+warming.sims.id.15.tau <- c()
+warming.sims.ac.15.tau <- c()
+warming.sims.acv.15.tau <- c()
+warming.sims.fdv.15.tau <- c()
+warming.sims.dt.15.tau <- c()
+
+time.15 <- c(1:15)
+
+for(i in 1:num.of.sims){
+  constant.sims.mean.15.tau[i] <- cor(constant.sims.mean.15[ , i], time.15, method = "kendall")
+  constant.sims.sk.15.tau[i] <- cor(constant.sims.sk.15[ , i], time.15, method = "kendall")
+  constant.sims.kt.15.tau[i] <- cor(constant.sims.kt.15[ , i], time.15, method = "kendall")
+  constant.sims.var.15.tau[i] <- cor(constant.sims.var.15[ , i], time.15, method = "kendall")
+  constant.sims.cv.15.tau[i] <- cor(constant.sims.cv.15[ , i], time.15, method = "kendall")
+  constant.sims.id.15.tau[i] <- cor(constant.sims.id.15[ , i], time.15, method = "kendall")
+  constant.sims.fdv.15.tau[i] <- cor(constant.sims.fdv.15[ , i], time.15, method = "kendall")
+  constant.sims.ac.15.tau[i] <- cor(constant.sims.ac.15[ , i], time.15, method = "kendall")
+  constant.sims.acv.15.tau[i] <- cor(constant.sims.acv.15[ , i], time.15, method = "kendall")
+  constant.sims.dt.15.tau[i] <- cor(constant.sims.dt.15[ , i], time.15, method = "kendall")
+  
+  warming.sims.mean.15.tau[i] <- cor(warming.sims.mean.15[ , i], time.15, method = "kendall")
+  warming.sims.sk.15.tau[i] <- cor(warming.sims.sk.15[ , i], time.15, method = "kendall")
+  warming.sims.kt.15.tau[i] <- cor(warming.sims.kt.15[ , i], time.15, method = "kendall")
+  warming.sims.var.15.tau[i] <- cor(warming.sims.var.15[ , i], time.15, method = "kendall")
+  warming.sims.cv.15.tau[i] <- cor(warming.sims.cv.15[ , i], time.15, method = "kendall")
+  warming.sims.id.15.tau[i] <- cor(warming.sims.id.15[ , i], time.15, method = "kendall")
+  warming.sims.fdv.15.tau[i] <- cor(warming.sims.fdv.15[ , i], time.15, method = "kendall")
+  warming.sims.ac.15.tau[i] <- cor(warming.sims.ac.15[ , i], time.15, method = "kendall")
+  warming.sims.acv.15.tau[i] <- cor(warming.sims.acv.15[ , i], time.15, method = "kendall")
+  warming.sims.dt.15.tau[i] <- cor(warming.sims.dt.15[ , i], time.15, method = "kendall")
+}
+```
+
+### Plotting
+
+```{r}
+cols <- c(rep("#1434A4", 1000), rep("#C21E56", 1000))
+
+## Mean
+mean <- data.frame(
+  treatment = c(rep("Constant", 1000), rep("Warming", 1000)),
+  k.tau = c(constant.sims.mean.15.tau, warming.sims.mean.15.tau)
+)
+ggplot(mean, aes(x = treatment, y = k.tau)) + 
+  geom_violin() +
+  geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
+  stat_summary(fun.y = median, geom = "point", size = 4, colour = "black", shape = 16) +
+  xlab("Treatment") +
+  ylab("Kendall's Tau (Mean)") +
+  theme(axis.text.x = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+## Variance
+var <- data.frame(
+  treatment = c(rep("Constant", 1000), rep("Warming", 1000)),
+  k.tau = c(constant.sims.var.15.tau, warming.sims.var.15.tau)
+)
+ggplot(var, aes(x = treatment, y = k.tau)) + 
+  geom_violin() +
+  geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
+  stat_summary(fun.y = median, geom = "point", size = 4, colour = "black", shape = 16) +
+  xlab("Treatment") +
+  ylab("Kendall's Tau (Variance)") +
+  theme(axis.text.x = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+## Skewness
+sk <- data.frame(
+  treatment = c(rep("Constant", 1000), rep("Warming", 1000)),
+  k.tau = c(constant.sims.sk.15.tau, warming.sims.sk.15.tau)
+)
+ggplot(sk, aes(x = treatment, y = k.tau)) + 
+  geom_violin() +
+  geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
+  stat_summary(fun.y = median, geom = "point", size = 4, colour = "black", shape = 16) +
+  xlab("Treatment") +
+  ylab("Kendall's Tau (Skewness)") +
+  theme(axis.text.x = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+## Kurtosis
+kt <- data.frame(
+  treatment = c(rep("Constant", 1000), rep("Warming", 1000)),
+  k.tau = c(constant.sims.kt.15.tau, warming.sims.kt.15.tau)
+)
+ggplot(kt, aes(x = treatment, y = k.tau)) + 
+  geom_violin() +
+  geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
+  stat_summary(fun.y = median, geom = "point", size = 4, colour = "black", shape = 16) +
+  xlab("Treatment") +
+  ylab("Kendall's Tau (Kurtosis)") +
+  theme(axis.text.x = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+## Co-Efficient of Variation
+cv <- data.frame(
+  treatment = c(rep("Constant", 1000), rep("Warming", 1000)),
+  k.tau = c(constant.sims.cv.15.tau, warming.sims.cv.15.tau)
+)
+ggplot(cv, aes(x = treatment, y = k.tau)) + 
+  geom_violin() +
+  geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
+  stat_summary(fun.y = median, geom = "point", size = 4, colour = "black", shape = 16) +
+  xlab("Treatment") +
+  ylab("Kendall's Tau (Co-Efficient of Variation)") +
+  theme(axis.text.x = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+## Index of Dispersion
+id <- data.frame(
+  treatment = c(rep("Constant", 1000), rep("Warming", 1000)),
+  k.tau = c(constant.sims.id.15.tau, warming.sims.id.15.tau)
+)
+ggplot(id, aes(x = treatment, y = k.tau)) + 
+  geom_violin() +
+  geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
+  stat_summary(fun.y = median, geom = "point", size = 4, colour = "black", shape = 16) +
+  xlab("Treatment") +
+  ylab("Kendall's Tau (Index of Dispersion)") +
+  theme(axis.text.x = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+## First Difference Variance
+fdv <- data.frame(
+  treatment = c(rep("Constant", 1000), rep("Warming", 1000)),
+  k.tau = c(constant.sims.fdv.15.tau, warming.sims.fdv.15.tau)
+)
+ggplot(fdv, aes(x = treatment, y = k.tau)) + 
+  geom_violin() +
+  geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
+  stat_summary(fun.y = median, geom = "point", size = 4, colour = "black", shape = 16) +
+  xlab("Treatment") +
+  ylab("Kendall's Tau (First Difference Variance)") +
+  theme(axis.text.x = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+## Autocorrelation
+ac <- data.frame(
+  treatment = c(rep("Constant", 1000), rep("Warming", 1000)),
+  k.tau = c(constant.sims.ac.15.tau, warming.sims.ac.15.tau)
+)
+ggplot(ac, aes(x = treatment, y = k.tau)) + 
+  geom_violin() +
+  geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
+  stat_summary(fun.y = median, geom = "point", size = 4, colour = "black", shape = 16) +
+  xlab("Treatment") +
+  ylab("Kendall's Tau (Autocorrelation)") +
+  theme(axis.text.x = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+## Autocovariance
+acv <- data.frame(
+  treatment = c(rep("Constant", 1000), rep("Warming", 1000)),
+  k.tau = c(constant.sims.acv.15.tau, warming.sims.acv.15.tau)
+)
+ggplot(acv, aes(x = treatment, y = k.tau)) + 
+  geom_violin() +
+  geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
+  stat_summary(fun.y = median, geom = "point", size = 4, colour = "black", shape = 16) +
+  xlab("Treatment") +
+  ylab("Kendall's Tau (Autocovariance)") +
+  theme(axis.text.x = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+## Decay Time
+dt <- data.frame(
+  treatment = c(rep("Constant", 1000), rep("Warming", 1000)),
+  k.tau = c(constant.sims.dt.15.tau, warming.sims.dt.15.tau)
+)
+ggplot(dt, aes(x = treatment, y = k.tau)) + 
+  geom_violin() +
+  geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
+  stat_summary(fun.y = median, geom = "point", size = 4, colour = "black", shape = 16) +
+  xlab("Treatment") +
+  ylab("Kendall's Tau (Decay Time)") +
+  theme(axis.text.x = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+```
+
+## AUC
+
+```{r}
+AUC_mean_15 <- calc_auc(warming.sims.mean.15.tau, constant.sims.mean.15.tau); AUC_mean_15
+AUC_sk_15 <- calc_auc(warming.sims.sk.15.tau, constant.sims.sk.15.tau); AUC_sk_15
+AUC_kt_15 <- calc_auc(warming.sims.kt.15.tau, constant.sims.kt.15.tau); AUC_kt_15
+AUC_var_15 <- calc_auc(warming.sims.var.15.tau, constant.sims.var.15.tau); AUC_var_15
+AUC_cv_15 <- calc_auc(warming.sims.cv.15.tau, constant.sims.cv.15.tau); AUC_cv_15
+AUC_id_15 <- calc_auc(warming.sims.id.15.tau, constant.sims.id.15.tau); AUC_id_15
+AUC_fdv_15 <- calc_auc(warming.sims.fdv.15.tau, constant.sims.fdv.15.tau); AUC_fdv_15
+AUC_ac_15 <- calc_auc(warming.sims.ac.15.tau, constant.sims.ac.15.tau); AUC_ac_15
+AUC_acv_15 <- calc_auc(warming.sims.acv.15.tau, constant.sims.acv.15.tau); AUC_acv_15
+AUC_dt_15 <- calc_auc(warming.sims.dt.15.tau, constant.sims.dt.15.tau); AUC_dt_15
+```
+
+### Plotting
+
+```{r}
+metrics <- c("mean", "skewness", "kurtosis", "variance", "cv", "id", "fdv", "cor", "acv", "dt")
+
+AUC_15 <- c(AUC_mean_15, AUC_sk_15, AUC_kt_15, AUC_var_15, AUC_cv_15, 
+           AUC_id_15, AUC_fdv_15, AUC_ac_15 ,AUC_acv_15, AUC_dt_15)
+
+metrics_full <- c("Mean", "Skewness", "Kurtosis", "Variance", "acvariance", "Index of Dispersion", "First Difference Variance", "Autocorrelation", "Autocovariance", "Decay Time")
+
+## Plot 
+plot(1:10, AUC_15, type = "p", 
+     main = "Simulated Data", xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = "red3", pch = 19)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2)
 ```

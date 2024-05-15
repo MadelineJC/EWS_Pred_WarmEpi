@@ -207,15 +207,15 @@ warming.sims.kt.5 <- matrix(nrow = 115, ncol = num.of.sims)
 
 # Use SlidingWindow to calculate sd, mean, skewness, and kurtosis
 for(i in 1:num.of.sims){
-  constant.sims.sd.5[ ,i] <- SlidingWindow(FUN = "sd", data = constant.incidence.daily[,i], window = 5,step = 1)
-  constant.sims.mean.5[ ,i] <- SlidingWindow(FUN = "mean", data = constant.incidence.daily[,i], window = 5, step = 1)
+  constant.sims.sd.5[ ,i] <- SlidingWindow(FUN = "sd", data = constant.incidence.daily[ ,i], window = 5, step = 1)
+  constant.sims.mean.5[ ,i] <- SlidingWindow(FUN = "mean", data = constant.incidence.daily[ ,i], window = 5, step = 1)
   constant.sims.sk.5[ ,i] <- SlidingWindow(FUN = "skewness", data = constant.incidence.daily[ ,i], window = 5, step = 1)
   constant.sims.kt.5[ ,i] <- SlidingWindow(FUN = "kurtosis", data = constant.incidence.daily[ ,i], window = 5, step = 1)
 }
 
 for(i in 1:num.of.sims){
-  warming.sims.sd.5[ ,i] <- SlidingWindow(FUN = "sd", data = warming.incidence.daily[,i], window = 5,step = 1)
-  warming.sims.mean.5[ ,i] <- SlidingWindow(FUN = "mean", data = warming.incidence.daily[,i], window = 5, step = 1)
+  warming.sims.sd.5[ ,i] <- SlidingWindow(FUN = "sd", data = warming.incidence.daily[ ,i], window = 5, step = 1)
+  warming.sims.mean.5[ ,i] <- SlidingWindow(FUN = "mean", data = warming.incidence.daily[ ,i], window = 5, step = 1)
   warming.sims.sk.5[ ,i] <- SlidingWindow(FUN = "skewness", data = warming.incidence.daily[ ,i], window = 5, step = 1)
   warming.sims.kt.5[ ,i] <- SlidingWindow(FUN = "kurtosis", data = warming.incidence.daily[ ,i], window = 5, step = 1)
 }
@@ -388,7 +388,7 @@ for(i in 1:200){
 abline(v = 60, col = "black", lwd = 2, lty = 2)
 ```
 
-### **Autocorrelation and Autoacvariance**
+### **Autocorrelation and Autocovariance**
 
 **Since `SlidingWindow` doesn't calculate metrics to include the last index, we'll do this manually.**
 
@@ -447,13 +447,13 @@ max(constant.sims.acv.5, na.rm = TRUE); max(warming.sims.acv.5, na.rm = TRUE)
 min(constant.sims.acv.5, na.rm = TRUE); min(warming.sims.acv.5, na.rm = TRUE)
 
 plot(constant.sims.acv.5[ ,1], type = "n",
-     main = "5 Day Sliding Window", xlab = "Time", ylab = "Autoacvariance", ylim = c(-2, 10))
+     main = "5 Day Sliding Window", xlab = "Time", ylab = "Autocovariance", ylim = c(-2, 10))
 for(i in 1:200){
   lines(constant.sims.acv.5[ ,i], col = alpha("cornflowerblue", 0.2), lwd = 2)
 }
 abline(v = 60, col = "black", lwd = 2, lty = 2)
 plot(warming.sims.acv.5[ ,1], type = "n",
-     main = "5 Day Sliding Window", xlab = "Time", ylab = "Autoacvariance", ylim = c(-5, 40))
+     main = "5 Day Sliding Window", xlab = "Time", ylab = "Autocovariance", ylim = c(-5, 40))
 for(i in 1:200){
   lines(warming.sims.acv.5[ ,i], col = alpha("red2", 0.2), lwd = 2)
 }
@@ -520,15 +520,15 @@ warming.sims.kt.15 <- matrix(nrow = 105, ncol = num.of.sims)
 
 # Use SlidingWindow to calculate sd, mean, skewness, and kurtosis
 for(i in 1:num.of.sims){
-  constant.sims.sd.15[ ,i] <- SlidingWindow(FUN = "sd", data = constant.incidence.daily[,i], window = 15,step = 1)
-  constant.sims.mean.15[ ,i] <- SlidingWindow(FUN = "mean", data = constant.incidence.daily[,i], window = 15, step = 1)
+  constant.sims.sd.15[ ,i] <- SlidingWindow(FUN = "sd", data = constant.incidence.daily[ ,i], window = 15,step = 1)
+  constant.sims.mean.15[ ,i] <- SlidingWindow(FUN = "mean", data = constant.incidence.daily[ ,i], window = 15, step = 1)
   constant.sims.sk.15[ ,i] <- SlidingWindow(FUN = "skewness", data = constant.incidence.daily[ ,i], window = 15, step = 1)
   constant.sims.kt.15[ ,i] <- SlidingWindow(FUN = "kurtosis", data = constant.incidence.daily[ ,i], window = 15, step = 1)
 }
 
 for(i in 1:num.of.sims){
-  warming.sims.sd.15[ ,i] <- SlidingWindow(FUN = "sd", data = warming.incidence.daily[,i], window = 15,step = 1)
-  warming.sims.mean.15[ ,i] <- SlidingWindow(FUN = "mean", data = warming.incidence.daily[,i], window = 15, step = 1)
+  warming.sims.sd.15[ ,i] <- SlidingWindow(FUN = "sd", data = warming.incidence.daily[ ,i], window = 15,step = 1)
+  warming.sims.mean.15[ ,i] <- SlidingWindow(FUN = "mean", data = warming.incidence.daily[ ,i], window = 15, step = 1)
   warming.sims.sk.15[ ,i] <- SlidingWindow(FUN = "skewness", data = warming.incidence.daily[ ,i], window = 15, step = 1)
   warming.sims.kt.15[ ,i] <- SlidingWindow(FUN = "kurtosis", data = warming.incidence.daily[ ,i], window = 15, step = 1)
 }
@@ -701,7 +701,7 @@ for(i in 1:200){
 abline(v = 60, col = "black", lwd = 2, lty = 2)
 ```
 
-### **Autocorrelation and Autoacvariance**
+### **Autocorrelation and Autocovariance**
 
 **Since `SlidingWindow` doesn't calculate metrics to include the last index, we'll do this manually.**
 
@@ -760,13 +760,13 @@ max(constant.sims.acv.15, na.rm = TRUE); max(warming.sims.acv.15, na.rm = TRUE)
 min(constant.sims.acv.15, na.rm = TRUE); min(warming.sims.acv.15, na.rm = TRUE)
 
 plot(constant.sims.acv.15[ ,1], type = "n",
-     main = "15 Day Sliding Window", xlab = "Time", ylab = "Autoacvariance", ylim = c(-1, 30))
+     main = "15 Day Sliding Window", xlab = "Time", ylab = "Autocovariance", ylim = c(-1, 30))
 for(i in 1:200){
   lines(constant.sims.acv.15[ ,i], col = alpha("cornflowerblue", 0.2), lwd = 2)
 }
 abline(v = 60, col = "black", lwd = 2, lty = 2)
 plot(warming.sims.acv.15[ ,1], type = "n",
-     main = "15 Day Sliding Window", xlab = "Time", ylab = "Autoacvariance", ylim = c(-1, 250))
+     main = "15 Day Sliding Window", xlab = "Time", ylab = "Autocovariance", ylim = c(-1, 250))
 for(i in 1:200){
   lines(warming.sims.acv.15[ ,i], col = alpha("red2", 0.2), lwd = 2)
 }
@@ -833,15 +833,15 @@ warming.sims.kt.30 <- matrix(nrow = 90, ncol = num.of.sims)
 
 # Use SlidingWindow to calculate sd, mean, skewness, and kurtosis
 for(i in 1:num.of.sims){
-  constant.sims.sd.30[ ,i] <- SlidingWindow(FUN = "sd", data = constant.incidence.daily[,i], window = 30,step = 1)
-  constant.sims.mean.30[ ,i] <- SlidingWindow(FUN = "mean", data = constant.incidence.daily[,i], window = 30, step = 1)
+  constant.sims.sd.30[ ,i] <- SlidingWindow(FUN = "sd", data = constant.incidence.daily[ ,i], window = 30,step = 1)
+  constant.sims.mean.30[ ,i] <- SlidingWindow(FUN = "mean", data = constant.incidence.daily[ ,i], window = 30, step = 1)
   constant.sims.sk.30[ ,i] <- SlidingWindow(FUN = "skewness", data = constant.incidence.daily[ ,i], window = 30, step = 1)
   constant.sims.kt.30[ ,i] <- SlidingWindow(FUN = "kurtosis", data = constant.incidence.daily[ ,i], window = 30, step = 1)
 }
 
 for(i in 1:num.of.sims){
-  warming.sims.sd.30[ ,i] <- SlidingWindow(FUN = "sd", data = warming.incidence.daily[,i], window = 30,step = 1)
-  warming.sims.mean.30[ ,i] <- SlidingWindow(FUN = "mean", data = warming.incidence.daily[,i], window = 30, step = 1)
+  warming.sims.sd.30[ ,i] <- SlidingWindow(FUN = "sd", data = warming.incidence.daily[ ,i], window = 30,step = 1)
+  warming.sims.mean.30[ ,i] <- SlidingWindow(FUN = "mean", data = warming.incidence.daily[ ,i], window = 30, step = 1)
   warming.sims.sk.30[ ,i] <- SlidingWindow(FUN = "skewness", data = warming.incidence.daily[ ,i], window = 30, step = 1)
   warming.sims.kt.30[ ,i] <- SlidingWindow(FUN = "kurtosis", data = warming.incidence.daily[ ,i], window = 30, step = 1)
 }
@@ -1014,7 +1014,7 @@ for(i in 1:200){
 abline(v = 60, col = "black", lwd = 2, lty = 2)
 ```
 
-### **Autocorrelation and Autoacvariance**
+### **Autocorrelation and Autocovariance**
 
 **Since `SlidingWindow` doesn't calculate metrics to include the last index, we'll do this manually.**
 
@@ -1073,13 +1073,13 @@ max(constant.sims.acv.30, na.rm = TRUE); max(warming.sims.acv.30, na.rm = TRUE)
 min(constant.sims.acv.30, na.rm = TRUE); min(warming.sims.acv.30, na.rm = TRUE)
 
 plot(constant.sims.acv.30[ ,1], type = "n",
-     main = "30 Day Sliding Window", xlab = "Time", ylab = "Autoacvariance", ylim = c(-1, 40))
+     main = "30 Day Sliding Window", xlab = "Time", ylab = "Autocovariance", ylim = c(-1, 40))
 for(i in 1:200){
   lines(constant.sims.acv.30[ ,i], col = alpha("cornflowerblue", 0.2), lwd = 2)
 }
 abline(v = 60, col = "black", lwd = 2, lty = 2)
 plot(warming.sims.acv.30[ ,1], type = "n",
-     main = "30 Day Sliding Window", xlab = "Time", ylab = "Autoacvariance", ylim = c(-1, 400))
+     main = "30 Day Sliding Window", xlab = "Time", ylab = "Autocovariance", ylim = c(-1, 400))
 for(i in 1:200){
   lines(warming.sims.acv.30[ ,i], col = alpha("red2", 0.2), lwd = 2)
 }
@@ -1169,7 +1169,7 @@ For reference, metrics and their short hands are as follows:
 | Index of Dispersion       | `id`   |
 | First Difference Variance | `fdv`  |
 | Autocorrelation           | `ac`   |
-| Autoacvariance            | `acv`  |
+| Autocovariance            | `acv`  |
 | Decay Time                | `dt`   |
 
 ## 5 Day Sliding Window
@@ -1180,24 +1180,24 @@ Cutting down all our statistical metric data frame to restrict our time frame to
 constant.sims.var.5 <- constant.sims.var.5[1:55, ]
 constant.sims.mean.5 <- constant.sims.mean.5[1:55, ]
 constant.sims.cv.5 <- constant.sims.cv.5[1:55, ]
-constant.sims.sk.5 <-  constant.sims.sk.5[1:55, ]
-constant.sims.kt.5 <-  constant.sims.kt.5[1:55, ]
-constant.sims.id.5 <-  constant.sims.id.5[1:55, ]
-constant.sims.ac.5 <-  constant.sims.ac.5[1:55, ]
-constant.sims.acv.5 <-  constant.sims.acv.5[1:55, ]
-constant.sims.fdv.5 <-  constant.sims.fdv.5[1:55, ]
-constant.sims.dt.5 <-  constant.sims.dt.5[1:55, ]
+constant.sims.sk.5 <- constant.sims.sk.5[1:55, ]
+constant.sims.kt.5 <- constant.sims.kt.5[1:55, ]
+constant.sims.id.5 <- constant.sims.id.5[1:55, ]
+constant.sims.ac.5 <- constant.sims.ac.5[1:55, ]
+constant.sims.acv.5 <- constant.sims.acv.5[1:55, ]
+constant.sims.fdv.5 <- constant.sims.fdv.5[1:55, ]
+constant.sims.dt.5 <- constant.sims.dt.5[1:55, ]
 
 warming.sims.var.5 <- warming.sims.var.5[1:55, ]
 warming.sims.mean.5 <- warming.sims.mean.5[1:55, ]
 warming.sims.cv.5 <- warming.sims.cv.5[1:55, ]
-warming.sims.sk.5 <-  warming.sims.sk.5[1:55, ]
-warming.sims.kt.5 <-  warming.sims.kt.5[1:55, ]
-warming.sims.id.5 <-  warming.sims.id.5[1:55, ]
-warming.sims.ac.5 <-  warming.sims.ac.5[1:55, ]
-warming.sims.acv.5 <-  warming.sims.acv.5[1:55, ]
-warming.sims.fdv.5 <-  warming.sims.fdv.5[1:55, ]
-warming.sims.dt.5 <-  warming.sims.dt.5[1:55, ]
+warming.sims.sk.5 <- warming.sims.sk.5[1:55, ]
+warming.sims.kt.5 <- warming.sims.kt.5[1:55, ]
+warming.sims.id.5 <- warming.sims.id.5[1:55, ]
+warming.sims.ac.5 <- warming.sims.ac.5[1:55, ]
+warming.sims.acv.5 <- warming.sims.acv.5[1:55, ]
+warming.sims.fdv.5 <- warming.sims.fdv.5[1:55, ]
+warming.sims.dt.5 <- warming.sims.dt.5[1:55, ]
 
 constant.sims.var.5.tau <- c()
 constant.sims.mean.5.tau <- c()
@@ -1292,16 +1292,16 @@ hist(warming.sims.acv.5.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
 Calculating AUC:
 
 ```{r}
-AUC_variance_5 <- calc_auc(warming.sims.var.5.tau, constant.sims.var.5.tau); AUC_variance_5
-AUC_mean_5 <- calc_auc(warming.sims.mean.5.tau, constant.sims.mean.5.tau); AUC_mean_5
-AUC_kurtosis_5 <- calc_auc(warming.sims.kt.5.tau, constant.sims.kt.5.tau); AUC_kurtosis_5
-AUC_skewness_5 <- calc_auc(warming.sims.sk.5.tau, constant.sims.sk.5.tau); AUC_skewness_5
-AUC_id_5 <- calc_auc(warming.sims.id.5.tau, constant.sims.id.5.tau); AUC_id_5
-AUC_fdv_5 <- calc_auc(warming.sims.fdv.5.tau, constant.sims.fdv.5.tau); AUC_fdv_5
-AUC_ac_5 <- calc_auc(warming.sims.ac.5.tau, constant.sims.ac.5.tau); AUC_ac_5
-AUC_acv_5 <- calc_auc(warming.sims.acv.5.tau, constant.sims.acv.5.tau); AUC_acv_5
-AUC_cv_5 <- calc_auc(warming.sims.cv.5.tau, constant.sims.cv.5.tau); AUC_cv_5
-AUC_dt_5 <- calc_auc(warming.sims.dt.5.tau, constant.sims.dt.5.tau); AUC_dt_5
+AUC_mean_5 <- calc_auc(warming.sims.mean.15.tau, constant.sims.mean.15.tau); AUC_mean_5
+AUC_sk_5 <- calc_auc(warming.sims.sk.15.tau, constant.sims.sk.15.tau); AUC_sk_5
+AUC_kt_5 <- calc_auc(warming.sims.kt.15.tau, constant.sims.kt.15.tau); AUC_kt_5
+AUC_var_5 <- calc_auc(warming.sims.var.15.tau, constant.sims.var.15.tau); AUC_var_5
+AUC_cv_5 <- calc_auc(warming.sims.cv.15.tau, constant.sims.cv.15.tau); AUC_cv_5
+AUC_id_5 <- calc_auc(warming.sims.id.15.tau, constant.sims.id.15.tau); AUC_id_5
+AUC_fdv_5 <- calc_auc(warming.sims.fdv.15.tau, constant.sims.fdv.15.tau); AUC_fdv_5
+AUC_ac_5 <- calc_auc(warming.sims.ac.15.tau, constant.sims.ac.15.tau); AUC_ac_5
+AUC_acv_5 <- calc_auc(warming.sims.acv.15.tau, constant.sims.acv.15.tau); AUC_acv_5
+AUC_dt_5 <- calc_auc(warming.sims.dt.15.tau, constant.sims.dt.15.tau); AUC_dt_5
 ```
 
 ## 15 Day Sliding Window
@@ -1312,24 +1312,24 @@ Cutting down all our statistical metric data frame to restrict our time frame to
 constant.sims.var.15 <- constant.sims.var.15[1:45, ]
 constant.sims.mean.15 <- constant.sims.mean.15[1:45, ]
 constant.sims.cv.15 <- constant.sims.cv.15[1:45, ]
-constant.sims.sk.15 <-  constant.sims.sk.15[1:45, ]
-constant.sims.kt.15 <-  constant.sims.kt.15[1:45, ]
-constant.sims.id.15 <-  constant.sims.id.15[1:45, ]
-constant.sims.ac.15 <-  constant.sims.ac.15[1:45, ]
-constant.sims.acv.15 <-  constant.sims.acv.15[1:45, ]
-constant.sims.fdv.15 <-  constant.sims.fdv.15[1:45, ]
-constant.sims.dt.15 <-  constant.sims.dt.15[1:45, ]
+constant.sims.sk.15 <- constant.sims.sk.15[1:45, ]
+constant.sims.kt.15 <- constant.sims.kt.15[1:45, ]
+constant.sims.id.15 <- constant.sims.id.15[1:45, ]
+constant.sims.ac.15 <- constant.sims.ac.15[1:45, ]
+constant.sims.acv.15 <- constant.sims.acv.15[1:45, ]
+constant.sims.fdv.15 <- constant.sims.fdv.15[1:45, ]
+constant.sims.dt.15 <- constant.sims.dt.15[1:45, ]
 
 warming.sims.var.15 <- warming.sims.var.15[1:45, ]
 warming.sims.mean.15 <- warming.sims.mean.15[1:45, ]
 warming.sims.cv.15 <- warming.sims.cv.15[1:45, ]
-warming.sims.sk.15 <-  warming.sims.sk.15[1:45, ]
-warming.sims.kt.15 <-  warming.sims.kt.15[1:45, ]
-warming.sims.id.15 <-  warming.sims.id.15[1:45, ]
-warming.sims.ac.15 <-  warming.sims.ac.15[1:45, ]
-warming.sims.acv.15 <-  warming.sims.acv.15[1:45, ]
-warming.sims.fdv.15 <-  warming.sims.fdv.15[1:45, ]
-warming.sims.dt.15 <-  warming.sims.dt.15[1:45, ]
+warming.sims.sk.15 <- warming.sims.sk.15[1:45, ]
+warming.sims.kt.15 <- warming.sims.kt.15[1:45, ]
+warming.sims.id.15 <- warming.sims.id.15[1:45, ]
+warming.sims.ac.15 <- warming.sims.ac.15[1:45, ]
+warming.sims.acv.15 <- warming.sims.acv.15[1:45, ]
+warming.sims.fdv.15 <- warming.sims.fdv.15[1:45, ]
+warming.sims.dt.15 <- warming.sims.dt.15[1:45, ]
 
 constant.sims.var.15.tau <- c()
 constant.sims.mean.15.tau <- c()
@@ -1424,15 +1424,15 @@ hist(warming.sims.acv.15.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
 Calculating AUC:
 
 ```{r}
-AUC_variance_15 <- calc_auc(warming.sims.var.15.tau, constant.sims.var.15.tau); AUC_variance_15
 AUC_mean_15 <- calc_auc(warming.sims.mean.15.tau, constant.sims.mean.15.tau); AUC_mean_15
-AUC_kurtosis_15 <- calc_auc(warming.sims.kt.15.tau, constant.sims.kt.15.tau); AUC_kurtosis_15
-AUC_skewness_15 <- calc_auc(warming.sims.sk.15.tau, constant.sims.sk.15.tau); AUC_skewness_15
+AUC_sk_15 <- calc_auc(warming.sims.sk.15.tau, constant.sims.sk.15.tau); AUC_sk_15
+AUC_kt_15 <- calc_auc(warming.sims.kt.15.tau, constant.sims.kt.15.tau); AUC_kt_15
+AUC_var_15 <- calc_auc(warming.sims.var.15.tau, constant.sims.var.15.tau); AUC_var_15
+AUC_cv_15 <- calc_auc(warming.sims.cv.15.tau, constant.sims.cv.15.tau); AUC_cv_15
 AUC_id_15 <- calc_auc(warming.sims.id.15.tau, constant.sims.id.15.tau); AUC_id_15
 AUC_fdv_15 <- calc_auc(warming.sims.fdv.15.tau, constant.sims.fdv.15.tau); AUC_fdv_15
 AUC_ac_15 <- calc_auc(warming.sims.ac.15.tau, constant.sims.ac.15.tau); AUC_ac_15
 AUC_acv_15 <- calc_auc(warming.sims.acv.15.tau, constant.sims.acv.15.tau); AUC_acv_15
-AUC_cv_15 <- calc_auc(warming.sims.cv.15.tau, constant.sims.cv.15.tau); AUC_cv_15
 AUC_dt_15 <- calc_auc(warming.sims.dt.15.tau, constant.sims.dt.15.tau); AUC_dt_15
 ```
 
@@ -1444,24 +1444,24 @@ Cutting down all our statistical metric data frame to restrict our time frame to
 constant.sims.var.30 <- constant.sims.var.30[1:30, ]
 constant.sims.mean.30 <- constant.sims.mean.30[1:30, ]
 constant.sims.cv.30 <- constant.sims.cv.30[1:30, ]
-constant.sims.sk.30 <-  constant.sims.sk.30[1:30, ]
-constant.sims.kt.30 <-  constant.sims.kt.30[1:30, ]
-constant.sims.id.30 <-  constant.sims.id.30[1:30, ]
-constant.sims.ac.30 <-  constant.sims.ac.30[1:30, ]
-constant.sims.acv.30 <-  constant.sims.acv.30[1:30, ]
-constant.sims.fdv.30 <-  constant.sims.fdv.30[1:30, ]
-constant.sims.dt.30 <-  constant.sims.dt.30[1:30, ]
+constant.sims.sk.30 <- constant.sims.sk.30[1:30, ]
+constant.sims.kt.30 <- constant.sims.kt.30[1:30, ]
+constant.sims.id.30 <- constant.sims.id.30[1:30, ]
+constant.sims.ac.30 <- constant.sims.ac.30[1:30, ]
+constant.sims.acv.30 <- constant.sims.acv.30[1:30, ]
+constant.sims.fdv.30 <- constant.sims.fdv.30[1:30, ]
+constant.sims.dt.30 <- constant.sims.dt.30[1:30, ]
 
 warming.sims.var.30 <- warming.sims.var.30[1:30, ]
 warming.sims.mean.30 <- warming.sims.mean.30[1:30, ]
 warming.sims.cv.30 <- warming.sims.cv.30[1:30, ]
-warming.sims.sk.30 <-  warming.sims.sk.30[1:30, ]
-warming.sims.kt.30 <-  warming.sims.kt.30[1:30, ]
-warming.sims.id.30 <-  warming.sims.id.30[1:30, ]
-warming.sims.ac.30 <-  warming.sims.ac.30[1:30, ]
-warming.sims.acv.30 <-  warming.sims.acv.30[1:30, ]
-warming.sims.fdv.30 <-  warming.sims.fdv.30[1:30, ]
-warming.sims.dt.30 <-  warming.sims.dt.30[1:30, ]
+warming.sims.sk.30 <- warming.sims.sk.30[1:30, ]
+warming.sims.kt.30 <- warming.sims.kt.30[1:30, ]
+warming.sims.id.30 <- warming.sims.id.30[1:30, ]
+warming.sims.ac.30 <- warming.sims.ac.30[1:30, ]
+warming.sims.acv.30 <- warming.sims.acv.30[1:30, ]
+warming.sims.fdv.30 <- warming.sims.fdv.30[1:30, ]
+warming.sims.dt.30 <- warming.sims.dt.30[1:30, ]
 
 constant.sims.var.30.tau <- c()
 constant.sims.mean.30.tau <- c()
@@ -1556,16 +1556,16 @@ hist(warming.sims.acv.30.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
 Calculating AUC:
 
 ```{r}
-AUC_variance_30 <- calc_auc(warming.sims.var.30.tau, constant.sims.var.30.tau); AUC_variance_30
-AUC_mean_30 <- calc_auc(warming.sims.mean.30.tau, constant.sims.mean.30.tau); AUC_mean_30
-AUC_kurtosis_30 <- calc_auc(warming.sims.kt.30.tau, constant.sims.kt.30.tau); AUC_kurtosis_30
-AUC_skewness_30 <- calc_auc(warming.sims.sk.30.tau, constant.sims.sk.30.tau); AUC_skewness_30
-AUC_id_30 <- calc_auc(warming.sims.id.30.tau, constant.sims.id.30.tau); AUC_id_30
-AUC_fdv_30 <- calc_auc(warming.sims.fdv.30.tau, constant.sims.fdv.30.tau); AUC_fdv_30
-AUC_ac_30 <- calc_auc(warming.sims.ac.30.tau, constant.sims.ac.30.tau); AUC_ac_30
-AUC_acv_30 <- calc_auc(warming.sims.acv.30.tau, constant.sims.acv.30.tau); AUC_acv_30
-AUC_cv_30 <- calc_auc(warming.sims.cv.30.tau, constant.sims.cv.30.tau); AUC_cv_30
-AUC_dt_30 <- calc_auc(warming.sims.dt.30.tau, constant.sims.dt.30.tau); AUC_dt_30
+AUC_mean_30 <- calc_auc(warming.sims.mean.15.tau, constant.sims.mean.15.tau); AUC_mean_30
+AUC_sk_30 <- calc_auc(warming.sims.sk.15.tau, constant.sims.sk.15.tau); AUC_sk_30
+AUC_kt_30 <- calc_auc(warming.sims.kt.15.tau, constant.sims.kt.15.tau); AUC_kt_30
+AUC_var_30 <- calc_auc(warming.sims.var.15.tau, constant.sims.var.15.tau); AUC_var_30
+AUC_cv_30 <- calc_auc(warming.sims.cv.15.tau, constant.sims.cv.15.tau); AUC_cv_30
+AUC_id_30 <- calc_auc(warming.sims.id.15.tau, constant.sims.id.15.tau); AUC_id_30
+AUC_fdv_30 <- calc_auc(warming.sims.fdv.15.tau, constant.sims.fdv.15.tau); AUC_fdv_30
+AUC_ac_30 <- calc_auc(warming.sims.ac.15.tau, constant.sims.ac.15.tau); AUC_ac_30
+AUC_acv_30 <- calc_auc(warming.sims.acv.15.tau, constant.sims.acv.15.tau); AUC_acv_30
+AUC_dt_30 <- calc_auc(warming.sims.dt.15.tau, constant.sims.dt.15.tau); AUC_dt_30
 ```
 
 ## Summarize Outputs
@@ -1573,11 +1573,11 @@ AUC_dt_30 <- calc_auc(warming.sims.dt.30.tau, constant.sims.dt.30.tau); AUC_dt_3
 ```{r}
 metrics <- c("mean", "skewness", "kurtosis", "variance", "cv", "id", "fdv", "cor", "acv", "dt")
 
-AUC_5 <- c(AUC_mean_5, AUC_skewness_5, AUC_kurtosis_5, AUC_variance_5, AUC_cv_5, 
+AUC_5 <- c(AUC_mean_5, AUC_sk_5, AUC_kt_5, AUC_var_5, AUC_cv_5, 
            AUC_id_5, AUC_fdv_5, AUC_ac_5 ,AUC_acv_5, AUC_dt_5)
-AUC_15 <- c(AUC_mean_15, AUC_skewness_15, AUC_kurtosis_15, AUC_variance_15, AUC_cv_15, 
+AUC_15 <- c(AUC_mean_15, AUC_sk_15, AUC_kt_15, AUC_var_15, AUC_cv_15, 
            AUC_id_15, AUC_fdv_15, AUC_ac_15 ,AUC_acv_15, AUC_dt_15)
-AUC_30 <- c(AUC_mean_30, AUC_skewness_30, AUC_kurtosis_30, AUC_variance_30, AUC_cv_30, 
+AUC_30 <- c(AUC_mean_30, AUC_sk_30, AUC_kt_30, AUC_var_30, AUC_cv_30, 
            AUC_id_30, AUC_fdv_30, AUC_ac_30 ,AUC_acv_30, AUC_dt_30)
 AUC_df <- data.frame(metrics, AUC_5, AUC_15, AUC_30); AUC_df
 saveRDS(AUC_df, "Objects/AUC_SimulatedData.rds")
@@ -1586,7 +1586,7 @@ saveRDS(AUC_df, "Objects/AUC_SimulatedData.rds")
 Let's make a quick plot:
 
 ```{r}
-metrics_full <- c("Mean", "Skewness", "Kurtosis", "Variance", "acvariance", "Index of Dispersion", "First Difference Variance", "Autocorrelation", "Autoacvariance", "Decay Time")
+metrics_full <- c("Mean", "Skewness", "Kurtosis", "Variance", "acvariance", "Index of Dispersion", "First Difference Variance", "Autocorrelation", "Autocovariance", "Decay Time")
 
 ## Plot 
 plot(1:10, AUC_df$AUC_5, type = "p", 
