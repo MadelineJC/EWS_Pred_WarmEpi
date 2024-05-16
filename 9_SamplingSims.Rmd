@@ -74,7 +74,7 @@ warming.sims <- data.frame(
 
 Okay, so, if we look at `2_EpidemicModel-Stochastic.Rmd`, we can see that the SIDE model starts with 169 susceptible individuals, so that's our population size. Since this is a compartmental model, that should be constant. **BUT! We need to think about a couple things:**
 
--   **We don't know how many *Daphnia* were in the experimental population, so this might not be as comparative as we want it to be**
+-   **We don't know how many *Daphnia* were in the experimental population, so this might not be as comparative as we want it to be... Do we have an estimate of *proportion* of experimental population sampled?**
 
     -   **The experimental populations also wouldn't have stayed at a constant size, so the denominator should change...**
 
@@ -201,7 +201,7 @@ lines(seq(1, 120, 3), sub8$status.sum, col = alpha("black", 0.6), lty = 3)
 
 # Computing EWS
 
-## Metrics 
+## Metrics
 
 ```{r}
 num.of.sims <- 10^3
