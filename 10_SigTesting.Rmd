@@ -12,19 +12,42 @@ require(strucchange)
 require(TTR)
 require(moments)
 require(tidyverse)
+require(earlywarnings)
 ```
+
+# Literature
 
 We want to quantify our confidence in these metrics/trends.
 
 There are a number of ways to do that:
 
-1.  Permutation Approach (Harris et al. 2020):
+1.  **Permutation Approach (Harris et al. 2020):**
     -   "We used the following permutation approach to assess the significance of the estimated correlations. We first **generated 10 000 permutations of case incidence during the approach to criticality (December 1981 to April 1993)**, thus **preserving the general features of the original data (e.g. amplitudes of fluctuations) while eliminating underlying patterns of serial dependence**. We then **performed rolling window analyses on the permuted data to generate a null distribution of correlation coefficients for each indicator. The false positive rates of the 10 tests were estimated by finding the proportion of these permutations with a value for more extreme than that calculated for the Kericho data**. The resulting p-values quantify the reliability of their corresponding statistics as early warning signals."
-2.  Non-Parametric Test: The Modified Mann-Kendall Test (Hamed and Rao 1998; Chen et al. 2022):
-    -   "The non-parametric Mann--Kendall test is commonly employed to detect monotonic trends in time series. The null hypothesis for the traditional Mann--Kendall trend test (equation (2.3)), however, is that the data are independent, randomly ordered, without serial correlation structure among the observations. However, in many real situations, the observed data are autocorrelated, which can result in misinterpretation of trend test results. In particular, in the context of early warning signals, this null hypothesis is not rigorously obeyed for the series of statistics such as the standard deviation or the autocorrelation that are obtained from a time series using a moving window."Hamed and Rao (1998) point out that a modified Mann--Kendall trend test can be used to study data with a serial correlation structure. **In the modified test, the null hypothesis is that there is no trend in the data, but there can be autocorrelation**, addressing the challenge existing in the studies of early warning signals. **If the null hypothesis is true, Kendall's τ should follow a normal distribution with mean 0, and variance given by Hamed and Rao (1998) (see Equation 3.1 in Chen et al. 2022)**.\
-        "For each time series, we calculated the variance as the early warning signal using a moving window. The window size and number of observations are varied and the values of Kendall's τ are then calculated for each set of obtained warning signals. The distribution of Kendall's τ obtained using the generated time series is shown in figure 5 revealing that the real distribution is much flatter than the normal distribution due to the positive correlation in data. Next, a single time series is used to calculate the varience of the normal distribution obtained by the modified Mann Kendall test (i.e. equation (3.1)). Results shown in figure 5 show that the modified distribution is much closer to the real distribution. **In practice, one may typically only have one time series. Therefore, the real distribution is not available. In this case, we can use the available time series to calculate the modified distribution of Kendall's τ, and use the distribution to calculate the percentile of the obtained Kendall's τ value.**"
-3.  Parametric Test: Generating a Null Case w/ an ARMA (Dakos et al. 2012; Chen et al. 2022):
-    -   "These methods use a general model to fit the data, and **generate artificial data using the model to understand how significant the trend statistic value is**. Dakos et al. (2012) proposed to **fit an autoregressive, moving-average model (ARMA) using the residual data after detrending**. This test is **designed to show that the data cannot come from a linear stationary process if a large Kendall's τ value is obtained from it**. When this test gives a p-value as low as 0.1%, that does not mean that the probability of critical transition is as high as 99.9%. It means that the probability that this time-series data is generated using a linear stationary model is as low as 0.1%."
+2.  **Non-Parametric Test: The Modified Mann-Kendall Test (Hamed and Rao 1998; Chen et al. 2022):**
+    -   "The non-parametric Mann--Kendall test is commonly employed to detect monotonic trends in time series. The null hypothesis for the traditional Mann--Kendall trend test (equation (2.3)), however, is that the data are independent, randomly ordered, without serial correlation structure among the observations. However, in many real situations, the observed data are autocorrelated, which can result in misinterpretation of trend test results. In particular, in the context of early warning signals, this null hypothesis is not rigorously obeyed for the series of statistics such as the standard deviation or the autocorrelation that are obtained from a time series using a moving window."Hamed and Rao (1998) point out that a modified Mann--Kendall trend test can be used to study data with a serial correlation structure. **In the modified test, the null hypothesis is that there is no trend in the data, but there can be autocorrelation**, addressing the challenge existing in the studies of early warning signals. **If the null hypothesis is true, Kendall's** $\tau$ shou**ld follow a normal distribution with mean 0, and variance given by Hamed and Rao (1998) (see Equation 3.1 in Chen et al. 2022)**.\
+        "For each time series, we calculated the variance as the early warning signal using a moving window. The window size and number of observations are varied and the values of Kendall's \$\\tau\$ are then calculated for each set of obtained warning signals. The distribution of Kendall's \$\\tau\$ obtained using the generated time series is shown in figure 5 revealing that the real distribution is much flatter than the normal distribution due to the positive correlation in data. Next, a single time series is used to calculate the varience of the normal distribution obtained by the modified Mann Kendall test (i.e. equation (3.1)). Results shown in figure 5 show that the modified distribution is much closer to the real distribution. **In practice, one may typically only have one time series. Therefore, the real distribution is not available. In this case, we can use the available time series to calculate the modified distribution of Kendall's** $\tau$, and **use the distribution to calculate the percentile of the obtained Kendall's** $\tau$ **value.**"
+3.  **Parametric Test: Generating a Null Case w/ an ARMA (Dakos et al. 2012; Chen et al. 2022):**
+    -   "These methods use a general model to fit the data, and **generate artificial data using the model to understand how significant the trend statistic value is**. Dakos et al. (2012) proposed to **fit an autoregressive, moving-average model (ARMA) using the residual data after detrending**. This test is **designed to show that the data cannot come from a linear stationary process if a large Kendall's** $\tau$ **value is obtained from it**. When this test gives a p-value as low as 0.1%, that does not mean that the probability of critical transition is as high as 99.9%. It means that the probability that this time-series data is generated using a linear stationary model is as low as 0.1%."
+
+What else does the literature say?
+
+-   **Review Papers:**
+
+    -   **Chen et al 2022:** *SEE ABOVE.*
+
+    -   **Southall et al. 2021:** "Another method that uses bootstrapped samples to estimate the statistical significance of an observed Kendall's $\tau$ statistic has proven popular in the literature (Carpenter et al. 2011; Dakos et al. 2008; Boettiger and Hastings 2012; Pimiento and Clements 2014; Kefi et al. 2014; Dakos et al. 2012) but also controversial (Dakos et al. 2008; Boettiger and Hastings 2012; Dakos et al. 2012). An empirical study tested if EWSs could indicate malaria resurgence in a historical data- set from Kericho, Kenya (Harris et al. 2020); using bootstrapping with Kendall's $\tau$ score over increasing amounts of data to calculate the p-value of the score over time. Evidence of CSD was said to be detected when the p-value became significant at 0.05. Under this framework, the resurgence of malaria was pre- dicted with a 24-month lead time with autocorrelation lag-1 and a six-month lead time with variance. However, this method has not been tested on time-series data which are not going through a critical transition, i.e. the method's specificity remains unknown."
+
+-   **Harris et al. 2020:** *SEE ABOVE.*
+
+-   **Dakos et al. 2008:** Assessed significance in three ways: "For each time series we tested the likelihood of obtaining our computed trend statistics (Kendall's $\tau$ rank correlation) by chance by using 1,000 surrogate time series of the same length as the filtered simulated and real data in three different ways. **First,** **we bootstrapped our datasets by shuffling the original residual time series and picking data with replacement to generate surrogate records of similar distribution (mean and variance)**. Second, we produced a surrogate time series that had the same Fourier spectrum and amplitudes as the original sets (Theiler et al. 1992). **Last, we created surrogate datasets produced by an autoregressive model of order 1 with the same variance, mean and autocorrelation at lag 1 with the residuals time series starting from the same initial value as in the original series** (Theiler et al. 1992). For each surrogate set, we computed the trend detection statistic. We then calculated the probability that our estimates of the trend statistic would be observed by chance as the fraction of the 1,000 surrogate series scoring the same value or a higher one."
+
+-   **Delecroix et al. 2022:** "When a trend is observed, its significance needs to be assessed. Due to the sliding window approach, standard statistical tests are not applicable as the observations are not independent. A proposed approach to assess the significance of the trend is to produce surrogate datasets to compare the trend estimates (Dakos et al. 2012). Several methods to produce consistent surrogate datasets have been proposed and implemented in the resilience indicators packages (Dakos's R Package"Earlywarnings" (2015))."
+
+-   **Gsell et al. 2016:** "We also tested for the significance of the trends by estimating the rate of false positives using simulated surrogate time series... Our significance testing relied on estimating EWI trends in surrogate stationary data fitted to the original time series to determine the rate of false positives. Unfortunately, we lacked records to serve as controls when comparing trends from comparable aquatic systems in which no transition occurred to estimate the rate of true negatives (no alarm, or sensitivity) of the EWIs. Given the lack of such controls, one potential way to measure the no alarm rate is to derive trends from nonstationary models fitted to the data (Livina et al. 2012). In future work, it would be valuable to compare trends in EWI in study systems that did not exhibit any changes or in which changes were brought about by large external shifts in drivers."
+
+-   **Dablander et al. 2022:** "**To create a sampling distribution under the null hypothesis of no increase in the early warning indicators that respects the temporal ordering of the data, we fitted a series of ARMA(p, q) models** with ( p, q) ∈ [1, 2, ...5] to the country-specific data. We selected the best-fitting model using AIC and subsequently **generated 500 surrogate time series from it, computed the early warning indicators as outlined above, and estimated the rank correlation of the indicator values st with time t, known as Kendall's** $\tau$**. This resulted in the sampling distribution under the null assumption 3 of stationarity, which allowed us to test the actually observed Kendall's** $\tau$ **against a significance level α**. This approach is the most widely used approach when estimating and testing early warning indicators using rolling windows (Dakos et al. 2012).
+
+-   **Dakos et al. 2012:** "Here, we suggest that the simplest null hypothesis one could imagine is that the trend estimates of the indicators are due to chance alone. To test this null hypothesis, we produced surrogate datasets to compare trend estimates in the original record with trend estimates obtained from records that have the same correlation structure and probability distribution as the original dataset, but that were produced by linear stationary processes (Dakos et al. 2008). **Surrogate datasets can be obtained by different approaches, including generating data with the same Fourier spectrum and amplitudes (Dakos et al. 2008; Theiler et al. 1992), or generating data from the simplest fitted linear first-order autoregressive model**. Although these are only some of the ways surrogate data can be produced to test for trends (Halley and Kugiumtzis 2011), we used here a more general approach. **We fit the best linear autoregressive moving average model (ARMA(p,q)) based on AIC to residuals (after detrending/filtering), then generated 1,000 simulated datasets of the same length as the residual time series. For each simulated dataset, we estimated the trend of the rolling window metric (in particular we only tested for autocorrelation at-lag-1, standard deviation, and skewness) using Kendall's** $\tau$**. We compared the Kendall** $\tau$ of the original data **to the number of cases in which the statistic was equal to or smaller than the estimates of the simulated records, P (**$\tau^* \geqslant \tau$**)**. We estimated this probability for all combinations of bandwidth and rolling window size as we did for the sensitivity analysis."
 
 # 1. Permutation Approach
 
@@ -97,14 +120,14 @@ sub8.nulls <- list()
 
 set.seed(123) 
 for (i in 1:1000){
-  sub1.nulls[[i]] <- sample(sub1.crit, length(sub1.crit), replace = FALSE)
-  sub2.nulls[[i]] <- sample(sub2.crit, length(sub2.crit), replace = FALSE)
-  sub3.nulls[[i]] <- sample(sub3.crit, length(sub3.crit), replace = FALSE)
-  sub4.nulls[[i]] <- sample(sub4.crit, length(sub4.crit), replace = FALSE)
-  sub5.nulls[[i]] <- sample(sub5.crit, length(sub5.crit), replace = FALSE)
-  sub6.nulls[[i]] <- sample(sub6.crit, length(sub6.crit), replace = FALSE)
-  sub7.nulls[[i]] <- sample(sub7.crit, length(sub7.crit), replace = FALSE)
-  sub8.nulls[[i]] <- sample(sub8.crit, length(sub8.crit), replace = FALSE)
+  sub1.nulls[[i]] <- sample(sub1.crit, length(sub1.crit), replace = TRUE)
+  sub2.nulls[[i]] <- sample(sub2.crit, length(sub2.crit), replace = TRUE)
+  sub3.nulls[[i]] <- sample(sub3.crit, length(sub3.crit), replace = TRUE)
+  sub4.nulls[[i]] <- sample(sub4.crit, length(sub4.crit), replace = TRUE)
+  sub5.nulls[[i]] <- sample(sub5.crit, length(sub5.crit), replace = TRUE)
+  sub6.nulls[[i]] <- sample(sub6.crit, length(sub6.crit), replace = TRUE)
+  sub7.nulls[[i]] <- sample(sub7.crit, length(sub7.crit), replace = TRUE)
+  sub8.nulls[[i]] <- sample(sub8.crit, length(sub8.crit), replace = TRUE)
 } 
 
 plot(sub4.nulls[[1]], type = "l", col = "red3",
@@ -1403,26 +1426,20 @@ I think you apply this, instead of just calculating Kendall's $\tau$ normally? K
 ```{r}
 library(modifiedmk)
 
-constant.sims.mean.15.tau
-warming.sims.mean.15.tau
-
-# Sliding window means
-View(constant.sims.mean.15)
-View(warming.sims.mean.15)
-
+## Mean
 mmk.constant.mean.dist <- c()
 for (i in 1:ncol(constant.sims.mean.15)){
   temp <- mmkh(constant.sims.mean.15[ , i], ci = 0.95)
   mmk.constant.mean.dist[i] <- as.numeric(temp["Tau"])
 }
-hist(mmk.constant.mean.dist)
+# hist(mmk.constant.mean.dist)
 
 mmk.warming.mean.dist <- c()
 for (i in 1:ncol(warming.sims.mean.15)){
   temp <- mmkh(warming.sims.mean.15[ , i], ci = 0.95)
   mmk.warming.mean.dist[i] <- as.numeric(temp["Tau"])
 }
-hist(mmk.warming.mean.dist)
+# hist(mmk.warming.mean.dist)
 
 hist(constant.sims.mean.15.tau, prob = TRUE, col = "#A7C7E7",
      main = "Control: Mean", xlab = "", ylab = "Density") 
@@ -1435,4 +1452,279 @@ hist(warming.sims.mean.15.tau, prob = TRUE, col = "#F88379",
 lines(density(mmk.warming.mean.dist), col = "#D22B2B")
 legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
        col = c("#F88379", "#D22B2B"), pch = 19)
+
+## Skewness
+mmk.constant.sk.dist <- c()
+for (i in 1:ncol(constant.sims.sk.15)){
+  temp <- mmkh(constant.sims.sk.15[ , i], ci = 0.95)
+  mmk.constant.sk.dist[i] <- as.numeric(temp["Tau"])
+}
+# hist(mmk.constant.sk.dist)
+
+mmk.warming.sk.dist <- c()
+for (i in 1:ncol(warming.sims.sk.15)){
+  temp <- mmkh(warming.sims.sk.15[ , i], ci = 0.95)
+  mmk.warming.sk.dist[i] <- as.numeric(temp["Tau"])
+}
+# hist(mmk.warming.sk.dist)
+
+hist(constant.sims.sk.15.tau, prob = TRUE, col = "#A7C7E7",
+     main = "Control: Skewness", xlab = "", ylab = "Density") 
+lines(density(mmk.constant.sk.dist), col = "#191970")
+legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
+       col = c("#A7C7E7", "#191970"), pch = 19)
+
+hist(warming.sims.sk.15.tau, prob = TRUE, col = "#F88379",
+     main = "Test: Skewness", xlab = "", ylab = "Density") 
+lines(density(mmk.warming.sk.dist), col = "#D22B2B")
+legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
+       col = c("#F88379", "#D22B2B"), pch = 19)
+
+## Kurtosis
+mmk.constant.kt.dist <- c()
+for (i in 1:ncol(constant.sims.kt.15)){
+  temp <- mmkh(constant.sims.kt.15[ , i], ci = 0.95)
+  mmk.constant.kt.dist[i] <- as.numeric(temp["Tau"])
+}
+# hist(mmk.constant.kt.dist)
+
+mmk.warming.kt.dist <- c()
+for (i in 1:ncol(warming.sims.kt.15)){
+  temp <- mmkh(warming.sims.kt.15[ , i], ci = 0.95)
+  mmk.warming.kt.dist[i] <- as.numeric(temp["Tau"])
+}
+# hist(mmk.warming.kt.dist)
+
+hist(constant.sims.kt.15.tau, prob = TRUE, col = "#A7C7E7",
+     main = "Control: Kurtosis", xlab = "", ylab = "Density") 
+lines(density(mmk.constant.kt.dist), col = "#191970")
+legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
+       col = c("#A7C7E7", "#191970"), pch = 19)
+
+hist(warming.sims.kt.15.tau, prob = TRUE, col = "#F88379",
+     main = "Test: Kurtosis", xlab = "", ylab = "Density") 
+lines(density(mmk.warming.kt.dist), col = "#D22B2B")
+legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
+       col = c("#F88379", "#D22B2B"), pch = 19)
+
+## Variance
+mmk.constant.var.dist <- c()
+for (i in 1:ncol(constant.sims.var.15)){
+  temp <- mmkh(constant.sims.var.15[ , i], ci = 0.95)
+  mmk.constant.var.dist[i] <- as.numeric(temp["Tau"])
+}
+# hist(mmk.constant.var.dist)
+
+mmk.warming.var.dist <- c()
+for (i in 1:ncol(warming.sims.var.15)){
+  temp <- mmkh(warming.sims.var.15[ , i], ci = 0.95)
+  mmk.warming.var.dist[i] <- as.numeric(temp["Tau"])
+}
+# hist(mmk.warming.var.dist)
+
+hist(constant.sims.var.15.tau, prob = TRUE, col = "#A7C7E7",
+     main = "Control: Variance", xlab = "", ylab = "Density") 
+lines(density(mmk.constant.var.dist), col = "#191970")
+legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
+       col = c("#A7C7E7", "#191970"), pch = 19)
+
+hist(warming.sims.var.15.tau, prob = TRUE, col = "#F88379",
+     main = "Test: Variance", xlab = "", ylab = "Density") 
+lines(density(mmk.warming.var.dist), col = "#D22B2B")
+legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
+       col = c("#F88379", "#D22B2B"), pch = 19)
+
+## Co-Efficient of Variation
+mmk.constant.cv.dist <- c()
+for (i in 1:ncol(constant.sims.cv.15)){
+  temp <- mmkh(constant.sims.cv.15[ , i], ci = 0.95)
+  mmk.constant.cv.dist[i] <- as.numeric(temp["Tau"])
+}
+# hist(mmk.constant.cv.dist)
+
+mmk.warming.cv.dist <- c()
+for (i in 1:ncol(warming.sims.cv.15)){
+  temp <- mmkh(warming.sims.cv.15[ , i], ci = 0.95)
+  mmk.warming.cv.dist[i] <- as.numeric(temp["Tau"])
+}
+# hist(mmk.warming.cv.dist)
+
+hist(constant.sims.cv.15.tau, prob = TRUE, col = "#A7C7E7",
+     main = "Control: Co-Efficient of Variation", xlab = "", ylab = "Density") 
+lines(density(mmk.constant.cv.dist), col = "#191970")
+legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
+       col = c("#A7C7E7", "#191970"), pch = 19)
+
+hist(warming.sims.cv.15.tau, prob = TRUE, col = "#F88379",
+     main = "Test: Co-Efficient of Variation", xlab = "", ylab = "Density") 
+lines(density(mmk.warming.cv.dist), col = "#D22B2B")
+legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
+       col = c("#F88379", "#D22B2B"), pch = 19)
+
+## Index of Dispersion
+mmk.constant.id.dist <- c()
+for (i in 1:ncol(constant.sims.id.15)){
+  temp <- mmkh(constant.sims.id.15[ , i], ci = 0.95)
+  mmk.constant.id.dist[i] <- as.numeric(temp["Tau"])
+}
+# hist(mmk.constant.id.dist)
+
+mmk.warming.id.dist <- c()
+for (i in 1:ncol(warming.sims.id.15)){
+  temp <- mmkh(warming.sims.id.15[ , i], ci = 0.95)
+  mmk.warming.id.dist[i] <- as.numeric(temp["Tau"])
+}
+# hist(mmk.warming.id.dist)
+
+hist(constant.sims.id.15.tau, prob = TRUE, col = "#A7C7E7",
+     main = "Control: Index of Dispersion", xlab = "", ylab = "Density") 
+lines(density(mmk.constant.id.dist), col = "#191970")
+legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
+       col = c("#A7C7E7", "#191970"), pch = 19)
+
+hist(warming.sims.id.15.tau, prob = TRUE, col = "#F88379",
+     main = "Test: Index of Dispersion", xlab = "", ylab = "Density") 
+lines(density(mmk.warming.id.dist), col = "#D22B2B")
+legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
+       col = c("#F88379", "#D22B2B"), pch = 19)
+
+## First Difference Variance
+mmk.constant.fdv.dist <- c()
+for (i in 1:ncol(constant.sims.fdv.15)){
+  temp <- mmkh(constant.sims.fdv.15[ , i], ci = 0.95)
+  mmk.constant.fdv.dist[i] <- as.numeric(temp["Tau"])
+}
+# hist(mmk.constant.fdv.dist)
+
+mmk.warming.fdv.dist <- c()
+for (i in 1:ncol(warming.sims.fdv.15)){
+  temp <- mmkh(warming.sims.fdv.15[ , i], ci = 0.95)
+  mmk.warming.fdv.dist[i] <- as.numeric(temp["Tau"])
+}
+# hist(mmk.warming.fdv.dist)
+
+hist(constant.sims.fdv.15.tau, prob = TRUE, col = "#A7C7E7",
+     main = "Control: First Difference Variance", xlab = "", ylab = "Density") 
+lines(density(mmk.constant.fdv.dist), col = "#191970")
+legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
+       col = c("#A7C7E7", "#191970"), pch = 19)
+
+hist(warming.sims.fdv.15.tau, prob = TRUE, col = "#F88379",
+     main = "Test: First Difference Variance", xlab = "", ylab = "Density") 
+lines(density(mmk.warming.fdv.dist), col = "#D22B2B")
+legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
+       col = c("#F88379", "#D22B2B"), pch = 19)
+
+## Autocorrelation
+mmk.constant.ac.dist <- c()
+for (i in 1:ncol(constant.sims.ac.15)){
+  temp <- mmkh(constant.sims.ac.15[ , i], ci = 0.95)
+  mmk.constant.ac.dist[i] <- as.numeric(temp["Tau"])
+}
+# hist(mmk.constant.ac.dist)
+
+mmk.warming.ac.dist <- c()
+for (i in 1:ncol(warming.sims.ac.15)){
+  temp <- mmkh(warming.sims.ac.15[ , i], ci = 0.95)
+  mmk.warming.ac.dist[i] <- as.numeric(temp["Tau"])
+}
+# hist(mmk.warming.ac.dist)
+
+hist(constant.sims.ac.15.tau, prob = TRUE, col = "#A7C7E7",
+     main = "Control: Autocorrelation", xlab = "", ylab = "Density") 
+lines(density(mmk.constant.ac.dist), col = "#191970")
+legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
+       col = c("#A7C7E7", "#191970"), pch = 19)
+
+hist(warming.sims.ac.15.tau, prob = TRUE, col = "#F88379",
+     main = "Test: Autocorrelation", xlab = "", ylab = "Density") 
+lines(density(mmk.warming.ac.dist), col = "#D22B2B")
+legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
+       col = c("#F88379", "#D22B2B"), pch = 19)
+
+## Autocovariance
+mmk.constant.acv.dist <- c()
+for (i in 1:ncol(constant.sims.acv.15)){
+  temp <- mmkh(constant.sims.acv.15[ , i], ci = 0.95)
+  mmk.constant.acv.dist[i] <- as.numeric(temp["Tau"])
+}
+# hist(mmk.constant.acv.dist)
+
+mmk.warming.acv.dist <- c()
+for (i in 1:ncol(warming.sims.acv.15)){
+  temp <- mmkh(warming.sims.acv.15[ , i], ci = 0.95)
+  mmk.warming.acv.dist[i] <- as.numeric(temp["Tau"])
+}
+# hist(mmk.warming.acv.dist)
+
+hist(constant.sims.acv.15.tau, prob = TRUE, col = "#A7C7E7",
+     main = "Control: Autocovariance", xlab = "", ylab = "Density") 
+lines(density(mmk.constant.acv.dist), col = "#191970")
+legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
+       col = c("#A7C7E7", "#191970"), pch = 19)
+
+hist(warming.sims.acv.15.tau, prob = TRUE, col = "#F88379",
+     main = "Test: Autocovariance", xlab = "", ylab = "Density") 
+lines(density(mmk.warming.acv.dist), col = "#D22B2B")
+legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
+       col = c("#F88379", "#D22B2B"), pch = 19)
+
+## Decay Time
+mmk.constant.dt.dist <- c()
+for (i in 1:ncol(constant.sims.dt.15)){
+  temp <- mmkh(constant.sims.dt.15[ , i], ci = 0.95)
+  mmk.constant.dt.dist[i] <- as.numeric(temp["Tau"])
+}
+# hist(mmk.constant.dt.dist)
+
+mmk.warming.dt.dist <- c()
+for (i in 1:ncol(warming.sims.dt.15)){
+  temp <- mmkh(warming.sims.dt.15[ , i], ci = 0.95)
+  mmk.warming.dt.dist[i] <- as.numeric(temp["Tau"])
+}
+# hist(mmk.warming.dt.dist)
+
+hist(constant.sims.dt.15.tau, prob = TRUE, col = "#A7C7E7",
+     main = "Control: Decay Time", xlab = "", ylab = "Density") 
+lines(density(mmk.constant.dt.dist), col = "#191970")
+legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
+       col = c("#A7C7E7", "#191970"), pch = 19)
+
+hist(warming.sims.dt.15.tau, prob = TRUE, col = "#F88379",
+     main = "Test: Decay Time", xlab = "", ylab = "Density") 
+lines(density(mmk.warming.dt.dist), col = "#D22B2B")
+legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
+       col = c("#F88379", "#D22B2B"), pch = 19)
+```
+
+# 3. Using an ARMA Model to Generate Surrogate Time Series
+
+```{r}
+## Okay, so this is the roughest of cuts, lol, really just messing around
+## Info here: https://cran.r-project.org/web/packages/earlywarnings/earlywarnings.pdf 
+
+# surrogates_ews(
+#   timeseries,
+#   indicator = c("ar1", "sd", "acf1", "sk", "kurt", "cv", "returnrate", "densratio"),
+#   winsize = 50,
+#   detrending = c("no", "gaussian", "loess", "linear", "first-diff"),
+#   bandwidth = NULL,
+#   span = NULL,
+#   degree = NULL,
+#   boots = 100,
+#   logtransform = FALSE,
+#   interpolate = FALSE)
+
+day <- seq(3, 120, 3)
+sub1.matrix <- as.matrix(cbind(day, sub1))
+
+sub1.surr <- earlywarnings::surrogates_ews(
+  timeseries = sub1.matrix,
+  indicator = "acf1",
+  winsize = 12.5, # 12.5% is every 5 time points (every 15 days)
+  detrending = "no",
+  boots = 1000,
+  logtransform = FALSE,
+  interpolate = FALSE
+)
 ```
