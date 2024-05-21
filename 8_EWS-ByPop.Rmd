@@ -1663,20 +1663,6 @@ ggplot(raw.sim.dt.15.tau, aes(x = Treatment, y = k.tau)) +
 `constant.mean.tau` and `warming.mean.tau`, etc., taken from `4_EWS-EmpData.Rmd`.
 
 ```{r}
-emp.ktaus <- data.frame(
-  subpop = c("constant.1", "constant.2", "constant.3", "constant.4", "warming.1", "warming.2", "warming.3", "warming.4"),
-  mean = c(constant.mean.tau, warming.mean.tau),
-  sk = c(constant.sk.tau, warming.sk.tau),
-  kt = c(constant.kt.tau, warming.kt.tau),
-  var = c(constant.var.tau, warming.var.tau),
-  cv = c(constant.cv.tau, warming.cv.tau),
-  id = c(constant.id.tau, warming.id.tau),
-  fdv = c(constant.fdv.tau, warming.fdv.tau),
-  ac = c(constant.ac.tau, warming.ac.tau),
-  acv = c(constant.acv.tau, warming.acv.tau),
-  dt = c(constant.dt.tau, warming.dt.tau)
-)
-
 par(mfrow = c(2, 3))
 
 ## Mean
@@ -1756,4 +1742,97 @@ points(1:4, warming.acv.tau, pch = 8, col = "#C21E56")
 abline(h = 0)
 axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
 axis(2, at = c(-1, 0, 1))
+```
+
+## (Better) Plotting
+
+```{r}
+emp.ktaus <- data.frame(
+  mean = c(constant.mean.tau, warming.mean.tau),
+  sk = c(constant.sk.tau, warming.sk.tau),
+  kt = c(constant.kt.tau, warming.kt.tau),
+  var = c(constant.var.tau, warming.var.tau),
+  cv = c(constant.cv.tau, warming.cv.tau),
+  id = c(constant.id.tau, warming.id.tau),
+  fdv = c(constant.fdv.tau, warming.fdv.tau),
+  ac = c(constant.ac.tau, warming.ac.tau),
+  acv = c(constant.acv.tau, warming.acv.tau),
+  dt = c(constant.dt.tau, warming.dt.tau)
+)
+rownames(emp.ktaus) <- c("constant.1", "constant.2", "constant.3", "constant.4", "warming.1", "warming.2", "warming.3", "warming.4")
+
+x.labs <- c("Mean", "Skewness", "Kurtosis", 
+                              "Variance", "Co-Efficient of Variation", "Index of Dispersion",
+                              "First Difference Variance", "Autocorrelation", "Autocovariance",
+                              "Decay Time")
+par(mar = c(6.5, 4, 4, 4)) # Order: 'bottom', 'left', 'top', 'right'.
+plot(x = 1, type = "n", xaxt = "n", yaxt = "n", 
+     main = "Experimental Data", xlab = "", ylab = "Kendall's Tau",
+     xlim = c(1, 10), ylim = c(-1, 1))
+text(1:10, emp.ktaus[1, ], label = 1, col = alpha("#1434A4", 0.5))
+text(1:10, emp.ktaus[2, ], label = 2, col = alpha("#1434A4", 0.5))
+text(1:10, emp.ktaus[3, ], label = 3, col = alpha("#1434A4", 0.5))
+text(1:10, emp.ktaus[4, ], label = 4, col = alpha("#1434A4", 0.5))
+text(1:10, emp.ktaus[5, ], label = 5, col = alpha("#C21E56", 0.5))
+text(1:10, emp.ktaus[6, ], label = 6, col = alpha("#C21E56", 0.5))
+text(1:10, emp.ktaus[7, ], label = 7, col = alpha("#C21E56", 0.5))
+text(1:10, emp.ktaus[8, ], label = 8, col = alpha("#C21E56", 0.5))
+abline(h = 0, lty = 3)
+# axis(1, at = 1:10, labels = c("Mean", "Skewness", "Kurtosis", 
+#                               "Variance", "Co-Efficient of Variation", "Index of Dispersion",
+#                               "First Difference Variance", "Autocorrelation", "Autocovariance",
+#                               "Decay Time"))
+axis(2, at = c(-1, -0.5, 0, 0.5, 1))
+text(cex = 1, x = 1:10, y = -1.4, x.labs, xpd = TRUE, srt = 35)
+legend(8, 1.1, legend = c("Constant Tempertaure", "Rising Temperature"),
+       pch = 19, col = c("#1434A4", "#C21E56"), cex = 0.8, bty = "n")
+```
+
+```{r}
+df <- data.frame(
+  metric = c(rep("Mean", 8),
+             rep("Skewness", 8),
+             rep("Kurtosis", 8),
+             rep("Variance", 8),
+             rep("Co-Efficient of Variance", 8),
+             rep("Index of Dispersion", 8),
+             rep("First Difference Variance", 8),
+             rep("Autocorrelation", 8),
+             rep("Autocovariance", 8),
+             rep("Decay Time", 8)),
+  Treatment = c(rep(c(rep("Constant", 4), rep("Warming", 4)), 10)),
+  k.tau = c(constant.mean.tau, warming.mean.tau,
+            constant.sk.tau, warming.sk.tau,
+            constant.kt.tau, warming.kt.tau,
+            constant.var.tau, warming.var.tau,
+            constant.cv.tau, warming.cv.tau,
+            constant.id.tau, warming.id.tau,
+            constant.fdv.tau, warming.fdv.tau,
+            constant.ac.tau, warming.ac.tau,
+            constant.acv.tau, warming.acv.tau,
+            constant.dt.tau, warming.dt.tau)
+)
+
+df$metric <- factor(df$metric, levels = unique(df$metric))
+cols <- rep(c("#1434A4","#C21E56"), 10)
+cols.pts <- rep(c(rep("#1434A4", 4), rep("#C21E56", 4)), 10)
+
+df %>%
+  ggplot(aes(x = metric, y = k.tau, fill = Treatment)) +
+  geom_violin(position = position_dodge(width = 1), alpha = 0.2) +
+  scale_fill_manual(values = cols) +
+  # geom_jitter(height = 0, width = 0, colour = "black", alpha = 0.5) +
+  geom_point(aes(y = k.tau), 
+             position = position_jitterdodge(seed = 1, dodge.width = 1), 
+             colour = cols.pts, size = 2, shape = 8) + 
+  xlab("") +
+  ylab("Kendall's Tau") +
+  ylim(-1, 1) +
+  geom_hline(yintercept = 0, linetype = "dotted", color = "black") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, colour = "black"),
+        text = element_text(size = 12)) +
+  theme(axis.text.y = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
 ```
