@@ -1232,9 +1232,14 @@ library(viridis)
 ## Mean
 
 ```{r}
-summary(constant.sims.mean.15.tau); summary(warming.sims.mean.15.tau)
+print("Summary of CT KTs:")
+summary(constant.sims.mean.15.tau)
+print("Summary of WT KTs:")
+summary(warming.sims.mean.15.tau)
+print("Proportion of WT simulations with larger KT than 0:")
 (length(warming.sims.mean.15.tau) - length(which(warming.sims.mean.15.tau < 0)))/length(warming.sims.mean.15.tau)
-(length(warming.sims.mean.15.tau) - length(which(warming.sims.mean.15.tau < median(constant.sims.mean.15.tau))))/length(warming.sims.mean.15.tau)
+print("Proportion of CT simulations with a larger KT than the median WT KT:")
+length(which(constant.sims.mean.15.tau >= median(warming.sims.mean.15.tau)))/length(constant.sims.mean.15.tau)
 
 raw.sim.mean.15.tau <- data.frame(cbind(constant.sims.mean.15.tau, warming.sims.mean.15.tau))
 Treatment <- c(rep("Constant", 1000), rep("Warming", 1000))
@@ -1275,9 +1280,14 @@ ggplot(raw.sim.mean.15.tau, aes(x = Treatment, y = k.tau)) +
 ## Skewness
 
 ```{r}
-summary(constant.sims.sk.15.tau); summary(warming.sims.sk.15.tau)
+print("Summary of CT KTs:")
+summary(constant.sims.sk.15.tau)
+print("Summary of WT KTs:")
+summary(warming.sims.sk.15.tau)
+print("Proportion of WT simulations with larger KT than 0:")
 (length(warming.sims.sk.15.tau) - length(which(warming.sims.sk.15.tau < 0)))/length(warming.sims.sk.15.tau)
-(length(warming.sims.sk.15.tau) - length(which(warming.sims.sk.15.tau < median(constant.sims.sk.15.tau))))/length(warming.sims.sk.15.tau)
+print("Proportion of CT simulations with a larger KT than the median WT KT:")
+length(which(constant.sims.sk.15.tau >= median(warming.sims.sk.15.tau)))/length(constant.sims.sk.15.tau)
 
 raw.sim.sk.15.tau <- data.frame(cbind(constant.sims.sk.15.tau, warming.sims.sk.15.tau))
 Treatment <- c(rep("Constant", 1000), rep("Warming", 1000))
@@ -1318,9 +1328,14 @@ ggplot(raw.sim.sk.15.tau, aes(x = Treatment, y = k.tau)) +
 ## Kurtosis
 
 ```{r}
-summary(constant.sims.kt.15.tau); summary(warming.sims.kt.15.tau)
+print("Summary of CT KTs:")
+summary(constant.sims.kt.15.tau)
+print("Summary of WT KTs:")
+summary(warming.sims.kt.15.tau)
+print("Proportion of WT simulations with larger KT than 0:")
 (length(warming.sims.kt.15.tau) - length(which(warming.sims.kt.15.tau < 0)))/length(warming.sims.kt.15.tau)
-(length(warming.sims.kt.15.tau) - length(which(warming.sims.kt.15.tau < median(constant.sims.kt.15.tau))))/length(warming.sims.kt.15.tau)
+print("Proportion of CT simulations with a larger KT than the median WT KT:")
+length(which(constant.sims.kt.15.tau >= median(warming.sims.kt.15.tau)))/length(constant.sims.kt.15.tau)
 
 raw.sim.kt.15.tau <- data.frame(cbind(constant.sims.kt.15.tau, warming.sims.kt.15.tau))
 Treatment <- c(rep("Constant", 1000), rep("Warming", 1000))
@@ -1361,9 +1376,14 @@ ggplot(raw.sim.kt.15.tau, aes(x = Treatment, y = k.tau)) +
 ## Variance
 
 ```{r}
-summary(constant.sims.var.15.tau); summary(warming.sims.var.15.tau)
+print("Summary of CT KTs:")
+summary(constant.sims.var.15.tau)
+print("Summary of WT KTs:")
+summary(warming.sims.var.15.tau)
+print("Proportion of WT simulations with larger KT than 0:")
 (length(warming.sims.var.15.tau) - length(which(warming.sims.var.15.tau < 0)))/length(warming.sims.var.15.tau)
-(length(warming.sims.var.15.tau) - length(which(warming.sims.var.15.tau < median(constant.sims.var.15.tau))))/length(warming.sims.var.15.tau)
+print("Proportion of CT simulations with a larger KT than the median WT KT:")
+length(which(constant.sims.var.15.tau >= median(warming.sims.var.15.tau)))/length(constant.sims.var.15.tau)
 
 raw.sim.var.15.tau <- data.frame(cbind(constant.sims.var.15.tau, warming.sims.var.15.tau))
 Treatment <- c(rep("Constant", 1000), rep("Warming", 1000))
@@ -1404,9 +1424,14 @@ ggplot(raw.sim.var.15.tau, aes(x = Treatment, y = k.tau)) +
 ## Co-Efficient of Variation
 
 ```{r}
-summary(constant.sims.cv.15.tau); summary(warming.sims.cv.15.tau)
+print("Summary of CT KTs:")
+summary(constant.sims.cv.15.tau)
+print("Summary of WT KTs:")
+summary(warming.sims.cv.15.tau)
+print("Proportion of WT simulations with larger KT than 0:")
 (length(warming.sims.cv.15.tau) - length(which(warming.sims.cv.15.tau < 0)))/length(warming.sims.cv.15.tau)
-(length(warming.sims.cv.15.tau) - length(which(warming.sims.cv.15.tau < median(constant.sims.cv.15.tau))))/length(warming.sims.cv.15.tau)
+print("Proportion of CT simulations with a larger KT than the median WT KT:")
+length(which(constant.sims.cv.15.tau >= median(warming.sims.cv.15.tau)))/length(constant.sims.cv.15.tau)
 
 raw.sim.cv.15.tau <- data.frame(cbind(constant.sims.cv.15.tau, warming.sims.cv.15.tau))
 Treatment <- c(rep("Constant", 1000), rep("Warming", 1000))
@@ -1447,9 +1472,14 @@ ggplot(raw.sim.cv.15.tau, aes(x = Treatment, y = k.tau)) +
 ## Index of Dispersion
 
 ```{r}
-summary(constant.sims.id.15.tau); summary(warming.sims.id.15.tau)
+print("Summary of CT KTs:")
+summary(constant.sims.id.15.tau)
+print("Summary of WT KTs:")
+summary(warming.sims.id.15.tau)
+print("Proportion of WT simulations with larger KT than 0:")
 (length(warming.sims.id.15.tau) - length(which(warming.sims.id.15.tau < 0)))/length(warming.sims.id.15.tau)
-(length(warming.sims.id.15.tau) - length(which(warming.sims.id.15.tau < median(constant.sims.id.15.tau))))/length(warming.sims.id.15.tau)
+print("Proportion of CT simulations with a larger KT than the median WT KT:")
+length(which(constant.sims.id.15.tau >= median(warming.sims.id.15.tau)))/length(constant.sims.id.15.tau)
 
 raw.sim.id.15.tau <- data.frame(cbind(constant.sims.id.15.tau, warming.sims.id.15.tau))
 Treatment <- c(rep("Constant", 1000), rep("Warming", 1000))
@@ -1490,9 +1520,14 @@ ggplot(raw.sim.id.15.tau, aes(x = Treatment, y = k.tau)) +
 ## First Difference Variance
 
 ```{r}
-summary(constant.sims.fdv.15.tau); summary(warming.sims.fdv.15.tau)
+print("Summary of CT KTs:")
+summary(constant.sims.fdv.15.tau)
+print("Summary of WT KTs:")
+summary(warming.sims.fdv.15.tau)
+print("Proportion of WT simulations with larger KT than 0:")
 (length(warming.sims.fdv.15.tau) - length(which(warming.sims.fdv.15.tau < 0)))/length(warming.sims.fdv.15.tau)
-(length(warming.sims.fdv.15.tau) - length(which(warming.sims.fdv.15.tau < median(constant.sims.fdv.15.tau))))/length(warming.sims.fdv.15.tau)
+print("Proportion of CT simulations with a larger KT than the median WT KT:")
+length(which(constant.sims.fdv.15.tau >= median(warming.sims.fdv.15.tau)))/length(constant.sims.fdv.15.tau)
 
 raw.sim.fdv.15.tau <- data.frame(cbind(constant.sims.fdv.15.tau, warming.sims.fdv.15.tau))
 Treatment <- c(rep("Constant", 1000), rep("Warming", 1000))
@@ -1533,9 +1568,14 @@ ggplot(raw.sim.fdv.15.tau, aes(x = Treatment, y = k.tau)) +
 ## Autocorrelation
 
 ```{r}
-summary(constant.sims.ac.15.tau); summary(warming.sims.ac.15.tau)
+print("Summary of CT KTs:")
+summary(constant.sims.ac.15.tau)
+print("Summary of WT KTs:")
+summary(warming.sims.ac.15.tau)
+print("Proportion of WT simulations with larger KT than 0:")
 (length(warming.sims.ac.15.tau) - length(which(warming.sims.ac.15.tau < 0)))/length(warming.sims.ac.15.tau)
-(length(warming.sims.ac.15.tau) - length(which(warming.sims.ac.15.tau < median(constant.sims.ac.15.tau))))/length(warming.sims.ac.15.tau)
+print("Proportion of CT simulations with a larger KT than the median WT KT:")
+length(which(constant.sims.ac.15.tau >= median(warming.sims.ac.15.tau)))/length(constant.sims.ac.15.tau)
 
 raw.sim.ac.15.tau <- data.frame(cbind(constant.sims.ac.15.tau, warming.sims.ac.15.tau))
 Treatment <- c(rep("Constant", 1000), rep("Warming", 1000))
@@ -1576,9 +1616,14 @@ ggplot(raw.sim.ac.15.tau, aes(x = Treatment, y = k.tau)) +
 ## Autocovariance
 
 ```{r}
-summary(constant.sims.acv.15.tau); summary(warming.sims.acv.15.tau)
+print("Summary of CT KTs:")
+summary(constant.sims.acv.15.tau)
+print("Summary of WT KTs:")
+summary(warming.sims.acv.15.tau)
+print("Proportion of WT simulations with larger KT than 0:")
 (length(warming.sims.acv.15.tau) - length(which(warming.sims.acv.15.tau < 0)))/length(warming.sims.acv.15.tau)
-(length(warming.sims.acv.15.tau) - length(which(warming.sims.acv.15.tau < median(constant.sims.acv.15.tau))))/length(warming.sims.acv.15.tau)
+print("Proportion of CT simulations with a larger KT than the median WT KT:")
+length(which(constant.sims.acv.15.tau >= median(warming.sims.acv.15.tau)))/length(constant.sims.acv.15.tau)
 
 raw.sim.acv.15.tau <- data.frame(cbind(constant.sims.acv.15.tau, warming.sims.acv.15.tau))
 Treatment <- c(rep("Constant", 1000), rep("Warming", 1000))
@@ -1619,8 +1664,17 @@ ggplot(raw.sim.acv.15.tau, aes(x = Treatment, y = k.tau)) +
 ## Decay Time
 
 ```{r}
-summary(constant.sims.dt.15.tau); summary(warming.sims.dt.15.tau)
-(length(warming.sims.dt.15.tau) - length(which(warming.sims.dt.15.tau < median(constant.sims.dt.15.tau))))/length(warming.sims.dt.15.tau)
+constant.sims.dt.15.tau.rmna <- constant.sims.dt.15.tau[!is.na(constant.sims.dt.15.tau)]
+warming.sims.dt.15.tau.rmna <- warming.sims.dt.15.tau[!is.na(warming.sims.dt.15.tau)]
+
+print("Summary of CT KTs:")
+summary(constant.sims.dt.15.tau.rmna)
+print("Summary of WT KTs:")
+summary(warming.sims.dt.15.tau.rmna)
+print("Proportion of WT simulations with larger KT than 0:")
+(length(warming.sims.dt.15.tau.rmna) - length(which(warming.sims.dt.15.tau.rmna < 0)))/length(warming.sims.dt.15.tau.rmna)
+print("Proportion of CT simulations with a larger KT than the median WT KT:")
+length(which(constant.sims.dt.15.tau.rmna >= median(warming.sims.dt.15.tau.rmna)))/length(constant.sims.dt.15.tau.rmna)
 
 raw.sim.dt.15.tau <- data.frame(cbind(constant.sims.dt.15.tau, warming.sims.dt.15.tau))
 Treatment <- c(rep("Constant", 1000), rep("Warming", 1000))
@@ -1634,8 +1688,8 @@ saveRDS(raw.sim.dt.15.tau, "Objects/raw.sim.dt.15.tau.rds")
 cols <- c(rep("#1434A4", 512), rep("#C21E56", 512))
 cols.pt <- c(rep("#A7C7E7", 1000), rep("#F6799D", 1000))
 
-med.const.sims.dt.15.tau <- median(constant.sims.dt.15.tau)
-med.warm.sims.dt.15.tau <- median(warming.sims.dt.15.tau)
+med.const.sims.dt.15.tau <- median(constant.sims.dt.15.tau.rmna)
+med.warm.sims.dt.15.tau <- median(warming.sims.dt.15.tau.rmna)
 ggplot(data = raw.sim.dt.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
   geom_density(alpha = 0.4, colour = cols) +
   scale_fill_manual(values = c("#1434A4", "#C21E56")) +
@@ -1653,6 +1707,58 @@ ggplot(raw.sim.dt.15.tau, aes(x = Treatment, y = k.tau)) +
   xlab("Decay Time") +
   ylab("Kendall's Tau") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+```
+
+## Plotting
+
+```{r}
+df <- data.frame(
+  metric = c(rep("Mean", 2000),
+             rep("Skewness", 2000),
+             rep("Kurtosis", 2000),
+             rep("Variance", 2000),
+             rep("Co-Efficient of Variance", 2000),
+             rep("Index of Dispersion", 2000),
+             rep("First Difference Variance", 2000),
+             rep("Autocorrelation", 2000),
+             rep("Autocovariance", 2000),
+             rep("Decay Time", 2000)),
+  Treatment = c(rep(c(rep("Constant", 1000), rep("Warming", 1000)), 10)),
+  k.tau = c(constant.sims.mean.15.tau, warming.sims.mean.15.tau,
+            constant.sims.sk.15.tau, warming.sims.sk.15.tau,
+            constant.sims.kt.15.tau, warming.sims.kt.15.tau,
+            constant.sims.var.15.tau, warming.sims.var.15.tau,
+            constant.sims.cv.15.tau, warming.sims.cv.15.tau,
+            constant.sims.id.15.tau, warming.sims.id.15.tau,
+            constant.sims.fdv.15.tau, warming.sims.fdv.15.tau,
+            constant.sims.ac.15.tau, warming.sims.ac.15.tau,
+            constant.sims.acv.15.tau, warming.sims.acv.15.tau,
+            constant.sims.dt.15.tau, warming.sims.dt.15.tau)
+)
+
+df$metric <- factor(df$metric, levels = unique(df$metric))
+cols <- rep(c("#1434A4","#C21E56"), 10)
+cols.pts <- rep(c(rep("#1434A4", 1000), rep("#C21E56", 1000)), 10)
+
+df %>%
+  ggplot(aes(x = metric, y = k.tau, fill = Treatment)) +
+  geom_violin(position = position_dodge(width = 1), alpha = 0.2) +
+  scale_fill_manual(values = cols) +
+  # geom_jitter(height = 0, width = 0, colour = "black", alpha = 0.5) +
+  geom_point(aes(y = k.tau), 
+             position = position_jitterdodge(seed = 1, dodge.width = 1), 
+             colour = cols.pts, size = 0.25, shape = 8) + 
+  stat_summary(fun.y = median, geom = "point", position = position_dodge(width = 1), size = 4, colour = "black", shape = 18) +
+  xlab("") +
+  ylab("Kendall's Tau") +
+  ylim(-1, 1) +
+  geom_hline(yintercept = 0, linetype = "dotted", color = "black") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, colour = "black"),
+        text = element_text(size = 12)) +
+  theme(axis.text.y = element_text(colour = "black"),
         text = element_text(size = 12)) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
