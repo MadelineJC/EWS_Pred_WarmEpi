@@ -25,7 +25,7 @@ There are a number of ways to do that:
     -   "We used the following permutation approach to assess the significance of the estimated correlations. We first **generated 10 000 permutations of case incidence during the approach to criticality (December 1981 to April 1993)**, thus **preserving the general features of the original data (e.g. amplitudes of fluctuations) while eliminating underlying patterns of serial dependence**. We then **performed rolling window analyses on the permuted data to generate a null distribution of correlation coefficients for each indicator. The false positive rates of the 10 tests were estimated by finding the proportion of these permutations with a value for more extreme than that calculated for the Kericho data**. The resulting p-values quantify the reliability of their corresponding statistics as early warning signals."
 2.  **Non-Parametric Test: The Modified Mann-Kendall Test (Hamed and Rao 1998; Chen et al. 2022):**
     -   "The non-parametric Mann--Kendall test is commonly employed to detect monotonic trends in time series. The null hypothesis for the traditional Mann--Kendall trend test (equation (2.3)), however, is that the data are independent, randomly ordered, without serial correlation structure among the observations. However, in many real situations, the observed data are autocorrelated, which can result in misinterpretation of trend test results. In particular, in the context of early warning signals, this null hypothesis is not rigorously obeyed for the series of statistics such as the standard deviation or the autocorrelation that are obtained from a time series using a moving window." Hamed and Rao (1998) point out that a modified Mann--Kendall trend test can be used to study data with a serial correlation structure. **In the modified test, the null hypothesis is that there is no trend in the data, but there can be autocorrelation**, addressing the challenge existing in the studies of early warning signals. **If the null hypothesis is true, Kendall's** $\tau$ shou**ld follow a normal distribution with mean 0, and variance given by Hamed and Rao (1998) (see Equation 3.1 in Chen et al. 2022)**.\
-        "For each time series, we calculated the variance as the early warning signal using a moving window. The window size and number of observations are varied and the values of Kendall's \$\\tau\$ are then calculated for each set of obtained warning signals. The distribution of Kendall's \$\\tau\$ obtained using the generated time series is shown in figure 5 revealing that the real distribution is much flatter than the normal distribution due to the positive correlation in data. Next, a single time series is used to calculate the varience of the normal distribution obtained by the modified Mann Kendall test (i.e. equation (3.1)). Results shown in figure 5 show that the modified distribution is much closer to the real distribution. **In practice, one may typically only have one time series. Therefore, the real distribution is not available. In this case, we can use the available time series to calculate the modified distribution of Kendall's** $\tau$, and **use the distribution to calculate the percentile of the obtained Kendall's** $\tau$ **value.**"
+        "For each time series, we calculated the variance as the early warning signal using a moving window. The window size and number of observations are varied and the values of Kendall's $\tau$ are then calculated for each set of obtained warning signals. The distribution of Kendall's $\tau$ obtained using the generated time series is shown in figure 5 revealing that the real distribution is much flatter than the normal distribution due to the positive correlation in data. Next, a single time series is used to calculate the varience of the normal distribution obtained by the modified Mann Kendall test (i.e. equation (3.1)). Results shown in figure 5 show that the modified distribution is much closer to the real distribution. **In practice, one may typically only have one time series. Therefore, the real distribution is not available. In this case, we can use the available time series to calculate the modified distribution of Kendall's** $\tau$, and **use the distribution to calculate the percentile of the obtained Kendall's** $\tau$ **value.**"
 3.  **Parametric Test: Generating a Null Case w/ an ARMA (Dakos et al. 2012; Chen et al. 2022):**
     -   "These methods use a general model to fit the data, and **generate artificial data using the model to understand how significant the trend statistic value is**. Dakos et al. (2012) proposed to **fit an autoregressive, moving-average model (ARMA) using the residual data after detrending**. This test is **designed to show that the data cannot come from a linear stationary process if a large Kendall's** $\tau$ **value is obtained from it**. When this test gives a p-value as low as 0.1%, that does not mean that the probability of critical transition is as high as 99.9%. It means that the probability that this time-series data is generated using a linear stationary model is as low as 0.1%."
 
@@ -39,13 +39,23 @@ What else does the literature say?
 
 -   **Harris et al. 2020:** *SEE ABOVE.*
 
--   **Dakos et al. 2008:** Assessed significance in three ways: "For each time series we tested the likelihood of obtaining our computed trend statistics (Kendall's $\tau$ rank correlation) by chance by using 1,000 surrogate time series of the same length as the filtered simulated and real data in three different ways. **First,** **we bootstrapped our datasets by shuffling the original residual time series and picking data with replacement to generate surrogate records of similar distribution (mean and variance)**. Second, we produced a surrogate time series that had the same Fourier spectrum and amplitudes as the original sets (Theiler et al. 1992). **Last, we created surrogate datasets produced by an autoregressive model of order 1 with the same variance, mean and autocorrelation at lag 1 with the residuals time series starting from the same initial value as in the original series** (Theiler et al. 1992). For each surrogate set, we computed the trend detection statistic. We then calculated the probability that our estimates of the trend statistic would be observed by chance as the fraction of the 1,000 surrogate series scoring the same value or a higher one."
+-   **Dakos et al. 2008:** Assessed significance in three ways: "For each time series we tested the likelihood of obtaining our computed trend statistics (Kendall's $\tau$ rank correlation) by chance by using 1,000 surrogate time series of the same length as the filtered simulated and real data in three different ways. **First,** **we bootstrapped our datasets by shuffling the original residual time series and picking data with replacement to generate surrogate records of similar distribution (mean and variance)**. **Second, we produced a surrogate time series that had the same Fourier spectrum and amplitudes as the original sets (Theiler et al. 1992).** **Last, we created surrogate datasets produced by an autoregressive model of order 1 with the same variance, mean and autocorrelation at lag 1 with the residuals time series starting from the same initial value as in the original series** (Theiler et al. 1992). For each surrogate set, we computed the trend detection statistic. We then calculated the probability that our estimates of the trend statistic would be observed by chance as the fraction of the 1,000 surrogate series scoring the same value or a higher one."
+
+    -   **Bootstrapped Surrogate Data Sets w/ Same MEAN, and VARIANCE:** "We bootstrapped our datasets by reshuffling the order of the detrended original time series and by picking data with replacement to generate surrogate records of similar probability distribution (mean and variance) (Efron and Tibshirani 1986)."
+
+    -   **Surrogate Data Sets w/ Same FOURIER SPECTRUM and AMPLITUDES:** "We produced surrogate time series with the same autocorrelations and the same probability distribution as the data, to test against the H0 hypothesis that our datasets are a realization of a Gaussian linear stochastic process (Schreiber and Schmitz 1996; Schreiber and Schmitz 2000). We did this by replicating data of the same Fourier spectrum and amplitudes as of the original set using the MATLAB function generate_iAAFT (Gautama et al. 2004)."
+
+    -   **Surrogate Data Sets Generated w/ ARMA Model w/ Same MEAN, VARIANCE, and AUTOCORRELATION:** "To test against the H0 hypothesis that the data are produced by a colored-noise process with similar variance, mean, and autocorrelation at lag 1 with the original detrended time series (Theiler et al. 1992), we generated surrogate sets by an AR1 model $x_{t+1} = \alpha_1 x_t + \alpha_0 + \sigma \epsilon_t$, where $\alpha_1 = A(1), \sigma^2 = v(1-\alpha_1^2)$, $\alpha_0 = \mu(1-\alpha_1)$, with $v$ the variance, $\mu$ the mean, $A(1)$ the autocorrelation at lag 1 from the residual time series (estimated by using function `acf` as implemented in R), and $\sigma$ a scaling factor for the Gaussian random error $\epsilon_t$.
+
+    -   "We estimated the probability that our estimates of the trend statistic would be observed by chance as the fraction of the 1,000 surrogate series scoring the same value or a higher one. Specifically for the Kendall $\tau$, we estimated this probability as the number of cases in which the statistic was equal to or higher than the estimate of the original record, $P(\tau \geqslant \tau^*)$. We also estimated the combined probability for observing the trend statistic estimate in each the H0 hypotheses test by chance. For this, we used the Fisher's combined probability test (Sokal and Rohlf 1995) to estimate the $X^2$ statistic, given by:\
+        $$X_{2k}^2 = -2 \sum_{i=1}^k ln(p_i)$$\
+        where $k$ is the amount of tests (here, $k=8$) and $P$ is the probability estimated for each hypotheses test. The combined probability for the $X^2$ statistic was given by a $\chi^2$ distribution with $2k$ degrees of freedom."
 
 -   **Delecroix et al. 2022:** "When a trend is observed, its significance needs to be assessed. Due to the sliding window approach, standard statistical tests are not applicable as the observations are not independent. A proposed approach to assess the significance of the trend is to produce surrogate datasets to compare the trend estimates (Dakos et al. 2012). Several methods to produce consistent surrogate datasets have been proposed and implemented in the resilience indicators packages (Dakos's R Package"Earlywarnings" (2015))."
 
 -   **Gsell et al. 2016:** "We also tested for the significance of the trends by estimating the rate of false positives using simulated surrogate time series... Our significance testing relied on estimating EWI trends in surrogate stationary data fitted to the original time series to determine the rate of false positives. Unfortunately, we lacked records to serve as controls when comparing trends from comparable aquatic systems in which no transition occurred to estimate the rate of true negatives (no alarm, or sensitivity) of the EWIs. Given the lack of such controls, one potential way to measure the no alarm rate is to derive trends from nonstationary models fitted to the data (Livina et al. 2012). In future work, it would be valuable to compare trends in EWI in study systems that did not exhibit any changes or in which changes were brought about by large external shifts in drivers."
 
--   **Dablander et al. 2022:** "**To create a sampling distribution under the null hypothesis of no increase in the early warning indicators that respects the temporal ordering of the data, we fitted a series of ARMA(p, q) models** with ( p, q) ∈ [1, 2, ...5] to the country-specific data. We selected the best-fitting model using AIC and subsequently **generated 500 surrogate time series from it, computed the early warning indicators as outlined above, and estimated the rank correlation of the indicator values st with time t, known as Kendall's** $\tau$**. This resulted in the sampling distribution under the null assumption 3 of stationarity, which allowed us to test the actually observed Kendall's** $\tau$ **against a significance level α**. This approach is the most widely used approach when estimating and testing early warning indicators using rolling windows (Dakos et al. 2012).
+-   **Dablander et al. 2022:** "**To create a sampling distribution under the null hypothesis of no increase in the early warning indicators that respects the temporal ordering of the data, we fitted a series of ARMA(p, q) models** with (p, q) ∈ [1, 2, ... 5] to the country-specific data. We selected the best-fitting model using AIC and subsequently **generated 500 surrogate time series from it, computed the early warning indicators as outlined above, and estimated the rank correlation of the indicator values st with time t, known as Kendall's** $\tau$**. This resulted in the sampling distribution under the null assumption 3 of stationarity, which allowed us to test the actually observed Kendall's** $\tau$ **against a significance level α**. This approach is the most widely used approach when estimating and testing early warning indicators using rolling windows (Dakos et al. 2012).
 
 -   **Dakos et al. 2012:** "Here, we suggest that the simplest null hypothesis one could imagine is that the trend estimates of the indicators are due to chance alone. To test this null hypothesis, we produced surrogate datasets to compare trend estimates in the original record with trend estimates obtained from records that have the same correlation structure and probability distribution as the original dataset, but that were produced by linear stationary processes (Dakos et al. 2008). **Surrogate datasets can be obtained by different approaches, including generating data with the same Fourier spectrum and amplitudes (Dakos et al. 2008; Theiler et al. 1992), or generating data from the simplest fitted linear first-order autoregressive model**. Although these are only some of the ways surrogate data can be produced to test for trends (Halley and Kugiumtzis 2011), we used here a more general approach. **We fit the best linear autoregressive moving average model (ARMA(p,q)) based on AIC to residuals (after detrending/filtering), then generated 1,000 simulated datasets of the same length as the residual time series. For each simulated dataset, we estimated the trend of the rolling window metric (in particular we only tested for autocorrelation at-lag-1, standard deviation, and skewness) using Kendall's** $\tau$**. We compared the Kendall** $\tau$ of the original data **to the number of cases in which the statistic was equal to or smaller than the estimates of the simulated records, P (**$\tau^* \geqslant \tau$**)**. We estimated this probability for all combinations of bandwidth and rolling window size as we did for the sensitivity analysis."
 
@@ -54,7 +64,7 @@ What else does the literature say?
 From Harris et al. (2020):
 
 ```{r}
-kericho <- read.csv("/Users/mjarviscross/Desktop/Github/Kericho-EWS/kericho.csv")
+kericho <- read.csv("/Users/mjarviscross/Desktop/Thesis_Lit/Chapter 3 Lit/Reference_Code/Harris et al. (2020)/kericho.csv")
 
 # Approach to criticality
 test <- kericho$BBK[204:340] # 137 of 455 observations; in our case, we restrict to the first 55 days (emergence at ~60)
@@ -1423,6 +1433,78 @@ legend("right", legend = c("Greater Than", "Less Than"), col = "black", pch = c(
 
 I think you apply this, instead of just calculating Kendall's $\tau$ normally? Kind of unclear. Let's see!
 
+## Empirical Data
+
+```{r}
+# Where n is the number of observations, and ps.i is the autocorrelation of the ranks of the observation
+mod.man.kendall <- function(n, ps){
+  
+  to.sum <- c()
+  for (i in 1:n - 1){
+    to.sum[i] <- (n - i)*(n - i - 1)*(n - i - 2)*ps[i]
+  }
+  
+  var.tau = (2*(2*n + 5))/(9*n*(n - 1)) * (1 + 2/(n*(n - 1)*(n - 2)) * sum(to.sum))
+  
+  return(var.tau)
+}
+
+## Let's try it
+
+## Mean
+means <- data.frame(pop1.mean, pop2.mean, pop3.mean, pop4.mean, pop5.mean, pop6.mean, pop7.mean, pop8.mean); means <- means[1:15, ]
+var <- c()
+for (i in 1:8){
+  ts <- means[ , i]
+  rank <- rank(ts)
+  rank.acf <- as.numeric(acf(rank, lag.max = length(ts) - 1)$acf)
+  var[i] <- mod.man.kendall(n = length(ts), ps = rank.acf)
+}
+
+mains <- c("pop1.mean", "pop2.mean", "pop3.mean", "pop4.mean", "pop5.mean", "pop6.mean", "pop7.mean", "pop8.mean")
+for (i in 1:8){
+  hist(rnorm(n = 10000, mean = 0, sd = sqrt(var[i])), 
+     xlim = c(-1, 1), ylim = c(1, 2500),
+     main = mains[i], xlab = "")
+}
+
+## Variance
+vars <- data.frame(pop1.var, pop2.var, pop3.var, pop4.var, pop5.var, pop6.var, pop7.var, pop8.var); vars <- vars[1:15, ]
+var <- c()
+for (i in 1:8){
+  ts <- vars[ , i]
+  rank <- rank(ts)
+  rank.acf <- as.numeric(acf(rank, lag.max = length(ts) - 1)$acf)
+  var[i] <- mod.man.kendall(n = length(ts), ps = rank.acf)
+}
+
+mains <- c("pop1.var", "pop2.var", "pop3.var", "pop4.var", "pop5.var", "pop6.var", "pop7.var", "pop8.var")
+for (i in 1:8){
+  hist(rnorm(n = 10000, mean = 0, sd = sqrt(var[i])), 
+     xlim = c(-1, 1), ylim = c(1, 2500),
+     main = mains[i], xlab = "")
+}
+
+## Index of Dispersion
+ids <- data.frame(pop1.id, pop2.id, pop3.id, pop4.id, pop5.id, pop6.id, pop7.id, pop8.id); ids <- ids[1:15, ]
+var <- c()
+for (i in 1:8){
+  ts <- ids[ , i]
+  rank <- rank(ts)
+  rank.acf <- as.numeric(acf(rank, lag.max = length(ts) - 1)$acf)
+  var[i] <- mod.man.kendall(n = length(ts), ps = rank.acf)
+}
+
+mains <- c("pop1.id", "pop2.id", "pop3.id", "pop4.id", "pop5.id", "pop6.id", "pop7.id", "pop8.id")
+for (i in 1:8){
+  hist(rnorm(n = 10000, mean = 0, sd = sqrt(var[i])), 
+     xlim = c(-1, 1), ylim = c(1, 2500),
+     main = mains[i], xlab = "")
+}
+```
+
+## Simulated Data
+
 ```{r}
 library(modifiedmk)
 
@@ -1727,4 +1809,66 @@ sub1.surr <- earlywarnings::surrogates_ews(
   logtransform = FALSE,
   interpolate = FALSE
 )
+
+#### Attempt 2! ####
+obj <- seq(3, 120, 3)
+for (i in 1:5){
+  temp <- tseries::arma(sub6, order = c(1, i)) # Where "order" is a two dimensional integer vector giving the orders of the model to fit. order[1] corresponds to the AR part and order[2] to the MA part.
+  temp <- sub6 - residuals(temp)
+  obj <- cbind(obj, temp)
+}
+cols <- c("red3", "orange", "goldenrod1", "forestgreen", "orchid")
+plot(obj[ , 1], sub6, type = "l",
+     xlab = "Day", ylab = "Incidence", main = "AR = 1; MA = 1 to 5")
+for (i in 1:5){
+  lines(obj[ , 1], obj[ , i + 1], col = cols[i])
+}
+legend("topleft", legend = c("MA = 1", "MA = 2", "MA = 3", "MA = 4", "MA = 5"),
+       lty = 1, col = cols)
+
+## AR 1-5; MA 1-5
+ARs <- c(rep(1:5, each = 5)); MAs <- c(rep(1:5, 5)); combs <- data.frame(ARs, MAs)
+
+combs.str <- c("day")
+for (i in 1:nrow(combs)) {
+    temp <- paste("AR", combs[i, 1], "MA", combs[i, 2], sep = "")
+    combs.str <- c(combs.str, temp)
+}
+
+obj <- seq(3, 120, 3)
+for (i in 1:nrow(combs)){
+  temp <- tseries::arma(sub6, order = c(combs[i, 1], combs[i, 2]))
+  temp <- sub6 - residuals(temp)
+  obj <- cbind(obj, temp)
+}
+obj <- as.data.frame(obj)
+colnames(obj) <- combs.str[1:ncol(obj)]
+
+par(mfrow = c(2, 2))
+
+plot(obj[ , 1], sub6, type = "l",
+     xlab = "Day", ylab = "Incidence", main = "AR = 1; MA = 1 to 5")
+for (i in 1:5){
+  lines(obj[ , 1], obj[ , i + 1], col = cols[i])
+}
+legend(0, 3, legend = c("MA = 1", "MA = 2", "MA = 3", "MA = 4", "MA = 5"),
+       lty = 1, col = cols, cex = 0.5)
+
+plot(obj[ , 1], sub6, type = "l",
+     xlab = "Day", ylab = "Incidence", main = "AR = 2; MA = 1 to 5")
+for (i in 6:10){
+  lines(obj[ , 1], obj[ , i + 1], col = cols[i - 5])
+}
+
+plot(obj[ , 1], sub6, type = "l",
+     xlab = "Day", ylab = "Incidence", main = "AR = 3; MA = 1 to 5")
+for (i in 11:15){
+  lines(obj[ , 1], obj[ , i + 1], col = cols[i - 10])
+}
+
+plot(obj[ , 1], sub6, type = "l",
+     xlab = "Day", ylab = "Incidence", main = "AR = 4; MA = 1 to 5")
+for (i in 16:20){
+  lines(obj[ , 1], obj[ , i + 1], col = cols[i - 16])
+}
 ```
