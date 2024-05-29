@@ -1435,7 +1435,7 @@ I think you apply this, instead of just calculating Kendall's $\tau$ normally? K
 
 Note that `pop1.mean` and related vectors were generated in `4_EWS-EmpData.Rmd`, and are the metrics of interest, as calculated within sliding windows.
 
-## Empirical Data
+## Generating Null Distributions
 
 ```{r}
 # Where n is the number of observations, and ps.i is the autocorrelation of the ranks of the observation
@@ -1520,7 +1520,7 @@ for (i in 1:8){
 }
 ```
 
-Calculating p-values:
+## Calculating *p*-Values
 
 ```{r}
 means <- data.frame(pop1.mean, pop2.mean, pop3.mean, pop4.mean, pop5.mean, pop6.mean, pop7.mean, pop8.mean); means <- means[1:15, ]
@@ -1598,283 +1598,9 @@ legend("topright", legend = c("Constant Tempertaure", "Rising Temperature"),
        pch = 19, col = c("#1434A4", "#C21E56"), cex = 0.8, bty = "n")
 ```
 
-## Simulated Data
-
-```{r}
-library(modifiedmk)
-
-## Mean
-mmk.constant.mean.dist <- c()
-for (i in 1:ncol(constant.sims.mean.15)){
-  temp <- mmkh(constant.sims.mean.15[ , i], ci = 0.95)
-  mmk.constant.mean.dist[i] <- as.numeric(temp["Tau"])
-}
-# hist(mmk.constant.mean.dist)
-
-mmk.warming.mean.dist <- c()
-for (i in 1:ncol(warming.sims.mean.15)){
-  temp <- mmkh(warming.sims.mean.15[ , i], ci = 0.95)
-  mmk.warming.mean.dist[i] <- as.numeric(temp["Tau"])
-}
-# hist(mmk.warming.mean.dist)
-
-hist(constant.sims.mean.15.tau, prob = TRUE, col = "#A7C7E7",
-     main = "Control: Mean", xlab = "", ylab = "Density") 
-lines(density(mmk.constant.mean.dist), col = "#191970")
-legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
-       col = c("#A7C7E7", "#191970"), pch = 19)
-
-hist(warming.sims.mean.15.tau, prob = TRUE, col = "#F88379",
-     main = "Test: Mean", xlab = "", ylab = "Density") 
-lines(density(mmk.warming.mean.dist), col = "#D22B2B")
-legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
-       col = c("#F88379", "#D22B2B"), pch = 19)
-
-## Skewness
-mmk.constant.sk.dist <- c()
-for (i in 1:ncol(constant.sims.sk.15)){
-  temp <- mmkh(constant.sims.sk.15[ , i], ci = 0.95)
-  mmk.constant.sk.dist[i] <- as.numeric(temp["Tau"])
-}
-# hist(mmk.constant.sk.dist)
-
-mmk.warming.sk.dist <- c()
-for (i in 1:ncol(warming.sims.sk.15)){
-  temp <- mmkh(warming.sims.sk.15[ , i], ci = 0.95)
-  mmk.warming.sk.dist[i] <- as.numeric(temp["Tau"])
-}
-# hist(mmk.warming.sk.dist)
-
-hist(constant.sims.sk.15.tau, prob = TRUE, col = "#A7C7E7",
-     main = "Control: Skewness", xlab = "", ylab = "Density") 
-lines(density(mmk.constant.sk.dist), col = "#191970")
-legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
-       col = c("#A7C7E7", "#191970"), pch = 19)
-
-hist(warming.sims.sk.15.tau, prob = TRUE, col = "#F88379",
-     main = "Test: Skewness", xlab = "", ylab = "Density") 
-lines(density(mmk.warming.sk.dist), col = "#D22B2B")
-legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
-       col = c("#F88379", "#D22B2B"), pch = 19)
-
-## Kurtosis
-mmk.constant.kt.dist <- c()
-for (i in 1:ncol(constant.sims.kt.15)){
-  temp <- mmkh(constant.sims.kt.15[ , i], ci = 0.95)
-  mmk.constant.kt.dist[i] <- as.numeric(temp["Tau"])
-}
-# hist(mmk.constant.kt.dist)
-
-mmk.warming.kt.dist <- c()
-for (i in 1:ncol(warming.sims.kt.15)){
-  temp <- mmkh(warming.sims.kt.15[ , i], ci = 0.95)
-  mmk.warming.kt.dist[i] <- as.numeric(temp["Tau"])
-}
-# hist(mmk.warming.kt.dist)
-
-hist(constant.sims.kt.15.tau, prob = TRUE, col = "#A7C7E7",
-     main = "Control: Kurtosis", xlab = "", ylab = "Density") 
-lines(density(mmk.constant.kt.dist), col = "#191970")
-legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
-       col = c("#A7C7E7", "#191970"), pch = 19)
-
-hist(warming.sims.kt.15.tau, prob = TRUE, col = "#F88379",
-     main = "Test: Kurtosis", xlab = "", ylab = "Density") 
-lines(density(mmk.warming.kt.dist), col = "#D22B2B")
-legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
-       col = c("#F88379", "#D22B2B"), pch = 19)
-
-## Variance
-mmk.constant.var.dist <- c()
-for (i in 1:ncol(constant.sims.var.15)){
-  temp <- mmkh(constant.sims.var.15[ , i], ci = 0.95)
-  mmk.constant.var.dist[i] <- as.numeric(temp["Tau"])
-}
-# hist(mmk.constant.var.dist)
-
-mmk.warming.var.dist <- c()
-for (i in 1:ncol(warming.sims.var.15)){
-  temp <- mmkh(warming.sims.var.15[ , i], ci = 0.95)
-  mmk.warming.var.dist[i] <- as.numeric(temp["Tau"])
-}
-# hist(mmk.warming.var.dist)
-
-hist(constant.sims.var.15.tau, prob = TRUE, col = "#A7C7E7",
-     main = "Control: Variance", xlab = "", ylab = "Density") 
-lines(density(mmk.constant.var.dist), col = "#191970")
-legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
-       col = c("#A7C7E7", "#191970"), pch = 19)
-
-hist(warming.sims.var.15.tau, prob = TRUE, col = "#F88379",
-     main = "Test: Variance", xlab = "", ylab = "Density") 
-lines(density(mmk.warming.var.dist), col = "#D22B2B")
-legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
-       col = c("#F88379", "#D22B2B"), pch = 19)
-
-## Co-Efficient of Variation
-mmk.constant.cv.dist <- c()
-for (i in 1:ncol(constant.sims.cv.15)){
-  temp <- mmkh(constant.sims.cv.15[ , i], ci = 0.95)
-  mmk.constant.cv.dist[i] <- as.numeric(temp["Tau"])
-}
-# hist(mmk.constant.cv.dist)
-
-mmk.warming.cv.dist <- c()
-for (i in 1:ncol(warming.sims.cv.15)){
-  temp <- mmkh(warming.sims.cv.15[ , i], ci = 0.95)
-  mmk.warming.cv.dist[i] <- as.numeric(temp["Tau"])
-}
-# hist(mmk.warming.cv.dist)
-
-hist(constant.sims.cv.15.tau, prob = TRUE, col = "#A7C7E7",
-     main = "Control: Co-Efficient of Variation", xlab = "", ylab = "Density") 
-lines(density(mmk.constant.cv.dist), col = "#191970")
-legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
-       col = c("#A7C7E7", "#191970"), pch = 19)
-
-hist(warming.sims.cv.15.tau, prob = TRUE, col = "#F88379",
-     main = "Test: Co-Efficient of Variation", xlab = "", ylab = "Density") 
-lines(density(mmk.warming.cv.dist), col = "#D22B2B")
-legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
-       col = c("#F88379", "#D22B2B"), pch = 19)
-
-## Index of Dispersion
-mmk.constant.id.dist <- c()
-for (i in 1:ncol(constant.sims.id.15)){
-  temp <- mmkh(constant.sims.id.15[ , i], ci = 0.95)
-  mmk.constant.id.dist[i] <- as.numeric(temp["Tau"])
-}
-# hist(mmk.constant.id.dist)
-
-mmk.warming.id.dist <- c()
-for (i in 1:ncol(warming.sims.id.15)){
-  temp <- mmkh(warming.sims.id.15[ , i], ci = 0.95)
-  mmk.warming.id.dist[i] <- as.numeric(temp["Tau"])
-}
-# hist(mmk.warming.id.dist)
-
-hist(constant.sims.id.15.tau, prob = TRUE, col = "#A7C7E7",
-     main = "Control: Index of Dispersion", xlab = "", ylab = "Density") 
-lines(density(mmk.constant.id.dist), col = "#191970")
-legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
-       col = c("#A7C7E7", "#191970"), pch = 19)
-
-hist(warming.sims.id.15.tau, prob = TRUE, col = "#F88379",
-     main = "Test: Index of Dispersion", xlab = "", ylab = "Density") 
-lines(density(mmk.warming.id.dist), col = "#D22B2B")
-legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
-       col = c("#F88379", "#D22B2B"), pch = 19)
-
-## First Difference Variance
-mmk.constant.fdv.dist <- c()
-for (i in 1:ncol(constant.sims.fdv.15)){
-  temp <- mmkh(constant.sims.fdv.15[ , i], ci = 0.95)
-  mmk.constant.fdv.dist[i] <- as.numeric(temp["Tau"])
-}
-# hist(mmk.constant.fdv.dist)
-
-mmk.warming.fdv.dist <- c()
-for (i in 1:ncol(warming.sims.fdv.15)){
-  temp <- mmkh(warming.sims.fdv.15[ , i], ci = 0.95)
-  mmk.warming.fdv.dist[i] <- as.numeric(temp["Tau"])
-}
-# hist(mmk.warming.fdv.dist)
-
-hist(constant.sims.fdv.15.tau, prob = TRUE, col = "#A7C7E7",
-     main = "Control: First Difference Variance", xlab = "", ylab = "Density") 
-lines(density(mmk.constant.fdv.dist), col = "#191970")
-legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
-       col = c("#A7C7E7", "#191970"), pch = 19)
-
-hist(warming.sims.fdv.15.tau, prob = TRUE, col = "#F88379",
-     main = "Test: First Difference Variance", xlab = "", ylab = "Density") 
-lines(density(mmk.warming.fdv.dist), col = "#D22B2B")
-legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
-       col = c("#F88379", "#D22B2B"), pch = 19)
-
-## Autocorrelation
-mmk.constant.ac.dist <- c()
-for (i in 1:ncol(constant.sims.ac.15)){
-  temp <- mmkh(constant.sims.ac.15[ , i], ci = 0.95)
-  mmk.constant.ac.dist[i] <- as.numeric(temp["Tau"])
-}
-# hist(mmk.constant.ac.dist)
-
-mmk.warming.ac.dist <- c()
-for (i in 1:ncol(warming.sims.ac.15)){
-  temp <- mmkh(warming.sims.ac.15[ , i], ci = 0.95)
-  mmk.warming.ac.dist[i] <- as.numeric(temp["Tau"])
-}
-# hist(mmk.warming.ac.dist)
-
-hist(constant.sims.ac.15.tau, prob = TRUE, col = "#A7C7E7",
-     main = "Control: Autocorrelation", xlab = "", ylab = "Density") 
-lines(density(mmk.constant.ac.dist), col = "#191970")
-legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
-       col = c("#A7C7E7", "#191970"), pch = 19)
-
-hist(warming.sims.ac.15.tau, prob = TRUE, col = "#F88379",
-     main = "Test: Autocorrelation", xlab = "", ylab = "Density") 
-lines(density(mmk.warming.ac.dist), col = "#D22B2B")
-legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
-       col = c("#F88379", "#D22B2B"), pch = 19)
-
-## Autocovariance
-mmk.constant.acv.dist <- c()
-for (i in 1:ncol(constant.sims.acv.15)){
-  temp <- mmkh(constant.sims.acv.15[ , i], ci = 0.95)
-  mmk.constant.acv.dist[i] <- as.numeric(temp["Tau"])
-}
-# hist(mmk.constant.acv.dist)
-
-mmk.warming.acv.dist <- c()
-for (i in 1:ncol(warming.sims.acv.15)){
-  temp <- mmkh(warming.sims.acv.15[ , i], ci = 0.95)
-  mmk.warming.acv.dist[i] <- as.numeric(temp["Tau"])
-}
-# hist(mmk.warming.acv.dist)
-
-hist(constant.sims.acv.15.tau, prob = TRUE, col = "#A7C7E7",
-     main = "Control: Autocovariance", xlab = "", ylab = "Density") 
-lines(density(mmk.constant.acv.dist), col = "#191970")
-legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
-       col = c("#A7C7E7", "#191970"), pch = 19)
-
-hist(warming.sims.acv.15.tau, prob = TRUE, col = "#F88379",
-     main = "Test: Autocovariance", xlab = "", ylab = "Density") 
-lines(density(mmk.warming.acv.dist), col = "#D22B2B")
-legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
-       col = c("#F88379", "#D22B2B"), pch = 19)
-
-## Decay Time
-mmk.constant.dt.dist <- c()
-for (i in 1:ncol(constant.sims.dt.15)){
-  temp <- mmkh(constant.sims.dt.15[ , i], ci = 0.95)
-  mmk.constant.dt.dist[i] <- as.numeric(temp["Tau"])
-}
-# hist(mmk.constant.dt.dist)
-
-mmk.warming.dt.dist <- c()
-for (i in 1:ncol(warming.sims.dt.15)){
-  temp <- mmkh(warming.sims.dt.15[ , i], ci = 0.95)
-  mmk.warming.dt.dist[i] <- as.numeric(temp["Tau"])
-}
-# hist(mmk.warming.dt.dist)
-
-hist(constant.sims.dt.15.tau, prob = TRUE, col = "#A7C7E7",
-     main = "Control: Decay Time", xlab = "", ylab = "Density") 
-lines(density(mmk.constant.dt.dist), col = "#191970")
-legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
-       col = c("#A7C7E7", "#191970"), pch = 19)
-
-hist(warming.sims.dt.15.tau, prob = TRUE, col = "#F88379",
-     main = "Test: Decay Time", xlab = "", ylab = "Density") 
-lines(density(mmk.warming.dt.dist), col = "#D22B2B")
-legend("topleft", legend = c("Kendall's Tau", "Modified Mann-Kendall Test"),
-       col = c("#F88379", "#D22B2B"), pch = 19)
-```
-
 # 3. Using an ARMA Model to Generate Surrogate Time Series
+
+## Attempt 1
 
 ```{r}
 ## Okay, so this is the roughest of cuts, lol, really just messing around
@@ -1968,10 +1694,248 @@ for (i in 16:20){
 }
 ```
 
+## Attempt 2
+
 Per Dakos et al. 2008: "To test against the H0 hypothesis that the data are produced by a colored-noise process with similar variance, mean, and autocorrelation at lag 1 with the original detrended time series (Theiler et al. 1992), we generated surrogate sets by an AR1 model $x_{t+1} = \alpha_1 x_t + \alpha_0 + \sigma \epsilon_t$, where $\alpha_1 = A(1), \sigma^2 = v(1-\alpha_1^2)$, $\alpha_0 = \mu(1-\alpha_1)$, with $v$ the variance, $\mu$ the mean, $A(1)$ the autocorrelation at lag 1 from the residual time series (estimated by using function `acf` as implemented in R), and $\sigma$ a scaling factor for the Gaussian random error $\epsilon_t$.
 
+QUESTIONS:
+
+1.  Do we calculate mean and variance over the whole time series, or only within the approach to criticality?
+2.  I'm pretty sure we're not calculating the above metrics over a moving window since the null predicts no change over time... Yes?
+3.  How do we calculate epsilon?
+
 ```{r}
-AR.func <- function(A1, mu, v, sigma, epsilon){
-  
+## Original empirical time series
+sub1.ts <- sub1$status.sum
+sub2.ts <- sub2$status.sum
+sub3.ts <- sub3$status.sum
+sub4.ts <- sub4$status.sum
+sub5.ts <- sub5$status.sum
+sub6.ts <- sub6$status.sum
+sub7.ts <- sub7$status.sum
+sub8.ts <- sub8$status.sum
+
+## Mean, variance, AR(1)
+sub1.ts.mean <- mean(sub1.ts); sub1.ts.var <- var(sub1.ts); sub1.ts.ac <- acf(sub1.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2] 
+sub2.ts.mean <- mean(sub2.ts); sub2.ts.var <- var(sub2.ts); sub2.ts.ac <- acf(sub2.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2] 
+sub3.ts.mean <- mean(sub3.ts); sub3.ts.var <- var(sub3.ts); sub3.ts.ac <- acf(sub3.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2] 
+sub4.ts.mean <- mean(sub4.ts); sub4.ts.var <- var(sub4.ts); sub4.ts.ac <- acf(sub4.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2] 
+sub5.ts.mean <- mean(sub5.ts); sub5.ts.var <- var(sub5.ts); sub5.ts.ac <- acf(sub5.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2] 
+sub6.ts.mean <- mean(sub6.ts); sub6.ts.var <- var(sub6.ts); sub6.ts.ac <- acf(sub6.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2] 
+sub7.ts.mean <- mean(sub7.ts); sub7.ts.var <- var(sub7.ts); sub7.ts.ac <- acf(sub7.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2] 
+sub8.ts.mean <- mean(sub8.ts); sub8.ts.var <- var(sub8.ts); sub8.ts.ac <- acf(sub8.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2] 
+
+## Error generated as Gaussian noise
+epsilon <- rnorm(n = 1, mean = 0, sd = 1) # Where do the mean and standard deviation come from?
+sigma <- 1 # Let's not scale epsilon for now, just while we get the pipeline functional
+
+## Function
+AR.func <- function(x.prev, mu, v, A1, sigma, epsilon){
+  alpha.1 = A1 # Where A(1) is the autocorrelation at lag 1 from the residual time series (est. using acf())
+  alpha.0 = mu*(1 - alpha.1) # Where mu is the mean
+  sigma = sqrt(v*(1 - alpha.1^2)) # Where v is the variance
+  x.next = alpha.1*x.prev + alpha.0 + sigma*epsilon # How do we get a value for epsilon?
+  return(x.next)
+}
+
+## Implementation
+x.prev <- 0
+set.seed(1); epsilon <- rnorm(n = 119, mean = 1, sd = 1)
+surr.ts <- c(x.prev)
+for (i in 1:119){
+  x.next <- AR.func(x.prev = x.prev, mu = sub1.ts.mean, v = sub1.ts.var, A1 = sub1.ts.ac, sigma = 1, epsilon = epsilon[i])
+  surr.ts <- c(surr.ts, x.next)
+  x.prev <- x.next
+}
+surr.ts <- surr.ts[seq(3, 120, 3)]
+plot(seq(3, 120, 3), surr.ts, type = "l",
+     xlab = "Day", ylab = "Prevalence")
+abline(h = 0, lty = 2)
+
+## Get 1000 time series
+seed <- c(1:1000)
+
+## Subpopulation 1
+sub1.surr.df <- c()
+for (i in 1:1000){
+  x.prev <- 0
+  set.seed(seed[i]); epsilon <- rnorm(n = 119, mean = 1, sd = 1)
+  surr.ts <- c(x.prev)
+  for (j in 1:119){
+      x.next <- AR.func(x.prev = x.prev, mu = sub1.ts.mean, v = sub1.ts.var, A1 = sub1.ts.ac, sigma = 1, epsilon = epsilon[j])
+      surr.ts <- c(surr.ts, x.next)
+      x.prev <- x.next
+  }
+  sub1.surr.df <- cbind(sub1.surr.df, surr.ts)
+}
+sub1.surr.df <- as.data.frame(sub1.surr.df[seq(3, 120, 3), ])
+
+## Subpopulation 2
+sub2.surr.df <- c()
+for (i in 1:1000){
+  x.prev <- 0
+  set.seed(seed[i]); epsilon <- rnorm(n = 119, mean = 1, sd = 1)
+  surr.ts <- c(x.prev)
+  for (j in 1:119){
+      x.next <- AR.func(x.prev = x.prev, mu = sub2.ts.mean, v = sub2.ts.var, A1 = sub2.ts.ac, sigma = 1, epsilon = epsilon[j])
+      surr.ts <- c(surr.ts, x.next)
+      x.prev <- x.next
+  }
+  sub2.surr.df <- cbind(sub2.surr.df, surr.ts)
+}
+sub2.surr.df <- as.data.frame(sub2.surr.df[seq(3, 120, 3), ])
+
+## Subpopulation 3
+sub3.surr.df <- c()
+for (i in 1:1000){
+  x.prev <- 0
+  set.seed(seed[i]); epsilon <- rnorm(n = 119, mean = 1, sd = 1)
+  surr.ts <- c(x.prev)
+  for (j in 1:119){
+      x.next <- AR.func(x.prev = x.prev, mu = sub3.ts.mean, v = sub3.ts.var, A1 = sub3.ts.ac, sigma = 1, epsilon = epsilon[j])
+      surr.ts <- c(surr.ts, x.next)
+      x.prev <- x.next
+  }
+  sub3.surr.df <- cbind(sub3.surr.df, surr.ts)
+}
+sub3.surr.df <- as.data.frame(sub3.surr.df[seq(3, 120, 3), ])
+
+## Subpopulation 4
+sub4.surr.df <- c()
+for (i in 1:1000){
+  x.prev <- 0
+  set.seed(seed[i]); epsilon <- rnorm(n = 119, mean = 1, sd = 1)
+  surr.ts <- c(x.prev)
+  for (j in 1:119){
+      x.next <- AR.func(x.prev = x.prev, mu = sub4.ts.mean, v = sub4.ts.var, A1 = sub4.ts.ac, sigma = 1, epsilon = epsilon[j])
+      surr.ts <- c(surr.ts, x.next)
+      x.prev <- x.next
+  }
+  sub4.surr.df <- cbind(sub4.surr.df, surr.ts)
+}
+sub4.surr.df <- as.data.frame(sub4.surr.df[seq(3, 120, 3), ])
+
+## Subpopulation 5
+sub5.surr.df <- c()
+for (i in 1:1000){
+  x.prev <- 0
+  set.seed(seed[i]); epsilon <- rnorm(n = 119, mean = 1, sd = 1)
+  surr.ts <- c(x.prev)
+  for (j in 1:119){
+      x.next <- AR.func(x.prev = x.prev, mu = sub5.ts.mean, v = sub5.ts.var, A1 = sub5.ts.ac, sigma = 1, epsilon = epsilon[j])
+      surr.ts <- c(surr.ts, x.next)
+      x.prev <- x.next
+  }
+  sub5.surr.df <- cbind(sub5.surr.df, surr.ts)
+}
+sub5.surr.df <- as.data.frame(sub5.surr.df[seq(3, 120, 3), ])
+
+## Subpopulation 6
+sub6.surr.df <- c()
+for (i in 1:1000){
+  x.prev <- 0
+  set.seed(seed[i]); epsilon <- rnorm(n = 119, mean = 1, sd = 1)
+  surr.ts <- c(x.prev)
+  for (j in 1:119){
+      x.next <- AR.func(x.prev = x.prev, mu = sub6.ts.mean, v = sub6.ts.var, A1 = sub6.ts.ac, sigma = 1, epsilon = epsilon[j])
+      surr.ts <- c(surr.ts, x.next)
+      x.prev <- x.next
+  }
+  sub6.surr.df <- cbind(sub6.surr.df, surr.ts)
+}
+sub6.surr.df <- as.data.frame(sub6.surr.df[seq(3, 120, 3), ])
+
+## Subpopulation 7
+sub7.surr.df <- c()
+for (i in 1:1000){
+  x.prev <- 0
+  set.seed(seed[i]); epsilon <- rnorm(n = 119, mean = 1, sd = 1)
+  surr.ts <- c(x.prev)
+  for (j in 1:119){
+      x.next <- AR.func(x.prev = x.prev, mu = sub7.ts.mean, v = sub7.ts.var, A1 = sub7.ts.ac, sigma = 1, epsilon = epsilon[j])
+      surr.ts <- c(surr.ts, x.next)
+      x.prev <- x.next
+  }
+  sub7.surr.df <- cbind(sub7.surr.df, surr.ts)
+}
+sub7.surr.df <- as.data.frame(sub7.surr.df[seq(3, 120, 3), ])
+
+## Subpopulation 8
+sub8.surr.df <- c()
+for (i in 1:1000){
+  x.prev <- 0
+  set.seed(seed[i]); epsilon <- rnorm(n = 119, mean = 1, sd = 1)
+  surr.ts <- c(x.prev)
+  for (j in 1:119){
+      x.next <- AR.func(x.prev = x.prev, mu = sub8.ts.mean, v = sub8.ts.var, A1 = sub8.ts.ac, sigma = 1, epsilon = epsilon[j])
+      surr.ts <- c(surr.ts, x.next)
+      x.prev <- x.next
+  }
+  sub8.surr.df <- cbind(sub8.surr.df, surr.ts)
+}
+sub8.surr.df <- as.data.frame(sub8.surr.df[seq(3, 120, 3), ])
+```
+
+Plotting a few surrogates from each population:
+
+```{r}
+cols <- c("red3", "orange", "goldenrod1", "forestgreen", "royalblue2", "orchid")
+
+par(mfrow = c(2, 4))
+
+## Subpopulation 1
+plot(seq(3, 120, 3), sub1.ts, type = "l", lwd = 2,
+     main = "Subpopulation 1", xlab = "Day", ylab = "Prevalence", ylim = c(-0.5, 1))
+for (i in 1:6){
+  lines(seq(3, 120, 3), sub1.surr.df[ , i], col = cols[i])
+}
+
+## Subpopulation 2
+plot(seq(3, 120, 3), sub2.ts, type = "l", lwd = 2,
+     main = "Subpopulation 2", xlab = "Day", ylab = "Prevalence", ylim = c(-0.5, 1.5))
+for (i in 1:6){
+  lines(seq(3, 120, 3), sub2.surr.df[ , i], col = cols[i])
+}
+
+## Subpopulation 3
+plot(seq(3, 120, 3), sub3.ts, type = "l", lwd = 2,
+     main = "Subpopulation 3", xlab = "Day", ylab = "Prevalence", ylim = c(-0.5, 2.5))
+for (i in 1:6){
+  lines(seq(3, 120, 3), sub3.surr.df[ , i], col = cols[i])
+}
+
+## Subpopulation 4
+plot(seq(3, 120, 3), sub4.ts, type = "l", lwd = 2,
+     main = "Subpopulation 4", xlab = "Day", ylab = "Prevalence", ylim = c(-0.5, 2.5))
+for (i in 1:6){
+  lines(seq(3, 120, 3), sub4.surr.df[ , i], col = cols[i])
+}
+
+## Subpopulation 5
+plot(seq(3, 120, 3), sub5.ts, type = "l", lwd = 2,
+     main = "Subpopulation 5", xlab = "Day", ylab = "Prevalence", ylim = c(-0.5, 5))
+for (i in 1:6){
+  lines(seq(3, 120, 3), sub5.surr.df[ , i], col = cols[i])
+}
+
+## Subpopulation 6
+plot(seq(3, 120, 3), sub6.ts, type = "l", lwd = 2,
+     main = "Subpopulation 6", xlab = "Day", ylab = "Prevalence", ylim = c(-0.5, 5))
+for (i in 1:6){
+  lines(seq(3, 120, 3), sub6.surr.df[ , i], col = cols[i])
+}
+
+## Subpopulation 7
+plot(seq(3, 120, 3), sub7.ts, type = "l", lwd = 2,
+     main = "Subpopulation 7", xlab = "Day", ylab = "Prevalence", ylim = c(-0.5, 7.5))
+for (i in 1:6){
+  lines(seq(3, 120, 3), sub7.surr.df[ , i], col = cols[i])
+}
+
+## Subpopulation 8
+plot(seq(3, 120, 3), sub8.ts, type = "l", lwd = 2,
+     main = "Subpopulation 8", xlab = "Day", ylab = "Prevalence", ylim = c(-0.5, 7.5))
+for (i in 1:6){
+  lines(seq(3, 120, 3), sub8.surr.df[ , i], col = cols[i])
 }
 ```
