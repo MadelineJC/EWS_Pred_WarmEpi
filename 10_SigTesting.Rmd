@@ -59,7 +59,7 @@ What else does the literature say?
 
 -   **Dakos et al. 2012:** "Here, we suggest that the simplest null hypothesis one could imagine is that the trend estimates of the indicators are due to chance alone. To test this null hypothesis, we produced surrogate datasets to compare trend estimates in the original record with trend estimates obtained from records that have the same correlation structure and probability distribution as the original dataset, but that were produced by linear stationary processes (Dakos et al. 2008). **Surrogate datasets can be obtained by different approaches, including generating data with the same Fourier spectrum and amplitudes (Dakos et al. 2008; Theiler et al. 1992), or generating data from the simplest fitted linear first-order autoregressive model**. Although these are only some of the ways surrogate data can be produced to test for trends (Halley and Kugiumtzis 2011), we used here a more general approach. **We fit the best linear autoregressive moving average model (ARMA(p,q)) based on AIC to residuals (after detrending/filtering), then generated 1,000 simulated datasets of the same length as the residual time series. For each simulated dataset, we estimated the trend of the rolling window metric (in particular we only tested for autocorrelation at-lag-1, standard deviation, and skewness) using Kendall's** $\tau$**. We compared the Kendall** $\tau$ of the original data **to the number of cases in which the statistic was equal to or smaller than the estimates of the simulated records, P (**$\tau^* \geqslant \tau$**)**. We estimated this probability for all combinations of bandwidth and rolling window size as we did for the sensitivity analysis."
 
-# 1. Permutation Approach
+# 1. Resampling Time Series
 
 From Harris et al. (2020):
 
@@ -1598,7 +1598,7 @@ legend("topright", legend = c("Constant Tempertaure", "Rising Temperature"),
        pch = 19, col = c("#1434A4", "#C21E56"), cex = 0.8, bty = "n")
 ```
 
-# 3. Using an ARMA Model to Generate Surrogate Time Series
+# 3. Surrogate Time Series via AR-1 Model
 
 ## Attempt 1
 
@@ -1694,9 +1694,9 @@ for (i in 16:20){
 }
 ```
 
-## Attempt 2
+## Generating Surrogate Time Series
 
-Per Dakos et al. 2008: "To test against the H0 hypothesis that the data are produced by a colored-noise process with similar variance, mean, and autocorrelation at lag 1 with the original detrended time series (Theiler et al. 1992), we generated surrogate sets by an AR1 model $x_{t+1} = \alpha_1 x_t + \alpha_0 + \sigma \epsilon_t$, where $\alpha_1 = A(1), \sigma^2 = v(1-\alpha_1^2)$, $\alpha_0 = \mu(1-\alpha_1)$, with $v$ the variance, $\mu$ the mean, $A(1)$ the autocorrelation at lag 1 from the residual time series (estimated by using function `acf` as implemented in R), and $\sigma$ a scaling factor for the Gaussian random error $\epsilon_t$.
+**Per Dakos et al. 2008:** "To test against the H0 hypothesis that the data are produced by a colored-noise process with similar variance, mean, and autocorrelation at lag 1 with the original detrended time series (Theiler et al. 1992), we generated surrogate sets by an AR1 model $x_{t+1} = \alpha_1 x_t + \alpha_0 + \sigma \epsilon_t$, where $\alpha_1 = A(1), \sigma^2 = v(1-\alpha_1^2)$, $\alpha_0 = \mu(1-\alpha_1)$, with $v$ the variance, $\mu$ the mean, $A(1)$ the autocorrelation at lag 1 from the residual time series (estimated by using function `acf` as implemented in R), and $\sigma$ a scaling factor for the Gaussian random error $\epsilon_t$.
 
 QUESTIONS:
 
@@ -1731,11 +1731,17 @@ sigma <- 1 # Let's not scale epsilon for now, just while we get the pipeline fun
 
 ## Function
 AR.func <- function(x.prev, mu, v, A1, sigma, epsilon){
+  
   alpha.1 = A1 # Where A(1) is the autocorrelation at lag 1 from the residual time series (est. using acf())
+  
   alpha.0 = mu*(1 - alpha.1) # Where mu is the mean
+  
   sigma = sqrt(v*(1 - alpha.1^2)) # Where v is the variance
+  
   x.next = alpha.1*x.prev + alpha.0 + sigma*epsilon # How do we get a value for epsilon?
+  
   return(x.next)
+  
 }
 
 ## Implementation
@@ -2289,5 +2295,3 @@ axis(2, at = c(0, 1))
 legend("topright", legend = c("Constant Tempertaure", "Rising Temperature"),
        pch = 19, col = c("#1434A4", "#C21E56"), cex = 0.8, bty = "n")
 ```
-
-

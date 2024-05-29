@@ -7,7 +7,30 @@ library(cowplot)
 
 # Raw
 
+## Simulated
+
+Objects generated in `3_EWS-SimData.Rmd`.
+
+```{r}
+AUC_Sim <- readRDS("Objects/AUC_SimulatedData.rds")
+
+par(mar = c(12, 4, 2, 2))
+plot(1:10, AUC_Sim$AUC_5, type = "p", 
+     main = "Simulated Data", 
+     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = alpha("red3", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_Sim$AUC_15, col = alpha("orange", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_Sim$AUC_30, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
+legend(x = 7.8, y = 0.25,
+       legend = c("Sliding Window = 5 Days", "Sliding Window = 15 Days", "Sliding Window = 30 Days"),
+       col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
+```
+
 ## Empirical
+
+Objects generated in `4_EWS-EmpData.Rmd`.
 
 ### Raw
 
@@ -62,18 +85,24 @@ abline(h = 0.5, lty = 3)
 axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
 ```
 
+# Pre-Processed
+
 ## Simulated
 
+Objects generated in `6_EWS-Detrend-SimData.Rmd`.
+
+### Bandwidth = 2
+
 ```{r}
-AUC_Sim <- readRDS("Objects/AUC_SimulatedData.rds")
+AUC_SmoothSim_2 <- readRDS("Objects/AUC_SmoothSimulatedData_B2.rds")
 
 par(mar = c(12, 4, 2, 2))
-plot(1:10, AUC_Sim$AUC_5, type = "p", 
-     main = "Simulated Data", 
+plot(1:10, AUC_SmoothSim_2$AUC_5, type = "p", 
+     main = "Pre-Processed Simulated Data | Bandwidth = 2", 
      xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
      col = alpha("red3", 0.75), pch = 19, cex = 1)
-points(1:10, AUC_Sim$AUC_15, col = alpha("orange", 0.75), pch = 19, cex = 1)
-points(1:10, AUC_Sim$AUC_30, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothSim_2$AUC_15, col = alpha("orange", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothSim_2$AUC_30, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
 abline(h = 0.5, lty = 3)
 axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
 legend(x = 7.8, y = 0.25,
@@ -81,9 +110,90 @@ legend(x = 7.8, y = 0.25,
        col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
 ```
 
-# Pre-Processed
+### Bandwidth = 3
+
+```{r}
+AUC_SmoothSim_3 <- readRDS("Objects/AUC_SmoothSimulatedData_B3.rds")
+
+par(mar = c(12, 4, 2, 2))
+plot(1:10, AUC_SmoothSim_3$AUC_5, type = "p", 
+     main = "Pre-Processed Simulated Data | Bandwidth = 3", 
+     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = alpha("red3", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothSim_3$AUC_15, col = alpha("orange", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothSim_3$AUC_30, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
+legend(x = 7.8, y = 0.25,
+       legend = c("Sliding Window = 5 Days", "Sliding Window = 15 Days", "Sliding Window = 30 Days"),
+       col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
+```
+
+### Bandwidth = 4
+
+```{r}
+AUC_SmoothSim_4 <- readRDS("Objects/AUC_SmoothSimulatedData_B4.rds")
+
+par(mar = c(12, 4, 2, 2))
+plot(1:10, AUC_SmoothSim_4$AUC_5, type = "p", 
+     main = "Pre-Processed Simulated Data | Bandwidth = 4", 
+     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = alpha("red3", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothSim_4$AUC_15, col = alpha("orange", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothSim_4$AUC_30, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
+legend(x = 7.8, y = 0.25,
+       legend = c("Sliding Window = 5 Days", "Sliding Window = 15 Days", "Sliding Window = 30 Days"),
+       col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
+```
+
+### Comparison
+
+```{r}
+par(mar = c(12, 4, 2, 2))
+plot(1:10, AUC_SmoothSim_2$AUC_5, type = "p", 
+     main = "Pre-Processed Simulated Data | 5 Day Sliding Window", 
+     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = alpha("red3", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothSim_3$AUC_5, col = alpha("orange", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothSim_4$AUC_5, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
+legend(x = 8.5, y = 0.25,
+       legend = c("Bandwidth = 2", "Bandwidth = 3", "Bandwidth = 4"),
+       col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
+
+par(mar = c(12, 4, 2, 2))
+plot(1:10, AUC_SmoothSim_2$AUC_15, type = "p", 
+     main = "Pre-Processed Simulated Data | 15 Day Sliding Window", 
+     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = alpha("red3", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothSim_3$AUC_15, col = alpha("orange", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothSim_4$AUC_15, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
+legend(x = 8.5, y = 0.25,
+       legend = c("Bandwidth = 2", "Bandwidth = 3", "Bandwidth = 4"),
+       col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
+
+par(mar = c(12, 4, 2, 2))
+plot(1:10, AUC_SmoothSim_2$AUC_30, type = "p", 
+     main = "Pre-Processed Simulated Data | 30 Day Sliding Window", 
+     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = alpha("red3", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothSim_3$AUC_30, col = alpha("orange", 0.75), pch = 19, cex = 1)
+points(1:10, AUC_SmoothSim_4$AUC_30, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
+legend(x = 8.5, y = 0.25,
+       legend = c("Bandwidth = 2", "Bandwidth = 3", "Bandwidth = 4"),
+       col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
+```
 
 ## Empirical
+
+Objects generated in `7_EWS-Detrend-EmpData.Rmd`.
 
 ### Bandwidth = 2
 
@@ -193,108 +303,6 @@ legend(x = 8.5, y = 0.25,
        col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
 ```
 
-## Simulated
-
-### Bandwidth = 2
-
-```{r}
-AUC_SmoothSim_2 <- readRDS("Objects/AUC_SmoothSimulatedData_B2.rds")
-
-par(mar = c(12, 4, 2, 2))
-plot(1:10, AUC_SmoothSim_2$AUC_5, type = "p", 
-     main = "Pre-Processed Simulated Data | Bandwidth = 2", 
-     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
-     col = alpha("red3", 0.75), pch = 19, cex = 1)
-points(1:10, AUC_SmoothSim_2$AUC_15, col = alpha("orange", 0.75), pch = 19, cex = 1)
-points(1:10, AUC_SmoothSim_2$AUC_30, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
-abline(h = 0.5, lty = 3)
-axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
-legend(x = 7.8, y = 0.25,
-       legend = c("Sliding Window = 5 Days", "Sliding Window = 15 Days", "Sliding Window = 30 Days"),
-       col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
-```
-
-### Bandwidth = 3
-
-```{r}
-AUC_SmoothSim_3 <- readRDS("Objects/AUC_SmoothSimulatedData_B3.rds")
-
-par(mar = c(12, 4, 2, 2))
-plot(1:10, AUC_SmoothSim_3$AUC_5, type = "p", 
-     main = "Pre-Processed Simulated Data | Bandwidth = 3", 
-     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
-     col = alpha("red3", 0.75), pch = 19, cex = 1)
-points(1:10, AUC_SmoothSim_3$AUC_15, col = alpha("orange", 0.75), pch = 19, cex = 1)
-points(1:10, AUC_SmoothSim_3$AUC_30, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
-abline(h = 0.5, lty = 3)
-axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
-legend(x = 7.8, y = 0.25,
-       legend = c("Sliding Window = 5 Days", "Sliding Window = 15 Days", "Sliding Window = 30 Days"),
-       col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
-```
-
-### Bandwidth = 4
-
-```{r}
-AUC_SmoothSim_4 <- readRDS("Objects/AUC_SmoothSimulatedData_B4.rds")
-
-par(mar = c(12, 4, 2, 2))
-plot(1:10, AUC_SmoothSim_4$AUC_5, type = "p", 
-     main = "Pre-Processed Simulated Data | Bandwidth = 4", 
-     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
-     col = alpha("red3", 0.75), pch = 19, cex = 1)
-points(1:10, AUC_SmoothSim_4$AUC_15, col = alpha("orange", 0.75), pch = 19, cex = 1)
-points(1:10, AUC_SmoothSim_4$AUC_30, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
-abline(h = 0.5, lty = 3)
-axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
-legend(x = 7.8, y = 0.25,
-       legend = c("Sliding Window = 5 Days", "Sliding Window = 15 Days", "Sliding Window = 30 Days"),
-       col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
-```
-
-### Comparison
-
-```{r}
-par(mar = c(12, 4, 2, 2))
-plot(1:10, AUC_SmoothSim_2$AUC_5, type = "p", 
-     main = "Pre-Processed Simulated Data | 5 Day Sliding Window", 
-     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
-     col = alpha("red3", 0.75), pch = 19, cex = 1)
-points(1:10, AUC_SmoothSim_3$AUC_5, col = alpha("orange", 0.75), pch = 19, cex = 1)
-points(1:10, AUC_SmoothSim_4$AUC_5, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
-abline(h = 0.5, lty = 3)
-axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
-legend(x = 8.5, y = 0.25,
-       legend = c("Bandwidth = 2", "Bandwidth = 3", "Bandwidth = 4"),
-       col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
-
-par(mar = c(12, 4, 2, 2))
-plot(1:10, AUC_SmoothSim_2$AUC_15, type = "p", 
-     main = "Pre-Processed Simulated Data | 15 Day Sliding Window", 
-     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
-     col = alpha("red3", 0.75), pch = 19, cex = 1)
-points(1:10, AUC_SmoothSim_3$AUC_15, col = alpha("orange", 0.75), pch = 19, cex = 1)
-points(1:10, AUC_SmoothSim_4$AUC_15, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
-abline(h = 0.5, lty = 3)
-axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
-legend(x = 8.5, y = 0.25,
-       legend = c("Bandwidth = 2", "Bandwidth = 3", "Bandwidth = 4"),
-       col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
-
-par(mar = c(12, 4, 2, 2))
-plot(1:10, AUC_SmoothSim_2$AUC_30, type = "p", 
-     main = "Pre-Processed Simulated Data | 30 Day Sliding Window", 
-     xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
-     col = alpha("red3", 0.75), pch = 19, cex = 1)
-points(1:10, AUC_SmoothSim_3$AUC_30, col = alpha("orange", 0.75), pch = 19, cex = 1)
-points(1:10, AUC_SmoothSim_4$AUC_30, col = alpha("forestgreen", 0.75), pch = 19, cex = 1)
-abline(h = 0.5, lty = 3)
-axis(side = 1, at = 1:10, labels = metrics_full, las = 2, cex.axis = 1)
-legend(x = 8.5, y = 0.25,
-       legend = c("Bandwidth = 2", "Bandwidth = 3", "Bandwidth = 4"),
-       col = c("red3", "orange", "forestgreen"), pch = 19, bty = "n", y.intersp = 0.5)
-```
-
 # Comparisons
 
 ## Objects
@@ -323,37 +331,6 @@ AUC_SmoothSim_4 # (Includes all 3 window sizes)
 ```
 
 ## Plotting
-
-### Empirical
-
-```{r}
-## We're looking at ten versions of this!
-v1 <- seq(1, 100, 10); v2 <- seq(2, 100, 10); v3 <- seq(3, 100, 10); v4 <- seq(4, 100, 10); v5 <- seq(5, 100, 10)
-v6 <- seq(6, 100, 10); v7 <- seq(7, 100, 10); v8 <- seq(8, 100, 10); v9 <- seq(9, 100, 10); v10 <- seq(10, 100, 10)
-
-par(mar = c(12, 4, 2, 2))
-plot(v1, AUC_Emp$AUC_data, type = "p", 
-     main = "Empirical Data", 
-     # xaxt = "none", 
-     xlim = c(2, 99), xlab = "", ylim = c(0, 1), ylab = "AUC",
-     col = "red3", pch = 19)
-points(v2, AUC_Emp_Ex5$AUC_data, col = "red3", pch = 1)
-points(v3, AUC_AdjEmp$AUC_data, col = "goldenrod1", pch = 19)
-# points(v4, AUC_AdjEmp_Ex5$AUC_data, col = "goldenrod1", pch = 1)
-points(v5, AUC_SmoothEmp_2$AUC_data, col = "springgreen4", pch = 17)
-points(v6, AUC_SmoothEmp_Ex5_2$AUC_data, col = "springgreen4", pch = 2)
-points(v7, AUC_SmoothEmp_3$AUC_data, col = "navy", pch = 17)
-points(v8, AUC_SmoothEmp_Ex5_3$AUC_data, col = "navy", pch = 2)
-points(v9, AUC_SmoothEmp_4$AUC_data, col = "orchid", pch = 17)
-points(v10, AUC_SmoothEmp_Ex5_4$AUC_data, col = "orchid", pch = 2)
-abline(v = c(10.5, 20.5, 30.5, 40.5, 50.5, 60.5, 70.5, 80.5, 90.5), lty = 3, col = "grey")
-abline(h = 0.5, lty = 3, col = "black")
-axis(side = 1, at = seq(5.5, 100, 10), labels = metrics_full, las = 2, cex.axis = 1)
-legend(x = 75, y = 0.28, 
-       legend = c("Raw", "Adjusted", "Smoothed (Bandwidth = 2)", "Smoothed (Bandwidth = 3)", "Smoothed (Bandwidth = 4)"), 
-       col = c("red3", "goldenrod1", "springgreen4", "navy", "orchid"), pch = c(19, 19, 17, 17, 17),
-       box.lwd = 0, box.col = "white", bg = "white", y.intersp = 0.3)
-```
 
 ### Simulated
 
@@ -418,9 +395,42 @@ ggplot(smooth_df, aes(x = metric, y = smooth_3_aucs, colour = metric)) +
   ylim(0, 1)
 ```
 
+### Empirical
+
+```{r}
+## We're looking at ten versions of this!
+v1 <- seq(1, 100, 10); v2 <- seq(2, 100, 10); v3 <- seq(3, 100, 10); v4 <- seq(4, 100, 10); v5 <- seq(5, 100, 10)
+v6 <- seq(6, 100, 10); v7 <- seq(7, 100, 10); v8 <- seq(8, 100, 10); v9 <- seq(9, 100, 10); v10 <- seq(10, 100, 10)
+
+par(mar = c(12, 4, 2, 2))
+plot(v1, AUC_Emp$AUC_data, type = "p", 
+     main = "Empirical Data", 
+     # xaxt = "none", 
+     xlim = c(2, 99), xlab = "", ylim = c(0, 1), ylab = "AUC",
+     col = "red3", pch = 19)
+points(v2, AUC_Emp_Ex5$AUC_data, col = "red3", pch = 1)
+points(v3, AUC_AdjEmp$AUC_data, col = "goldenrod1", pch = 19)
+# points(v4, AUC_AdjEmp_Ex5$AUC_data, col = "goldenrod1", pch = 1)
+points(v5, AUC_SmoothEmp_2$AUC_data, col = "springgreen4", pch = 17)
+points(v6, AUC_SmoothEmp_Ex5_2$AUC_data, col = "springgreen4", pch = 2)
+points(v7, AUC_SmoothEmp_3$AUC_data, col = "navy", pch = 17)
+points(v8, AUC_SmoothEmp_Ex5_3$AUC_data, col = "navy", pch = 2)
+points(v9, AUC_SmoothEmp_4$AUC_data, col = "orchid", pch = 17)
+points(v10, AUC_SmoothEmp_Ex5_4$AUC_data, col = "orchid", pch = 2)
+abline(v = c(10.5, 20.5, 30.5, 40.5, 50.5, 60.5, 70.5, 80.5, 90.5), lty = 3, col = "grey")
+abline(h = 0.5, lty = 3, col = "black")
+axis(side = 1, at = seq(5.5, 100, 10), labels = metrics_full, las = 2, cex.axis = 1)
+legend(x = 75, y = 0.28, 
+       legend = c("Raw", "Adjusted", "Smoothed (Bandwidth = 2)", "Smoothed (Bandwidth = 3)", "Smoothed (Bandwidth = 4)"), 
+       col = c("red3", "goldenrod1", "springgreen4", "navy", "orchid"), pch = c(19, 19, 17, 17, 17),
+       box.lwd = 0, box.col = "white", bg = "white", y.intersp = 0.3)
+```
+
 # BY POPULATION
 
 # Raw, Simulated
+
+Objects generated in `8_EWS-ByPop.Rmd`.
 
 ```{r}
 cols <- c(rep("#1434A4", 512), rep("#C21E56", 512))
@@ -454,19 +464,19 @@ violin <- ggplot(raw.sim.mean.15.tau, aes(x = Treatment, y = k.tau)) +
 plot_grid(dens, violin, align = "h", labels = "AUTO")
 
 ## Variance
-raw.sim.variance.15.tau <- readRDS("Objects/raw.sim.variance.15.tau.rds")
-med.const.sims.variance.15.tau <- median(constant.sims.variance.15.tau)
-med.warm.sims.variance.15.tau <- median(warming.sims.variance.15.tau)
-dens <- ggplot(data = raw.sim.variance.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+raw.sim.var.15.tau <- readRDS("Objects/raw.sim.var.15.tau.rds")
+med.const.sims.var.15.tau <- median(constant.sims.var.15.tau)
+med.warm.sims.var.15.tau <- median(warming.sims.var.15.tau)
+dens <- ggplot(data = raw.sim.var.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
   geom_density(alpha = 0.4, colour = cols) +
   scale_fill_manual(values = c("#1434A4", "#C21E56")) +
-  geom_vline(xintercept = med.const.sims.variance.15.tau, colour = "#1434A4") +
-  geom_vline(xintercept = med.warm.sims.variance.15.tau, colour = "#C21E56") +
+  geom_vline(xintercept = med.const.sims.var.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.var.15.tau, colour = "#C21E56") +
   xlab("Kendall's Tau") +
   ylab("Density (Variance)") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
-violin <- ggplot(raw.sim.variance.15.tau, aes(x = Treatment, y = k.tau)) + 
+violin <- ggplot(raw.sim.var.15.tau, aes(x = Treatment, y = k.tau)) + 
   geom_violin(fill = cols, colour = cols) +
   geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
   stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
@@ -479,19 +489,19 @@ violin <- ggplot(raw.sim.variance.15.tau, aes(x = Treatment, y = k.tau)) +
 plot_grid(dens, violin, align = "h", labels = "AUTO")
 
 ## Skewness
-raw.sim.skewness.15.tau <- readRDS("Objects/raw.sim.skewness.15.tau.rds")
-med.const.sims.skewness.15.tau <- median(constant.sims.skewness.15.tau)
-med.warm.sims.skewness.15.tau <- median(warming.sims.skewness.15.tau)
-dens <- ggplot(data = raw.sim.skewness.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+raw.sim.sk.15.tau <- readRDS("Objects/raw.sim.sk.15.tau.rds")
+med.const.sims.sk.15.tau <- median(constant.sims.sk.15.tau)
+med.warm.sims.sk.15.tau <- median(warming.sims.sk.15.tau)
+dens <- ggplot(data = raw.sim.sk.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
   geom_density(alpha = 0.4, colour = cols) +
   scale_fill_manual(values = c("#1434A4", "#C21E56")) +
-  geom_vline(xintercept = med.const.sims.skewness.15.tau, colour = "#1434A4") +
-  geom_vline(xintercept = med.warm.sims.skewness.15.tau, colour = "#C21E56") +
+  geom_vline(xintercept = med.const.sims.sk.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.sk.15.tau, colour = "#C21E56") +
   xlab("Kendall's Tau") +
   ylab("Density (Skewness)") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
-violin <- ggplot(raw.sim.skewness.15.tau, aes(x = Treatment, y = k.tau)) + 
+violin <- ggplot(raw.sim.sk.15.tau, aes(x = Treatment, y = k.tau)) + 
   geom_violin(fill = cols, colour = cols) +
   geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
   stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
@@ -504,19 +514,19 @@ violin <- ggplot(raw.sim.skewness.15.tau, aes(x = Treatment, y = k.tau)) +
 plot_grid(dens, violin, align = "h", labels = "AUTO")
 
 ## Kurtosis
-raw.sim.kurtosis.15.tau <- readRDS("Objects/raw.sim.kurtosis.15.tau.rds")
-med.const.sims.kurtosis.15.tau <- median(constant.sims.kurtosis.15.tau)
-med.warm.sims.kurtosis.15.tau <- median(warming.sims.kurtosis.15.tau)
-dens <- ggplot(data = raw.sim.kurtosis.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+raw.sim.kt.15.tau <- readRDS("Objects/raw.sim.kt.15.tau.rds")
+med.const.sims.kt.15.tau <- median(constant.sims.kt.15.tau)
+med.warm.sims.kt.15.tau <- median(warming.sims.kt.15.tau)
+dens <- ggplot(data = raw.sim.kt.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
   geom_density(alpha = 0.4, colour = cols) +
   scale_fill_manual(values = c("#1434A4", "#C21E56")) +
-  geom_vline(xintercept = med.const.sims.kurtosis.15.tau, colour = "#1434A4") +
-  geom_vline(xintercept = med.warm.sims.kurtosis.15.tau, colour = "#C21E56") +
+  geom_vline(xintercept = med.const.sims.kt.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.kt.15.tau, colour = "#C21E56") +
   xlab("Kendall's Tau") +
   ylab("Density (Kurtosis)") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
-violin <- ggplot(raw.sim.kurtosis.15.tau, aes(x = Treatment, y = k.tau)) + 
+violin <- ggplot(raw.sim.kt.15.tau, aes(x = Treatment, y = k.tau)) + 
   geom_violin(fill = cols, colour = cols) +
   geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
   stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
@@ -579,19 +589,19 @@ violin <- ggplot(raw.sim.id.15.tau, aes(x = Treatment, y = k.tau)) +
 plot_grid(dens, violin, align = "h", labels = "AUTO")
 
 ## First Difference Variance
-raw.sim.first.diff.variance.15.tau <- readRDS("Objects/raw.sim.first.diff.variance.15.tau.rds")
-med.const.sims.first.diff.variance.15.tau <- median(constant.sims.first.diff.variance.15.tau)
-med.warm.sims.first.diff.variance.15.tau <- median(warming.sims.first.diff.variance.15.tau)
-dens <- ggplot(data = raw.sim.first.diff.variance.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+raw.sim.fdv.15.tau <- readRDS("Objects/raw.sim.fdv.15.tau.rds")
+med.const.sims.fdv.15.tau <- median(constant.sims.fdv.15.tau)
+med.warm.sims.fdv.15.tau <- median(warming.sims.fdv.15.tau)
+dens <- ggplot(data = raw.sim.fdv.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
   geom_density(alpha = 0.4, colour = cols) +
   scale_fill_manual(values = c("#1434A4", "#C21E56")) +
-  geom_vline(xintercept = med.const.sims.first.diff.variance.15.tau, colour = "#1434A4") +
-  geom_vline(xintercept = med.warm.sims.first.diff.variance.15.tau, colour = "#C21E56") +
+  geom_vline(xintercept = med.const.sims.fdv.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.fdv.15.tau, colour = "#C21E56") +
   xlab("Kendall's Tau") +
   ylab("Density (First Difference Variance)") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
-violin <- ggplot(raw.sim.first.diff.variance.15.tau, aes(x = Treatment, y = k.tau)) + 
+violin <- ggplot(raw.sim.fdv.15.tau, aes(x = Treatment, y = k.tau)) + 
   geom_violin(fill = cols, colour = cols) +
   geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
   stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
@@ -604,19 +614,19 @@ violin <- ggplot(raw.sim.first.diff.variance.15.tau, aes(x = Treatment, y = k.ta
 plot_grid(dens, violin, align = "h", labels = "AUTO")
 
 ## Autocorrelation
-raw.sim.cor.15.tau <- readRDS("Objects/raw.sim.cor.15.tau.rds")
-med.const.sims.cor.15.tau <- median(constant.sims.cor.15.tau)
-med.warm.sims.cor.15.tau <- median(warming.sims.cor.15.tau)
-dens <- ggplot(data = raw.sim.cor.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+raw.sim.ac.15.tau <- readRDS("Objects/raw.sim.ac.15.tau.rds")
+med.const.sims.ac.15.tau <- median(constant.sims.ac.15.tau)
+med.warm.sims.ac.15.tau <- median(warming.sims.ac.15.tau)
+dens <- ggplot(data = raw.sim.ac.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
   geom_density(alpha = 0.4, colour = cols) +
   scale_fill_manual(values = c("#1434A4", "#C21E56")) +
-  geom_vline(xintercept = med.const.sims.cor.15.tau, colour = "#1434A4") +
-  geom_vline(xintercept = med.warm.sims.cor.15.tau, colour = "#C21E56") +
+  geom_vline(xintercept = med.const.sims.ac.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.ac.15.tau, colour = "#C21E56") +
   xlab("Kendall's Tau") +
   ylab("Density (Autocorrelation)") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
-violin <- ggplot(raw.sim.cor.15.tau, aes(x = Treatment, y = k.tau)) + 
+violin <- ggplot(raw.sim.ac.15.tau, aes(x = Treatment, y = k.tau)) + 
   geom_violin(fill = cols, colour = cols) +
   geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
   stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
@@ -629,19 +639,19 @@ violin <- ggplot(raw.sim.cor.15.tau, aes(x = Treatment, y = k.tau)) +
 plot_grid(dens, violin, align = "h", labels = "AUTO")
 
 ## Autocovariance
-raw.sim.cov.15.tau <- readRDS("Objects/raw.sim.cov.15.tau.rds")
-med.const.sims.cov.15.tau <- median(constant.sims.cov.15.tau)
-med.warm.sims.cov.15.tau <- median(warming.sims.cov.15.tau)
-dens <- ggplot(data = raw.sim.cov.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+raw.sim.acv.15.tau <- readRDS("Objects/raw.sim.acv.15.tau.rds")
+med.const.sims.acv.15.tau <- median(constant.sims.acv.15.tau)
+med.warm.sims.acv.15.tau <- median(warming.sims.acv.15.tau)
+dens <- ggplot(data = raw.sim.acv.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
   geom_density(alpha = 0.4, colour = cols) +
   scale_fill_manual(values = c("#1434A4", "#C21E56")) +
-  geom_vline(xintercept = med.const.sims.cov.15.tau, colour = "#1434A4") +
-  geom_vline(xintercept = med.warm.sims.cov.15.tau, colour = "#C21E56") +
+  geom_vline(xintercept = med.const.sims.acv.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.acv.15.tau, colour = "#C21E56") +
   xlab("Kendall's Tau") +
   ylab("Density (Autocovariance)") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
-violin <- ggplot(raw.sim.cov.15.tau, aes(x = Treatment, y = k.tau)) + 
+violin <- ggplot(raw.sim.acv.15.tau, aes(x = Treatment, y = k.tau)) + 
   geom_violin(fill = cols, colour = cols) +
   geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
   stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
@@ -654,19 +664,19 @@ violin <- ggplot(raw.sim.cov.15.tau, aes(x = Treatment, y = k.tau)) +
 plot_grid(dens, violin, align = "h", labels = "AUTO")
 
 ## Decay Time
-raw.sim.decay.time.15.tau <- readRDS("Objects/raw.sim.decay.time.15.tau.rds")
-med.const.sims.decay.time.15.tau <- median(constant.sims.decay.time.15.tau)
-med.warm.sims.decay.time.15.tau <- median(warming.sims.decay.time.15.tau)
-dens <- ggplot(data = raw.sim.decay.time.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+raw.sim.dt.15.tau <- readRDS("Objects/raw.sim.dt.15.tau.rds")
+med.const.sims.dt.15.tau <- median(constant.sims.dt.15.tau)
+med.warm.sims.dt.15.tau <- median(warming.sims.dt.15.tau)
+dens <- ggplot(data = raw.sim.dt.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
   geom_density(alpha = 0.4, colour = cols) +
   scale_fill_manual(values = c("#1434A4", "#C21E56")) +
-  geom_vline(xintercept = med.const.sims.decay.time.15.tau, colour = "#1434A4") +
-  geom_vline(xintercept = med.warm.sims.decay.time.15.tau, colour = "#C21E56") +
+  geom_vline(xintercept = med.const.sims.dt.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.dt.15.tau, colour = "#C21E56") +
   xlab("Kendall's Tau") +
   ylab("Density (Decay Time)") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
-violin <- ggplot(raw.sim.decay.time.15.tau, aes(x = Treatment, y = k.tau)) + 
+violin <- ggplot(raw.sim.dt.15.tau, aes(x = Treatment, y = k.tau)) + 
   geom_violin(fill = cols, colour = cols) +
   geom_jitter(height = 0, width = 0.2, colour = cols.pt) +
   stat_summary(fun.y = median, geom = "point", size = 6, colour = "black", shape = 18) + 
@@ -679,11 +689,158 @@ violin <- ggplot(raw.sim.decay.time.15.tau, aes(x = Treatment, y = k.tau)) +
 plot_grid(dens, violin, align = "h", labels = "AUTO")
 ```
 
+```{r}
+df <- data.frame(
+  metric = c(rep("Mean", 2000),
+             rep("Skewness", 2000),
+             rep("Kurtosis", 2000),
+             rep("Variance", 2000),
+             rep("Co-Efficient of Variance", 2000),
+             rep("Index of Dispersion", 2000),
+             rep("First Difference Variance", 2000),
+             rep("Autocorrelation", 2000),
+             rep("Autocovariance", 2000),
+             rep("Decay Time", 2000)),
+  Treatment = c(rep(c(rep("Constant", 1000), rep("Warming", 1000)), 10)),
+  k.tau = c(constant.sims.mean.15.tau, warming.sims.mean.15.tau,
+            constant.sims.sk.15.tau, warming.sims.sk.15.tau,
+            constant.sims.kt.15.tau, warming.sims.kt.15.tau,
+            constant.sims.var.15.tau, warming.sims.var.15.tau,
+            constant.sims.cv.15.tau, warming.sims.cv.15.tau,
+            constant.sims.id.15.tau, warming.sims.id.15.tau,
+            constant.sims.fdv.15.tau, warming.sims.fdv.15.tau,
+            constant.sims.ac.15.tau, warming.sims.ac.15.tau,
+            constant.sims.acv.15.tau, warming.sims.acv.15.tau,
+            constant.sims.dt.15.tau, warming.sims.dt.15.tau)
+)
+
+df$metric <- factor(df$metric, levels = unique(df$metric))
+cols <- rep(c("#1434A4","#C21E56"), 10)
+cols.pts <- rep(c(rep("#1434A4", 1000), rep("#C21E56", 1000)), 10)
+
+df %>%
+  ggplot(aes(x = metric, y = k.tau, fill = Treatment)) +
+  geom_violin(position = position_dodge(width = 1), alpha = 0.2) +
+  scale_fill_manual(values = cols) +
+  # geom_jitter(height = 0, width = 0, colour = "black", alpha = 0.5) +
+  geom_point(aes(y = k.tau), 
+             position = position_jitterdodge(seed = 1, dodge.width = 1), 
+             colour = cols.pts, size = 0.25, shape = 8) + 
+  stat_summary(fun.y = median, geom = "point", position = position_dodge(width = 1), size = 4, colour = "black", shape = 18) +
+  xlab("") +
+  ylab("Kendall's Tau") +
+  ylim(-1, 1) +
+  geom_hline(yintercept = 0, linetype = "dotted", color = "black") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, colour = "black"),
+        text = element_text(size = 12)) +
+  theme(axis.text.y = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+```
+
 # Raw, Empirical
 
-Run `8_EWS-ByPop.Rmd` to get these results!
+Objects generated in `8_EWS-ByPop.Rmd`.
 
-## With Null Distribution
+## True Values
+
+`constant.mean.tau` and `warming.mean.tau`, etc., taken from `4_EWS-EmpData.Rmd`.
+
+```{r}
+emp.ktaus <- data.frame(
+  mean = c(constant.mean.tau, warming.mean.tau),
+  sk = c(constant.sk.tau, warming.sk.tau),
+  kt = c(constant.kt.tau, warming.kt.tau),
+  var = c(constant.var.tau, warming.var.tau),
+  cv = c(constant.cv.tau, warming.cv.tau),
+  id = c(constant.id.tau, warming.id.tau),
+  fdv = c(constant.fdv.tau, warming.fdv.tau),
+  ac = c(constant.ac.tau, warming.ac.tau),
+  acv = c(constant.acv.tau, warming.acv.tau),
+  dt = c(constant.dt.tau, warming.dt.tau)
+)
+rownames(emp.ktaus) <- c("constant.1", "constant.2", "constant.3", "constant.4", "warming.1", "warming.2", "warming.3", "warming.4")
+
+x.labs <- c("Mean", "Skewness", "Kurtosis", 
+                              "Variance", "Co-Efficient of Variation", "Index of Dispersion",
+                              "First Difference Variance", "Autocorrelation", "Autocovariance",
+                              "Decay Time")
+par(mar = c(6.5, 4, 4, 4)) # Order: 'bottom', 'left', 'top', 'right'.
+plot(x = 1, type = "n", xaxt = "n", yaxt = "n", 
+     main = "Experimental Data", xlab = "", ylab = "Kendall's Tau",
+     xlim = c(1, 10), ylim = c(-1, 1))
+text(1:10, emp.ktaus[1, ], label = 1, col = alpha("#1434A4", 0.5))
+text(1:10, emp.ktaus[2, ], label = 2, col = alpha("#1434A4", 0.5))
+text(1:10, emp.ktaus[3, ], label = 3, col = alpha("#1434A4", 0.5))
+text(1:10, emp.ktaus[4, ], label = 4, col = alpha("#1434A4", 0.5))
+text(1:10, emp.ktaus[5, ], label = 5, col = alpha("#C21E56", 0.5))
+text(1:10, emp.ktaus[6, ], label = 6, col = alpha("#C21E56", 0.5))
+text(1:10, emp.ktaus[7, ], label = 7, col = alpha("#C21E56", 0.5))
+text(1:10, emp.ktaus[8, ], label = 8, col = alpha("#C21E56", 0.5))
+abline(h = 0, lty = 3)
+# axis(1, at = 1:10, labels = c("Mean", "Skewness", "Kurtosis", 
+#                               "Variance", "Co-Efficient of Variation", "Index of Dispersion",
+#                               "First Difference Variance", "Autocorrelation", "Autocovariance",
+#                               "Decay Time"))
+axis(2, at = c(-1, -0.5, 0, 0.5, 1))
+text(cex = 1, x = 1:10, y = -1.4, x.labs, xpd = TRUE, srt = 35)
+legend(8, 1.1, legend = c("Constant Tempertaure", "Rising Temperature"),
+       pch = 19, col = c("#1434A4", "#C21E56"), cex = 0.8, bty = "n")
+
+df <- data.frame(
+  metric = c(rep("Mean", 8),
+             rep("Skewness", 8),
+             rep("Kurtosis", 8),
+             rep("Variance", 8),
+             rep("Co-Efficient of Variance", 8),
+             rep("Index of Dispersion", 8),
+             rep("First Difference Variance", 8),
+             rep("Autocorrelation", 8),
+             rep("Autocovariance", 8),
+             rep("Decay Time", 8)),
+  Treatment = c(rep(c(rep("Constant", 4), rep("Warming", 4)), 10)),
+  k.tau = c(constant.mean.tau, warming.mean.tau,
+            constant.sk.tau, warming.sk.tau,
+            constant.kt.tau, warming.kt.tau,
+            constant.var.tau, warming.var.tau,
+            constant.cv.tau, warming.cv.tau,
+            constant.id.tau, warming.id.tau,
+            constant.fdv.tau, warming.fdv.tau,
+            constant.ac.tau, warming.ac.tau,
+            constant.acv.tau, warming.acv.tau,
+            constant.dt.tau, warming.dt.tau)
+)
+
+df$metric <- factor(df$metric, levels = unique(df$metric))
+cols <- rep(c("#1434A4","#C21E56"), 10)
+cols.pts <- rep(c(rep("#1434A4", 4), rep("#C21E56", 4)), 10)
+
+df %>%
+  ggplot(aes(x = metric, y = k.tau, fill = Treatment)) +
+  geom_violin(position = position_dodge(width = 1), alpha = 0.2) +
+  scale_fill_manual(values = cols) +
+  # geom_jitter(height = 0, width = 0, colour = "black", alpha = 0.5) +
+  geom_point(aes(y = k.tau), 
+             position = position_jitterdodge(seed = 1, dodge.width = 1), 
+             colour = cols.pts, size = 2, shape = 8) + 
+  xlab("") +
+  ylab("Kendall's Tau") +
+  ylim(-1, 1) +
+  geom_hline(yintercept = 0, linetype = "dotted", color = "black") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, colour = "black"),
+        text = element_text(size = 12)) +
+  theme(axis.text.y = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+```
+
+## Significance Testing
+
+Objects generated in `10_SigTesting.Rmd`.
+
+### Surrogate Time Series Generated via Re-Sampling
 
 ```{r}
 cols <- c(rep("#1434A4", 4000), rep("#C21E56", 4000))
@@ -903,128 +1060,303 @@ abline(h = 0.05)
 legend("right", legend = c("Greater Than", "Less Than"), col = "black", pch = c(0, 2))
 ```
 
-## Direct Comparison
+### Modified Mann-Kendall Test
 
 ```{r}
-par(mfrow = c(3, 3))
-
 ## Mean
-plot(1:4, rep(constant.mean.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
-     xaxt = "n", yaxt = "n",
-     main = "Mean", xlab = "Subpopulation", ylab = "Kendall's Tau",
-     ylim = c(-1, 1))
-points(1:4, rep(constant.mean.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
-points(1:4, rep(constant.mean.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
-points(1:4, rep(constant.mean.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
-points(1:4, warming.mean.tau, pch = 19, col = alpha("#C21E56", 0.3))
-axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
-axis(2, at = c(-1, 0, 1))
-
-## Skewness
-plot(1:4, rep(constant.sk.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
-     xaxt = "n", yaxt = "n",
-     main = "Skewness", xlab = "Subpopulation", ylab = "Kendall's Tau",
-     ylim = c(-1, 1))
-points(1:4, rep(constant.sk.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
-points(1:4, rep(constant.sk.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
-points(1:4, rep(constant.sk.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
-points(1:4, warming.sk.tau, pch = 19, col = alpha("#C21E56", 0.3))
-axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
-axis(2, at = c(-1, 0, 1))
-
-## Kurtosis
-plot(1:4, rep(constant.kt.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
-     xaxt = "n", yaxt = "n",
-     main = "Kurtosis", xlab = "Subpopulation", ylab = "Kendall's Tau",
-     ylim = c(-1, 1))
-points(1:4, rep(constant.kt.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
-points(1:4, rep(constant.kt.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
-points(1:4, rep(constant.kt.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
-points(1:4, warming.kt.tau, pch = 19, col = alpha("#C21E56", 0.3))
-axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
-axis(2, at = c(-1, 0, 1))
+means <- data.frame(pop1.mean, pop2.mean, pop3.mean, pop4.mean, pop5.mean, pop6.mean, pop7.mean, pop8.mean); means <- means[1:15, ]
+var <- c()
+for (i in 1:8){
+  ts <- means[ , i]
+  rank <- rank(ts)
+  rank.acf <- as.numeric(acf(rank, lag.max = length(ts) - 1, plot = FALSE)$acf)
+  var[i] <- mod.man.kendall(n = length(ts), ps = rank.acf)
+}
+cols <- c(rep("#A7C7E7", 4), rep("#F6799D", 4))
+mains <- c("pop1.mean", "pop2.mean", "pop3.mean", "pop4.mean", "pop5.mean", "pop6.mean", "pop7.mean", "pop8.mean")
+true.taus <- c(constant.mean.tau, warming.mean.tau)
+vline.cols <- c(rep("#1434A4", 4), rep("#C21E56", 4))
+par(mfrow = c(2, 4))
+for (i in 1:8){
+  hist(rnorm(n = 10000, mean = 0, sd = sqrt(var[i])), 
+     col = cols[i], border = cols[i],
+     xlim = c(-1, 1), ylim = c(1, 2500),
+     main = mains[i], xlab = "")
+  abline(v = true.taus[i], col = vline.cols[i], lwd = 2)
+}
 
 ## Variance
-plot(1:4, rep(constant.var.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
-     xaxt = "n", yaxt = "n",
-     main = "Variance", xlab = "Subpopulation", ylab = "Kendall's Tau",
-     ylim = c(-1, 1))
-points(1:4, rep(constant.var.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
-points(1:4, rep(constant.var.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
-points(1:4, rep(constant.var.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
-points(1:4, warming.var.tau, pch = 19, col = alpha("#C21E56", 0.3))
-axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
-axis(2, at = c(-1, 0, 1))
-
-## Co-Efficient of Variation
-plot(1:4, rep(constant.cv.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
-     xaxt = "n", yaxt = "n",
-     main = "Co-Efficient of Variation", xlab = "Subpopulation", ylab = "Kendall's Tau",
-     ylim = c(-1, 1))
-points(1:4, rep(constant.cv.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
-points(1:4, rep(constant.cv.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
-points(1:4, rep(constant.cv.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
-points(1:4, warming.cv.tau, pch = 19, col = alpha("#C21E56", 0.3))
-axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
-axis(2, at = c(-1, 0, 1))
+vars <- data.frame(pop1.var, pop2.var, pop3.var, pop4.var, pop5.var, pop6.var, pop7.var, pop8.var); vars <- vars[1:15, ]
+var <- c()
+for (i in 1:8){
+  ts <- vars[ , i]
+  rank <- rank(ts)
+  rank.acf <- as.numeric(acf(rank, lag.max = length(ts) - 1, plot = FALSE)$acf)
+  var[i] <- mod.man.kendall(n = length(ts), ps = rank.acf)
+}
+cols <- c(rep("#A7C7E7", 4), rep("#F6799D", 4))
+mains <- c("pop1.var", "pop2.var", "pop3.var", "pop4.var", "pop5.var", "pop6.var", "pop7.var", "pop8.var")
+true.taus <- c(constant.var.tau, warming.var.tau)
+vline.cols <- c(rep("#1434A4", 4), rep("#C21E56", 4))
+par(mfrow = c(2, 4))
+for (i in 1:8){
+  hist(rnorm(n = 10000, mean = 0, sd = sqrt(var[i])), 
+     col = cols[i], border = cols[i],
+     xlim = c(-1, 1), ylim = c(1, 2500),
+     main = mains[i], xlab = "")
+  abline(v = true.taus[i], col = vline.cols[i], lwd = 2)
+}
 
 ## Index of Dispersion
-plot(1:4, rep(constant.id.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
-     xaxt = "n", yaxt = "n",
-     main = "Index of Dispersion", xlab = "Subpopulation", ylab = "Kendall's Tau",
-     ylim = c(-1, 1))
-points(1:4, rep(constant.id.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
-points(1:4, rep(constant.id.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
-points(1:4, rep(constant.id.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
-points(1:4, warming.id.tau, pch = 19, col = alpha("#C21E56", 0.3))
-axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
-axis(2, at = c(-1, 0, 1))
+ids <- data.frame(pop1.id, pop2.id, pop3.id, pop4.id, pop5.id, pop6.id, pop7.id, pop8.id); ids <- ids[1:15, ]
+var <- c()
+for (i in 1:8){
+  ts <- ids[ , i]
+  rank <- rank(ts)
+  rank.acf <- as.numeric(acf(rank, lag.max = length(ts) - 1, plot = FALSE)$acf)
+  var[i] <- mod.man.kendall(n = length(ts), ps = rank.acf)
+}
+cols <- c(rep("#A7C7E7", 4), rep("#F6799D", 4))
+mains <- c("pop1.id", "pop2.id", "pop3.id", "pop4.id", "pop5.id", "pop6.id", "pop7.id", "pop8.id")
+true.taus <- c(constant.id.tau, warming.id.tau)
+vline.cols <- c(rep("#1434A4", 4), rep("#C21E56", 4))
+par(mfrow = c(2, 4))
+for (i in 1:8){
+  hist(rnorm(n = 10000, mean = 0, sd = sqrt(var[i])), 
+     col = cols[i], border = cols[i],
+     xlim = c(-1, 1), ylim = c(1, 2500),
+     main = mains[i], xlab = "")
+  abline(v = true.taus[i], col = vline.cols[i], lwd = 2)
+}
 
-## First Difference Variance
-plot(1:4, rep(constant.fdv.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
-     xaxt = "n", yaxt = "n",
-     main = "First Difference Variance", xlab = "Subpopulation", ylab = "Kendall's Tau",
-     ylim = c(-1, 1))
-points(1:4, rep(constant.fdv.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
-points(1:4, rep(constant.fdv.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
-points(1:4, rep(constant.fdv.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
-points(1:4, warming.fdv.tau, pch = 19, col = alpha("#C21E56", 0.3))
-axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
-axis(2, at = c(-1, 0, 1))
+means <- data.frame(pop1.mean, pop2.mean, pop3.mean, pop4.mean, pop5.mean, pop6.mean, pop7.mean, pop8.mean); means <- means[1:15, ]
+var <- c()
+for (i in 1:8){
+  ts <- means[ , i]
+  rank <- rank(ts)
+  rank.acf <- as.numeric(acf(rank, lag.max = length(ts) - 1, plot = FALSE)$acf)
+  var[i] <- mod.man.kendall(n = length(ts), ps = rank.acf)
+}
+true.taus <- c(constant.mean.tau, warming.mean.tau)
+mean.p.vals <- c()
+for (i in 1:8){
+  set.seed(123)
+  null.mean.taus <- rnorm(n = 10000, mean = 0, sd = sqrt(var[i]))
+  mean.p.vals[i] <- length(which(null.mean.taus >= true.taus[i]))/10000
+}
 
-## Autocorrelation
-plot(1:4, rep(constant.ac.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
-     xaxt = "n", yaxt = "n",
-     main = "Autocorrelation", xlab = "Subpopulation", ylab = "Kendall's Tau",
-     ylim = c(-1, 1))
-points(1:4, rep(constant.ac.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
-points(1:4, rep(constant.ac.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
-points(1:4, rep(constant.ac.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
-points(1:4, warming.ac.tau, pch = 19, col = alpha("#C21E56", 0.3))
-axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
-axis(2, at = c(-1, 0, 1))
 
-## Autocovariance
-plot(1:4, rep(constant.acv.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
-     xaxt = "n", yaxt = "n",
-     main = "Autocovariance", xlab = "Subpopulation", ylab = "Kendall's Tau",
-     ylim = c(-1, 1))
-points(1:4, rep(constant.acv.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
-points(1:4, rep(constant.acv.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
-points(1:4, rep(constant.acv.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
-points(1:4, warming.acv.tau, pch = 19, col = alpha("#C21E56", 0.3))
-axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
-axis(2, at = c(-1, 0, 1))
+vars <- data.frame(pop1.var, pop2.var, pop3.var, pop4.var, pop5.var, pop6.var, pop7.var, pop8.var); vars <- vars[1:15, ]
+var <- c()
+for (i in 1:8){
+  ts <- vars[ , i]
+  rank <- rank(ts)
+  rank.acf <- as.numeric(acf(rank, lag.max = length(ts) - 1, plot = FALSE)$acf)
+  var[i] <- mod.man.kendall(n = length(ts), ps = rank.acf)
+}
+true.taus <- c(constant.var.tau, warming.var.tau)
+var.p.vals <- c()
+for (i in 1:8){
+  set.seed(123)
+  null.var.taus <- rnorm(n = 10000, mean = 0, sd = sqrt(var[i]))
+  var.p.vals[i] <- length(which(null.var.taus >= true.taus[i]))/10000
+}
 
-# ## Decay Time
-# plot(1:4, rep(constant.dt.tau[1], 4), pch = 19, col = alpha("#1434A4", 0.3), 
-#      xaxt = "n", yaxt = "n",
-#      main = "Decay Time", xlab = "Subpopulation", ylab = "Kendall's Tau",
-#      ylim = c(-1, 1))
-# points(1:4, rep(constant.dt.tau[2], 4), pch = 19, col = alpha("#1434A4", 0.3))
-# points(1:4, rep(constant.dt.tau[3], 4), pch = 19, col = alpha("#1434A4", 0.3))
-# points(1:4, rep(constant.dt.tau[4], 4), pch = 19, col = alpha("#1434A4", 0.3))
-# points(1:4, warming.dt.tau, pch = 19, col = alpha("#C21E56", 0.3))
-# axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
-# axis(2, at = c(-1, 0, 1))
+
+ids <- data.frame(pop1.id, pop2.id, pop3.id, pop4.id, pop5.id, pop6.id, pop7.id, pop8.id); ids <- ids[1:15, ]
+var <- c()
+for (i in 1:8){
+  ts <- ids[ , i]
+  rank <- rank(ts)
+  rank.acf <- as.numeric(acf(rank, lag.max = length(ts) - 1, plot = FALSE)$acf)
+  var[i] <- mod.man.kendall(n = length(ts), ps = rank.acf)
+}
+true.taus <- c(constant.id.tau, warming.id.tau)
+id.p.vals <- c()
+for (i in 1:8){
+  set.seed(123)
+  null.id.taus <- rnorm(n = 10000, mean = 0, sd = sqrt(var[i]))
+  id.p.vals[i] <- length(which(null.id.taus >= true.taus[i]))/10000
+}
+
+p.vals <- data.frame(
+  mean = mean.p.vals,
+  var = var.p.vals,
+  id = id.p.vals
+)
+rownames(p.vals) <- c("constant.1", "constant.2", "constant.3", "constant.4", "warming.1", "warming.2", "warming.3", "warming.4")
+x.labs <- c("Mean", "Variance", "Index of Dispersion")
+plot(x = 1, type = "n", xaxt = "n", yaxt = "n", 
+     main = "P-Values Per Modified Mann-Kendall Test", xlab = "", ylab = "P-Value",
+     xlim = c(1, 3), ylim = c(0, 1))
+text(1:3, p.vals[1, ], label = 1, col = alpha("#1434A4", 0.5))
+text(1:3, p.vals[2, ], label = 2, col = alpha("#1434A4", 0.5))
+text(1:3, p.vals[3, ], label = 3, col = alpha("#1434A4", 0.5))
+text(1:3, p.vals[4, ], label = 4, col = alpha("#1434A4", 0.5))
+text(1:3, p.vals[5, ], label = 5, col = alpha("#C21E56", 0.5))
+text(1:3, p.vals[6, ], label = 6, col = alpha("#C21E56", 0.5))
+text(1:3, p.vals[7, ], label = 7, col = alpha("#C21E56", 0.5))
+text(1:3, p.vals[8, ], label = 8, col = alpha("#C21E56", 0.5))
+abline(h = 0.05, lty = 3)
+axis(1, at = 1:3, labels = x.labs)
+axis(2, at = c(0, 1))
+legend("topright", legend = c("Constant Tempertaure", "Rising Temperature"),
+       pch = 19, col = c("#1434A4", "#C21E56"), cex = 0.8, bty = "n")
+```
+
+### Surrogate Time Series Generated via AR(1) Model
+
+```{r}
+subpop <- c(rep("1", 1000), rep("2", 1000), rep("3", 1000), rep("4", 1000), rep("5", 1000), rep("6", 1000), rep("7", 1000), rep("8", 1000))
+real.tau <- c(rep(sub1.mean.tau, 1000), rep(sub2.mean.tau, 1000), rep(sub3.mean.tau, 1000), rep(sub4.mean.tau, 1000), rep(sub5.mean.tau, 1000), rep(sub6.mean.tau, 1000), rep(sub7.mean.tau, 1000), rep(sub8.mean.tau, 1000))
+null.mean.tau <- c(sub1.surr.null.mean.tau, sub2.surr.null.mean.tau, sub3.surr.null.mean.tau, sub4.surr.null.mean.tau, sub5.surr.null.mean.tau, sub6.surr.null.mean.tau, sub7.surr.null.mean.tau, sub8.surr.null.mean.tau)
+null.mean.tau.df <- data.frame(
+  subpop = subpop, 
+  real.tau = real.tau,
+  null.mean.tau = null.mean.tau
+)
+
+cols <- c(rep("#1434A4", 4000), rep("#C21E56", 4000))
+
+ggplot(null.mean.tau.df, aes(x = subpop, y = null.mean.tau)) + 
+  geom_violin() +
+  geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
+  geom_point(aes(y = real.tau), size = 4, shape = 8) + 
+  stat_summary(fun.y = median, geom = "point", size = 4, colour = "black", shape = 16) +
+  xlab("Subpopulation") +
+  ylab("Kendall's Tau (Mean)") +
+  theme(axis.text.x = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+subpop <- c(rep("1", 1000), rep("2", 1000), rep("3", 1000), rep("4", 1000), rep("5", 1000), rep("6", 1000), rep("7", 1000), rep("8", 1000))
+real.tau <- c(rep(sub1.var.tau, 1000), rep(sub2.var.tau, 1000), rep(sub3.var.tau, 1000), rep(sub4.var.tau, 1000), rep(sub5.var.tau, 1000), rep(sub6.var.tau, 1000), rep(sub7.var.tau, 1000), rep(sub8.var.tau, 1000))
+null.var.tau <- c(sub1.surr.null.var.tau, sub2.surr.null.var.tau, sub3.surr.null.var.tau, sub4.surr.null.var.tau, sub5.surr.null.var.tau, sub6.surr.null.var.tau, sub7.surr.null.var.tau, sub8.surr.null.var.tau)
+null.var.tau.df <- data.frame(
+  subpop = subpop, 
+  real.tau = real.tau,
+  null.var.tau = null.var.tau
+)
+
+cols <- c(rep("#1434A4", 4000), rep("#C21E56", 4000))
+
+ggplot(null.var.tau.df, aes(x = subpop, y = null.var.tau)) + 
+  geom_violin() +
+  geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
+  geom_point(aes(y = real.tau), size = 4, shape = 8) + 
+  stat_summary(fun.y = median, geom = "point", size = 4, colour = "black", shape = 16) +
+  xlab("Subpopulation") +
+  ylab("Kendall's Tau (Variance)") +
+  theme(axis.text.x = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+subpop <- c(rep("1", 1000), rep("2", 1000), rep("3", 1000), rep("4", 1000), rep("5", 1000), rep("6", 1000), rep("7", 1000), rep("8", 1000))
+real.tau <- c(rep(sub1.id.tau, 1000), rep(sub2.id.tau, 1000), rep(sub3.id.tau, 1000), rep(sub4.id.tau, 1000), rep(sub5.id.tau, 1000), rep(sub6.id.tau, 1000), rep(sub7.id.tau, 1000), rep(sub8.id.tau, 1000))
+null.id.tau <- c(sub1.surr.null.id.tau, sub2.surr.null.id.tau, sub3.surr.null.id.tau, sub4.surr.null.id.tau, sub5.surr.null.id.tau, sub6.surr.null.id.tau, sub7.surr.null.id.tau, sub8.surr.null.id.tau)
+null.id.tau.df <- data.frame(
+  subpop = subpop, 
+  real.tau = real.tau,
+  null.id.tau = null.id.tau
+)
+
+cols <- c(rep("#1434A4", 4000), rep("#C21E56", 4000))
+
+ggplot(null.id.tau.df, aes(x = subpop, y = null.id.tau)) + 
+  geom_violin() +
+  geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
+  geom_point(aes(y = real.tau), size = 4, shape = 8) + 
+  stat_summary(fun.y = median, geom = "point", size = 4, colour = "black", shape = 16) +
+  xlab("Subpopulation") +
+  ylab("Kendall's Tau (Index of Dispersion") +
+  theme(axis.text.x = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+cols <- c(rep("#A7C7E7", 4), rep("#F6799D", 4))
+mains <- c("pop1.mean", "pop2.mean", "pop3.mean", "pop4.mean", "pop5.mean", "pop6.mean", "pop7.mean", "pop8.mean")
+true.taus <- c(constant.mean.tau, warming.mean.tau)
+vline.cols <- c(rep("#1434A4", 4), rep("#C21E56", 4))
+par(mfrow = c(2, 4))
+for (i in 1:8){
+  hist(surr.null.mean.taus[[i]], 
+     col = cols[i], border = cols[i],
+     xlim = c(-1, 1), ylim = c(1, 200),
+     main = mains[i], xlab = "")
+  abline(v = true.taus[i], col = vline.cols[i], lwd = 2)
+}
+
+cols <- c(rep("#A7C7E7", 4), rep("#F6799D", 4))
+mains <- c("pop1.var", "pop2.var", "pop3.var", "pop4.var", "pop5.var", "pop6.var", "pop7.var", "pop8.var")
+true.taus <- c(constant.var.tau, warming.var.tau)
+vline.cols <- c(rep("#1434A4", 4), rep("#C21E56", 4))
+par(mfrow = c(2, 4))
+for (i in 1:8){
+  hist(surr.null.var.taus[[i]], 
+     col = cols[i], border = cols[i],
+     xlim = c(-1, 1), ylim = c(1, 200),
+     main = mains[i], xlab = "")
+  abline(v = true.taus[i], col = vline.cols[i], lwd = 2)
+}
+
+cols <- c(rep("#A7C7E7", 4), rep("#F6799D", 4))
+mains <- c("pop1.id", "pop2.id", "pop3.id", "pop4.id", "pop5.id", "pop6.id", "pop7.id", "pop8.id")
+true.taus <- c(constant.id.tau, warming.id.tau)
+vline.cols <- c(rep("#1434A4", 4), rep("#C21E56", 4))
+par(mfrow = c(2, 4))
+for (i in 1:8){
+  hist(surr.null.id.taus[[i]], 
+     col = cols[i], border = cols[i],
+     xlim = c(-1, 1), ylim = c(1, 200),
+     main = mains[i], xlab = "")
+  abline(v = true.taus[i], col = vline.cols[i], lwd = 2)
+}
+
+## Mean
+true.taus <- c(constant.mean.tau, warming.mean.tau)
+mean.p.vals <- c()
+for (i in 1:8){
+  mean.p.vals[i] <- length(which(surr.null.mean.taus[[i]] >= true.taus[i]))/1000
+}
+
+## Variance
+true.taus <- c(constant.var.tau, warming.var.tau)
+var.p.vals <- c()
+for (i in 1:8){
+  var.p.vals[i] <- length(which(surr.null.var.taus[[i]] >= true.taus[i]))/1000
+}
+
+## Index of Dispersion
+true.taus <- c(constant.id.tau, warming.id.tau)
+id.p.vals <- c()
+for (i in 1:8){
+  id.p.vals[i] <- length(which(surr.null.id.taus[[i]] >= true.taus[i]))/1000
+}
+
+p.vals <- data.frame(
+  mean = mean.p.vals,
+  var = var.p.vals,
+  id = id.p.vals
+)
+rownames(p.vals) <- c("constant.1", "constant.2", "constant.3", "constant.4", "warming.1", "warming.2", "warming.3", "warming.4")
+x.labs <- c("Mean", "Variance", "Index of Dispersion")
+plot(x = 1, type = "n", xaxt = "n", yaxt = "n", 
+     main = "P-Values Per Surrogate Time Series (AR(1) Model)", xlab = "", ylab = "P-Value",
+     xlim = c(1, 3), ylim = c(0, 1))
+text(1:3, p.vals[1, ], label = 1, col = alpha("#1434A4", 0.5))
+text(1:3, p.vals[2, ], label = 2, col = alpha("#1434A4", 0.5))
+text(1:3, p.vals[3, ], label = 3, col = alpha("#1434A4", 0.5))
+text(1:3, p.vals[4, ], label = 4, col = alpha("#1434A4", 0.5))
+text(1:3, p.vals[5, ], label = 5, col = alpha("#C21E56", 0.5))
+text(1:3, p.vals[6, ], label = 6, col = alpha("#C21E56", 0.5))
+text(1:3, p.vals[7, ], label = 7, col = alpha("#C21E56", 0.5))
+text(1:3, p.vals[8, ], label = 8, col = alpha("#C21E56", 0.5))
+abline(h = 0.05, lty = 3)
+axis(1, at = 1:3, labels = x.labs)
+axis(2, at = c(0, 1))
+legend("topright", legend = c("Constant Tempertaure", "Rising Temperature"),
+       pch = 19, col = c("#1434A4", "#C21E56"), cex = 0.8, bty = "n")
 ```

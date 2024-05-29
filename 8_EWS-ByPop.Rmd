@@ -1769,90 +1769,6 @@ df %>%
 `constant.mean.tau` and `warming.mean.tau`, etc., taken from `4_EWS-EmpData.Rmd`.
 
 ```{r}
-par(mfrow = c(2, 3))
-
-## Mean
-plot(x = 1, type = "n", xaxt = "n", yaxt = "n",
-     main = "Mean", xlab = "Subpopulation", ylab = "Kendall's Tau",
-     xlim = c(1, 4), ylim = c(-1, 1))
-text(1:4, rep(constant.mean.tau[1], 4), label = 1, col = alpha("#1434A4", 0.7))
-text(1:4, rep(constant.mean.tau[2], 4), label = 2, col = alpha("#1434A4", 0.7))
-text(1:4, rep(constant.mean.tau[3], 4), label = 3, col = alpha("#1434A4", 0.7))
-text(1:4, rep(constant.mean.tau[4], 4), label = 4, col = alpha("#1434A4", 0.7))
-points(1:4, warming.mean.tau, pch = 8, col = "#C21E56")
-abline(h = 0)
-axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
-axis(2, at = c(-1, 0, 1))
-
-## Variance
-plot(x = 1, type = "n", xaxt = "n", yaxt = "n",
-     main = "Variance", xlab = "Subpopulation", ylab = "Kendall's Tau",
-     xlim = c(1, 4), ylim = c(-1, 1))
-text(1:4, rep(constant.var.tau[1], 4), label = 1, col = alpha("#1434A4", 0.7))
-text(1:4, rep(constant.var.tau[2], 4), label = 2, col = alpha("#1434A4", 0.7))
-text(1:4, rep(constant.var.tau[3], 4), label = 3, col = alpha("#1434A4", 0.7))
-text(1:4, rep(constant.var.tau[4], 4), label = 4, col = alpha("#1434A4", 0.7))
-points(1:4, warming.var.tau, pch = 8, col = "#C21E56")
-abline(h = 0)
-axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
-axis(2, at = c(-1, 0, 1))
-
-## Co-Efficient of Variation
-plot(x = 1, type = "n", xaxt = "n", yaxt = "n",
-     main = "Co-Efficient of Variation", xlab = "Subpopulation", ylab = "Kendall's Tau",
-     xlim = c(1, 4), ylim = c(-1, 1))
-text(1:4, rep(constant.cv.tau[1], 4), label = 1, col = alpha("#1434A4", 0.7))
-text(1:4, rep(constant.cv.tau[2], 4), label = 2, col = alpha("#1434A4", 0.7))
-text(1:4, rep(constant.cv.tau[3], 4), label = 3, col = alpha("#1434A4", 0.7))
-text(1:4, rep(constant.cv.tau[4], 4), label = 4, col = alpha("#1434A4", 0.7))
-points(1:4, warming.cv.tau, pch = 8, col = "#C21E56")
-abline(h = 0)
-axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
-axis(2, at = c(-1, 0, 1))
-
-## Index of Dispersion
-plot(x = 1, type = "n", xaxt = "n", yaxt = "n",
-     main = "Index of Dispersion", xlab = "Subpopulation", ylab = "Kendall's Tau",
-     xlim = c(1, 4), ylim = c(-1, 1))
-text(1:4, rep(constant.id.tau[1], 4), label = 1, col = alpha("#1434A4", 0.7))
-text(1:4, rep(constant.id.tau[2], 4), label = 2, col = alpha("#1434A4", 0.7))
-text(1:4, rep(constant.id.tau[3], 4), label = 3, col = alpha("#1434A4", 0.7))
-text(1:4, rep(constant.id.tau[4], 4), label = 4, col = alpha("#1434A4", 0.7))
-points(1:4, warming.id.tau, pch = 8, col = "#C21E56")
-abline(h = 0)
-axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
-axis(2, at = c(-1, 0, 1))
-
-## First Difference Variance
-plot(x = 1, type = "n", xaxt = "n", yaxt = "n",
-     main = "First Difference Variance", xlab = "Subpopulation", ylab = "Kendall's Tau",
-     xlim = c(1, 4), ylim = c(-1, 1))
-text(1:4, rep(constant.fdv.tau[1], 4), label = 1, col = alpha("#1434A4", 0.7))
-text(1:4, rep(constant.fdv.tau[2], 4), label = 2, col = alpha("#1434A4", 0.7))
-text(1:4, rep(constant.fdv.tau[3], 4), label = 3, col = alpha("#1434A4", 0.7))
-text(1:4, rep(constant.fdv.tau[4], 4), label = 4, col = alpha("#1434A4", 0.7))
-points(1:4, warming.fdv.tau, pch = 8, col = "#C21E56")
-abline(h = 0)
-axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
-axis(2, at = c(-1, 0, 1))
-
-## Autocovariance
-plot(x = 1, type = "n", xaxt = "n", yaxt = "n",
-     main = "Autocovariance", xlab = "Subpopulation", ylab = "Kendall's Tau",
-     xlim = c(1, 4), ylim = c(-1, 1))
-text(1:4, rep(constant.acv.tau[1], 4), label = 1, col = alpha("#1434A4", 0.7))
-text(1:4, rep(constant.acv.tau[2], 4), label = 2, col = alpha("#1434A4", 0.7))
-text(1:4, rep(constant.acv.tau[3], 4), label = 3, col = alpha("#1434A4", 0.7))
-text(1:4, rep(constant.acv.tau[4], 4), label = 4, col = alpha("#1434A4", 0.7))
-points(1:4, warming.acv.tau, pch = 8, col = "#C21E56")
-abline(h = 0)
-axis(1, at = 1:4, labels = c("5", "6", "7", "8"))
-axis(2, at = c(-1, 0, 1))
-```
-
-## (Better) Plotting
-
-```{r}
 emp.ktaus <- data.frame(
   mean = c(constant.mean.tau, warming.mean.tau),
   sk = c(constant.sk.tau, warming.sk.tau),
@@ -1892,9 +1808,7 @@ axis(2, at = c(-1, -0.5, 0, 0.5, 1))
 text(cex = 1, x = 1:10, y = -1.4, x.labs, xpd = TRUE, srt = 35)
 legend(8, 1.1, legend = c("Constant Tempertaure", "Rising Temperature"),
        pch = 19, col = c("#1434A4", "#C21E56"), cex = 0.8, bty = "n")
-```
 
-```{r}
 df <- data.frame(
   metric = c(rep("Mean", 8),
              rep("Skewness", 8),
