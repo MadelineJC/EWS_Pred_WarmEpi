@@ -13,6 +13,7 @@ library(cowplot)
 
 ```{r}
 AUC_Emp <- readRDS("Objects/AUC_EmpiricalData.rds")
+metrics_full <- c("Mean", "Skewness", "Kurtosis", "Variance", "Covariance", "Index of Dispersion", "First Difference Variance", "Autocorrelation", "Autocovariance", "Decay Time")
 
 par(mar = c(12, 4, 2, 2))
 plot(1:10, AUC_Emp$AUC_data, type = "p", 
