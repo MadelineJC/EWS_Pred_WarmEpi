@@ -1600,145 +1600,51 @@ legend("topright", legend = c("Constant Tempertaure", "Rising Temperature"),
 
 # 3. Surrogate Time Series via AR-1 Model
 
-## Attempt 1
-
-```{r}
-## Okay, so this is the roughest of cuts, lol, really just messing around
-## Info here: https://cran.r-project.org/web/packages/earlywarnings/earlywarnings.pdf 
-
-# surrogates_ews(
-#   timeseries,
-#   indicator = c("ar1", "sd", "acf1", "sk", "kurt", "cv", "returnrate", "densratio"),
-#   winsize = 50,
-#   detrending = c("no", "gaussian", "loess", "linear", "first-diff"),
-#   bandwidth = NULL,
-#   span = NULL,
-#   degree = NULL,
-#   boots = 100,
-#   logtransform = FALSE,
-#   interpolate = FALSE)
-
-day <- seq(3, 120, 3)
-sub1.matrix <- as.matrix(cbind(day, sub1))
-
-sub1.surr <- earlywarnings::surrogates_ews(
-  timeseries = sub1.matrix,
-  indicator = "acf1",
-  winsize = 12.5, # 12.5% is every 5 time points (every 15 days)
-  detrending = "no",
-  boots = 1000,
-  logtransform = FALSE,
-  interpolate = FALSE
-)
-
-#### Attempt 2! ####
-obj <- seq(3, 120, 3)
-for (i in 1:5){
-  temp <- tseries::arma(sub6, order = c(1, i)) # Where "order" is a two dimensional integer vector giving the orders of the model to fit. order[1] corresponds to the AR part and order[2] to the MA part.
-  temp <- sub6 - residuals(temp)
-  obj <- cbind(obj, temp)
-}
-cols <- c("red3", "orange", "goldenrod1", "forestgreen", "orchid")
-plot(obj[ , 1], sub6, type = "l",
-     xlab = "Day", ylab = "Incidence", main = "AR = 1; MA = 1 to 5")
-for (i in 1:5){
-  lines(obj[ , 1], obj[ , i + 1], col = cols[i])
-}
-legend("topleft", legend = c("MA = 1", "MA = 2", "MA = 3", "MA = 4", "MA = 5"),
-       lty = 1, col = cols)
-
-## AR 1-5; MA 1-5
-ARs <- c(rep(1:5, each = 5)); MAs <- c(rep(1:5, 5)); combs <- data.frame(ARs, MAs)
-
-combs.str <- c("day")
-for (i in 1:nrow(combs)) {
-    temp <- paste("AR", combs[i, 1], "MA", combs[i, 2], sep = "")
-    combs.str <- c(combs.str, temp)
-}
-
-obj <- seq(3, 120, 3)
-for (i in 1:nrow(combs)){
-  temp <- tseries::arma(sub6, order = c(combs[i, 1], combs[i, 2]))
-  temp <- sub6 - residuals(temp)
-  obj <- cbind(obj, temp)
-}
-obj <- as.data.frame(obj)
-colnames(obj) <- combs.str[1:ncol(obj)]
-
-par(mfrow = c(2, 2))
-
-plot(obj[ , 1], sub6, type = "l",
-     xlab = "Day", ylab = "Incidence", main = "AR = 1; MA = 1 to 5")
-for (i in 1:5){
-  lines(obj[ , 1], obj[ , i + 1], col = cols[i])
-}
-legend(0, 3, legend = c("MA = 1", "MA = 2", "MA = 3", "MA = 4", "MA = 5"),
-       lty = 1, col = cols, cex = 0.5)
-
-plot(obj[ , 1], sub6, type = "l",
-     xlab = "Day", ylab = "Incidence", main = "AR = 2; MA = 1 to 5")
-for (i in 6:10){
-  lines(obj[ , 1], obj[ , i + 1], col = cols[i - 5])
-}
-
-plot(obj[ , 1], sub6, type = "l",
-     xlab = "Day", ylab = "Incidence", main = "AR = 3; MA = 1 to 5")
-for (i in 11:15){
-  lines(obj[ , 1], obj[ , i + 1], col = cols[i - 10])
-}
-
-plot(obj[ , 1], sub6, type = "l",
-     xlab = "Day", ylab = "Incidence", main = "AR = 4; MA = 1 to 5")
-for (i in 16:20){
-  lines(obj[ , 1], obj[ , i + 1], col = cols[i - 16])
-}
-```
-
 ## Generating Surrogate Time Series
 
 **Per Dakos et al. 2008:** "To test against the H0 hypothesis that the data are produced by a colored-noise process with similar variance, mean, and autocorrelation at lag 1 with the original detrended time series (Theiler et al. 1992), we generated surrogate sets by an AR1 model $x_{t+1} = \alpha_1 x_t + \alpha_0 + \sigma \epsilon_t$, where $\alpha_1 = A(1), \sigma^2 = v(1-\alpha_1^2)$, $\alpha_0 = \mu(1-\alpha_1)$, with $v$ the variance, $\mu$ the mean, $A(1)$ the autocorrelation at lag 1 from the residual time series (estimated by using function `acf` as implemented in R), and $\sigma$ a scaling factor for the Gaussian random error $\epsilon_t$.
 
-QUESTIONS:
-
-1.  Do we calculate mean and variance over the whole time series, or only within the approach to criticality?
-2.  I'm pretty sure we're not calculating the above metrics over a moving window since the null predicts no change over time... Yes?
-3.  How do we calculate epsilon?
-
 ```{r}
 ## Original empirical time series
-sub1.ts <- sub1$status.sum
-sub2.ts <- sub2$status.sum
-sub3.ts <- sub3$status.sum
-sub4.ts <- sub4$status.sum
-sub5.ts <- sub5$status.sum
-sub6.ts <- sub6$status.sum
-sub7.ts <- sub7$status.sum
-sub8.ts <- sub8$status.sum
+sub1.ts <- sub1$status.sum[1:20]
+sub2.ts <- sub2$status.sum[1:20]
+sub3.ts <- sub3$status.sum[1:20]
+sub4.ts <- sub4$status.sum[1:20]
+sub5.ts <- sub5$status.sum[1:20]
+sub6.ts <- sub6$status.sum[1:20]
+sub7.ts <- sub7$status.sum[1:20]
+sub8.ts <- sub8$status.sum[1:20]
 
-## Mean, variance, AR(1)
-sub1.ts.mean <- mean(sub1.ts); sub1.ts.var <- var(sub1.ts); sub1.ts.ac <- acf(sub1.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2] 
-sub2.ts.mean <- mean(sub2.ts); sub2.ts.var <- var(sub2.ts); sub2.ts.ac <- acf(sub2.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2] 
-sub3.ts.mean <- mean(sub3.ts); sub3.ts.var <- var(sub3.ts); sub3.ts.ac <- acf(sub3.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2] 
-sub4.ts.mean <- mean(sub4.ts); sub4.ts.var <- var(sub4.ts); sub4.ts.ac <- acf(sub4.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2] 
-sub5.ts.mean <- mean(sub5.ts); sub5.ts.var <- var(sub5.ts); sub5.ts.ac <- acf(sub5.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2] 
-sub6.ts.mean <- mean(sub6.ts); sub6.ts.var <- var(sub6.ts); sub6.ts.ac <- acf(sub6.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2] 
-sub7.ts.mean <- mean(sub7.ts); sub7.ts.var <- var(sub7.ts); sub7.ts.ac <- acf(sub7.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2] 
-sub8.ts.mean <- mean(sub8.ts); sub8.ts.var <- var(sub8.ts); sub8.ts.ac <- acf(sub8.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2] 
+## Mean, variance
+sub1.ts.mean <- mean(sub1.ts); sub1.ts.var <- var(sub1.ts)
+sub2.ts.mean <- mean(sub2.ts); sub2.ts.var <- var(sub2.ts)
+sub3.ts.mean <- mean(sub3.ts); sub3.ts.var <- var(sub3.ts)
+sub4.ts.mean <- mean(sub4.ts); sub4.ts.var <- var(sub4.ts)
+sub5.ts.mean <- mean(sub5.ts); sub5.ts.var <- var(sub5.ts)
+sub6.ts.mean <- mean(sub6.ts); sub6.ts.var <- var(sub6.ts)
+sub7.ts.mean <- mean(sub7.ts); sub7.ts.var <- var(sub7.ts)
+sub8.ts.mean <- mean(sub8.ts); sub8.ts.var <- var(sub8.ts)
 
-## Error generated as Gaussian noise
-epsilon <- rnorm(n = 1, mean = 0, sd = 1) # Where do the mean and standard deviation come from?
-sigma <- 1 # Let's not scale epsilon for now, just while we get the pipeline functional
+## AR(1)
+sub1.ts.ac <- acf(sub1.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2]
+sub2.ts.ac <- acf(sub2.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2] 
+sub3.ts.ac <- acf(sub3.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2] 
+sub4.ts.ac <- acf(sub4.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2] 
+sub5.ts.ac <- acf(sub5.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2] 
+sub6.ts.ac <- acf(sub6.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2] 
+sub7.ts.ac <- acf(sub7.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2]
+sub8.ts.ac <- acf(sub8.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2] 
 
 ## Function
-AR.func <- function(x.prev, mu, v, A1, sigma, epsilon){
+AR.func <- function(x.prev, mu, v, ac){
   
-  alpha.1 = A1 # Where A(1) is the autocorrelation at lag 1 from the residual time series (est. using acf())
+  delta <- mu*(1 - ac)
   
-  alpha.0 = mu*(1 - alpha.1) # Where mu is the mean
+  sigma2 <- v*(1 - ac^2)
   
-  sigma = sqrt(v*(1 - alpha.1^2)) # Where v is the variance
+  omega <- rnorm(n = 1, mean = 0, sd = sigma2)
   
-  x.next = alpha.1*x.prev + alpha.0 + sigma*epsilon # How do we get a value for epsilon?
+  x.next <- delta + ac*x.prev + omega
   
   return(x.next)
   
@@ -1746,10 +1652,11 @@ AR.func <- function(x.prev, mu, v, A1, sigma, epsilon){
 
 ## Implementation
 x.prev <- 0
-set.seed(1); epsilon <- rnorm(n = 119, mean = 1, sd = 1)
+seed <- c(1:119)
 surr.ts <- c(x.prev)
 for (i in 1:119){
-  x.next <- AR.func(x.prev = x.prev, mu = sub1.ts.mean, v = sub1.ts.var, A1 = sub1.ts.ac, sigma = 1, epsilon = epsilon[i])
+  set.seed(seed[i])
+  x.next <- AR.func(x.prev = x.prev, mu = sub1.ts.mean, v = sub1.ts.var, ac = sub1.ts.ac)
   surr.ts <- c(surr.ts, x.next)
   x.prev <- x.next
 }
@@ -1759,18 +1666,20 @@ plot(seq(3, 120, 3), surr.ts, type = "l",
 abline(h = 0, lty = 2)
 
 ## Get 1000 time series
-seed <- c(1:1000)
+ints <- c(1:(1000*119))
+all.seeds <- matrix(ints, nrow = 119)
 
 ## Subpopulation 1
 sub1.surr.df <- c()
 for (i in 1:1000){
   x.prev <- 0
-  set.seed(seed[i]); epsilon <- rnorm(n = 119, mean = 1, sd = 1)
+  seeds <- all.seeds[ , i]
   surr.ts <- c(x.prev)
   for (j in 1:119){
-      x.next <- AR.func(x.prev = x.prev, mu = sub1.ts.mean, v = sub1.ts.var, A1 = sub1.ts.ac, sigma = 1, epsilon = epsilon[j])
-      surr.ts <- c(surr.ts, x.next)
-      x.prev <- x.next
+    set.seed(seeds[j])
+    x.next <- AR.func(x.prev = x.prev, mu = sub1.ts.mean, v = sub1.ts.var, ac = sub1.ts.ac)
+    surr.ts <- c(surr.ts, x.next)
+    x.prev <- x.next
   }
   sub1.surr.df <- cbind(sub1.surr.df, surr.ts)
 }
@@ -1780,12 +1689,13 @@ sub1.surr.df <- as.data.frame(sub1.surr.df[seq(3, 120, 3), ])
 sub2.surr.df <- c()
 for (i in 1:1000){
   x.prev <- 0
-  set.seed(seed[i]); epsilon <- rnorm(n = 119, mean = 1, sd = 1)
+  seeds <- all.seeds[ , i]
   surr.ts <- c(x.prev)
   for (j in 1:119){
-      x.next <- AR.func(x.prev = x.prev, mu = sub2.ts.mean, v = sub2.ts.var, A1 = sub2.ts.ac, sigma = 1, epsilon = epsilon[j])
-      surr.ts <- c(surr.ts, x.next)
-      x.prev <- x.next
+    set.seed(seeds[j])
+    x.next <- AR.func(x.prev = x.prev, mu = sub2.ts.mean, v = sub2.ts.var, ac = sub2.ts.ac)
+    surr.ts <- c(surr.ts, x.next)
+    x.prev <- x.next
   }
   sub2.surr.df <- cbind(sub2.surr.df, surr.ts)
 }
@@ -1795,12 +1705,13 @@ sub2.surr.df <- as.data.frame(sub2.surr.df[seq(3, 120, 3), ])
 sub3.surr.df <- c()
 for (i in 1:1000){
   x.prev <- 0
-  set.seed(seed[i]); epsilon <- rnorm(n = 119, mean = 1, sd = 1)
+  seeds <- all.seeds[ , i]
   surr.ts <- c(x.prev)
   for (j in 1:119){
-      x.next <- AR.func(x.prev = x.prev, mu = sub3.ts.mean, v = sub3.ts.var, A1 = sub3.ts.ac, sigma = 1, epsilon = epsilon[j])
-      surr.ts <- c(surr.ts, x.next)
-      x.prev <- x.next
+    set.seed(seeds[j])
+    x.next <- AR.func(x.prev = x.prev, mu = sub3.ts.mean, v = sub3.ts.var, ac = sub3.ts.ac)
+    surr.ts <- c(surr.ts, x.next)
+    x.prev <- x.next
   }
   sub3.surr.df <- cbind(sub3.surr.df, surr.ts)
 }
@@ -1810,12 +1721,13 @@ sub3.surr.df <- as.data.frame(sub3.surr.df[seq(3, 120, 3), ])
 sub4.surr.df <- c()
 for (i in 1:1000){
   x.prev <- 0
-  set.seed(seed[i]); epsilon <- rnorm(n = 119, mean = 1, sd = 1)
+  seeds <- all.seeds[ , i]
   surr.ts <- c(x.prev)
   for (j in 1:119){
-      x.next <- AR.func(x.prev = x.prev, mu = sub4.ts.mean, v = sub4.ts.var, A1 = sub4.ts.ac, sigma = 1, epsilon = epsilon[j])
-      surr.ts <- c(surr.ts, x.next)
-      x.prev <- x.next
+    set.seed(seeds[j])
+    x.next <- AR.func(x.prev = x.prev, mu = sub4.ts.mean, v = sub4.ts.var, ac = sub4.ts.ac)
+    surr.ts <- c(surr.ts, x.next)
+    x.prev <- x.next
   }
   sub4.surr.df <- cbind(sub4.surr.df, surr.ts)
 }
@@ -1825,12 +1737,13 @@ sub4.surr.df <- as.data.frame(sub4.surr.df[seq(3, 120, 3), ])
 sub5.surr.df <- c()
 for (i in 1:1000){
   x.prev <- 0
-  set.seed(seed[i]); epsilon <- rnorm(n = 119, mean = 1, sd = 1)
+  seeds <- all.seeds[ , i]
   surr.ts <- c(x.prev)
   for (j in 1:119){
-      x.next <- AR.func(x.prev = x.prev, mu = sub5.ts.mean, v = sub5.ts.var, A1 = sub5.ts.ac, sigma = 1, epsilon = epsilon[j])
-      surr.ts <- c(surr.ts, x.next)
-      x.prev <- x.next
+    set.seed(seeds[j])
+    x.next <- AR.func(x.prev = x.prev, mu = sub5.ts.mean, v = sub5.ts.var, ac = sub5.ts.ac)
+    surr.ts <- c(surr.ts, x.next)
+    x.prev <- x.next
   }
   sub5.surr.df <- cbind(sub5.surr.df, surr.ts)
 }
@@ -1840,12 +1753,13 @@ sub5.surr.df <- as.data.frame(sub5.surr.df[seq(3, 120, 3), ])
 sub6.surr.df <- c()
 for (i in 1:1000){
   x.prev <- 0
-  set.seed(seed[i]); epsilon <- rnorm(n = 119, mean = 1, sd = 1)
+  seeds <- all.seeds[ , i]
   surr.ts <- c(x.prev)
   for (j in 1:119){
-      x.next <- AR.func(x.prev = x.prev, mu = sub6.ts.mean, v = sub6.ts.var, A1 = sub6.ts.ac, sigma = 1, epsilon = epsilon[j])
-      surr.ts <- c(surr.ts, x.next)
-      x.prev <- x.next
+    set.seed(seeds[j])
+    x.next <- AR.func(x.prev = x.prev, mu = sub6.ts.mean, v = sub6.ts.var, ac = sub6.ts.ac)
+    surr.ts <- c(surr.ts, x.next)
+    x.prev <- x.next
   }
   sub6.surr.df <- cbind(sub6.surr.df, surr.ts)
 }
@@ -1855,12 +1769,13 @@ sub6.surr.df <- as.data.frame(sub6.surr.df[seq(3, 120, 3), ])
 sub7.surr.df <- c()
 for (i in 1:1000){
   x.prev <- 0
-  set.seed(seed[i]); epsilon <- rnorm(n = 119, mean = 1, sd = 1)
+  seeds <- all.seeds[ , i]
   surr.ts <- c(x.prev)
   for (j in 1:119){
-      x.next <- AR.func(x.prev = x.prev, mu = sub7.ts.mean, v = sub7.ts.var, A1 = sub7.ts.ac, sigma = 1, epsilon = epsilon[j])
-      surr.ts <- c(surr.ts, x.next)
-      x.prev <- x.next
+    set.seed(seeds[j])
+    x.next <- AR.func(x.prev = x.prev, mu = sub7.ts.mean, v = sub7.ts.var, ac = sub7.ts.ac)
+    surr.ts <- c(surr.ts, x.next)
+    x.prev <- x.next
   }
   sub7.surr.df <- cbind(sub7.surr.df, surr.ts)
 }
@@ -1870,12 +1785,13 @@ sub7.surr.df <- as.data.frame(sub7.surr.df[seq(3, 120, 3), ])
 sub8.surr.df <- c()
 for (i in 1:1000){
   x.prev <- 0
-  set.seed(seed[i]); epsilon <- rnorm(n = 119, mean = 1, sd = 1)
+  seeds <- all.seeds[ , i]
   surr.ts <- c(x.prev)
   for (j in 1:119){
-      x.next <- AR.func(x.prev = x.prev, mu = sub8.ts.mean, v = sub8.ts.var, A1 = sub8.ts.ac, sigma = 1, epsilon = epsilon[j])
-      surr.ts <- c(surr.ts, x.next)
-      x.prev <- x.next
+    set.seed(seeds[j])
+    x.next <- AR.func(x.prev = x.prev, mu = sub8.ts.mean, v = sub8.ts.var, ac = sub8.ts.ac)
+    surr.ts <- c(surr.ts, x.next)
+    x.prev <- x.next
   }
   sub8.surr.df <- cbind(sub8.surr.df, surr.ts)
 }
@@ -1890,60 +1806,68 @@ cols <- c("red3", "orange", "goldenrod1", "forestgreen", "royalblue2", "orchid")
 par(mfrow = c(2, 4))
 
 ## Subpopulation 1
-plot(seq(3, 120, 3), sub1.ts, type = "l", lwd = 2,
-     main = "Subpopulation 1", xlab = "Day", ylab = "Prevalence", ylim = c(-0.5, 1))
+plot(seq(3, 120, 3), sub1$status.sum, type = "l", lwd = 2,
+     main = "Subpopulation 1", xlab = "Day", ylab = "Prevalence", ylim = c(0, 2))
 for (i in 1:6){
   lines(seq(3, 120, 3), sub1.surr.df[ , i], col = cols[i])
 }
+abline(v = 60, lty = 2, lwd = 2)
 
 ## Subpopulation 2
-plot(seq(3, 120, 3), sub2.ts, type = "l", lwd = 2,
-     main = "Subpopulation 2", xlab = "Day", ylab = "Prevalence", ylim = c(-0.5, 1.5))
+plot(seq(3, 120, 3), sub2$status.sum, type = "l", lwd = 2,
+     main = "Subpopulation 2", xlab = "Day", ylab = "Prevalence", ylim = c(0, 2))
 for (i in 1:6){
   lines(seq(3, 120, 3), sub2.surr.df[ , i], col = cols[i])
 }
+abline(v = 60, lty = 2, lwd = 2)
 
 ## Subpopulation 3
-plot(seq(3, 120, 3), sub3.ts, type = "l", lwd = 2,
-     main = "Subpopulation 3", xlab = "Day", ylab = "Prevalence", ylim = c(-0.5, 2.5))
+plot(seq(3, 120, 3), sub3$status.sum, type = "l", lwd = 2,
+     main = "Subpopulation 3", xlab = "Day", ylab = "Prevalence", ylim = c(0, 2))
 for (i in 1:6){
   lines(seq(3, 120, 3), sub3.surr.df[ , i], col = cols[i])
 }
+abline(v = 60, lty = 2, lwd = 2)
 
 ## Subpopulation 4
-plot(seq(3, 120, 3), sub4.ts, type = "l", lwd = 2,
-     main = "Subpopulation 4", xlab = "Day", ylab = "Prevalence", ylim = c(-0.5, 2.5))
+plot(seq(3, 120, 3), sub4$status.sum, type = "l", lwd = 2,
+     main = "Subpopulation 4", xlab = "Day", ylab = "Prevalence", ylim = c(0, 2))
 for (i in 1:6){
   lines(seq(3, 120, 3), sub4.surr.df[ , i], col = cols[i])
 }
+abline(v = 60, lty = 2, lwd = 2)
 
 ## Subpopulation 5
-plot(seq(3, 120, 3), sub5.ts, type = "l", lwd = 2,
-     main = "Subpopulation 5", xlab = "Day", ylab = "Prevalence", ylim = c(-0.5, 5))
+plot(seq(3, 120, 3), sub5$status.sum, type = "l", lwd = 2,
+     main = "Subpopulation 5", xlab = "Day", ylab = "Prevalence", ylim = c(0, 5))
 for (i in 1:6){
   lines(seq(3, 120, 3), sub5.surr.df[ , i], col = cols[i])
 }
+abline(v = 60, lty = 2, lwd = 2)
 
 ## Subpopulation 6
-plot(seq(3, 120, 3), sub6.ts, type = "l", lwd = 2,
-     main = "Subpopulation 6", xlab = "Day", ylab = "Prevalence", ylim = c(-0.5, 5))
+plot(seq(3, 120, 3), sub6$status.sum, type = "l", lwd = 2,
+     main = "Subpopulation 6", xlab = "Day", ylab = "Prevalence", ylim = c(0, 5))
 for (i in 1:6){
   lines(seq(3, 120, 3), sub6.surr.df[ , i], col = cols[i])
 }
+abline(v = 60, lty = 2, lwd = 2)
 
 ## Subpopulation 7
-plot(seq(3, 120, 3), sub7.ts, type = "l", lwd = 2,
-     main = "Subpopulation 7", xlab = "Day", ylab = "Prevalence", ylim = c(-0.5, 7.5))
+plot(seq(3, 120, 3), sub7$status.sum, type = "l", lwd = 2,
+     main = "Subpopulation 7", xlab = "Day", ylab = "Prevalence", ylim = c(0, 5))
 for (i in 1:6){
   lines(seq(3, 120, 3), sub7.surr.df[ , i], col = cols[i])
 }
+abline(v = 60, lty = 2, lwd = 2)
 
 ## Subpopulation 8
-plot(seq(3, 120, 3), sub8.ts, type = "l", lwd = 2,
-     main = "Subpopulation 8", xlab = "Day", ylab = "Prevalence", ylim = c(-0.5, 7.5))
+plot(seq(3, 120, 3), sub8$status.sum, type = "l", lwd = 2,
+     main = "Subpopulation 8", xlab = "Day", ylab = "Prevalence", ylim = c(0, 5))
 for (i in 1:6){
   lines(seq(3, 120, 3), sub8.surr.df[ , i], col = cols[i])
 }
+abline(v = 60, lty = 2, lwd = 2)
 ```
 
 ## Data Wrangling
