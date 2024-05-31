@@ -13,6 +13,7 @@ require(TTR)
 require(moments)
 require(tidyverse)
 require(earlywarnings)
+library(ggridges)
 ```
 
 # Literature
@@ -119,41 +120,41 @@ sub6.crit <- sub6[1:20]
 sub7.crit <- sub7[1:20]
 sub8.crit <- sub8[1:20]
 
-sub1.nulls <- list()
-sub2.nulls <- list()
-sub3.nulls <- list()
-sub4.nulls <- list()
-sub5.nulls <- list()
-sub6.nulls <- list()
-sub7.nulls <- list()
-sub8.nulls <- list()
+sub1.null <- list()
+sub2.null <- list()
+sub3.null <- list()
+sub4.null <- list()
+sub5.null <- list()
+sub6.null <- list()
+sub7.null <- list()
+sub8.null <- list()
 
 set.seed(123) 
 for (i in 1:1000){
-  sub1.nulls[[i]] <- sample(sub1.crit, length(sub1.crit), replace = TRUE)
-  sub2.nulls[[i]] <- sample(sub2.crit, length(sub2.crit), replace = TRUE)
-  sub3.nulls[[i]] <- sample(sub3.crit, length(sub3.crit), replace = TRUE)
-  sub4.nulls[[i]] <- sample(sub4.crit, length(sub4.crit), replace = TRUE)
-  sub5.nulls[[i]] <- sample(sub5.crit, length(sub5.crit), replace = TRUE)
-  sub6.nulls[[i]] <- sample(sub6.crit, length(sub6.crit), replace = TRUE)
-  sub7.nulls[[i]] <- sample(sub7.crit, length(sub7.crit), replace = TRUE)
-  sub8.nulls[[i]] <- sample(sub8.crit, length(sub8.crit), replace = TRUE)
+  sub1.null[[i]] <- sample(sub1.crit, length(sub1.crit), replace = TRUE)
+  sub2.null[[i]] <- sample(sub2.crit, length(sub2.crit), replace = TRUE)
+  sub3.null[[i]] <- sample(sub3.crit, length(sub3.crit), replace = TRUE)
+  sub4.null[[i]] <- sample(sub4.crit, length(sub4.crit), replace = TRUE)
+  sub5.null[[i]] <- sample(sub5.crit, length(sub5.crit), replace = TRUE)
+  sub6.null[[i]] <- sample(sub6.crit, length(sub6.crit), replace = TRUE)
+  sub7.null[[i]] <- sample(sub7.crit, length(sub7.crit), replace = TRUE)
+  sub8.null[[i]] <- sample(sub8.crit, length(sub8.crit), replace = TRUE)
 } 
 
-plot(sub4.nulls[[1]], type = "l", col = "red3",
+plot(sub4.null[[1]], type = "l", col = "red3",
      main = "Subpopulation 4", xlab = "Time", ylab = "Incidence")
-lines(sub4.nulls[[2]], col = "orange")
-lines(sub4.nulls[[3]], col = "goldenrod1")
-lines(sub4.nulls[[4]], col = "forestgreen")
-lines(sub4.nulls[[5]], col = "cornflowerblue")
+lines(sub4.null[[2]], col = "orange")
+lines(sub4.null[[3]], col = "goldenrod1")
+lines(sub4.null[[4]], col = "forestgreen")
+lines(sub4.null[[5]], col = "cornflowerblue")
 lines(sub4.crit, lwd = 2)
 
-plot(sub8.nulls[[1]], type = "l", col = "red3",
+plot(sub8.null[[1]], type = "l", col = "red3",
      main = "Subpopulation 8", xlab = "Time", ylab = "Incidence")
-lines(sub8.nulls[[2]], col = "orange")
-lines(sub8.nulls[[3]], col = "goldenrod1")
-lines(sub8.nulls[[4]], col = "forestgreen")
-lines(sub8.nulls[[5]], col = "cornflowerblue")
+lines(sub8.null[[2]], col = "orange")
+lines(sub8.null[[3]], col = "goldenrod1")
+lines(sub8.null[[4]], col = "forestgreen")
+lines(sub8.null[[5]], col = "cornflowerblue")
 lines(sub8.crit, lwd = 2)
 ```
 
@@ -162,268 +163,268 @@ lines(sub8.crit, lwd = 2)
 ### Mean, Standard Deviation, Skewness, Kurtosis
 
 ```{r}
-sub1.nulls.mean <- list(); sub1.nulls.sd <- list(); sub1.nulls.sk <- list(); sub1.nulls.kt <- list()
-sub2.nulls.mean <- list(); sub2.nulls.sd <- list(); sub2.nulls.sk <- list(); sub2.nulls.kt <- list()
-sub3.nulls.mean <- list(); sub3.nulls.sd <- list(); sub3.nulls.sk <- list(); sub3.nulls.kt <- list()
-sub4.nulls.mean <- list(); sub4.nulls.sd <- list(); sub4.nulls.sk <- list(); sub4.nulls.kt <- list()
-sub5.nulls.mean <- list(); sub5.nulls.sd <- list(); sub5.nulls.sk <- list(); sub5.nulls.kt <- list()
-sub6.nulls.mean <- list(); sub6.nulls.sd <- list(); sub6.nulls.sk <- list(); sub6.nulls.kt <- list()
-sub7.nulls.mean <- list(); sub7.nulls.sd <- list(); sub7.nulls.sk <- list(); sub7.nulls.kt <- list()
-sub8.nulls.mean <- list(); sub8.nulls.sd <- list(); sub8.nulls.sk <- list(); sub8.nulls.kt <- list()
+sub1.null.mean <- list(); sub1.null.sd <- list(); sub1.null.sk <- list(); sub1.null.kt <- list()
+sub2.null.mean <- list(); sub2.null.sd <- list(); sub2.null.sk <- list(); sub2.null.kt <- list()
+sub3.null.mean <- list(); sub3.null.sd <- list(); sub3.null.sk <- list(); sub3.null.kt <- list()
+sub4.null.mean <- list(); sub4.null.sd <- list(); sub4.null.sk <- list(); sub4.null.kt <- list()
+sub5.null.mean <- list(); sub5.null.sd <- list(); sub5.null.sk <- list(); sub5.null.kt <- list()
+sub6.null.mean <- list(); sub6.null.sd <- list(); sub6.null.sk <- list(); sub6.null.kt <- list()
+sub7.null.mean <- list(); sub7.null.sd <- list(); sub7.null.sk <- list(); sub7.null.kt <- list()
+sub8.null.mean <- list(); sub8.null.sd <- list(); sub8.null.sk <- list(); sub8.null.kt <- list()
 
-for (i in 1:length(sub1.nulls)){
-  sub1.nulls.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub1.nulls[[i]], window = 5, step = 1)
-  sub1.nulls.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub1.nulls[[i]], window = 5, step = 1)
-  sub1.nulls.sk[[i]] <- SlidingWindow(FUN = "skewness", data = sub1.nulls[[i]], window = 5, step = 1)
-  sub1.nulls.kt[[i]] <- SlidingWindow(FUN = "kurtosis", data = sub1.nulls[[i]], window = 5, step = 1)
+for (i in 1:length(sub1.null)){
+  sub1.null.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub1.null[[i]], window = 5, step = 1)
+  sub1.null.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub1.null[[i]], window = 5, step = 1)
+  sub1.null.sk[[i]] <- SlidingWindow(FUN = "skewness", data = sub1.null[[i]], window = 5, step = 1)
+  sub1.null.kt[[i]] <- SlidingWindow(FUN = "kurtosis", data = sub1.null[[i]], window = 5, step = 1)
   
-  sub2.nulls.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub2.nulls[[i]], window = 5, step = 1)
-  sub2.nulls.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub2.nulls[[i]], window = 5, step = 1)
-  sub2.nulls.sk[[i]] <- SlidingWindow(FUN = "skewness", data = sub2.nulls[[i]], window = 5, step = 1)
-  sub2.nulls.kt[[i]] <- SlidingWindow(FUN = "kurtosis", data = sub2.nulls[[i]], window = 5, step = 1)
+  sub2.null.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub2.null[[i]], window = 5, step = 1)
+  sub2.null.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub2.null[[i]], window = 5, step = 1)
+  sub2.null.sk[[i]] <- SlidingWindow(FUN = "skewness", data = sub2.null[[i]], window = 5, step = 1)
+  sub2.null.kt[[i]] <- SlidingWindow(FUN = "kurtosis", data = sub2.null[[i]], window = 5, step = 1)
   
-  sub3.nulls.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub3.nulls[[i]], window = 5, step = 1)
-  sub3.nulls.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub3.nulls[[i]], window = 5, step = 1)
-  sub3.nulls.sk[[i]] <- SlidingWindow(FUN = "skewness", data = sub3.nulls[[i]], window = 5, step = 1)
-  sub3.nulls.kt[[i]] <- SlidingWindow(FUN = "kurtosis", data = sub3.nulls[[i]], window = 5, step = 1)
+  sub3.null.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub3.null[[i]], window = 5, step = 1)
+  sub3.null.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub3.null[[i]], window = 5, step = 1)
+  sub3.null.sk[[i]] <- SlidingWindow(FUN = "skewness", data = sub3.null[[i]], window = 5, step = 1)
+  sub3.null.kt[[i]] <- SlidingWindow(FUN = "kurtosis", data = sub3.null[[i]], window = 5, step = 1)
   
-  sub4.nulls.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub4.nulls[[i]], window = 5, step = 1)
-  sub4.nulls.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub4.nulls[[i]], window = 5, step = 1)
-  sub4.nulls.sk[[i]] <- SlidingWindow(FUN = "skewness", data = sub4.nulls[[i]], window = 5, step = 1)
-  sub4.nulls.kt[[i]] <- SlidingWindow(FUN = "kurtosis", data = sub4.nulls[[i]], window = 5, step = 1)
+  sub4.null.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub4.null[[i]], window = 5, step = 1)
+  sub4.null.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub4.null[[i]], window = 5, step = 1)
+  sub4.null.sk[[i]] <- SlidingWindow(FUN = "skewness", data = sub4.null[[i]], window = 5, step = 1)
+  sub4.null.kt[[i]] <- SlidingWindow(FUN = "kurtosis", data = sub4.null[[i]], window = 5, step = 1)
   
-  sub5.nulls.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub5.nulls[[i]], window = 5, step = 1)
-  sub5.nulls.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub5.nulls[[i]], window = 5, step = 1)
-  sub5.nulls.sk[[i]] <- SlidingWindow(FUN = "skewness", data = sub5.nulls[[i]], window = 5, step = 1)
-  sub5.nulls.kt[[i]] <- SlidingWindow(FUN = "kurtosis", data = sub5.nulls[[i]], window = 5, step = 1)
+  sub5.null.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub5.null[[i]], window = 5, step = 1)
+  sub5.null.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub5.null[[i]], window = 5, step = 1)
+  sub5.null.sk[[i]] <- SlidingWindow(FUN = "skewness", data = sub5.null[[i]], window = 5, step = 1)
+  sub5.null.kt[[i]] <- SlidingWindow(FUN = "kurtosis", data = sub5.null[[i]], window = 5, step = 1)
   
-  sub6.nulls.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub6.nulls[[i]], window = 5, step = 1)
-  sub6.nulls.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub6.nulls[[i]], window = 5, step = 1)
-  sub6.nulls.sk[[i]] <- SlidingWindow(FUN = "skewness", data = sub6.nulls[[i]], window = 5, step = 1)
-  sub6.nulls.kt[[i]] <- SlidingWindow(FUN = "kurtosis", data = sub6.nulls[[i]], window = 5, step = 1)
+  sub6.null.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub6.null[[i]], window = 5, step = 1)
+  sub6.null.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub6.null[[i]], window = 5, step = 1)
+  sub6.null.sk[[i]] <- SlidingWindow(FUN = "skewness", data = sub6.null[[i]], window = 5, step = 1)
+  sub6.null.kt[[i]] <- SlidingWindow(FUN = "kurtosis", data = sub6.null[[i]], window = 5, step = 1)
   
-  sub7.nulls.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub7.nulls[[i]], window = 5, step = 1)
-  sub7.nulls.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub7.nulls[[i]], window = 5, step = 1)
-  sub7.nulls.sk[[i]] <- SlidingWindow(FUN = "skewness", data = sub7.nulls[[i]], window = 5, step = 1)
-  sub7.nulls.kt[[i]] <- SlidingWindow(FUN = "kurtosis", data = sub7.nulls[[i]], window = 5, step = 1)
+  sub7.null.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub7.null[[i]], window = 5, step = 1)
+  sub7.null.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub7.null[[i]], window = 5, step = 1)
+  sub7.null.sk[[i]] <- SlidingWindow(FUN = "skewness", data = sub7.null[[i]], window = 5, step = 1)
+  sub7.null.kt[[i]] <- SlidingWindow(FUN = "kurtosis", data = sub7.null[[i]], window = 5, step = 1)
   
-  sub8.nulls.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub8.nulls[[i]], window = 5, step = 1)
-  sub8.nulls.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub8.nulls[[i]], window = 5, step = 1)
-  sub8.nulls.sk[[i]] <- SlidingWindow(FUN = "skewness", data = sub8.nulls[[i]], window = 5, step = 1)
-  sub8.nulls.kt[[i]] <- SlidingWindow(FUN = "kurtosis", data = sub8.nulls[[i]], window = 5, step = 1)
+  sub8.null.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub8.null[[i]], window = 5, step = 1)
+  sub8.null.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub8.null[[i]], window = 5, step = 1)
+  sub8.null.sk[[i]] <- SlidingWindow(FUN = "skewness", data = sub8.null[[i]], window = 5, step = 1)
+  sub8.null.kt[[i]] <- SlidingWindow(FUN = "kurtosis", data = sub8.null[[i]], window = 5, step = 1)
 }
 ```
 
 ### Variance
 
 ```{r}
-sub1.nulls.var <- list(); sub2.nulls.var <- list(); sub3.nulls.var <- list(); sub4.nulls.var <- list()
-sub5.nulls.var <- list(); sub6.nulls.var <- list(); sub7.nulls.var <- list(); sub8.nulls.var <- list()
+sub1.null.var <- list(); sub2.null.var <- list(); sub3.null.var <- list(); sub4.null.var <- list()
+sub5.null.var <- list(); sub6.null.var <- list(); sub7.null.var <- list(); sub8.null.var <- list()
 for (i in 1:1000){
-  sub1.nulls.var[[i]] <- sub1.nulls.sd[[i]]^2
-  sub2.nulls.var[[i]] <- sub2.nulls.sd[[i]]^2
-  sub3.nulls.var[[i]] <- sub3.nulls.sd[[i]]^2
-  sub4.nulls.var[[i]] <- sub4.nulls.sd[[i]]^2
-  sub5.nulls.var[[i]] <- sub5.nulls.sd[[i]]^2
-  sub6.nulls.var[[i]] <- sub6.nulls.sd[[i]]^2
-  sub7.nulls.var[[i]] <- sub7.nulls.sd[[i]]^2
-  sub8.nulls.var[[i]] <- sub8.nulls.sd[[i]]^2
+  sub1.null.var[[i]] <- sub1.null.sd[[i]]^2
+  sub2.null.var[[i]] <- sub2.null.sd[[i]]^2
+  sub3.null.var[[i]] <- sub3.null.sd[[i]]^2
+  sub4.null.var[[i]] <- sub4.null.sd[[i]]^2
+  sub5.null.var[[i]] <- sub5.null.sd[[i]]^2
+  sub6.null.var[[i]] <- sub6.null.sd[[i]]^2
+  sub7.null.var[[i]] <- sub7.null.sd[[i]]^2
+  sub8.null.var[[i]] <- sub8.null.sd[[i]]^2
 }
 ```
 
 **Co-Efficient of Variation**
 
 ```{r}
-sub1.nulls.cv <- list(); sub2.nulls.cv <- list(); sub3.nulls.cv <- list(); sub4.nulls.cv <- list()
-sub5.nulls.cv <- list(); sub6.nulls.cv <- list(); sub7.nulls.cv <- list(); sub8.nulls.cv <- list()
+sub1.null.cv <- list(); sub2.null.cv <- list(); sub3.null.cv <- list(); sub4.null.cv <- list()
+sub5.null.cv <- list(); sub6.null.cv <- list(); sub7.null.cv <- list(); sub8.null.cv <- list()
 for (i in 1:1000){
-  sub1.nulls.cv[[i]] <- sub1.nulls.sd[[i]]/(sub1.nulls.mean[[i]] + 1e-10)
-  sub2.nulls.cv[[i]] <- sub2.nulls.sd[[i]]/(sub2.nulls.mean[[i]] + 1e-10)
-  sub3.nulls.cv[[i]] <- sub3.nulls.sd[[i]]/(sub3.nulls.mean[[i]] + 1e-10)
-  sub4.nulls.cv[[i]] <- sub4.nulls.sd[[i]]/(sub4.nulls.mean[[i]] + 1e-10)
-  sub5.nulls.cv[[i]] <- sub5.nulls.sd[[i]]/(sub5.nulls.mean[[i]] + 1e-10)
-  sub6.nulls.cv[[i]] <- sub6.nulls.sd[[i]]/(sub6.nulls.mean[[i]] + 1e-10)
-  sub7.nulls.cv[[i]] <- sub7.nulls.sd[[i]]/(sub7.nulls.mean[[i]] + 1e-10)
-  sub8.nulls.cv[[i]] <- sub8.nulls.sd[[i]]/(sub8.nulls.mean[[i]] + 1e-10)
+  sub1.null.cv[[i]] <- sub1.null.sd[[i]]/(sub1.null.mean[[i]] + 1e-10)
+  sub2.null.cv[[i]] <- sub2.null.sd[[i]]/(sub2.null.mean[[i]] + 1e-10)
+  sub3.null.cv[[i]] <- sub3.null.sd[[i]]/(sub3.null.mean[[i]] + 1e-10)
+  sub4.null.cv[[i]] <- sub4.null.sd[[i]]/(sub4.null.mean[[i]] + 1e-10)
+  sub5.null.cv[[i]] <- sub5.null.sd[[i]]/(sub5.null.mean[[i]] + 1e-10)
+  sub6.null.cv[[i]] <- sub6.null.sd[[i]]/(sub6.null.mean[[i]] + 1e-10)
+  sub7.null.cv[[i]] <- sub7.null.sd[[i]]/(sub7.null.mean[[i]] + 1e-10)
+  sub8.null.cv[[i]] <- sub8.null.sd[[i]]/(sub8.null.mean[[i]] + 1e-10)
 }
 ```
 
 ### Index of Dispersion
 
 ```{r}
-sub1.nulls.id <- list(); sub2.nulls.id <- list(); sub3.nulls.id <- list(); sub4.nulls.id <- list()
-sub5.nulls.id <- list(); sub6.nulls.id <- list(); sub7.nulls.id <- list(); sub8.nulls.id <- list()
+sub1.null.id <- list(); sub2.null.id <- list(); sub3.null.id <- list(); sub4.null.id <- list()
+sub5.null.id <- list(); sub6.null.id <- list(); sub7.null.id <- list(); sub8.null.id <- list()
 for (i in 1:1000){
-  sub1.nulls.id[[i]] <- sub1.nulls.var[[i]]/(sub1.nulls.mean[[i]] + 1e-10)
-  sub2.nulls.id[[i]] <- sub2.nulls.var[[i]]/(sub2.nulls.mean[[i]] + 1e-10)
-  sub3.nulls.id[[i]] <- sub3.nulls.var[[i]]/(sub3.nulls.mean[[i]] + 1e-10)
-  sub4.nulls.id[[i]] <- sub4.nulls.var[[i]]/(sub4.nulls.mean[[i]] + 1e-10)
-  sub5.nulls.id[[i]] <- sub5.nulls.var[[i]]/(sub5.nulls.mean[[i]] + 1e-10)
-  sub6.nulls.id[[i]] <- sub6.nulls.var[[i]]/(sub6.nulls.mean[[i]] + 1e-10)
-  sub7.nulls.id[[i]] <- sub7.nulls.var[[i]]/(sub7.nulls.mean[[i]] + 1e-10)
-  sub8.nulls.id[[i]] <- sub8.nulls.var[[i]]/(sub8.nulls.mean[[i]] + 1e-10)
+  sub1.null.id[[i]] <- sub1.null.var[[i]]/(sub1.null.mean[[i]] + 1e-10)
+  sub2.null.id[[i]] <- sub2.null.var[[i]]/(sub2.null.mean[[i]] + 1e-10)
+  sub3.null.id[[i]] <- sub3.null.var[[i]]/(sub3.null.mean[[i]] + 1e-10)
+  sub4.null.id[[i]] <- sub4.null.var[[i]]/(sub4.null.mean[[i]] + 1e-10)
+  sub5.null.id[[i]] <- sub5.null.var[[i]]/(sub5.null.mean[[i]] + 1e-10)
+  sub6.null.id[[i]] <- sub6.null.var[[i]]/(sub6.null.mean[[i]] + 1e-10)
+  sub7.null.id[[i]] <- sub7.null.var[[i]]/(sub7.null.mean[[i]] + 1e-10)
+  sub8.null.id[[i]] <- sub8.null.var[[i]]/(sub8.null.mean[[i]] + 1e-10)
 }
 ```
 
 **First Difference Variance**
 
 ```{r}
-sub1.nulls.fdv <- list(); sub2.nulls.fdv <- list(); sub3.nulls.fdv <- list(); sub4.nulls.fdv <- list()
-sub5.nulls.fdv <- list(); sub6.nulls.fdv <- list(); sub7.nulls.fdv <- list(); sub8.nulls.fdv <- list()
+sub1.null.fdv <- list(); sub2.null.fdv <- list(); sub3.null.fdv <- list(); sub4.null.fdv <- list()
+sub5.null.fdv <- list(); sub6.null.fdv <- list(); sub7.null.fdv <- list(); sub8.null.fdv <- list()
 
 for (i in 1:1000){
-  sub1.nulls.fdv.temp <- c()
-  sub2.nulls.fdv.temp <- c()
-  sub3.nulls.fdv.temp <- c()
-  sub4.nulls.fdv.temp <- c()
-  sub5.nulls.fdv.temp <- c()
-  sub6.nulls.fdv.temp <- c()
-  sub7.nulls.fdv.temp <- c()
-  sub8.nulls.fdv.temp <- c()
+  sub1.null.fdv.temp <- c()
+  sub2.null.fdv.temp <- c()
+  sub3.null.fdv.temp <- c()
+  sub4.null.fdv.temp <- c()
+  sub5.null.fdv.temp <- c()
+  sub6.null.fdv.temp <- c()
+  sub7.null.fdv.temp <- c()
+  sub8.null.fdv.temp <- c()
   for (j in 2:15){
-    sub1.nulls.fdv.temp[j - 1] <- sub1.nulls.var[[i]][j] - sub1.nulls.var[[i]][j - 1]
-    sub2.nulls.fdv.temp[j - 1] <- sub2.nulls.var[[i]][j] - sub2.nulls.var[[i]][j - 1]
-    sub3.nulls.fdv.temp[j - 1] <- sub3.nulls.var[[i]][j] - sub3.nulls.var[[i]][j - 1]
-    sub4.nulls.fdv.temp[j - 1] <- sub4.nulls.var[[i]][j] - sub4.nulls.var[[i]][j - 1]
-    sub5.nulls.fdv.temp[j - 1] <- sub5.nulls.var[[i]][j] - sub5.nulls.var[[i]][j - 1]
-    sub6.nulls.fdv.temp[j - 1] <- sub6.nulls.var[[i]][j] - sub6.nulls.var[[i]][j - 1]
-    sub7.nulls.fdv.temp[j - 1] <- sub7.nulls.var[[i]][j] - sub7.nulls.var[[i]][j - 1]
-    sub8.nulls.fdv.temp[j - 1] <- sub8.nulls.var[[i]][j] - sub8.nulls.var[[i]][j - 1]
+    sub1.null.fdv.temp[j - 1] <- sub1.null.var[[i]][j] - sub1.null.var[[i]][j - 1]
+    sub2.null.fdv.temp[j - 1] <- sub2.null.var[[i]][j] - sub2.null.var[[i]][j - 1]
+    sub3.null.fdv.temp[j - 1] <- sub3.null.var[[i]][j] - sub3.null.var[[i]][j - 1]
+    sub4.null.fdv.temp[j - 1] <- sub4.null.var[[i]][j] - sub4.null.var[[i]][j - 1]
+    sub5.null.fdv.temp[j - 1] <- sub5.null.var[[i]][j] - sub5.null.var[[i]][j - 1]
+    sub6.null.fdv.temp[j - 1] <- sub6.null.var[[i]][j] - sub6.null.var[[i]][j - 1]
+    sub7.null.fdv.temp[j - 1] <- sub7.null.var[[i]][j] - sub7.null.var[[i]][j - 1]
+    sub8.null.fdv.temp[j - 1] <- sub8.null.var[[i]][j] - sub8.null.var[[i]][j - 1]
   }
-  sub1.nulls.fdv[[i]] <- sub1.nulls.fdv.temp
-  sub2.nulls.fdv[[i]] <- sub2.nulls.fdv.temp
-  sub3.nulls.fdv[[i]] <- sub3.nulls.fdv.temp
-  sub4.nulls.fdv[[i]] <- sub4.nulls.fdv.temp
-  sub5.nulls.fdv[[i]] <- sub5.nulls.fdv.temp
-  sub6.nulls.fdv[[i]] <- sub6.nulls.fdv.temp
-  sub7.nulls.fdv[[i]] <- sub7.nulls.fdv.temp
-  sub8.nulls.fdv[[i]] <- sub8.nulls.fdv.temp
+  sub1.null.fdv[[i]] <- sub1.null.fdv.temp
+  sub2.null.fdv[[i]] <- sub2.null.fdv.temp
+  sub3.null.fdv[[i]] <- sub3.null.fdv.temp
+  sub4.null.fdv[[i]] <- sub4.null.fdv.temp
+  sub5.null.fdv[[i]] <- sub5.null.fdv.temp
+  sub6.null.fdv[[i]] <- sub6.null.fdv.temp
+  sub7.null.fdv[[i]] <- sub7.null.fdv.temp
+  sub8.null.fdv[[i]] <- sub8.null.fdv.temp
 }
 ```
 
 **Autocorrelation**
 
 ```{r}
-sub1.nulls.ac <- list(); sub2.nulls.ac <- list(); sub3.nulls.ac <- list(); sub4.nulls.ac <- list()
-sub5.nulls.ac <- list(); sub6.nulls.ac <- list(); sub7.nulls.ac <- list(); sub8.nulls.ac <- list()
+sub1.null.ac <- list(); sub2.null.ac <- list(); sub3.null.ac <- list(); sub4.null.ac <- list()
+sub5.null.ac <- list(); sub6.null.ac <- list(); sub7.null.ac <- list(); sub8.null.ac <- list()
 
 for (i in 1:1000){
-  sub1.nulls.ac.temp <- c()
-  sub2.nulls.ac.temp <- c()
-  sub3.nulls.ac.temp <- c()
-  sub4.nulls.ac.temp <- c()
-  sub5.nulls.ac.temp <- c()
-  sub6.nulls.ac.temp <- c()
-  sub7.nulls.ac.temp <- c()
-  sub8.nulls.ac.temp <- c()
+  sub1.null.ac.temp <- c()
+  sub2.null.ac.temp <- c()
+  sub3.null.ac.temp <- c()
+  sub4.null.ac.temp <- c()
+  sub5.null.ac.temp <- c()
+  sub6.null.ac.temp <- c()
+  sub7.null.ac.temp <- c()
+  sub8.null.ac.temp <- c()
   for (j in 1:15){
     window.start <- j; window.end <- j + 4
-    sub1.nulls.ac.temp[j] <- acf(sub1.nulls[[i]][c(window.start:window.end)], 
+    sub1.null.ac.temp[j] <- acf(sub1.null[[i]][c(window.start:window.end)], 
                                  plot = FALSE, type = "correlation")[[1]][2] 
-    sub2.nulls.ac.temp[j] <- acf(sub2.nulls[[i]][c(window.start:window.end)], 
+    sub2.null.ac.temp[j] <- acf(sub2.null[[i]][c(window.start:window.end)], 
                                  plot = FALSE, type = "correlation")[[1]][2] 
-    sub3.nulls.ac.temp[j] <- acf(sub3.nulls[[i]][c(window.start:window.end)], 
+    sub3.null.ac.temp[j] <- acf(sub3.null[[i]][c(window.start:window.end)], 
                                  plot = FALSE, type = "correlation")[[1]][2] 
-    sub4.nulls.ac.temp[j] <- acf(sub4.nulls[[i]][c(window.start:window.end)], 
+    sub4.null.ac.temp[j] <- acf(sub4.null[[i]][c(window.start:window.end)], 
                                  plot = FALSE, type = "correlation")[[1]][2] 
-    sub5.nulls.ac.temp[j] <- acf(sub5.nulls[[i]][c(window.start:window.end)], 
+    sub5.null.ac.temp[j] <- acf(sub5.null[[i]][c(window.start:window.end)], 
                                  plot = FALSE, type = "correlation")[[1]][2] 
-    sub6.nulls.ac.temp[j] <- acf(sub6.nulls[[i]][c(window.start:window.end)], 
+    sub6.null.ac.temp[j] <- acf(sub6.null[[i]][c(window.start:window.end)], 
                                  plot = FALSE, type = "correlation")[[1]][2] 
-    sub7.nulls.ac.temp[j] <- acf(sub7.nulls[[i]][c(window.start:window.end)], 
+    sub7.null.ac.temp[j] <- acf(sub7.null[[i]][c(window.start:window.end)], 
                                  plot = FALSE, type = "correlation")[[1]][2] 
-    sub8.nulls.ac.temp[j] <- acf(sub8.nulls[[i]][c(window.start:window.end)], 
+    sub8.null.ac.temp[j] <- acf(sub8.null[[i]][c(window.start:window.end)], 
                                  plot = FALSE, type = "correlation")[[1]][2] 
   }
-  sub1.nulls.ac[[i]] <- sub1.nulls.ac.temp
-  sub2.nulls.ac[[i]] <- sub2.nulls.ac.temp
-  sub3.nulls.ac[[i]] <- sub3.nulls.ac.temp
-  sub4.nulls.ac[[i]] <- sub4.nulls.ac.temp
-  sub5.nulls.ac[[i]] <- sub5.nulls.ac.temp
-  sub6.nulls.ac[[i]] <- sub6.nulls.ac.temp
-  sub7.nulls.ac[[i]] <- sub7.nulls.ac.temp
-  sub8.nulls.ac[[i]] <- sub8.nulls.ac.temp
+  sub1.null.ac[[i]] <- sub1.null.ac.temp
+  sub2.null.ac[[i]] <- sub2.null.ac.temp
+  sub3.null.ac[[i]] <- sub3.null.ac.temp
+  sub4.null.ac[[i]] <- sub4.null.ac.temp
+  sub5.null.ac[[i]] <- sub5.null.ac.temp
+  sub6.null.ac[[i]] <- sub6.null.ac.temp
+  sub7.null.ac[[i]] <- sub7.null.ac.temp
+  sub8.null.ac[[i]] <- sub8.null.ac.temp
 }
 ```
 
 **Autocovariance**
 
 ```{r}
-sub1.nulls.acv <- list(); sub2.nulls.acv <- list(); sub3.nulls.acv <- list(); sub4.nulls.acv <- list()
-sub5.nulls.acv <- list(); sub6.nulls.acv <- list(); sub7.nulls.acv <- list(); sub8.nulls.acv <- list()
+sub1.null.acv <- list(); sub2.null.acv <- list(); sub3.null.acv <- list(); sub4.null.acv <- list()
+sub5.null.acv <- list(); sub6.null.acv <- list(); sub7.null.acv <- list(); sub8.null.acv <- list()
 
 for (i in 1:1000){
-  sub1.nulls.acv.temp <- c()
-  sub2.nulls.acv.temp <- c()
-  sub3.nulls.acv.temp <- c()
-  sub4.nulls.acv.temp <- c()
-  sub5.nulls.acv.temp <- c()
-  sub6.nulls.acv.temp <- c()
-  sub7.nulls.acv.temp <- c()
-  sub8.nulls.acv.temp <- c()
+  sub1.null.acv.temp <- c()
+  sub2.null.acv.temp <- c()
+  sub3.null.acv.temp <- c()
+  sub4.null.acv.temp <- c()
+  sub5.null.acv.temp <- c()
+  sub6.null.acv.temp <- c()
+  sub7.null.acv.temp <- c()
+  sub8.null.acv.temp <- c()
   for (j in 1:15){
     window.start <- j; window.end <- j + 4
-    sub1.nulls.acv.temp[j] <- acf(sub1.nulls[[i]][c(window.start:window.end)], 
+    sub1.null.acv.temp[j] <- acf(sub1.null[[i]][c(window.start:window.end)], 
                                  plot = FALSE, type = "covariance")[[1]][2] 
-    sub2.nulls.acv.temp[j] <- acf(sub2.nulls[[i]][c(window.start:window.end)], 
+    sub2.null.acv.temp[j] <- acf(sub2.null[[i]][c(window.start:window.end)], 
                                  plot = FALSE, type = "covariance")[[1]][2] 
-    sub3.nulls.acv.temp[j] <- acf(sub3.nulls[[i]][c(window.start:window.end)], 
+    sub3.null.acv.temp[j] <- acf(sub3.null[[i]][c(window.start:window.end)], 
                                  plot = FALSE, type = "covariance")[[1]][2] 
-    sub4.nulls.acv.temp[j] <- acf(sub4.nulls[[i]][c(window.start:window.end)], 
+    sub4.null.acv.temp[j] <- acf(sub4.null[[i]][c(window.start:window.end)], 
                                  plot = FALSE, type = "covariance")[[1]][2] 
-    sub5.nulls.acv.temp[j] <- acf(sub5.nulls[[i]][c(window.start:window.end)], 
+    sub5.null.acv.temp[j] <- acf(sub5.null[[i]][c(window.start:window.end)], 
                                  plot = FALSE, type = "covariance")[[1]][2] 
-    sub6.nulls.acv.temp[j] <- acf(sub6.nulls[[i]][c(window.start:window.end)], 
+    sub6.null.acv.temp[j] <- acf(sub6.null[[i]][c(window.start:window.end)], 
                                  plot = FALSE, type = "covariance")[[1]][2] 
-    sub7.nulls.acv.temp[j] <- acf(sub7.nulls[[i]][c(window.start:window.end)], 
+    sub7.null.acv.temp[j] <- acf(sub7.null[[i]][c(window.start:window.end)], 
                                  plot = FALSE, type = "covariance")[[1]][2] 
-    sub8.nulls.acv.temp[j] <- acf(sub8.nulls[[i]][c(window.start:window.end)], 
+    sub8.null.acv.temp[j] <- acf(sub8.null[[i]][c(window.start:window.end)], 
                                  plot = FALSE, type = "covariance")[[1]][2] 
   }
-  sub1.nulls.acv[[i]] <- sub1.nulls.acv.temp
-  sub2.nulls.acv[[i]] <- sub2.nulls.acv.temp
-  sub3.nulls.acv[[i]] <- sub3.nulls.acv.temp
-  sub4.nulls.acv[[i]] <- sub4.nulls.acv.temp
-  sub5.nulls.acv[[i]] <- sub5.nulls.acv.temp
-  sub6.nulls.acv[[i]] <- sub6.nulls.acv.temp
-  sub7.nulls.acv[[i]] <- sub7.nulls.acv.temp
-  sub8.nulls.acv[[i]] <- sub8.nulls.acv.temp
+  sub1.null.acv[[i]] <- sub1.null.acv.temp
+  sub2.null.acv[[i]] <- sub2.null.acv.temp
+  sub3.null.acv[[i]] <- sub3.null.acv.temp
+  sub4.null.acv[[i]] <- sub4.null.acv.temp
+  sub5.null.acv[[i]] <- sub5.null.acv.temp
+  sub6.null.acv[[i]] <- sub6.null.acv.temp
+  sub7.null.acv[[i]] <- sub7.null.acv.temp
+  sub8.null.acv[[i]] <- sub8.null.acv.temp
 }
 ```
 
 **Decay Time**
 
 ```{r}
-sub1.nulls.dt <- list(); sub2.nulls.dt <- list(); sub3.nulls.dt <- list(); sub4.nulls.dt <- list()
-sub5.nulls.dt <- list(); sub6.nulls.dt <- list(); sub7.nulls.dt <- list(); sub8.nulls.dt <- list()
+sub1.null.dt <- list(); sub2.null.dt <- list(); sub3.null.dt <- list(); sub4.null.dt <- list()
+sub5.null.dt <- list(); sub6.null.dt <- list(); sub7.null.dt <- list(); sub8.null.dt <- list()
 
 for (i in 1:1000){
-  sub1.nulls.dt.temp <- c()
-  sub2.nulls.dt.temp <- c()
-  sub3.nulls.dt.temp <- c()
-  sub4.nulls.dt.temp <- c()
-  sub5.nulls.dt.temp <- c()
-  sub6.nulls.dt.temp <- c()
-  sub7.nulls.dt.temp <- c()
-  sub8.nulls.dt.temp <- c()
+  sub1.null.dt.temp <- c()
+  sub2.null.dt.temp <- c()
+  sub3.null.dt.temp <- c()
+  sub4.null.dt.temp <- c()
+  sub5.null.dt.temp <- c()
+  sub6.null.dt.temp <- c()
+  sub7.null.dt.temp <- c()
+  sub8.null.dt.temp <- c()
   for (j in 1:15){
-    suppressWarnings(sub1.nulls.dt.temp[j] <- -j/log(sub1.nulls.ac[[i]][j]))
-    suppressWarnings(sub2.nulls.dt.temp[j] <- -j/log(sub2.nulls.ac[[i]][j]))
-    suppressWarnings(sub3.nulls.dt.temp[j] <- -j/log(sub3.nulls.ac[[i]][j]))
-    suppressWarnings(sub4.nulls.dt.temp[j] <- -j/log(sub4.nulls.ac[[i]][j]))
-    suppressWarnings(sub5.nulls.dt.temp[j] <- -j/log(sub5.nulls.ac[[i]][j]))
-    suppressWarnings(sub6.nulls.dt.temp[j] <- -j/log(sub6.nulls.ac[[i]][j]))
-    suppressWarnings(sub7.nulls.dt.temp[j] <- -j/log(sub7.nulls.ac[[i]][j]))
-    suppressWarnings(sub8.nulls.dt.temp[j] <- -j/log(sub8.nulls.ac[[i]][j]))
+    suppressWarnings(sub1.null.dt.temp[j] <- -j/log(sub1.null.ac[[i]][j]))
+    suppressWarnings(sub2.null.dt.temp[j] <- -j/log(sub2.null.ac[[i]][j]))
+    suppressWarnings(sub3.null.dt.temp[j] <- -j/log(sub3.null.ac[[i]][j]))
+    suppressWarnings(sub4.null.dt.temp[j] <- -j/log(sub4.null.ac[[i]][j]))
+    suppressWarnings(sub5.null.dt.temp[j] <- -j/log(sub5.null.ac[[i]][j]))
+    suppressWarnings(sub6.null.dt.temp[j] <- -j/log(sub6.null.ac[[i]][j]))
+    suppressWarnings(sub7.null.dt.temp[j] <- -j/log(sub7.null.ac[[i]][j]))
+    suppressWarnings(sub8.null.dt.temp[j] <- -j/log(sub8.null.ac[[i]][j]))
   }
-  sub1.nulls.dt[[i]] <- sub1.nulls.dt.temp
-  sub2.nulls.dt[[i]] <- sub2.nulls.dt.temp
-  sub3.nulls.dt[[i]] <- sub3.nulls.dt.temp
-  sub4.nulls.dt[[i]] <- sub4.nulls.dt.temp
-  sub5.nulls.dt[[i]] <- sub5.nulls.dt.temp
-  sub6.nulls.dt[[i]] <- sub6.nulls.dt.temp
-  sub7.nulls.dt[[i]] <- sub7.nulls.dt.temp
-  sub8.nulls.dt[[i]] <- sub8.nulls.dt.temp
+  sub1.null.dt[[i]] <- sub1.null.dt.temp
+  sub2.null.dt[[i]] <- sub2.null.dt.temp
+  sub3.null.dt[[i]] <- sub3.null.dt.temp
+  sub4.null.dt[[i]] <- sub4.null.dt.temp
+  sub5.null.dt[[i]] <- sub5.null.dt.temp
+  sub6.null.dt[[i]] <- sub6.null.dt.temp
+  sub7.null.dt[[i]] <- sub7.null.dt.temp
+  sub8.null.dt[[i]] <- sub8.null.dt.temp
 }
 ```
 
@@ -432,180 +433,180 @@ for (i in 1:1000){
 ### Mean
 
 ```{r}
-sub1.null.mean.tau <- c(); sub2.null.mean.tau <- c(); sub3.null.mean.tau <- c(); sub4.null.mean.tau <- c()
-sub5.null.mean.tau <- c(); sub6.null.mean.tau <- c(); sub7.null.mean.tau <- c(); sub8.null.mean.tau <- c()
+sub1.null.mean.taus <- c(); sub2.null.mean.taus <- c(); sub3.null.mean.taus <- c(); sub4.null.mean.taus <- c()
+sub5.null.mean.taus <- c(); sub6.null.mean.taus <- c(); sub7.null.mean.taus <- c(); sub8.null.mean.taus <- c()
 t <- seq(1, 15, 1)
 for (i in 1:1000){
-  sub1.null.mean.tau[i] <- cor(sub1.nulls.mean[[i]], t, method = "kendall")
-  sub2.null.mean.tau[i] <- cor(sub2.nulls.mean[[i]], t, method = "kendall")
-  sub3.null.mean.tau[i] <- cor(sub3.nulls.mean[[i]], t, method = "kendall")
-  sub4.null.mean.tau[i] <- cor(sub4.nulls.mean[[i]], t, method = "kendall")
-  sub5.null.mean.tau[i] <- cor(sub5.nulls.mean[[i]], t, method = "kendall")
-  sub6.null.mean.tau[i] <- cor(sub6.nulls.mean[[i]], t, method = "kendall")
-  sub7.null.mean.tau[i] <- cor(sub7.nulls.mean[[i]], t, method = "kendall")
-  sub8.null.mean.tau[i] <- cor(sub8.nulls.mean[[i]], t, method = "kendall")
+  sub1.null.mean.taus[i] <- cor(sub1.null.mean[[i]], t, method = "kendall")
+  sub2.null.mean.taus[i] <- cor(sub2.null.mean[[i]], t, method = "kendall")
+  sub3.null.mean.taus[i] <- cor(sub3.null.mean[[i]], t, method = "kendall")
+  sub4.null.mean.taus[i] <- cor(sub4.null.mean[[i]], t, method = "kendall")
+  sub5.null.mean.taus[i] <- cor(sub5.null.mean[[i]], t, method = "kendall")
+  sub6.null.mean.taus[i] <- cor(sub6.null.mean[[i]], t, method = "kendall")
+  sub7.null.mean.taus[i] <- cor(sub7.null.mean[[i]], t, method = "kendall")
+  sub8.null.mean.taus[i] <- cor(sub8.null.mean[[i]], t, method = "kendall")
 }
 ```
 
 **Skewness**
 
 ```{r}
-sub1.null.sk.tau <- c(); sub2.null.sk.tau <- c(); sub3.null.sk.tau <- c(); sub4.null.sk.tau <- c()
-sub5.null.sk.tau <- c(); sub6.null.sk.tau <- c(); sub7.null.sk.tau <- c(); sub8.null.sk.tau <- c()
+sub1.null.sk.taus <- c(); sub2.null.sk.taus <- c(); sub3.null.sk.taus <- c(); sub4.null.sk.taus <- c()
+sub5.null.sk.taus <- c(); sub6.null.sk.taus <- c(); sub7.null.sk.taus <- c(); sub8.null.sk.taus <- c()
 t <- seq(1, 15, 1)
 for (i in 1:1000){
-  sub1.null.sk.tau[i] <- cor(sub1.nulls.sk[[i]], t, method = "kendall")
-  sub2.null.sk.tau[i] <- cor(sub2.nulls.sk[[i]], t, method = "kendall")
-  sub3.null.sk.tau[i] <- cor(sub3.nulls.sk[[i]], t, method = "kendall")
-  sub4.null.sk.tau[i] <- cor(sub4.nulls.sk[[i]], t, method = "kendall")
-  sub5.null.sk.tau[i] <- cor(sub5.nulls.sk[[i]], t, method = "kendall")
-  sub6.null.sk.tau[i] <- cor(sub6.nulls.sk[[i]], t, method = "kendall")
-  sub7.null.sk.tau[i] <- cor(sub7.nulls.sk[[i]], t, method = "kendall")
-  sub8.null.sk.tau[i] <- cor(sub8.nulls.sk[[i]], t, method = "kendall")
+  sub1.null.sk.taus[i] <- cor(sub1.null.sk[[i]], t, method = "kendall")
+  sub2.null.sk.taus[i] <- cor(sub2.null.sk[[i]], t, method = "kendall")
+  sub3.null.sk.taus[i] <- cor(sub3.null.sk[[i]], t, method = "kendall")
+  sub4.null.sk.taus[i] <- cor(sub4.null.sk[[i]], t, method = "kendall")
+  sub5.null.sk.taus[i] <- cor(sub5.null.sk[[i]], t, method = "kendall")
+  sub6.null.sk.taus[i] <- cor(sub6.null.sk[[i]], t, method = "kendall")
+  sub7.null.sk.taus[i] <- cor(sub7.null.sk[[i]], t, method = "kendall")
+  sub8.null.sk.taus[i] <- cor(sub8.null.sk[[i]], t, method = "kendall")
 }
 ```
 
 **Kurtosis**
 
 ```{r}
-sub1.null.kt.tau <- c(); sub2.null.kt.tau <- c(); sub3.null.kt.tau <- c(); sub4.null.kt.tau <- c()
-sub5.null.kt.tau <- c(); sub6.null.kt.tau <- c(); sub7.null.kt.tau <- c(); sub8.null.kt.tau <- c()
+sub1.null.kt.taus <- c(); sub2.null.kt.taus <- c(); sub3.null.kt.taus <- c(); sub4.null.kt.taus <- c()
+sub5.null.kt.taus <- c(); sub6.null.kt.taus <- c(); sub7.null.kt.taus <- c(); sub8.null.kt.taus <- c()
 t <- seq(1, 15, 1)
 for (i in 1:1000){
-  sub1.null.kt.tau[i] <- cor(sub1.nulls.kt[[i]], t, method = "kendall")
-  sub2.null.kt.tau[i] <- cor(sub2.nulls.kt[[i]], t, method = "kendall")
-  sub3.null.kt.tau[i] <- cor(sub3.nulls.kt[[i]], t, method = "kendall")
-  sub4.null.kt.tau[i] <- cor(sub4.nulls.kt[[i]], t, method = "kendall")
-  sub5.null.kt.tau[i] <- cor(sub5.nulls.kt[[i]], t, method = "kendall")
-  sub6.null.kt.tau[i] <- cor(sub6.nulls.kt[[i]], t, method = "kendall")
-  sub7.null.kt.tau[i] <- cor(sub7.nulls.kt[[i]], t, method = "kendall")
-  sub8.null.kt.tau[i] <- cor(sub8.nulls.kt[[i]], t, method = "kendall")
+  sub1.null.kt.taus[i] <- cor(sub1.null.kt[[i]], t, method = "kendall")
+  sub2.null.kt.taus[i] <- cor(sub2.null.kt[[i]], t, method = "kendall")
+  sub3.null.kt.taus[i] <- cor(sub3.null.kt[[i]], t, method = "kendall")
+  sub4.null.kt.taus[i] <- cor(sub4.null.kt[[i]], t, method = "kendall")
+  sub5.null.kt.taus[i] <- cor(sub5.null.kt[[i]], t, method = "kendall")
+  sub6.null.kt.taus[i] <- cor(sub6.null.kt[[i]], t, method = "kendall")
+  sub7.null.kt.taus[i] <- cor(sub7.null.kt[[i]], t, method = "kendall")
+  sub8.null.kt.taus[i] <- cor(sub8.null.kt[[i]], t, method = "kendall")
 }
 ```
 
 ### Variance
 
 ```{r}
-sub1.null.var.tau <- c(); sub2.null.var.tau <- c(); sub3.null.var.tau <- c(); sub4.null.var.tau <- c()
-sub5.null.var.tau <- c(); sub6.null.var.tau <- c(); sub7.null.var.tau <- c(); sub8.null.var.tau <- c()
+sub1.null.var.taus <- c(); sub2.null.var.taus <- c(); sub3.null.var.taus <- c(); sub4.null.var.taus <- c()
+sub5.null.var.taus <- c(); sub6.null.var.taus <- c(); sub7.null.var.taus <- c(); sub8.null.var.taus <- c()
 t <- seq(1, 15, 1)
 for (i in 1:1000){
-  sub1.null.var.tau[i] <- cor(sub1.nulls.var[[i]], t, method = "kendall")
-  sub2.null.var.tau[i] <- cor(sub2.nulls.var[[i]], t, method = "kendall")
-  sub3.null.var.tau[i] <- cor(sub3.nulls.var[[i]], t, method = "kendall")
-  sub4.null.var.tau[i] <- cor(sub4.nulls.var[[i]], t, method = "kendall")
-  sub5.null.var.tau[i] <- cor(sub5.nulls.var[[i]], t, method = "kendall")
-  sub6.null.var.tau[i] <- cor(sub6.nulls.var[[i]], t, method = "kendall")
-  sub7.null.var.tau[i] <- cor(sub7.nulls.var[[i]], t, method = "kendall")
-  sub8.null.var.tau[i] <- cor(sub8.nulls.var[[i]], t, method = "kendall")
+  sub1.null.var.taus[i] <- cor(sub1.null.var[[i]], t, method = "kendall")
+  sub2.null.var.taus[i] <- cor(sub2.null.var[[i]], t, method = "kendall")
+  sub3.null.var.taus[i] <- cor(sub3.null.var[[i]], t, method = "kendall")
+  sub4.null.var.taus[i] <- cor(sub4.null.var[[i]], t, method = "kendall")
+  sub5.null.var.taus[i] <- cor(sub5.null.var[[i]], t, method = "kendall")
+  sub6.null.var.taus[i] <- cor(sub6.null.var[[i]], t, method = "kendall")
+  sub7.null.var.taus[i] <- cor(sub7.null.var[[i]], t, method = "kendall")
+  sub8.null.var.taus[i] <- cor(sub8.null.var[[i]], t, method = "kendall")
 }
 ```
 
 **Co-Efficient of Variation**
 
 ```{r}
-sub1.null.cv.tau <- c(); sub2.null.cv.tau <- c(); sub3.null.cv.tau <- c(); sub4.null.cv.tau <- c()
-sub5.null.cv.tau <- c(); sub6.null.cv.tau <- c(); sub7.null.cv.tau <- c(); sub8.null.cv.tau <- c()
+sub1.null.cv.taus <- c(); sub2.null.cv.taus <- c(); sub3.null.cv.taus <- c(); sub4.null.cv.taus <- c()
+sub5.null.cv.taus <- c(); sub6.null.cv.taus <- c(); sub7.null.cv.taus <- c(); sub8.null.cv.taus <- c()
 t <- seq(1, 15, 1)
 for (i in 1:1000){
-  sub1.null.cv.tau[i] <- cor(sub1.nulls.cv[[i]], t, method = "kendall")
-  sub2.null.cv.tau[i] <- cor(sub2.nulls.cv[[i]], t, method = "kendall")
-  sub3.null.cv.tau[i] <- cor(sub3.nulls.cv[[i]], t, method = "kendall")
-  sub4.null.cv.tau[i] <- cor(sub4.nulls.cv[[i]], t, method = "kendall")
-  sub5.null.cv.tau[i] <- cor(sub5.nulls.cv[[i]], t, method = "kendall")
-  sub6.null.cv.tau[i] <- cor(sub6.nulls.cv[[i]], t, method = "kendall")
-  sub7.null.cv.tau[i] <- cor(sub7.nulls.cv[[i]], t, method = "kendall")
-  sub8.null.cv.tau[i] <- cor(sub8.nulls.cv[[i]], t, method = "kendall")
+  sub1.null.cv.taus[i] <- cor(sub1.null.cv[[i]], t, method = "kendall")
+  sub2.null.cv.taus[i] <- cor(sub2.null.cv[[i]], t, method = "kendall")
+  sub3.null.cv.taus[i] <- cor(sub3.null.cv[[i]], t, method = "kendall")
+  sub4.null.cv.taus[i] <- cor(sub4.null.cv[[i]], t, method = "kendall")
+  sub5.null.cv.taus[i] <- cor(sub5.null.cv[[i]], t, method = "kendall")
+  sub6.null.cv.taus[i] <- cor(sub6.null.cv[[i]], t, method = "kendall")
+  sub7.null.cv.taus[i] <- cor(sub7.null.cv[[i]], t, method = "kendall")
+  sub8.null.cv.taus[i] <- cor(sub8.null.cv[[i]], t, method = "kendall")
 }
 ```
 
 ### Index of Dispersion
 
 ```{r}
-sub1.null.id.tau <- c(); sub2.null.id.tau <- c(); sub3.null.id.tau <- c(); sub4.null.id.tau <- c()
-sub5.null.id.tau <- c(); sub6.null.id.tau <- c(); sub7.null.id.tau <- c(); sub8.null.id.tau <- c()
+sub1.null.id.taus <- c(); sub2.null.id.taus <- c(); sub3.null.id.taus <- c(); sub4.null.id.taus <- c()
+sub5.null.id.taus <- c(); sub6.null.id.taus <- c(); sub7.null.id.taus <- c(); sub8.null.id.taus <- c()
 t <- seq(1, 15, 1)
 for (i in 1:1000){
-  sub1.null.id.tau[i] <- cor(sub1.nulls.id[[i]], t, method = "kendall")
-  sub2.null.id.tau[i] <- cor(sub2.nulls.id[[i]], t, method = "kendall")
-  sub3.null.id.tau[i] <- cor(sub3.nulls.id[[i]], t, method = "kendall")
-  sub4.null.id.tau[i] <- cor(sub4.nulls.id[[i]], t, method = "kendall")
-  sub5.null.id.tau[i] <- cor(sub5.nulls.id[[i]], t, method = "kendall")
-  sub6.null.id.tau[i] <- cor(sub6.nulls.id[[i]], t, method = "kendall")
-  sub7.null.id.tau[i] <- cor(sub7.nulls.id[[i]], t, method = "kendall")
-  sub8.null.id.tau[i] <- cor(sub8.nulls.id[[i]], t, method = "kendall")
+  sub1.null.id.taus[i] <- cor(sub1.null.id[[i]], t, method = "kendall")
+  sub2.null.id.taus[i] <- cor(sub2.null.id[[i]], t, method = "kendall")
+  sub3.null.id.taus[i] <- cor(sub3.null.id[[i]], t, method = "kendall")
+  sub4.null.id.taus[i] <- cor(sub4.null.id[[i]], t, method = "kendall")
+  sub5.null.id.taus[i] <- cor(sub5.null.id[[i]], t, method = "kendall")
+  sub6.null.id.taus[i] <- cor(sub6.null.id[[i]], t, method = "kendall")
+  sub7.null.id.taus[i] <- cor(sub7.null.id[[i]], t, method = "kendall")
+  sub8.null.id.taus[i] <- cor(sub8.null.id[[i]], t, method = "kendall")
 }
 ```
 
 **First Difference Variance**
 
 ```{r}
-sub1.null.fdv.tau <- c(); sub2.null.fdv.tau <- c(); sub3.null.fdv.tau <- c(); sub4.null.fdv.tau <- c()
-sub5.null.fdv.tau <- c(); sub6.null.fdv.tau <- c(); sub7.null.fdv.tau <- c(); sub8.null.fdv.tau <- c()
+sub1.null.fdv.taus <- c(); sub2.null.fdv.taus <- c(); sub3.null.fdv.taus <- c(); sub4.null.fdv.taus <- c()
+sub5.null.fdv.taus <- c(); sub6.null.fdv.taus <- c(); sub7.null.fdv.taus <- c(); sub8.null.fdv.taus <- c()
 t <- seq(1, 14, 1)
 for (i in 1:1000){
-  sub1.null.fdv.tau[i] <- cor(sub1.nulls.fdv[[i]], t, method = "kendall")
-  sub2.null.fdv.tau[i] <- cor(sub2.nulls.fdv[[i]], t, method = "kendall")
-  sub3.null.fdv.tau[i] <- cor(sub3.nulls.fdv[[i]], t, method = "kendall")
-  sub4.null.fdv.tau[i] <- cor(sub4.nulls.fdv[[i]], t, method = "kendall")
-  sub5.null.fdv.tau[i] <- cor(sub5.nulls.fdv[[i]], t, method = "kendall")
-  sub6.null.fdv.tau[i] <- cor(sub6.nulls.fdv[[i]], t, method = "kendall")
-  sub7.null.fdv.tau[i] <- cor(sub7.nulls.fdv[[i]], t, method = "kendall")
-  sub8.null.fdv.tau[i] <- cor(sub8.nulls.fdv[[i]], t, method = "kendall")
+  sub1.null.fdv.taus[i] <- cor(sub1.null.fdv[[i]], t, method = "kendall")
+  sub2.null.fdv.taus[i] <- cor(sub2.null.fdv[[i]], t, method = "kendall")
+  sub3.null.fdv.taus[i] <- cor(sub3.null.fdv[[i]], t, method = "kendall")
+  sub4.null.fdv.taus[i] <- cor(sub4.null.fdv[[i]], t, method = "kendall")
+  sub5.null.fdv.taus[i] <- cor(sub5.null.fdv[[i]], t, method = "kendall")
+  sub6.null.fdv.taus[i] <- cor(sub6.null.fdv[[i]], t, method = "kendall")
+  sub7.null.fdv.taus[i] <- cor(sub7.null.fdv[[i]], t, method = "kendall")
+  sub8.null.fdv.taus[i] <- cor(sub8.null.fdv[[i]], t, method = "kendall")
 }
 ```
 
 **Autocorrelation**
 
 ```{r}
-sub1.null.ac.tau <- c(); sub2.null.ac.tau <- c(); sub3.null.ac.tau <- c(); sub4.null.ac.tau <- c()
-sub5.null.ac.tau <- c(); sub6.null.ac.tau <- c(); sub7.null.ac.tau <- c(); sub8.null.ac.tau <- c()
+sub1.null.ac.taus <- c(); sub2.null.ac.taus <- c(); sub3.null.ac.taus <- c(); sub4.null.ac.taus <- c()
+sub5.null.ac.taus <- c(); sub6.null.ac.taus <- c(); sub7.null.ac.taus <- c(); sub8.null.ac.taus <- c()
 t <- seq(1, 15, 1)
 for (i in 1:1000){
-  sub1.null.ac.tau[i] <- cor(sub1.nulls.ac[[i]], t, method = "kendall")
-  sub2.null.ac.tau[i] <- cor(sub2.nulls.ac[[i]], t, method = "kendall")
-  sub3.null.ac.tau[i] <- cor(sub3.nulls.ac[[i]], t, method = "kendall")
-  sub4.null.ac.tau[i] <- cor(sub4.nulls.ac[[i]], t, method = "kendall")
-  sub5.null.ac.tau[i] <- cor(sub5.nulls.ac[[i]], t, method = "kendall")
-  sub6.null.ac.tau[i] <- cor(sub6.nulls.ac[[i]], t, method = "kendall")
-  sub7.null.ac.tau[i] <- cor(sub7.nulls.ac[[i]], t, method = "kendall")
-  sub8.null.ac.tau[i] <- cor(sub8.nulls.ac[[i]], t, method = "kendall")
+  sub1.null.ac.taus[i] <- cor(sub1.null.ac[[i]], t, method = "kendall")
+  sub2.null.ac.taus[i] <- cor(sub2.null.ac[[i]], t, method = "kendall")
+  sub3.null.ac.taus[i] <- cor(sub3.null.ac[[i]], t, method = "kendall")
+  sub4.null.ac.taus[i] <- cor(sub4.null.ac[[i]], t, method = "kendall")
+  sub5.null.ac.taus[i] <- cor(sub5.null.ac[[i]], t, method = "kendall")
+  sub6.null.ac.taus[i] <- cor(sub6.null.ac[[i]], t, method = "kendall")
+  sub7.null.ac.taus[i] <- cor(sub7.null.ac[[i]], t, method = "kendall")
+  sub8.null.ac.taus[i] <- cor(sub8.null.ac[[i]], t, method = "kendall")
 }
 ```
 
 **Autocovariance**
 
 ```{r}
-sub1.null.acv.tau <- c(); sub2.null.acv.tau <- c(); sub3.null.acv.tau <- c(); sub4.null.acv.tau <- c()
-sub5.null.acv.tau <- c(); sub6.null.acv.tau <- c(); sub7.null.acv.tau <- c(); sub8.null.acv.tau <- c()
+sub1.null.acv.taus <- c(); sub2.null.acv.taus <- c(); sub3.null.acv.taus <- c(); sub4.null.acv.taus <- c()
+sub5.null.acv.taus <- c(); sub6.null.acv.taus <- c(); sub7.null.acv.taus <- c(); sub8.null.acv.taus <- c()
 t <- seq(1, 15, 1)
 for (i in 1:1000){
-  sub1.null.acv.tau[i] <- cor(sub1.nulls.acv[[i]], t, method = "kendall")
-  sub2.null.acv.tau[i] <- cor(sub2.nulls.acv[[i]], t, method = "kendall")
-  sub3.null.acv.tau[i] <- cor(sub3.nulls.acv[[i]], t, method = "kendall")
-  sub4.null.acv.tau[i] <- cor(sub4.nulls.acv[[i]], t, method = "kendall")
-  sub5.null.acv.tau[i] <- cor(sub5.nulls.acv[[i]], t, method = "kendall")
-  sub6.null.acv.tau[i] <- cor(sub6.nulls.acv[[i]], t, method = "kendall")
-  sub7.null.acv.tau[i] <- cor(sub7.nulls.acv[[i]], t, method = "kendall")
-  sub8.null.acv.tau[i] <- cor(sub8.nulls.acv[[i]], t, method = "kendall")
+  sub1.null.acv.taus[i] <- cor(sub1.null.acv[[i]], t, method = "kendall")
+  sub2.null.acv.taus[i] <- cor(sub2.null.acv[[i]], t, method = "kendall")
+  sub3.null.acv.taus[i] <- cor(sub3.null.acv[[i]], t, method = "kendall")
+  sub4.null.acv.taus[i] <- cor(sub4.null.acv[[i]], t, method = "kendall")
+  sub5.null.acv.taus[i] <- cor(sub5.null.acv[[i]], t, method = "kendall")
+  sub6.null.acv.taus[i] <- cor(sub6.null.acv[[i]], t, method = "kendall")
+  sub7.null.acv.taus[i] <- cor(sub7.null.acv[[i]], t, method = "kendall")
+  sub8.null.acv.taus[i] <- cor(sub8.null.acv[[i]], t, method = "kendall")
 }
 ```
 
 **Decay Time**
 
 ```{r}
-sub1.null.dt.tau <- c(); sub2.null.dt.tau <- c(); sub3.null.dt.tau <- c(); sub4.null.dt.tau <- c()
-sub5.null.dt.tau <- c(); sub6.null.dt.tau <- c(); sub7.null.dt.tau <- c(); sub8.null.dt.tau <- c()
+sub1.null.dt.taus <- c(); sub2.null.dt.taus <- c(); sub3.null.dt.taus <- c(); sub4.null.dt.taus <- c()
+sub5.null.dt.taus <- c(); sub6.null.dt.taus <- c(); sub7.null.dt.taus <- c(); sub8.null.dt.taus <- c()
 t <- seq(1, 15, 1)
 for (i in 1:1000){
-  sub1.null.dt.tau[i] <- cor(sub1.nulls.dt[[i]], t, method = "kendall")
-  sub2.null.dt.tau[i] <- cor(sub2.nulls.dt[[i]], t, method = "kendall")
-  sub3.null.dt.tau[i] <- cor(sub3.nulls.dt[[i]], t, method = "kendall")
-  sub4.null.dt.tau[i] <- cor(sub4.nulls.dt[[i]], t, method = "kendall")
-  sub5.null.dt.tau[i] <- cor(sub5.nulls.dt[[i]], t, method = "kendall")
-  sub6.null.dt.tau[i] <- cor(sub6.nulls.dt[[i]], t, method = "kendall")
-  sub7.null.dt.tau[i] <- cor(sub7.nulls.dt[[i]], t, method = "kendall")
-  sub8.null.dt.tau[i] <- cor(sub8.nulls.dt[[i]], t, method = "kendall")
+  sub1.null.dt.taus[i] <- cor(sub1.null.dt[[i]], t, method = "kendall")
+  sub2.null.dt.taus[i] <- cor(sub2.null.dt[[i]], t, method = "kendall")
+  sub3.null.dt.taus[i] <- cor(sub3.null.dt[[i]], t, method = "kendall")
+  sub4.null.dt.taus[i] <- cor(sub4.null.dt[[i]], t, method = "kendall")
+  sub5.null.dt.taus[i] <- cor(sub5.null.dt[[i]], t, method = "kendall")
+  sub6.null.dt.taus[i] <- cor(sub6.null.dt[[i]], t, method = "kendall")
+  sub7.null.dt.taus[i] <- cor(sub7.null.dt[[i]], t, method = "kendall")
+  sub8.null.dt.taus[i] <- cor(sub8.null.dt[[i]], t, method = "kendall")
 }
 ```
 
@@ -712,16 +713,16 @@ sub8.dt.tau <- warming.dt.tau[4]
 ```{r}
 subpop <- c(rep("1", 1000), rep("2", 1000), rep("3", 1000), rep("4", 1000), rep("5", 1000), rep("6", 1000), rep("7", 1000), rep("8", 1000))
 real.tau <- c(rep(sub1.mean.tau, 1000), rep(sub2.mean.tau, 1000), rep(sub3.mean.tau, 1000), rep(sub4.mean.tau, 1000), rep(sub5.mean.tau, 1000), rep(sub6.mean.tau, 1000), rep(sub7.mean.tau, 1000), rep(sub8.mean.tau, 1000))
-null.mean.tau <- c(sub1.null.mean.tau, sub2.null.mean.tau, sub3.null.mean.tau, sub4.null.mean.tau, sub5.null.mean.tau, sub6.null.mean.tau, sub7.null.mean.tau, sub8.null.mean.tau)
-null.mean.tau.df <- data.frame(
+null.mean.taus <- c(sub1.null.mean.taus, sub2.null.mean.taus, sub3.null.mean.taus, sub4.null.mean.taus, sub5.null.mean.taus, sub6.null.mean.taus, sub7.null.mean.taus, sub8.null.mean.taus)
+null.mean.taus.df <- data.frame(
   subpop = subpop, 
   real.tau = real.tau,
-  null.mean.tau = null.mean.tau
+  null.mean.taus = null.mean.taus
 )
 
 cols <- c(rep("#1434A4", 4000), rep("#C21E56", 4000))
 
-ggplot(null.mean.tau.df, aes(x = subpop, y = null.mean.tau)) + 
+ggplot(null.mean.taus.df, aes(x = subpop, y = null.mean.taus)) + 
   geom_violin() +
   geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
   geom_point(aes(y = real.tau), size = 4, shape = 8) + 
@@ -739,16 +740,16 @@ ggplot(null.mean.tau.df, aes(x = subpop, y = null.mean.tau)) +
 ```{r}
 subpop <- c(rep("1", 1000), rep("2", 1000), rep("3", 1000), rep("4", 1000), rep("5", 1000), rep("6", 1000), rep("7", 1000), rep("8", 1000))
 real.tau <- c(rep(sub1.sk.tau, 1000), rep(sub2.sk.tau, 1000), rep(sub3.sk.tau, 1000), rep(sub4.sk.tau, 1000), rep(sub5.sk.tau, 1000), rep(sub6.sk.tau, 1000), rep(sub7.sk.tau, 1000), rep(sub8.sk.tau, 1000))
-null.sk.tau <- c(sub1.null.sk.tau, sub2.null.sk.tau, sub3.null.sk.tau, sub4.null.sk.tau, sub5.null.sk.tau, sub6.null.sk.tau, sub7.null.sk.tau, sub8.null.sk.tau)
-null.sk.tau.df <- data.frame(
+null.sk.taus <- c(sub1.null.sk.taus, sub2.null.sk.taus, sub3.null.sk.taus, sub4.null.sk.taus, sub5.null.sk.taus, sub6.null.sk.taus, sub7.null.sk.taus, sub8.null.sk.taus)
+null.sk.taus.df <- data.frame(
   subpop = subpop, 
   real.tau = real.tau,
-  null.sk.tau = null.sk.tau
+  null.sk.taus = null.sk.taus
 )
 
 cols <- c(rep("#1434A4", 4000), rep("#C21E56", 4000))
 
-ggplot(null.sk.tau.df, aes(x = subpop, y = null.sk.tau)) + 
+ggplot(null.sk.taus.df, aes(x = subpop, y = null.sk.taus)) + 
   geom_violin() +
   geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
   geom_point(aes(y = real.tau), size = 4, shape = 8) + 
@@ -766,16 +767,16 @@ ggplot(null.sk.tau.df, aes(x = subpop, y = null.sk.tau)) +
 ```{r}
 subpop <- c(rep("1", 1000), rep("2", 1000), rep("3", 1000), rep("4", 1000), rep("5", 1000), rep("6", 1000), rep("7", 1000), rep("8", 1000))
 real.tau <- c(rep(sub1.kt.tau, 1000), rep(sub2.kt.tau, 1000), rep(sub3.kt.tau, 1000), rep(sub4.kt.tau, 1000), rep(sub5.kt.tau, 1000), rep(sub6.kt.tau, 1000), rep(sub7.kt.tau, 1000), rep(sub8.kt.tau, 1000))
-null.kt.tau <- c(sub1.null.kt.tau, sub2.null.kt.tau, sub3.null.kt.tau, sub4.null.kt.tau, sub5.null.kt.tau, sub6.null.kt.tau, sub7.null.kt.tau, sub8.null.kt.tau)
-null.kt.tau.df <- data.frame(
+null.kt.taus <- c(sub1.null.kt.taus, sub2.null.kt.taus, sub3.null.kt.taus, sub4.null.kt.taus, sub5.null.kt.taus, sub6.null.kt.taus, sub7.null.kt.taus, sub8.null.kt.taus)
+null.kt.taus.df <- data.frame(
   subpop = subpop, 
   real.tau = real.tau,
-  null.kt.tau = null.kt.tau
+  null.kt.taus = null.kt.taus
 )
 
 cols <- c(rep("#1434A4", 4000), rep("#C21E56", 4000))
 
-ggplot(null.kt.tau.df, aes(x = subpop, y = null.kt.tau)) + 
+ggplot(null.kt.taus.df, aes(x = subpop, y = null.kt.taus)) + 
   geom_violin() +
   geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
   geom_point(aes(y = real.tau), size = 4, shape = 8) + 
@@ -793,16 +794,16 @@ ggplot(null.kt.tau.df, aes(x = subpop, y = null.kt.tau)) +
 ```{r}
 subpop <- c(rep("1", 1000), rep("2", 1000), rep("3", 1000), rep("4", 1000), rep("5", 1000), rep("6", 1000), rep("7", 1000), rep("8", 1000))
 real.tau <- c(rep(sub1.var.tau, 1000), rep(sub2.var.tau, 1000), rep(sub3.var.tau, 1000), rep(sub4.var.tau, 1000), rep(sub5.var.tau, 1000), rep(sub6.var.tau, 1000), rep(sub7.var.tau, 1000), rep(sub8.var.tau, 1000))
-null.var.tau <- c(sub1.null.var.tau, sub2.null.var.tau, sub3.null.var.tau, sub4.null.var.tau, sub5.null.var.tau, sub6.null.var.tau, sub7.null.var.tau, sub8.null.var.tau)
-null.var.tau.df <- data.frame(
+null.var.taus <- c(sub1.null.var.taus, sub2.null.var.taus, sub3.null.var.taus, sub4.null.var.taus, sub5.null.var.taus, sub6.null.var.taus, sub7.null.var.taus, sub8.null.var.taus)
+null.var.taus.df <- data.frame(
   subpop = subpop, 
   real.tau = real.tau,
-  null.var.tau = null.var.tau
+  null.var.taus = null.var.taus
 )
 
 cols <- c(rep("#1434A4", 4000), rep("#C21E56", 4000))
 
-ggplot(null.var.tau.df, aes(x = subpop, y = null.var.tau)) + 
+ggplot(null.var.taus.df, aes(x = subpop, y = null.var.taus)) + 
   geom_violin() +
   geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
   geom_point(aes(y = real.tau), size = 4, shape = 8) + 
@@ -820,16 +821,16 @@ ggplot(null.var.tau.df, aes(x = subpop, y = null.var.tau)) +
 ```{r}
 subpop <- c(rep("1", 1000), rep("2", 1000), rep("3", 1000), rep("4", 1000), rep("5", 1000), rep("6", 1000), rep("7", 1000), rep("8", 1000))
 real.tau <- c(rep(sub1.cv.tau, 1000), rep(sub2.cv.tau, 1000), rep(sub3.cv.tau, 1000), rep(sub4.cv.tau, 1000), rep(sub5.cv.tau, 1000), rep(sub6.cv.tau, 1000), rep(sub7.cv.tau, 1000), rep(sub8.cv.tau, 1000))
-null.cv.tau <- c(sub1.null.cv.tau, sub2.null.cv.tau, sub3.null.cv.tau, sub4.null.cv.tau, sub5.null.cv.tau, sub6.null.cv.tau, sub7.null.cv.tau, sub8.null.cv.tau)
-null.cv.tau.df <- data.frame(
+null.cv.taus <- c(sub1.null.cv.taus, sub2.null.cv.taus, sub3.null.cv.taus, sub4.null.cv.taus, sub5.null.cv.taus, sub6.null.cv.taus, sub7.null.cv.taus, sub8.null.cv.taus)
+null.cv.taus.df <- data.frame(
   subpop = subpop, 
   real.tau = real.tau,
-  null.cv.tau = null.cv.tau
+  null.cv.taus = null.cv.taus
 )
 
 cols <- c(rep("#1434A4", 4000), rep("#C21E56", 4000))
 
-ggplot(null.cv.tau.df, aes(x = subpop, y = null.cv.tau)) + 
+ggplot(null.cv.taus.df, aes(x = subpop, y = null.cv.taus)) + 
   geom_violin() +
   geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
   geom_point(aes(y = real.tau), size = 4, shape = 8) + 
@@ -847,22 +848,22 @@ ggplot(null.cv.tau.df, aes(x = subpop, y = null.cv.tau)) +
 ```{r}
 subpop <- c(rep("1", 1000), rep("2", 1000), rep("3", 1000), rep("4", 1000), rep("5", 1000), rep("6", 1000), rep("7", 1000), rep("8", 1000))
 real.tau <- c(rep(sub1.id.tau, 1000), rep(sub2.id.tau, 1000), rep(sub3.id.tau, 1000), rep(sub4.id.tau, 1000), rep(sub5.id.tau, 1000), rep(sub6.id.tau, 1000), rep(sub7.id.tau, 1000), rep(sub8.id.tau, 1000))
-null.id.tau <- c(sub1.null.id.tau, sub2.null.id.tau, sub3.null.id.tau, sub4.null.id.tau, sub5.null.id.tau, sub6.null.id.tau, sub7.null.id.tau, sub8.null.id.tau)
-null.id.tau.df <- data.frame(
+null.id.taus <- c(sub1.null.id.taus, sub2.null.id.taus, sub3.null.id.taus, sub4.null.id.taus, sub5.null.id.taus, sub6.null.id.taus, sub7.null.id.taus, sub8.null.id.taus)
+null.id.taus.df <- data.frame(
   subpop = subpop, 
   real.tau = real.tau,
-  null.id.tau = null.id.tau
+  null.id.taus = null.id.taus
 )
 
 cols <- c(rep("#1434A4", 4000), rep("#C21E56", 4000))
 
-ggplot(null.id.tau.df, aes(x = subpop, y = null.id.tau)) + 
+ggplot(null.id.taus.df, aes(x = subpop, y = null.id.taus)) + 
   geom_violin() +
   geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
   geom_point(aes(y = real.tau), size = 4, shape = 8) + 
   stat_summary(fun.y = median, geom = "point", size = 4, colour = "black", shape = 16) +
   xlab("Subpopulation") +
-  ylab("Kendall's Tau (Index of Dispersion") +
+  ylab("Kendall's Tau (Index of Dispersion)") +
   theme(axis.text.x = element_text(colour = "black"),
         text = element_text(size = 12)) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -874,16 +875,16 @@ ggplot(null.id.tau.df, aes(x = subpop, y = null.id.tau)) +
 ```{r}
 subpop <- c(rep("1", 1000), rep("2", 1000), rep("3", 1000), rep("4", 1000), rep("5", 1000), rep("6", 1000), rep("7", 1000), rep("8", 1000))
 real.tau <- c(rep(sub1.fdv.tau, 1000), rep(sub2.fdv.tau, 1000), rep(sub3.fdv.tau, 1000), rep(sub4.fdv.tau, 1000), rep(sub5.fdv.tau, 1000), rep(sub6.fdv.tau, 1000), rep(sub7.fdv.tau, 1000), rep(sub8.fdv.tau, 1000))
-null.fdv.tau <- c(sub1.null.fdv.tau, sub2.null.fdv.tau, sub3.null.fdv.tau, sub4.null.fdv.tau, sub5.null.fdv.tau, sub6.null.fdv.tau, sub7.null.fdv.tau, sub8.null.fdv.tau)
-null.fdv.tau.df <- data.frame(
+null.fdv.taus <- c(sub1.null.fdv.taus, sub2.null.fdv.taus, sub3.null.fdv.taus, sub4.null.fdv.taus, sub5.null.fdv.taus, sub6.null.fdv.taus, sub7.null.fdv.taus, sub8.null.fdv.taus)
+null.fdv.taus.df <- data.frame(
   subpop = subpop, 
   real.tau = real.tau,
-  null.fdv.tau = null.fdv.tau
+  null.fdv.taus = null.fdv.taus
 )
 
 cols <- c(rep("#1434A4", 4000), rep("#C21E56", 4000))
 
-ggplot(null.fdv.tau.df, aes(x = subpop, y = null.fdv.tau)) + 
+ggplot(null.fdv.taus.df, aes(x = subpop, y = null.fdv.taus)) + 
   geom_violin() +
   geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
   geom_point(aes(y = real.tau), size = 4, shape = 8) + 
@@ -901,16 +902,16 @@ ggplot(null.fdv.tau.df, aes(x = subpop, y = null.fdv.tau)) +
 ```{r}
 subpop <- c(rep("1", 1000), rep("2", 1000), rep("3", 1000), rep("4", 1000), rep("5", 1000), rep("6", 1000), rep("7", 1000), rep("8", 1000))
 real.tau <- c(rep(sub1.ac.tau, 1000), rep(sub2.ac.tau, 1000), rep(sub3.ac.tau, 1000), rep(sub4.ac.tau, 1000), rep(sub5.ac.tau, 1000), rep(sub6.ac.tau, 1000), rep(sub7.ac.tau, 1000), rep(sub8.ac.tau, 1000))
-null.ac.tau <- c(sub1.null.ac.tau, sub2.null.ac.tau, sub3.null.ac.tau, sub4.null.ac.tau, sub5.null.ac.tau, sub6.null.ac.tau, sub7.null.ac.tau, sub8.null.ac.tau)
-null.ac.tau.df <- data.frame(
+null.ac.taus <- c(sub1.null.ac.taus, sub2.null.ac.taus, sub3.null.ac.taus, sub4.null.ac.taus, sub5.null.ac.taus, sub6.null.ac.taus, sub7.null.ac.taus, sub8.null.ac.taus)
+null.ac.taus.df <- data.frame(
   subpop = subpop, 
   real.tau = real.tau,
-  null.ac.tau = null.ac.tau
+  null.ac.taus = null.ac.taus
 )
 
 cols <- c(rep("#1434A4", 4000), rep("#C21E56", 4000))
 
-ggplot(null.ac.tau.df, aes(x = subpop, y = null.ac.tau)) + 
+ggplot(null.ac.taus.df, aes(x = subpop, y = null.ac.taus)) + 
   geom_violin() +
   geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
   geom_point(aes(y = real.tau), size = 4, shape = 8) + 
@@ -928,16 +929,16 @@ ggplot(null.ac.tau.df, aes(x = subpop, y = null.ac.tau)) +
 ```{r}
 subpop <- c(rep("1", 1000), rep("2", 1000), rep("3", 1000), rep("4", 1000), rep("5", 1000), rep("6", 1000), rep("7", 1000), rep("8", 1000))
 real.tau <- c(rep(sub1.acv.tau, 1000), rep(sub2.acv.tau, 1000), rep(sub3.acv.tau, 1000), rep(sub4.acv.tau, 1000), rep(sub5.acv.tau, 1000), rep(sub6.acv.tau, 1000), rep(sub7.acv.tau, 1000), rep(sub8.acv.tau, 1000))
-null.acv.tau <- c(sub1.null.acv.tau, sub2.null.acv.tau, sub3.null.acv.tau, sub4.null.acv.tau, sub5.null.acv.tau, sub6.null.acv.tau, sub7.null.acv.tau, sub8.null.acv.tau)
-null.acv.tau.df <- data.frame(
+null.acv.taus <- c(sub1.null.acv.taus, sub2.null.acv.taus, sub3.null.acv.taus, sub4.null.acv.taus, sub5.null.acv.taus, sub6.null.acv.taus, sub7.null.acv.taus, sub8.null.acv.taus)
+null.acv.taus.df <- data.frame(
   subpop = subpop, 
   real.tau = real.tau,
-  null.acv.tau = null.acv.tau
+  null.acv.taus = null.acv.taus
 )
 
 cols <- c(rep("#1434A4", 4000), rep("#C21E56", 4000))
 
-ggplot(null.acv.tau.df, aes(x = subpop, y = null.acv.tau)) + 
+ggplot(null.acv.taus.df, aes(x = subpop, y = null.acv.taus)) + 
   geom_violin() +
   geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
   geom_point(aes(y = real.tau), size = 4, shape = 8) + 
@@ -955,16 +956,16 @@ ggplot(null.acv.tau.df, aes(x = subpop, y = null.acv.tau)) +
 ```{r}
 subpop <- c(rep("1", 1000), rep("2", 1000), rep("3", 1000), rep("4", 1000), rep("5", 1000), rep("6", 1000), rep("7", 1000), rep("8", 1000))
 real.tau <- c(rep(sub1.dt.tau, 1000), rep(sub2.dt.tau, 1000), rep(sub3.dt.tau, 1000), rep(sub4.dt.tau, 1000), rep(sub5.dt.tau, 1000), rep(sub6.dt.tau, 1000), rep(sub7.dt.tau, 1000), rep(sub8.dt.tau, 1000))
-null.dt.tau <- c(sub1.null.dt.tau, sub2.null.dt.tau, sub3.null.dt.tau, sub4.null.dt.tau, sub5.null.dt.tau, sub6.null.dt.tau, sub7.null.dt.tau, sub8.null.dt.tau)
-null.dt.tau.df <- data.frame(
+null.dt.taus <- c(sub1.null.dt.taus, sub2.null.dt.taus, sub3.null.dt.taus, sub4.null.dt.taus, sub5.null.dt.taus, sub6.null.dt.taus, sub7.null.dt.taus, sub8.null.dt.taus)
+null.dt.taus.df <- data.frame(
   subpop = subpop, 
   real.tau = real.tau,
-  null.dt.tau = null.dt.tau
+  null.dt.taus = null.dt.taus
 )
 
 cols <- c(rep("#1434A4", 4000), rep("#C21E56", 4000))
 
-ggplot(null.dt.tau.df, aes(x = subpop, y = null.dt.tau)) + 
+ggplot(null.dt.taus.df, aes(x = subpop, y = null.dt.taus)) + 
   geom_violin() +
   geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
   geom_point(aes(y = real.tau), size = 4, shape = 8) + 
@@ -981,356 +982,356 @@ ggplot(null.dt.tau.df, aes(x = subpop, y = null.dt.tau)) +
 
 ```{r}
 ## Mean
-sub1.null.mean.tau <- sub1.null.mean.tau[!is.na(sub1.null.mean.tau)]
-sub2.null.mean.tau <- sub2.null.mean.tau[!is.na(sub2.null.mean.tau)]
-sub3.null.mean.tau <- sub3.null.mean.tau[!is.na(sub3.null.mean.tau)]
-sub4.null.mean.tau <- sub4.null.mean.tau[!is.na(sub4.null.mean.tau)]
-sub5.null.mean.tau <- sub5.null.mean.tau[!is.na(sub5.null.mean.tau)]
-sub6.null.mean.tau <- sub6.null.mean.tau[!is.na(sub6.null.mean.tau)]
-sub7.null.mean.tau <- sub7.null.mean.tau[!is.na(sub7.null.mean.tau)]
-sub8.null.mean.tau <- sub8.null.mean.tau[!is.na(sub8.null.mean.tau)]
+sub1.null.mean.taus <- sub1.null.mean.taus[!is.na(sub1.null.mean.taus)]
+sub2.null.mean.taus <- sub2.null.mean.taus[!is.na(sub2.null.mean.taus)]
+sub3.null.mean.taus <- sub3.null.mean.taus[!is.na(sub3.null.mean.taus)]
+sub4.null.mean.taus <- sub4.null.mean.taus[!is.na(sub4.null.mean.taus)]
+sub5.null.mean.taus <- sub5.null.mean.taus[!is.na(sub5.null.mean.taus)]
+sub6.null.mean.taus <- sub6.null.mean.taus[!is.na(sub6.null.mean.taus)]
+sub7.null.mean.taus <- sub7.null.mean.taus[!is.na(sub7.null.mean.taus)]
+sub8.null.mean.taus <- sub8.null.mean.taus[!is.na(sub8.null.mean.taus)]
 # Percent of "bootstraps" with larger value of tau than found in empirical data
-sub1.mean.fpr.gt <- length(which(sub1.null.mean.tau >= sub1.mean.tau))/length(sub1.null.mean.tau)
-sub2.mean.fpr.gt <- length(which(sub2.null.mean.tau >= sub2.mean.tau))/length(sub2.null.mean.tau)
-sub3.mean.fpr.gt <- length(which(sub3.null.mean.tau >= sub3.mean.tau))/length(sub3.null.mean.tau)
-sub4.mean.fpr.gt <- length(which(sub4.null.mean.tau >= sub4.mean.tau))/length(sub4.null.mean.tau)
-sub5.mean.fpr.gt <- length(which(sub5.null.mean.tau >= sub5.mean.tau))/length(sub5.null.mean.tau)
-sub6.mean.fpr.gt <- length(which(sub6.null.mean.tau >= sub6.mean.tau))/length(sub6.null.mean.tau)
-sub7.mean.fpr.gt <- length(which(sub7.null.mean.tau >= sub7.mean.tau))/length(sub7.null.mean.tau)
-sub8.mean.fpr.gt <- length(which(sub8.null.mean.tau >= sub8.mean.tau))/length(sub8.null.mean.tau)
+sub1.mean.fpr.gt <- length(which(sub1.null.mean.taus >= sub1.mean.tau))/length(sub1.null.mean.taus)
+sub2.mean.fpr.gt <- length(which(sub2.null.mean.taus >= sub2.mean.tau))/length(sub2.null.mean.taus)
+sub3.mean.fpr.gt <- length(which(sub3.null.mean.taus >= sub3.mean.tau))/length(sub3.null.mean.taus)
+sub4.mean.fpr.gt <- length(which(sub4.null.mean.taus >= sub4.mean.tau))/length(sub4.null.mean.taus)
+sub5.mean.fpr.gt <- length(which(sub5.null.mean.taus >= sub5.mean.tau))/length(sub5.null.mean.taus)
+sub6.mean.fpr.gt <- length(which(sub6.null.mean.taus >= sub6.mean.tau))/length(sub6.null.mean.taus)
+sub7.mean.fpr.gt <- length(which(sub7.null.mean.taus >= sub7.mean.tau))/length(sub7.null.mean.taus)
+sub8.mean.fpr.gt <- length(which(sub8.null.mean.taus >= sub8.mean.tau))/length(sub8.null.mean.taus)
 
-sub1.null.mean.tau <- sub1.null.mean.tau[!is.na(sub1.null.mean.tau)]
-sub2.null.mean.tau <- sub2.null.mean.tau[!is.na(sub2.null.mean.tau)]
-sub3.null.mean.tau <- sub3.null.mean.tau[!is.na(sub3.null.mean.tau)]
-sub4.null.mean.tau <- sub4.null.mean.tau[!is.na(sub4.null.mean.tau)]
-sub5.null.mean.tau <- sub5.null.mean.tau[!is.na(sub5.null.mean.tau)]
-sub6.null.mean.tau <- sub6.null.mean.tau[!is.na(sub6.null.mean.tau)]
-sub7.null.mean.tau <- sub7.null.mean.tau[!is.na(sub7.null.mean.tau)]
-sub8.null.mean.tau <- sub8.null.mean.tau[!is.na(sub8.null.mean.tau)]
+sub1.null.mean.taus <- sub1.null.mean.taus[!is.na(sub1.null.mean.taus)]
+sub2.null.mean.taus <- sub2.null.mean.taus[!is.na(sub2.null.mean.taus)]
+sub3.null.mean.taus <- sub3.null.mean.taus[!is.na(sub3.null.mean.taus)]
+sub4.null.mean.taus <- sub4.null.mean.taus[!is.na(sub4.null.mean.taus)]
+sub5.null.mean.taus <- sub5.null.mean.taus[!is.na(sub5.null.mean.taus)]
+sub6.null.mean.taus <- sub6.null.mean.taus[!is.na(sub6.null.mean.taus)]
+sub7.null.mean.taus <- sub7.null.mean.taus[!is.na(sub7.null.mean.taus)]
+sub8.null.mean.taus <- sub8.null.mean.taus[!is.na(sub8.null.mean.taus)]
 # Percent of "bootstraps" with smaller value of tau than found in empirical data
-sub1.mean.fpr.lt <- length(which(sub1.null.mean.tau <= sub1.mean.tau))/length(sub1.null.mean.tau)
-sub2.mean.fpr.lt <- length(which(sub2.null.mean.tau <= sub2.mean.tau))/length(sub2.null.mean.tau)
-sub3.mean.fpr.lt <- length(which(sub3.null.mean.tau <= sub3.mean.tau))/length(sub3.null.mean.tau)
-sub4.mean.fpr.lt <- length(which(sub4.null.mean.tau <= sub4.mean.tau))/length(sub4.null.mean.tau)
-sub5.mean.fpr.lt <- length(which(sub5.null.mean.tau <= sub5.mean.tau))/length(sub5.null.mean.tau)
-sub6.mean.fpr.lt <- length(which(sub6.null.mean.tau <= sub6.mean.tau))/length(sub6.null.mean.tau)
-sub7.mean.fpr.lt <- length(which(sub7.null.mean.tau <= sub7.mean.tau))/length(sub7.null.mean.tau)
-sub8.mean.fpr.lt <- length(which(sub8.null.mean.tau <= sub8.mean.tau))/length(sub8.null.mean.tau)
+sub1.mean.fpr.lt <- length(which(sub1.null.mean.taus <= sub1.mean.tau))/length(sub1.null.mean.taus)
+sub2.mean.fpr.lt <- length(which(sub2.null.mean.taus <= sub2.mean.tau))/length(sub2.null.mean.taus)
+sub3.mean.fpr.lt <- length(which(sub3.null.mean.taus <= sub3.mean.tau))/length(sub3.null.mean.taus)
+sub4.mean.fpr.lt <- length(which(sub4.null.mean.taus <= sub4.mean.tau))/length(sub4.null.mean.taus)
+sub5.mean.fpr.lt <- length(which(sub5.null.mean.taus <= sub5.mean.tau))/length(sub5.null.mean.taus)
+sub6.mean.fpr.lt <- length(which(sub6.null.mean.taus <= sub6.mean.tau))/length(sub6.null.mean.taus)
+sub7.mean.fpr.lt <- length(which(sub7.null.mean.taus <= sub7.mean.tau))/length(sub7.null.mean.taus)
+sub8.mean.fpr.lt <- length(which(sub8.null.mean.taus <= sub8.mean.tau))/length(sub8.null.mean.taus)
 
 ## Skewness
-sub1.null.sk.tau <- sub1.null.sk.tau[!is.na(sub1.null.sk.tau)]
-sub2.null.sk.tau <- sub2.null.sk.tau[!is.na(sub2.null.sk.tau)]
-sub3.null.sk.tau <- sub3.null.sk.tau[!is.na(sub3.null.sk.tau)]
-sub4.null.sk.tau <- sub4.null.sk.tau[!is.na(sub4.null.sk.tau)]
-sub5.null.sk.tau <- sub5.null.sk.tau[!is.na(sub5.null.sk.tau)]
-sub6.null.sk.tau <- sub6.null.sk.tau[!is.na(sub6.null.sk.tau)]
-sub7.null.sk.tau <- sub7.null.sk.tau[!is.na(sub7.null.sk.tau)]
-sub8.null.sk.tau <- sub8.null.sk.tau[!is.na(sub8.null.sk.tau)]
-sub1.sk.fpr.gt <- length(which(sub1.null.sk.tau >= sub1.sk.tau))/length(sub1.null.sk.tau)
-sub2.sk.fpr.gt <- length(which(sub2.null.sk.tau >= sub2.sk.tau))/length(sub2.null.sk.tau)
-sub3.sk.fpr.gt <- length(which(sub3.null.sk.tau >= sub3.sk.tau))/length(sub3.null.sk.tau)
-sub4.sk.fpr.gt <- length(which(sub4.null.sk.tau >= sub4.sk.tau))/length(sub4.null.sk.tau)
-sub5.sk.fpr.gt <- length(which(sub5.null.sk.tau >= sub5.sk.tau))/length(sub5.null.sk.tau)
-sub6.sk.fpr.gt <- length(which(sub6.null.sk.tau >= sub6.sk.tau))/length(sub6.null.sk.tau)
-sub7.sk.fpr.gt <- length(which(sub7.null.sk.tau >= sub7.sk.tau))/length(sub7.null.sk.tau)
-sub8.sk.fpr.gt <- length(which(sub8.null.sk.tau >= sub8.sk.tau))/length(sub8.null.sk.tau)
+sub1.null.sk.taus <- sub1.null.sk.taus[!is.na(sub1.null.sk.taus)]
+sub2.null.sk.taus <- sub2.null.sk.taus[!is.na(sub2.null.sk.taus)]
+sub3.null.sk.taus <- sub3.null.sk.taus[!is.na(sub3.null.sk.taus)]
+sub4.null.sk.taus <- sub4.null.sk.taus[!is.na(sub4.null.sk.taus)]
+sub5.null.sk.taus <- sub5.null.sk.taus[!is.na(sub5.null.sk.taus)]
+sub6.null.sk.taus <- sub6.null.sk.taus[!is.na(sub6.null.sk.taus)]
+sub7.null.sk.taus <- sub7.null.sk.taus[!is.na(sub7.null.sk.taus)]
+sub8.null.sk.taus <- sub8.null.sk.taus[!is.na(sub8.null.sk.taus)]
+sub1.sk.fpr.gt <- length(which(sub1.null.sk.taus >= sub1.sk.tau))/length(sub1.null.sk.taus)
+sub2.sk.fpr.gt <- length(which(sub2.null.sk.taus >= sub2.sk.tau))/length(sub2.null.sk.taus)
+sub3.sk.fpr.gt <- length(which(sub3.null.sk.taus >= sub3.sk.tau))/length(sub3.null.sk.taus)
+sub4.sk.fpr.gt <- length(which(sub4.null.sk.taus >= sub4.sk.tau))/length(sub4.null.sk.taus)
+sub5.sk.fpr.gt <- length(which(sub5.null.sk.taus >= sub5.sk.tau))/length(sub5.null.sk.taus)
+sub6.sk.fpr.gt <- length(which(sub6.null.sk.taus >= sub6.sk.tau))/length(sub6.null.sk.taus)
+sub7.sk.fpr.gt <- length(which(sub7.null.sk.taus >= sub7.sk.tau))/length(sub7.null.sk.taus)
+sub8.sk.fpr.gt <- length(which(sub8.null.sk.taus >= sub8.sk.tau))/length(sub8.null.sk.taus)
 
-sub1.null.sk.tau <- sub1.null.sk.tau[!is.na(sub1.null.sk.tau)]
-sub2.null.sk.tau <- sub2.null.sk.tau[!is.na(sub2.null.sk.tau)]
-sub3.null.sk.tau <- sub3.null.sk.tau[!is.na(sub3.null.sk.tau)]
-sub4.null.sk.tau <- sub4.null.sk.tau[!is.na(sub4.null.sk.tau)]
-sub5.null.sk.tau <- sub5.null.sk.tau[!is.na(sub5.null.sk.tau)]
-sub6.null.sk.tau <- sub6.null.sk.tau[!is.na(sub6.null.sk.tau)]
-sub7.null.sk.tau <- sub7.null.sk.tau[!is.na(sub7.null.sk.tau)]
-sub8.null.sk.tau <- sub8.null.sk.tau[!is.na(sub8.null.sk.tau)]
-sub1.sk.fpr.lt <- length(which(sub1.null.sk.tau <= sub1.sk.tau))/length(sub1.null.sk.tau)
-sub2.sk.fpr.lt <- length(which(sub2.null.sk.tau <= sub2.sk.tau))/length(sub2.null.sk.tau)
-sub3.sk.fpr.lt <- length(which(sub3.null.sk.tau <= sub3.sk.tau))/length(sub3.null.sk.tau)
-sub4.sk.fpr.lt <- length(which(sub4.null.sk.tau <= sub4.sk.tau))/length(sub4.null.sk.tau)
-sub5.sk.fpr.lt <- length(which(sub5.null.sk.tau <= sub5.sk.tau))/length(sub5.null.sk.tau)
-sub6.sk.fpr.lt <- length(which(sub6.null.sk.tau <= sub6.sk.tau))/length(sub6.null.sk.tau)
-sub7.sk.fpr.lt <- length(which(sub7.null.sk.tau <= sub7.sk.tau))/length(sub7.null.sk.tau)
-sub8.sk.fpr.lt <- length(which(sub8.null.sk.tau <= sub8.sk.tau))/length(sub8.null.sk.tau)
+sub1.null.sk.taus <- sub1.null.sk.taus[!is.na(sub1.null.sk.taus)]
+sub2.null.sk.taus <- sub2.null.sk.taus[!is.na(sub2.null.sk.taus)]
+sub3.null.sk.taus <- sub3.null.sk.taus[!is.na(sub3.null.sk.taus)]
+sub4.null.sk.taus <- sub4.null.sk.taus[!is.na(sub4.null.sk.taus)]
+sub5.null.sk.taus <- sub5.null.sk.taus[!is.na(sub5.null.sk.taus)]
+sub6.null.sk.taus <- sub6.null.sk.taus[!is.na(sub6.null.sk.taus)]
+sub7.null.sk.taus <- sub7.null.sk.taus[!is.na(sub7.null.sk.taus)]
+sub8.null.sk.taus <- sub8.null.sk.taus[!is.na(sub8.null.sk.taus)]
+sub1.sk.fpr.lt <- length(which(sub1.null.sk.taus <= sub1.sk.tau))/length(sub1.null.sk.taus)
+sub2.sk.fpr.lt <- length(which(sub2.null.sk.taus <= sub2.sk.tau))/length(sub2.null.sk.taus)
+sub3.sk.fpr.lt <- length(which(sub3.null.sk.taus <= sub3.sk.tau))/length(sub3.null.sk.taus)
+sub4.sk.fpr.lt <- length(which(sub4.null.sk.taus <= sub4.sk.tau))/length(sub4.null.sk.taus)
+sub5.sk.fpr.lt <- length(which(sub5.null.sk.taus <= sub5.sk.tau))/length(sub5.null.sk.taus)
+sub6.sk.fpr.lt <- length(which(sub6.null.sk.taus <= sub6.sk.tau))/length(sub6.null.sk.taus)
+sub7.sk.fpr.lt <- length(which(sub7.null.sk.taus <= sub7.sk.tau))/length(sub7.null.sk.taus)
+sub8.sk.fpr.lt <- length(which(sub8.null.sk.taus <= sub8.sk.tau))/length(sub8.null.sk.taus)
 
 ## Kurtosis
-sub1.null.kt.tau <- sub1.null.kt.tau[!is.na(sub1.null.kt.tau)]
-sub2.null.kt.tau <- sub2.null.kt.tau[!is.na(sub2.null.kt.tau)]
-sub3.null.kt.tau <- sub3.null.kt.tau[!is.na(sub3.null.kt.tau)]
-sub4.null.kt.tau <- sub4.null.kt.tau[!is.na(sub4.null.kt.tau)]
-sub5.null.kt.tau <- sub5.null.kt.tau[!is.na(sub5.null.kt.tau)]
-sub6.null.kt.tau <- sub6.null.kt.tau[!is.na(sub6.null.kt.tau)]
-sub7.null.kt.tau <- sub7.null.kt.tau[!is.na(sub7.null.kt.tau)]
-sub8.null.kt.tau <- sub8.null.kt.tau[!is.na(sub8.null.kt.tau)]
-sub1.kt.fpr.gt <- length(which(sub1.null.kt.tau >= sub1.kt.tau))/length(sub1.null.kt.tau)
-sub2.kt.fpr.gt <- length(which(sub2.null.kt.tau >= sub2.kt.tau))/length(sub2.null.kt.tau)
-sub3.kt.fpr.gt <- length(which(sub3.null.kt.tau >= sub3.kt.tau))/length(sub3.null.kt.tau)
-sub4.kt.fpr.gt <- length(which(sub4.null.kt.tau >= sub4.kt.tau))/length(sub4.null.kt.tau)
-sub5.kt.fpr.gt <- length(which(sub5.null.kt.tau >= sub5.kt.tau))/length(sub5.null.kt.tau)
-sub6.kt.fpr.gt <- length(which(sub6.null.kt.tau >= sub6.kt.tau))/length(sub6.null.kt.tau)
-sub7.kt.fpr.gt <- length(which(sub7.null.kt.tau >= sub7.kt.tau))/length(sub7.null.kt.tau)
-sub8.kt.fpr.gt <- length(which(sub8.null.kt.tau >= sub8.kt.tau))/length(sub8.null.kt.tau)
+sub1.null.kt.taus <- sub1.null.kt.taus[!is.na(sub1.null.kt.taus)]
+sub2.null.kt.taus <- sub2.null.kt.taus[!is.na(sub2.null.kt.taus)]
+sub3.null.kt.taus <- sub3.null.kt.taus[!is.na(sub3.null.kt.taus)]
+sub4.null.kt.taus <- sub4.null.kt.taus[!is.na(sub4.null.kt.taus)]
+sub5.null.kt.taus <- sub5.null.kt.taus[!is.na(sub5.null.kt.taus)]
+sub6.null.kt.taus <- sub6.null.kt.taus[!is.na(sub6.null.kt.taus)]
+sub7.null.kt.taus <- sub7.null.kt.taus[!is.na(sub7.null.kt.taus)]
+sub8.null.kt.taus <- sub8.null.kt.taus[!is.na(sub8.null.kt.taus)]
+sub1.kt.fpr.gt <- length(which(sub1.null.kt.taus >= sub1.kt.tau))/length(sub1.null.kt.taus)
+sub2.kt.fpr.gt <- length(which(sub2.null.kt.taus >= sub2.kt.tau))/length(sub2.null.kt.taus)
+sub3.kt.fpr.gt <- length(which(sub3.null.kt.taus >= sub3.kt.tau))/length(sub3.null.kt.taus)
+sub4.kt.fpr.gt <- length(which(sub4.null.kt.taus >= sub4.kt.tau))/length(sub4.null.kt.taus)
+sub5.kt.fpr.gt <- length(which(sub5.null.kt.taus >= sub5.kt.tau))/length(sub5.null.kt.taus)
+sub6.kt.fpr.gt <- length(which(sub6.null.kt.taus >= sub6.kt.tau))/length(sub6.null.kt.taus)
+sub7.kt.fpr.gt <- length(which(sub7.null.kt.taus >= sub7.kt.tau))/length(sub7.null.kt.taus)
+sub8.kt.fpr.gt <- length(which(sub8.null.kt.taus >= sub8.kt.tau))/length(sub8.null.kt.taus)
 
-sub1.null.kt.tau <- sub1.null.kt.tau[!is.na(sub1.null.kt.tau)]
-sub2.null.kt.tau <- sub2.null.kt.tau[!is.na(sub2.null.kt.tau)]
-sub3.null.kt.tau <- sub3.null.kt.tau[!is.na(sub3.null.kt.tau)]
-sub4.null.kt.tau <- sub4.null.kt.tau[!is.na(sub4.null.kt.tau)]
-sub5.null.kt.tau <- sub5.null.kt.tau[!is.na(sub5.null.kt.tau)]
-sub6.null.kt.tau <- sub6.null.kt.tau[!is.na(sub6.null.kt.tau)]
-sub7.null.kt.tau <- sub7.null.kt.tau[!is.na(sub7.null.kt.tau)]
-sub8.null.kt.tau <- sub8.null.kt.tau[!is.na(sub8.null.kt.tau)]
-sub1.kt.fpr.lt <- length(which(sub1.null.kt.tau <= sub1.kt.tau))/length(sub1.null.kt.tau)
-sub2.kt.fpr.lt <- length(which(sub2.null.kt.tau <= sub2.kt.tau))/length(sub2.null.kt.tau)
-sub3.kt.fpr.lt <- length(which(sub3.null.kt.tau <= sub3.kt.tau))/length(sub3.null.kt.tau)
-sub4.kt.fpr.lt <- length(which(sub4.null.kt.tau <= sub4.kt.tau))/length(sub4.null.kt.tau)
-sub5.kt.fpr.lt <- length(which(sub5.null.kt.tau <= sub5.kt.tau))/length(sub5.null.kt.tau)
-sub6.kt.fpr.lt <- length(which(sub6.null.kt.tau <= sub6.kt.tau))/length(sub6.null.kt.tau)
-sub7.kt.fpr.lt <- length(which(sub7.null.kt.tau <= sub7.kt.tau))/length(sub7.null.kt.tau)
-sub8.kt.fpr.lt <- length(which(sub8.null.kt.tau <= sub8.kt.tau))/length(sub8.null.kt.tau)
+sub1.null.kt.taus <- sub1.null.kt.taus[!is.na(sub1.null.kt.taus)]
+sub2.null.kt.taus <- sub2.null.kt.taus[!is.na(sub2.null.kt.taus)]
+sub3.null.kt.taus <- sub3.null.kt.taus[!is.na(sub3.null.kt.taus)]
+sub4.null.kt.taus <- sub4.null.kt.taus[!is.na(sub4.null.kt.taus)]
+sub5.null.kt.taus <- sub5.null.kt.taus[!is.na(sub5.null.kt.taus)]
+sub6.null.kt.taus <- sub6.null.kt.taus[!is.na(sub6.null.kt.taus)]
+sub7.null.kt.taus <- sub7.null.kt.taus[!is.na(sub7.null.kt.taus)]
+sub8.null.kt.taus <- sub8.null.kt.taus[!is.na(sub8.null.kt.taus)]
+sub1.kt.fpr.lt <- length(which(sub1.null.kt.taus <= sub1.kt.tau))/length(sub1.null.kt.taus)
+sub2.kt.fpr.lt <- length(which(sub2.null.kt.taus <= sub2.kt.tau))/length(sub2.null.kt.taus)
+sub3.kt.fpr.lt <- length(which(sub3.null.kt.taus <= sub3.kt.tau))/length(sub3.null.kt.taus)
+sub4.kt.fpr.lt <- length(which(sub4.null.kt.taus <= sub4.kt.tau))/length(sub4.null.kt.taus)
+sub5.kt.fpr.lt <- length(which(sub5.null.kt.taus <= sub5.kt.tau))/length(sub5.null.kt.taus)
+sub6.kt.fpr.lt <- length(which(sub6.null.kt.taus <= sub6.kt.tau))/length(sub6.null.kt.taus)
+sub7.kt.fpr.lt <- length(which(sub7.null.kt.taus <= sub7.kt.tau))/length(sub7.null.kt.taus)
+sub8.kt.fpr.lt <- length(which(sub8.null.kt.taus <= sub8.kt.tau))/length(sub8.null.kt.taus)
 
 ## Variance
-sub1.null.var.tau <- sub1.null.var.tau[!is.na(sub1.null.var.tau)]
-sub2.null.var.tau <- sub2.null.var.tau[!is.na(sub2.null.var.tau)]
-sub3.null.var.tau <- sub3.null.var.tau[!is.na(sub3.null.var.tau)]
-sub4.null.var.tau <- sub4.null.var.tau[!is.na(sub4.null.var.tau)]
-sub5.null.var.tau <- sub5.null.var.tau[!is.na(sub5.null.var.tau)]
-sub6.null.var.tau <- sub6.null.var.tau[!is.na(sub6.null.var.tau)]
-sub7.null.var.tau <- sub7.null.var.tau[!is.na(sub7.null.var.tau)]
-sub8.null.var.tau <- sub8.null.var.tau[!is.na(sub8.null.var.tau)]
-sub1.var.fpr.gt <- length(which(sub1.null.var.tau >= sub1.var.tau))/length(sub1.null.var.tau)
-sub2.var.fpr.gt <- length(which(sub2.null.var.tau >= sub2.var.tau))/length(sub2.null.var.tau)
-sub3.var.fpr.gt <- length(which(sub3.null.var.tau >= sub3.var.tau))/length(sub3.null.var.tau)
-sub4.var.fpr.gt <- length(which(sub4.null.var.tau >= sub4.var.tau))/length(sub4.null.var.tau)
-sub5.var.fpr.gt <- length(which(sub5.null.var.tau >= sub5.var.tau))/length(sub5.null.var.tau)
-sub6.var.fpr.gt <- length(which(sub6.null.var.tau >= sub6.var.tau))/length(sub6.null.var.tau)
-sub7.var.fpr.gt <- length(which(sub7.null.var.tau >= sub7.var.tau))/length(sub7.null.var.tau)
-sub8.var.fpr.gt <- length(which(sub8.null.var.tau >= sub8.var.tau))/length(sub8.null.var.tau)
+sub1.null.var.taus <- sub1.null.var.taus[!is.na(sub1.null.var.taus)]
+sub2.null.var.taus <- sub2.null.var.taus[!is.na(sub2.null.var.taus)]
+sub3.null.var.taus <- sub3.null.var.taus[!is.na(sub3.null.var.taus)]
+sub4.null.var.taus <- sub4.null.var.taus[!is.na(sub4.null.var.taus)]
+sub5.null.var.taus <- sub5.null.var.taus[!is.na(sub5.null.var.taus)]
+sub6.null.var.taus <- sub6.null.var.taus[!is.na(sub6.null.var.taus)]
+sub7.null.var.taus <- sub7.null.var.taus[!is.na(sub7.null.var.taus)]
+sub8.null.var.taus <- sub8.null.var.taus[!is.na(sub8.null.var.taus)]
+sub1.var.fpr.gt <- length(which(sub1.null.var.taus >= sub1.var.tau))/length(sub1.null.var.taus)
+sub2.var.fpr.gt <- length(which(sub2.null.var.taus >= sub2.var.tau))/length(sub2.null.var.taus)
+sub3.var.fpr.gt <- length(which(sub3.null.var.taus >= sub3.var.tau))/length(sub3.null.var.taus)
+sub4.var.fpr.gt <- length(which(sub4.null.var.taus >= sub4.var.tau))/length(sub4.null.var.taus)
+sub5.var.fpr.gt <- length(which(sub5.null.var.taus >= sub5.var.tau))/length(sub5.null.var.taus)
+sub6.var.fpr.gt <- length(which(sub6.null.var.taus >= sub6.var.tau))/length(sub6.null.var.taus)
+sub7.var.fpr.gt <- length(which(sub7.null.var.taus >= sub7.var.tau))/length(sub7.null.var.taus)
+sub8.var.fpr.gt <- length(which(sub8.null.var.taus >= sub8.var.tau))/length(sub8.null.var.taus)
 
-sub1.null.var.tau <- sub1.null.var.tau[!is.na(sub1.null.var.tau)]
-sub2.null.var.tau <- sub2.null.var.tau[!is.na(sub2.null.var.tau)]
-sub3.null.var.tau <- sub3.null.var.tau[!is.na(sub3.null.var.tau)]
-sub4.null.var.tau <- sub4.null.var.tau[!is.na(sub4.null.var.tau)]
-sub5.null.var.tau <- sub5.null.var.tau[!is.na(sub5.null.var.tau)]
-sub6.null.var.tau <- sub6.null.var.tau[!is.na(sub6.null.var.tau)]
-sub7.null.var.tau <- sub7.null.var.tau[!is.na(sub7.null.var.tau)]
-sub8.null.var.tau <- sub8.null.var.tau[!is.na(sub8.null.var.tau)]
-sub1.var.fpr.lt <- length(which(sub1.null.var.tau <= sub1.var.tau))/length(sub1.null.var.tau)
-sub2.var.fpr.lt <- length(which(sub2.null.var.tau <= sub2.var.tau))/length(sub2.null.var.tau)
-sub3.var.fpr.lt <- length(which(sub3.null.var.tau <= sub3.var.tau))/length(sub3.null.var.tau)
-sub4.var.fpr.lt <- length(which(sub4.null.var.tau <= sub4.var.tau))/length(sub4.null.var.tau)
-sub5.var.fpr.lt <- length(which(sub5.null.var.tau <= sub5.var.tau))/length(sub5.null.var.tau)
-sub6.var.fpr.lt <- length(which(sub6.null.var.tau <= sub6.var.tau))/length(sub6.null.var.tau)
-sub7.var.fpr.lt <- length(which(sub7.null.var.tau <= sub7.var.tau))/length(sub7.null.var.tau)
-sub8.var.fpr.lt <- length(which(sub8.null.var.tau <= sub8.var.tau))/length(sub8.null.var.tau)
+sub1.null.var.taus <- sub1.null.var.taus[!is.na(sub1.null.var.taus)]
+sub2.null.var.taus <- sub2.null.var.taus[!is.na(sub2.null.var.taus)]
+sub3.null.var.taus <- sub3.null.var.taus[!is.na(sub3.null.var.taus)]
+sub4.null.var.taus <- sub4.null.var.taus[!is.na(sub4.null.var.taus)]
+sub5.null.var.taus <- sub5.null.var.taus[!is.na(sub5.null.var.taus)]
+sub6.null.var.taus <- sub6.null.var.taus[!is.na(sub6.null.var.taus)]
+sub7.null.var.taus <- sub7.null.var.taus[!is.na(sub7.null.var.taus)]
+sub8.null.var.taus <- sub8.null.var.taus[!is.na(sub8.null.var.taus)]
+sub1.var.fpr.lt <- length(which(sub1.null.var.taus <= sub1.var.tau))/length(sub1.null.var.taus)
+sub2.var.fpr.lt <- length(which(sub2.null.var.taus <= sub2.var.tau))/length(sub2.null.var.taus)
+sub3.var.fpr.lt <- length(which(sub3.null.var.taus <= sub3.var.tau))/length(sub3.null.var.taus)
+sub4.var.fpr.lt <- length(which(sub4.null.var.taus <= sub4.var.tau))/length(sub4.null.var.taus)
+sub5.var.fpr.lt <- length(which(sub5.null.var.taus <= sub5.var.tau))/length(sub5.null.var.taus)
+sub6.var.fpr.lt <- length(which(sub6.null.var.taus <= sub6.var.tau))/length(sub6.null.var.taus)
+sub7.var.fpr.lt <- length(which(sub7.null.var.taus <= sub7.var.tau))/length(sub7.null.var.taus)
+sub8.var.fpr.lt <- length(which(sub8.null.var.taus <= sub8.var.tau))/length(sub8.null.var.taus)
 
 ## Co-Efficient of Variation
-sub1.null.cv.tau <- sub1.null.cv.tau[!is.na(sub1.null.cv.tau)]
-sub2.null.cv.tau <- sub2.null.cv.tau[!is.na(sub2.null.cv.tau)]
-sub3.null.cv.tau <- sub3.null.cv.tau[!is.na(sub3.null.cv.tau)]
-sub4.null.cv.tau <- sub4.null.cv.tau[!is.na(sub4.null.cv.tau)]
-sub5.null.cv.tau <- sub5.null.cv.tau[!is.na(sub5.null.cv.tau)]
-sub6.null.cv.tau <- sub6.null.cv.tau[!is.na(sub6.null.cv.tau)]
-sub7.null.cv.tau <- sub7.null.cv.tau[!is.na(sub7.null.cv.tau)]
-sub8.null.cv.tau <- sub8.null.cv.tau[!is.na(sub8.null.cv.tau)]
-sub1.cv.fpr.gt <- length(which(sub1.null.cv.tau >= sub1.cv.tau))/length(sub1.null.cv.tau)
-sub2.cv.fpr.gt <- length(which(sub2.null.cv.tau >= sub2.cv.tau))/length(sub2.null.cv.tau)
-sub3.cv.fpr.gt <- length(which(sub3.null.cv.tau >= sub3.cv.tau))/length(sub3.null.cv.tau)
-sub4.cv.fpr.gt <- length(which(sub4.null.cv.tau >= sub4.cv.tau))/length(sub4.null.cv.tau)
-sub5.cv.fpr.gt <- length(which(sub5.null.cv.tau >= sub5.cv.tau))/length(sub5.null.cv.tau)
-sub6.cv.fpr.gt <- length(which(sub6.null.cv.tau >= sub6.cv.tau))/length(sub6.null.cv.tau)
-sub7.cv.fpr.gt <- length(which(sub7.null.cv.tau >= sub7.cv.tau))/length(sub7.null.cv.tau)
-sub8.cv.fpr.gt <- length(which(sub8.null.cv.tau >= sub8.cv.tau))/length(sub8.null.cv.tau)
+sub1.null.cv.taus <- sub1.null.cv.taus[!is.na(sub1.null.cv.taus)]
+sub2.null.cv.taus <- sub2.null.cv.taus[!is.na(sub2.null.cv.taus)]
+sub3.null.cv.taus <- sub3.null.cv.taus[!is.na(sub3.null.cv.taus)]
+sub4.null.cv.taus <- sub4.null.cv.taus[!is.na(sub4.null.cv.taus)]
+sub5.null.cv.taus <- sub5.null.cv.taus[!is.na(sub5.null.cv.taus)]
+sub6.null.cv.taus <- sub6.null.cv.taus[!is.na(sub6.null.cv.taus)]
+sub7.null.cv.taus <- sub7.null.cv.taus[!is.na(sub7.null.cv.taus)]
+sub8.null.cv.taus <- sub8.null.cv.taus[!is.na(sub8.null.cv.taus)]
+sub1.cv.fpr.gt <- length(which(sub1.null.cv.taus >= sub1.cv.tau))/length(sub1.null.cv.taus)
+sub2.cv.fpr.gt <- length(which(sub2.null.cv.taus >= sub2.cv.tau))/length(sub2.null.cv.taus)
+sub3.cv.fpr.gt <- length(which(sub3.null.cv.taus >= sub3.cv.tau))/length(sub3.null.cv.taus)
+sub4.cv.fpr.gt <- length(which(sub4.null.cv.taus >= sub4.cv.tau))/length(sub4.null.cv.taus)
+sub5.cv.fpr.gt <- length(which(sub5.null.cv.taus >= sub5.cv.tau))/length(sub5.null.cv.taus)
+sub6.cv.fpr.gt <- length(which(sub6.null.cv.taus >= sub6.cv.tau))/length(sub6.null.cv.taus)
+sub7.cv.fpr.gt <- length(which(sub7.null.cv.taus >= sub7.cv.tau))/length(sub7.null.cv.taus)
+sub8.cv.fpr.gt <- length(which(sub8.null.cv.taus >= sub8.cv.tau))/length(sub8.null.cv.taus)
 
-sub1.null.cv.tau <- sub1.null.cv.tau[!is.na(sub1.null.cv.tau)]
-sub2.null.cv.tau <- sub2.null.cv.tau[!is.na(sub2.null.cv.tau)]
-sub3.null.cv.tau <- sub3.null.cv.tau[!is.na(sub3.null.cv.tau)]
-sub4.null.cv.tau <- sub4.null.cv.tau[!is.na(sub4.null.cv.tau)]
-sub5.null.cv.tau <- sub5.null.cv.tau[!is.na(sub5.null.cv.tau)]
-sub6.null.cv.tau <- sub6.null.cv.tau[!is.na(sub6.null.cv.tau)]
-sub7.null.cv.tau <- sub7.null.cv.tau[!is.na(sub7.null.cv.tau)]
-sub8.null.cv.tau <- sub8.null.cv.tau[!is.na(sub8.null.cv.tau)]
-sub1.cv.fpr.lt <- length(which(sub1.null.cv.tau <= sub1.cv.tau))/length(sub1.null.cv.tau)
-sub2.cv.fpr.lt <- length(which(sub2.null.cv.tau <= sub2.cv.tau))/length(sub2.null.cv.tau)
-sub3.cv.fpr.lt <- length(which(sub3.null.cv.tau <= sub3.cv.tau))/length(sub3.null.cv.tau)
-sub4.cv.fpr.lt <- length(which(sub4.null.cv.tau <= sub4.cv.tau))/length(sub4.null.cv.tau)
-sub5.cv.fpr.lt <- length(which(sub5.null.cv.tau <= sub5.cv.tau))/length(sub5.null.cv.tau)
-sub6.cv.fpr.lt <- length(which(sub6.null.cv.tau <= sub6.cv.tau))/length(sub6.null.cv.tau)
-sub7.cv.fpr.lt <- length(which(sub7.null.cv.tau <= sub7.cv.tau))/length(sub7.null.cv.tau)
-sub8.cv.fpr.lt <- length(which(sub8.null.cv.tau <= sub8.cv.tau))/length(sub8.null.cv.tau)
+sub1.null.cv.taus <- sub1.null.cv.taus[!is.na(sub1.null.cv.taus)]
+sub2.null.cv.taus <- sub2.null.cv.taus[!is.na(sub2.null.cv.taus)]
+sub3.null.cv.taus <- sub3.null.cv.taus[!is.na(sub3.null.cv.taus)]
+sub4.null.cv.taus <- sub4.null.cv.taus[!is.na(sub4.null.cv.taus)]
+sub5.null.cv.taus <- sub5.null.cv.taus[!is.na(sub5.null.cv.taus)]
+sub6.null.cv.taus <- sub6.null.cv.taus[!is.na(sub6.null.cv.taus)]
+sub7.null.cv.taus <- sub7.null.cv.taus[!is.na(sub7.null.cv.taus)]
+sub8.null.cv.taus <- sub8.null.cv.taus[!is.na(sub8.null.cv.taus)]
+sub1.cv.fpr.lt <- length(which(sub1.null.cv.taus <= sub1.cv.tau))/length(sub1.null.cv.taus)
+sub2.cv.fpr.lt <- length(which(sub2.null.cv.taus <= sub2.cv.tau))/length(sub2.null.cv.taus)
+sub3.cv.fpr.lt <- length(which(sub3.null.cv.taus <= sub3.cv.tau))/length(sub3.null.cv.taus)
+sub4.cv.fpr.lt <- length(which(sub4.null.cv.taus <= sub4.cv.tau))/length(sub4.null.cv.taus)
+sub5.cv.fpr.lt <- length(which(sub5.null.cv.taus <= sub5.cv.tau))/length(sub5.null.cv.taus)
+sub6.cv.fpr.lt <- length(which(sub6.null.cv.taus <= sub6.cv.tau))/length(sub6.null.cv.taus)
+sub7.cv.fpr.lt <- length(which(sub7.null.cv.taus <= sub7.cv.tau))/length(sub7.null.cv.taus)
+sub8.cv.fpr.lt <- length(which(sub8.null.cv.taus <= sub8.cv.tau))/length(sub8.null.cv.taus)
 
 ## Index of Dispersion
-sub1.null.id.tau <- sub1.null.id.tau[!is.na(sub1.null.id.tau)]
-sub2.null.id.tau <- sub2.null.id.tau[!is.na(sub2.null.id.tau)]
-sub3.null.id.tau <- sub3.null.id.tau[!is.na(sub3.null.id.tau)]
-sub4.null.id.tau <- sub4.null.id.tau[!is.na(sub4.null.id.tau)]
-sub5.null.id.tau <- sub5.null.id.tau[!is.na(sub5.null.id.tau)]
-sub6.null.id.tau <- sub6.null.id.tau[!is.na(sub6.null.id.tau)]
-sub7.null.id.tau <- sub7.null.id.tau[!is.na(sub7.null.id.tau)]
-sub8.null.id.tau <- sub8.null.id.tau[!is.na(sub8.null.id.tau)]
-sub1.id.fpr.gt <- length(which(sub1.null.id.tau >= sub1.id.tau))/length(sub1.null.id.tau)
-sub2.id.fpr.gt <- length(which(sub2.null.id.tau >= sub2.id.tau))/length(sub2.null.id.tau)
-sub3.id.fpr.gt <- length(which(sub3.null.id.tau >= sub3.id.tau))/length(sub3.null.id.tau)
-sub4.id.fpr.gt <- length(which(sub4.null.id.tau >= sub4.id.tau))/length(sub4.null.id.tau)
-sub5.id.fpr.gt <- length(which(sub5.null.id.tau >= sub5.id.tau))/length(sub5.null.id.tau)
-sub6.id.fpr.gt <- length(which(sub6.null.id.tau >= sub6.id.tau))/length(sub6.null.id.tau)
-sub7.id.fpr.gt <- length(which(sub7.null.id.tau >= sub7.id.tau))/length(sub7.null.id.tau)
-sub8.id.fpr.gt <- length(which(sub8.null.id.tau >= sub8.id.tau))/length(sub8.null.id.tau)
+sub1.null.id.taus <- sub1.null.id.taus[!is.na(sub1.null.id.taus)]
+sub2.null.id.taus <- sub2.null.id.taus[!is.na(sub2.null.id.taus)]
+sub3.null.id.taus <- sub3.null.id.taus[!is.na(sub3.null.id.taus)]
+sub4.null.id.taus <- sub4.null.id.taus[!is.na(sub4.null.id.taus)]
+sub5.null.id.taus <- sub5.null.id.taus[!is.na(sub5.null.id.taus)]
+sub6.null.id.taus <- sub6.null.id.taus[!is.na(sub6.null.id.taus)]
+sub7.null.id.taus <- sub7.null.id.taus[!is.na(sub7.null.id.taus)]
+sub8.null.id.taus <- sub8.null.id.taus[!is.na(sub8.null.id.taus)]
+sub1.id.fpr.gt <- length(which(sub1.null.id.taus >= sub1.id.tau))/length(sub1.null.id.taus)
+sub2.id.fpr.gt <- length(which(sub2.null.id.taus >= sub2.id.tau))/length(sub2.null.id.taus)
+sub3.id.fpr.gt <- length(which(sub3.null.id.taus >= sub3.id.tau))/length(sub3.null.id.taus)
+sub4.id.fpr.gt <- length(which(sub4.null.id.taus >= sub4.id.tau))/length(sub4.null.id.taus)
+sub5.id.fpr.gt <- length(which(sub5.null.id.taus >= sub5.id.tau))/length(sub5.null.id.taus)
+sub6.id.fpr.gt <- length(which(sub6.null.id.taus >= sub6.id.tau))/length(sub6.null.id.taus)
+sub7.id.fpr.gt <- length(which(sub7.null.id.taus >= sub7.id.tau))/length(sub7.null.id.taus)
+sub8.id.fpr.gt <- length(which(sub8.null.id.taus >= sub8.id.tau))/length(sub8.null.id.taus)
 
-sub1.null.id.tau <- sub1.null.id.tau[!is.na(sub1.null.id.tau)]
-sub2.null.id.tau <- sub2.null.id.tau[!is.na(sub2.null.id.tau)]
-sub3.null.id.tau <- sub3.null.id.tau[!is.na(sub3.null.id.tau)]
-sub4.null.id.tau <- sub4.null.id.tau[!is.na(sub4.null.id.tau)]
-sub5.null.id.tau <- sub5.null.id.tau[!is.na(sub5.null.id.tau)]
-sub6.null.id.tau <- sub6.null.id.tau[!is.na(sub6.null.id.tau)]
-sub7.null.id.tau <- sub7.null.id.tau[!is.na(sub7.null.id.tau)]
-sub8.null.id.tau <- sub8.null.id.tau[!is.na(sub8.null.id.tau)]
-sub1.id.fpr.lt <- length(which(sub1.null.id.tau <= sub1.id.tau))/length(sub1.null.id.tau)
-sub2.id.fpr.lt <- length(which(sub2.null.id.tau <= sub2.id.tau))/length(sub2.null.id.tau)
-sub3.id.fpr.lt <- length(which(sub3.null.id.tau <= sub3.id.tau))/length(sub3.null.id.tau)
-sub4.id.fpr.lt <- length(which(sub4.null.id.tau <= sub4.id.tau))/length(sub4.null.id.tau)
-sub5.id.fpr.lt <- length(which(sub5.null.id.tau <= sub5.id.tau))/length(sub5.null.id.tau)
-sub6.id.fpr.lt <- length(which(sub6.null.id.tau <= sub6.id.tau))/length(sub6.null.id.tau)
-sub7.id.fpr.lt <- length(which(sub7.null.id.tau <= sub7.id.tau))/length(sub7.null.id.tau)
-sub8.id.fpr.lt <- length(which(sub8.null.id.tau <= sub8.id.tau))/length(sub8.null.id.tau)
+sub1.null.id.taus <- sub1.null.id.taus[!is.na(sub1.null.id.taus)]
+sub2.null.id.taus <- sub2.null.id.taus[!is.na(sub2.null.id.taus)]
+sub3.null.id.taus <- sub3.null.id.taus[!is.na(sub3.null.id.taus)]
+sub4.null.id.taus <- sub4.null.id.taus[!is.na(sub4.null.id.taus)]
+sub5.null.id.taus <- sub5.null.id.taus[!is.na(sub5.null.id.taus)]
+sub6.null.id.taus <- sub6.null.id.taus[!is.na(sub6.null.id.taus)]
+sub7.null.id.taus <- sub7.null.id.taus[!is.na(sub7.null.id.taus)]
+sub8.null.id.taus <- sub8.null.id.taus[!is.na(sub8.null.id.taus)]
+sub1.id.fpr.lt <- length(which(sub1.null.id.taus <= sub1.id.tau))/length(sub1.null.id.taus)
+sub2.id.fpr.lt <- length(which(sub2.null.id.taus <= sub2.id.tau))/length(sub2.null.id.taus)
+sub3.id.fpr.lt <- length(which(sub3.null.id.taus <= sub3.id.tau))/length(sub3.null.id.taus)
+sub4.id.fpr.lt <- length(which(sub4.null.id.taus <= sub4.id.tau))/length(sub4.null.id.taus)
+sub5.id.fpr.lt <- length(which(sub5.null.id.taus <= sub5.id.tau))/length(sub5.null.id.taus)
+sub6.id.fpr.lt <- length(which(sub6.null.id.taus <= sub6.id.tau))/length(sub6.null.id.taus)
+sub7.id.fpr.lt <- length(which(sub7.null.id.taus <= sub7.id.tau))/length(sub7.null.id.taus)
+sub8.id.fpr.lt <- length(which(sub8.null.id.taus <= sub8.id.tau))/length(sub8.null.id.taus)
 
 ## First Difference Variance
-sub1.null.fdv.tau <- sub1.null.fdv.tau[!is.na(sub1.null.fdv.tau)]
-sub2.null.fdv.tau <- sub2.null.fdv.tau[!is.na(sub2.null.fdv.tau)]
-sub3.null.fdv.tau <- sub3.null.fdv.tau[!is.na(sub3.null.fdv.tau)]
-sub4.null.fdv.tau <- sub4.null.fdv.tau[!is.na(sub4.null.fdv.tau)]
-sub5.null.fdv.tau <- sub5.null.fdv.tau[!is.na(sub5.null.fdv.tau)]
-sub6.null.fdv.tau <- sub6.null.fdv.tau[!is.na(sub6.null.fdv.tau)]
-sub7.null.fdv.tau <- sub7.null.fdv.tau[!is.na(sub7.null.fdv.tau)]
-sub8.null.fdv.tau <- sub8.null.fdv.tau[!is.na(sub8.null.fdv.tau)]
-sub1.fdv.fpr.gt <- length(which(sub1.null.fdv.tau >= sub1.fdv.tau))/length(sub1.null.fdv.tau)
-sub2.fdv.fpr.gt <- length(which(sub2.null.fdv.tau >= sub2.fdv.tau))/length(sub2.null.fdv.tau)
-sub3.fdv.fpr.gt <- length(which(sub3.null.fdv.tau >= sub3.fdv.tau))/length(sub3.null.fdv.tau)
-sub4.fdv.fpr.gt <- length(which(sub4.null.fdv.tau >= sub4.fdv.tau))/length(sub4.null.fdv.tau)
-sub5.fdv.fpr.gt <- length(which(sub5.null.fdv.tau >= sub5.fdv.tau))/length(sub5.null.fdv.tau)
-sub6.fdv.fpr.gt <- length(which(sub6.null.fdv.tau >= sub6.fdv.tau))/length(sub6.null.fdv.tau)
-sub7.fdv.fpr.gt <- length(which(sub7.null.fdv.tau >= sub7.fdv.tau))/length(sub7.null.fdv.tau)
-sub8.fdv.fpr.gt <- length(which(sub8.null.fdv.tau >= sub8.fdv.tau))/length(sub8.null.fdv.tau)
+sub1.null.fdv.taus <- sub1.null.fdv.taus[!is.na(sub1.null.fdv.taus)]
+sub2.null.fdv.taus <- sub2.null.fdv.taus[!is.na(sub2.null.fdv.taus)]
+sub3.null.fdv.taus <- sub3.null.fdv.taus[!is.na(sub3.null.fdv.taus)]
+sub4.null.fdv.taus <- sub4.null.fdv.taus[!is.na(sub4.null.fdv.taus)]
+sub5.null.fdv.taus <- sub5.null.fdv.taus[!is.na(sub5.null.fdv.taus)]
+sub6.null.fdv.taus <- sub6.null.fdv.taus[!is.na(sub6.null.fdv.taus)]
+sub7.null.fdv.taus <- sub7.null.fdv.taus[!is.na(sub7.null.fdv.taus)]
+sub8.null.fdv.taus <- sub8.null.fdv.taus[!is.na(sub8.null.fdv.taus)]
+sub1.fdv.fpr.gt <- length(which(sub1.null.fdv.taus >= sub1.fdv.tau))/length(sub1.null.fdv.taus)
+sub2.fdv.fpr.gt <- length(which(sub2.null.fdv.taus >= sub2.fdv.tau))/length(sub2.null.fdv.taus)
+sub3.fdv.fpr.gt <- length(which(sub3.null.fdv.taus >= sub3.fdv.tau))/length(sub3.null.fdv.taus)
+sub4.fdv.fpr.gt <- length(which(sub4.null.fdv.taus >= sub4.fdv.tau))/length(sub4.null.fdv.taus)
+sub5.fdv.fpr.gt <- length(which(sub5.null.fdv.taus >= sub5.fdv.tau))/length(sub5.null.fdv.taus)
+sub6.fdv.fpr.gt <- length(which(sub6.null.fdv.taus >= sub6.fdv.tau))/length(sub6.null.fdv.taus)
+sub7.fdv.fpr.gt <- length(which(sub7.null.fdv.taus >= sub7.fdv.tau))/length(sub7.null.fdv.taus)
+sub8.fdv.fpr.gt <- length(which(sub8.null.fdv.taus >= sub8.fdv.tau))/length(sub8.null.fdv.taus)
 
-sub1.null.fdv.tau <- sub1.null.fdv.tau[!is.na(sub1.null.fdv.tau)]
-sub2.null.fdv.tau <- sub2.null.fdv.tau[!is.na(sub2.null.fdv.tau)]
-sub3.null.fdv.tau <- sub3.null.fdv.tau[!is.na(sub3.null.fdv.tau)]
-sub4.null.fdv.tau <- sub4.null.fdv.tau[!is.na(sub4.null.fdv.tau)]
-sub5.null.fdv.tau <- sub5.null.fdv.tau[!is.na(sub5.null.fdv.tau)]
-sub6.null.fdv.tau <- sub6.null.fdv.tau[!is.na(sub6.null.fdv.tau)]
-sub7.null.fdv.tau <- sub7.null.fdv.tau[!is.na(sub7.null.fdv.tau)]
-sub8.null.fdv.tau <- sub8.null.fdv.tau[!is.na(sub8.null.fdv.tau)]
-sub1.fdv.fpr.lt <- length(which(sub1.null.fdv.tau <= sub1.fdv.tau))/length(sub1.null.fdv.tau)
-sub2.fdv.fpr.lt <- length(which(sub2.null.fdv.tau <= sub2.fdv.tau))/length(sub2.null.fdv.tau)
-sub3.fdv.fpr.lt <- length(which(sub3.null.fdv.tau <= sub3.fdv.tau))/length(sub3.null.fdv.tau)
-sub4.fdv.fpr.lt <- length(which(sub4.null.fdv.tau <= sub4.fdv.tau))/length(sub4.null.fdv.tau)
-sub5.fdv.fpr.lt <- length(which(sub5.null.fdv.tau <= sub5.fdv.tau))/length(sub5.null.fdv.tau)
-sub6.fdv.fpr.lt <- length(which(sub6.null.fdv.tau <= sub6.fdv.tau))/length(sub6.null.fdv.tau)
-sub7.fdv.fpr.lt <- length(which(sub7.null.fdv.tau <= sub7.fdv.tau))/length(sub7.null.fdv.tau)
-sub8.fdv.fpr.lt <- length(which(sub8.null.fdv.tau <= sub8.fdv.tau))/length(sub8.null.fdv.tau)
+sub1.null.fdv.taus <- sub1.null.fdv.taus[!is.na(sub1.null.fdv.taus)]
+sub2.null.fdv.taus <- sub2.null.fdv.taus[!is.na(sub2.null.fdv.taus)]
+sub3.null.fdv.taus <- sub3.null.fdv.taus[!is.na(sub3.null.fdv.taus)]
+sub4.null.fdv.taus <- sub4.null.fdv.taus[!is.na(sub4.null.fdv.taus)]
+sub5.null.fdv.taus <- sub5.null.fdv.taus[!is.na(sub5.null.fdv.taus)]
+sub6.null.fdv.taus <- sub6.null.fdv.taus[!is.na(sub6.null.fdv.taus)]
+sub7.null.fdv.taus <- sub7.null.fdv.taus[!is.na(sub7.null.fdv.taus)]
+sub8.null.fdv.taus <- sub8.null.fdv.taus[!is.na(sub8.null.fdv.taus)]
+sub1.fdv.fpr.lt <- length(which(sub1.null.fdv.taus <= sub1.fdv.tau))/length(sub1.null.fdv.taus)
+sub2.fdv.fpr.lt <- length(which(sub2.null.fdv.taus <= sub2.fdv.tau))/length(sub2.null.fdv.taus)
+sub3.fdv.fpr.lt <- length(which(sub3.null.fdv.taus <= sub3.fdv.tau))/length(sub3.null.fdv.taus)
+sub4.fdv.fpr.lt <- length(which(sub4.null.fdv.taus <= sub4.fdv.tau))/length(sub4.null.fdv.taus)
+sub5.fdv.fpr.lt <- length(which(sub5.null.fdv.taus <= sub5.fdv.tau))/length(sub5.null.fdv.taus)
+sub6.fdv.fpr.lt <- length(which(sub6.null.fdv.taus <= sub6.fdv.tau))/length(sub6.null.fdv.taus)
+sub7.fdv.fpr.lt <- length(which(sub7.null.fdv.taus <= sub7.fdv.tau))/length(sub7.null.fdv.taus)
+sub8.fdv.fpr.lt <- length(which(sub8.null.fdv.taus <= sub8.fdv.tau))/length(sub8.null.fdv.taus)
 
 ## Autocorrelation
-sub1.null.ac.tau <- sub1.null.ac.tau[!is.na(sub1.null.ac.tau)]
-sub2.null.ac.tau <- sub2.null.ac.tau[!is.na(sub2.null.ac.tau)]
-sub3.null.ac.tau <- sub3.null.ac.tau[!is.na(sub3.null.ac.tau)]
-sub4.null.ac.tau <- sub4.null.ac.tau[!is.na(sub4.null.ac.tau)]
-sub5.null.ac.tau <- sub5.null.ac.tau[!is.na(sub5.null.ac.tau)]
-sub6.null.ac.tau <- sub6.null.ac.tau[!is.na(sub6.null.ac.tau)]
-sub7.null.ac.tau <- sub7.null.ac.tau[!is.na(sub7.null.ac.tau)]
-sub8.null.ac.tau <- sub8.null.ac.tau[!is.na(sub8.null.ac.tau)]
-sub1.ac.fpr.gt <- length(which(sub1.null.ac.tau >= sub1.ac.tau))/length(sub1.null.ac.tau)
-sub2.ac.fpr.gt <- length(which(sub2.null.ac.tau >= sub2.ac.tau))/length(sub2.null.ac.tau)
-sub3.ac.fpr.gt <- length(which(sub3.null.ac.tau >= sub3.ac.tau))/length(sub3.null.ac.tau)
-sub4.ac.fpr.gt <- length(which(sub4.null.ac.tau >= sub4.ac.tau))/length(sub4.null.ac.tau)
-sub5.ac.fpr.gt <- length(which(sub5.null.ac.tau >= sub5.ac.tau))/length(sub5.null.ac.tau)
-sub6.ac.fpr.gt <- length(which(sub6.null.ac.tau >= sub6.ac.tau))/length(sub6.null.ac.tau)
-sub7.ac.fpr.gt <- length(which(sub7.null.ac.tau >= sub7.ac.tau))/length(sub7.null.ac.tau)
-sub8.ac.fpr.gt <- length(which(sub8.null.ac.tau >= sub8.ac.tau))/length(sub8.null.ac.tau)
+sub1.null.ac.taus <- sub1.null.ac.taus[!is.na(sub1.null.ac.taus)]
+sub2.null.ac.taus <- sub2.null.ac.taus[!is.na(sub2.null.ac.taus)]
+sub3.null.ac.taus <- sub3.null.ac.taus[!is.na(sub3.null.ac.taus)]
+sub4.null.ac.taus <- sub4.null.ac.taus[!is.na(sub4.null.ac.taus)]
+sub5.null.ac.taus <- sub5.null.ac.taus[!is.na(sub5.null.ac.taus)]
+sub6.null.ac.taus <- sub6.null.ac.taus[!is.na(sub6.null.ac.taus)]
+sub7.null.ac.taus <- sub7.null.ac.taus[!is.na(sub7.null.ac.taus)]
+sub8.null.ac.taus <- sub8.null.ac.taus[!is.na(sub8.null.ac.taus)]
+sub1.ac.fpr.gt <- length(which(sub1.null.ac.taus >= sub1.ac.tau))/length(sub1.null.ac.taus)
+sub2.ac.fpr.gt <- length(which(sub2.null.ac.taus >= sub2.ac.tau))/length(sub2.null.ac.taus)
+sub3.ac.fpr.gt <- length(which(sub3.null.ac.taus >= sub3.ac.tau))/length(sub3.null.ac.taus)
+sub4.ac.fpr.gt <- length(which(sub4.null.ac.taus >= sub4.ac.tau))/length(sub4.null.ac.taus)
+sub5.ac.fpr.gt <- length(which(sub5.null.ac.taus >= sub5.ac.tau))/length(sub5.null.ac.taus)
+sub6.ac.fpr.gt <- length(which(sub6.null.ac.taus >= sub6.ac.tau))/length(sub6.null.ac.taus)
+sub7.ac.fpr.gt <- length(which(sub7.null.ac.taus >= sub7.ac.tau))/length(sub7.null.ac.taus)
+sub8.ac.fpr.gt <- length(which(sub8.null.ac.taus >= sub8.ac.tau))/length(sub8.null.ac.taus)
 
-sub1.null.ac.tau <- sub1.null.ac.tau[!is.na(sub1.null.ac.tau)]
-sub2.null.ac.tau <- sub2.null.ac.tau[!is.na(sub2.null.ac.tau)]
-sub3.null.ac.tau <- sub3.null.ac.tau[!is.na(sub3.null.ac.tau)]
-sub4.null.ac.tau <- sub4.null.ac.tau[!is.na(sub4.null.ac.tau)]
-sub5.null.ac.tau <- sub5.null.ac.tau[!is.na(sub5.null.ac.tau)]
-sub6.null.ac.tau <- sub6.null.ac.tau[!is.na(sub6.null.ac.tau)]
-sub7.null.ac.tau <- sub7.null.ac.tau[!is.na(sub7.null.ac.tau)]
-sub8.null.ac.tau <- sub8.null.ac.tau[!is.na(sub8.null.ac.tau)]
-sub1.ac.fpr.lt <- length(which(sub1.null.ac.tau <= sub1.ac.tau))/length(sub1.null.ac.tau)
-sub2.ac.fpr.lt <- length(which(sub2.null.ac.tau <= sub2.ac.tau))/length(sub2.null.ac.tau)
-sub3.ac.fpr.lt <- length(which(sub3.null.ac.tau <= sub3.ac.tau))/length(sub3.null.ac.tau)
-sub4.ac.fpr.lt <- length(which(sub4.null.ac.tau <= sub4.ac.tau))/length(sub4.null.ac.tau)
-sub5.ac.fpr.lt <- length(which(sub5.null.ac.tau <= sub5.ac.tau))/length(sub5.null.ac.tau)
-sub6.ac.fpr.lt <- length(which(sub6.null.ac.tau <= sub6.ac.tau))/length(sub6.null.ac.tau)
-sub7.ac.fpr.lt <- length(which(sub7.null.ac.tau <= sub7.ac.tau))/length(sub7.null.ac.tau)
-sub8.ac.fpr.lt <- length(which(sub8.null.ac.tau <= sub8.ac.tau))/length(sub8.null.ac.tau)
+sub1.null.ac.taus <- sub1.null.ac.taus[!is.na(sub1.null.ac.taus)]
+sub2.null.ac.taus <- sub2.null.ac.taus[!is.na(sub2.null.ac.taus)]
+sub3.null.ac.taus <- sub3.null.ac.taus[!is.na(sub3.null.ac.taus)]
+sub4.null.ac.taus <- sub4.null.ac.taus[!is.na(sub4.null.ac.taus)]
+sub5.null.ac.taus <- sub5.null.ac.taus[!is.na(sub5.null.ac.taus)]
+sub6.null.ac.taus <- sub6.null.ac.taus[!is.na(sub6.null.ac.taus)]
+sub7.null.ac.taus <- sub7.null.ac.taus[!is.na(sub7.null.ac.taus)]
+sub8.null.ac.taus <- sub8.null.ac.taus[!is.na(sub8.null.ac.taus)]
+sub1.ac.fpr.lt <- length(which(sub1.null.ac.taus <= sub1.ac.tau))/length(sub1.null.ac.taus)
+sub2.ac.fpr.lt <- length(which(sub2.null.ac.taus <= sub2.ac.tau))/length(sub2.null.ac.taus)
+sub3.ac.fpr.lt <- length(which(sub3.null.ac.taus <= sub3.ac.tau))/length(sub3.null.ac.taus)
+sub4.ac.fpr.lt <- length(which(sub4.null.ac.taus <= sub4.ac.tau))/length(sub4.null.ac.taus)
+sub5.ac.fpr.lt <- length(which(sub5.null.ac.taus <= sub5.ac.tau))/length(sub5.null.ac.taus)
+sub6.ac.fpr.lt <- length(which(sub6.null.ac.taus <= sub6.ac.tau))/length(sub6.null.ac.taus)
+sub7.ac.fpr.lt <- length(which(sub7.null.ac.taus <= sub7.ac.tau))/length(sub7.null.ac.taus)
+sub8.ac.fpr.lt <- length(which(sub8.null.ac.taus <= sub8.ac.tau))/length(sub8.null.ac.taus)
 
 ## Autocovariance
-sub1.null.acv.tau <- sub1.null.acv.tau[!is.na(sub1.null.acv.tau)]
-sub2.null.acv.tau <- sub2.null.acv.tau[!is.na(sub2.null.acv.tau)]
-sub3.null.acv.tau <- sub3.null.acv.tau[!is.na(sub3.null.acv.tau)]
-sub4.null.acv.tau <- sub4.null.acv.tau[!is.na(sub4.null.acv.tau)]
-sub5.null.acv.tau <- sub5.null.acv.tau[!is.na(sub5.null.acv.tau)]
-sub6.null.acv.tau <- sub6.null.acv.tau[!is.na(sub6.null.acv.tau)]
-sub7.null.acv.tau <- sub7.null.acv.tau[!is.na(sub7.null.acv.tau)]
-sub8.null.acv.tau <- sub8.null.acv.tau[!is.na(sub8.null.acv.tau)]
-sub1.acv.fpr.gt <- length(which(sub1.null.acv.tau >= sub1.acv.tau))/length(sub1.null.acv.tau)
-sub2.acv.fpr.gt <- length(which(sub2.null.acv.tau >= sub2.acv.tau))/length(sub2.null.acv.tau)
-sub3.acv.fpr.gt <- length(which(sub3.null.acv.tau >= sub3.acv.tau))/length(sub3.null.acv.tau)
-sub4.acv.fpr.gt <- length(which(sub4.null.acv.tau >= sub4.acv.tau))/length(sub4.null.acv.tau)
-sub5.acv.fpr.gt <- length(which(sub5.null.acv.tau >= sub5.acv.tau))/length(sub5.null.acv.tau)
-sub6.acv.fpr.gt <- length(which(sub6.null.acv.tau >= sub6.acv.tau))/length(sub6.null.acv.tau)
-sub7.acv.fpr.gt <- length(which(sub7.null.acv.tau >= sub7.acv.tau))/length(sub7.null.acv.tau)
-sub8.acv.fpr.gt <- length(which(sub8.null.acv.tau >= sub8.acv.tau))/length(sub8.null.acv.tau)
+sub1.null.acv.taus <- sub1.null.acv.taus[!is.na(sub1.null.acv.taus)]
+sub2.null.acv.taus <- sub2.null.acv.taus[!is.na(sub2.null.acv.taus)]
+sub3.null.acv.taus <- sub3.null.acv.taus[!is.na(sub3.null.acv.taus)]
+sub4.null.acv.taus <- sub4.null.acv.taus[!is.na(sub4.null.acv.taus)]
+sub5.null.acv.taus <- sub5.null.acv.taus[!is.na(sub5.null.acv.taus)]
+sub6.null.acv.taus <- sub6.null.acv.taus[!is.na(sub6.null.acv.taus)]
+sub7.null.acv.taus <- sub7.null.acv.taus[!is.na(sub7.null.acv.taus)]
+sub8.null.acv.taus <- sub8.null.acv.taus[!is.na(sub8.null.acv.taus)]
+sub1.acv.fpr.gt <- length(which(sub1.null.acv.taus >= sub1.acv.tau))/length(sub1.null.acv.taus)
+sub2.acv.fpr.gt <- length(which(sub2.null.acv.taus >= sub2.acv.tau))/length(sub2.null.acv.taus)
+sub3.acv.fpr.gt <- length(which(sub3.null.acv.taus >= sub3.acv.tau))/length(sub3.null.acv.taus)
+sub4.acv.fpr.gt <- length(which(sub4.null.acv.taus >= sub4.acv.tau))/length(sub4.null.acv.taus)
+sub5.acv.fpr.gt <- length(which(sub5.null.acv.taus >= sub5.acv.tau))/length(sub5.null.acv.taus)
+sub6.acv.fpr.gt <- length(which(sub6.null.acv.taus >= sub6.acv.tau))/length(sub6.null.acv.taus)
+sub7.acv.fpr.gt <- length(which(sub7.null.acv.taus >= sub7.acv.tau))/length(sub7.null.acv.taus)
+sub8.acv.fpr.gt <- length(which(sub8.null.acv.taus >= sub8.acv.tau))/length(sub8.null.acv.taus)
 
-sub1.null.acv.tau <- sub1.null.acv.tau[!is.na(sub1.null.acv.tau)]
-sub2.null.acv.tau <- sub2.null.acv.tau[!is.na(sub2.null.acv.tau)]
-sub3.null.acv.tau <- sub3.null.acv.tau[!is.na(sub3.null.acv.tau)]
-sub4.null.acv.tau <- sub4.null.acv.tau[!is.na(sub4.null.acv.tau)]
-sub5.null.acv.tau <- sub5.null.acv.tau[!is.na(sub5.null.acv.tau)]
-sub6.null.acv.tau <- sub6.null.acv.tau[!is.na(sub6.null.acv.tau)]
-sub7.null.acv.tau <- sub7.null.acv.tau[!is.na(sub7.null.acv.tau)]
-sub8.null.acv.tau <- sub8.null.acv.tau[!is.na(sub8.null.acv.tau)]
-sub1.acv.fpr.lt <- length(which(sub1.null.acv.tau <= sub1.acv.tau))/length(sub1.null.acv.tau)
-sub2.acv.fpr.lt <- length(which(sub2.null.acv.tau <= sub2.acv.tau))/length(sub2.null.acv.tau)
-sub3.acv.fpr.lt <- length(which(sub3.null.acv.tau <= sub3.acv.tau))/length(sub3.null.acv.tau)
-sub4.acv.fpr.lt <- length(which(sub4.null.acv.tau <= sub4.acv.tau))/length(sub4.null.acv.tau)
-sub5.acv.fpr.lt <- length(which(sub5.null.acv.tau <= sub5.acv.tau))/length(sub5.null.acv.tau)
-sub6.acv.fpr.lt <- length(which(sub6.null.acv.tau <= sub6.acv.tau))/length(sub6.null.acv.tau)
-sub7.acv.fpr.lt <- length(which(sub7.null.acv.tau <= sub7.acv.tau))/length(sub7.null.acv.tau)
-sub8.acv.fpr.lt <- length(which(sub8.null.acv.tau <= sub8.acv.tau))/length(sub8.null.acv.tau)
+sub1.null.acv.taus <- sub1.null.acv.taus[!is.na(sub1.null.acv.taus)]
+sub2.null.acv.taus <- sub2.null.acv.taus[!is.na(sub2.null.acv.taus)]
+sub3.null.acv.taus <- sub3.null.acv.taus[!is.na(sub3.null.acv.taus)]
+sub4.null.acv.taus <- sub4.null.acv.taus[!is.na(sub4.null.acv.taus)]
+sub5.null.acv.taus <- sub5.null.acv.taus[!is.na(sub5.null.acv.taus)]
+sub6.null.acv.taus <- sub6.null.acv.taus[!is.na(sub6.null.acv.taus)]
+sub7.null.acv.taus <- sub7.null.acv.taus[!is.na(sub7.null.acv.taus)]
+sub8.null.acv.taus <- sub8.null.acv.taus[!is.na(sub8.null.acv.taus)]
+sub1.acv.fpr.lt <- length(which(sub1.null.acv.taus <= sub1.acv.tau))/length(sub1.null.acv.taus)
+sub2.acv.fpr.lt <- length(which(sub2.null.acv.taus <= sub2.acv.tau))/length(sub2.null.acv.taus)
+sub3.acv.fpr.lt <- length(which(sub3.null.acv.taus <= sub3.acv.tau))/length(sub3.null.acv.taus)
+sub4.acv.fpr.lt <- length(which(sub4.null.acv.taus <= sub4.acv.tau))/length(sub4.null.acv.taus)
+sub5.acv.fpr.lt <- length(which(sub5.null.acv.taus <= sub5.acv.tau))/length(sub5.null.acv.taus)
+sub6.acv.fpr.lt <- length(which(sub6.null.acv.taus <= sub6.acv.tau))/length(sub6.null.acv.taus)
+sub7.acv.fpr.lt <- length(which(sub7.null.acv.taus <= sub7.acv.tau))/length(sub7.null.acv.taus)
+sub8.acv.fpr.lt <- length(which(sub8.null.acv.taus <= sub8.acv.tau))/length(sub8.null.acv.taus)
 
 ## Decay Time
-sub1.null.dt.tau <- sub1.null.dt.tau[!is.na(sub1.null.dt.tau)]
-sub2.null.dt.tau <- sub2.null.dt.tau[!is.na(sub2.null.dt.tau)]
-sub3.null.dt.tau <- sub3.null.dt.tau[!is.na(sub3.null.dt.tau)]
-sub4.null.dt.tau <- sub4.null.dt.tau[!is.na(sub4.null.dt.tau)]
-sub5.null.dt.tau <- sub5.null.dt.tau[!is.na(sub5.null.dt.tau)]
-sub6.null.dt.tau <- sub6.null.dt.tau[!is.na(sub6.null.dt.tau)]
-sub7.null.dt.tau <- sub7.null.dt.tau[!is.na(sub7.null.dt.tau)]
-sub8.null.dt.tau <- sub8.null.dt.tau[!is.na(sub8.null.dt.tau)]
-sub1.dt.fpr.gt <- length(which(sub1.null.dt.tau >= sub1.dt.tau))/length(sub1.null.dt.tau)
-sub2.dt.fpr.gt <- length(which(sub2.null.dt.tau >= sub2.dt.tau))/length(sub2.null.dt.tau)
-sub3.dt.fpr.gt <- length(which(sub3.null.dt.tau >= sub3.dt.tau))/length(sub3.null.dt.tau)
-sub4.dt.fpr.gt <- length(which(sub4.null.dt.tau >= sub4.dt.tau))/length(sub4.null.dt.tau)
-sub5.dt.fpr.gt <- length(which(sub5.null.dt.tau >= sub5.dt.tau))/length(sub5.null.dt.tau)
-sub6.dt.fpr.gt <- length(which(sub6.null.dt.tau >= sub6.dt.tau))/length(sub6.null.dt.tau)
-sub7.dt.fpr.gt <- length(which(sub7.null.dt.tau >= sub7.dt.tau))/length(sub7.null.dt.tau)
-sub8.dt.fpr.gt <- length(which(sub8.null.dt.tau >= sub8.dt.tau))/length(sub8.null.dt.tau)
+sub1.null.dt.taus <- sub1.null.dt.taus[!is.na(sub1.null.dt.taus)]
+sub2.null.dt.taus <- sub2.null.dt.taus[!is.na(sub2.null.dt.taus)]
+sub3.null.dt.taus <- sub3.null.dt.taus[!is.na(sub3.null.dt.taus)]
+sub4.null.dt.taus <- sub4.null.dt.taus[!is.na(sub4.null.dt.taus)]
+sub5.null.dt.taus <- sub5.null.dt.taus[!is.na(sub5.null.dt.taus)]
+sub6.null.dt.taus <- sub6.null.dt.taus[!is.na(sub6.null.dt.taus)]
+sub7.null.dt.taus <- sub7.null.dt.taus[!is.na(sub7.null.dt.taus)]
+sub8.null.dt.taus <- sub8.null.dt.taus[!is.na(sub8.null.dt.taus)]
+sub1.dt.fpr.gt <- length(which(sub1.null.dt.taus >= sub1.dt.tau))/length(sub1.null.dt.taus)
+sub2.dt.fpr.gt <- length(which(sub2.null.dt.taus >= sub2.dt.tau))/length(sub2.null.dt.taus)
+sub3.dt.fpr.gt <- length(which(sub3.null.dt.taus >= sub3.dt.tau))/length(sub3.null.dt.taus)
+sub4.dt.fpr.gt <- length(which(sub4.null.dt.taus >= sub4.dt.tau))/length(sub4.null.dt.taus)
+sub5.dt.fpr.gt <- length(which(sub5.null.dt.taus >= sub5.dt.tau))/length(sub5.null.dt.taus)
+sub6.dt.fpr.gt <- length(which(sub6.null.dt.taus >= sub6.dt.tau))/length(sub6.null.dt.taus)
+sub7.dt.fpr.gt <- length(which(sub7.null.dt.taus >= sub7.dt.tau))/length(sub7.null.dt.taus)
+sub8.dt.fpr.gt <- length(which(sub8.null.dt.taus >= sub8.dt.tau))/length(sub8.null.dt.taus)
 
-sub1.null.dt.tau <- sub1.null.dt.tau[!is.na(sub1.null.dt.tau)]
-sub2.null.dt.tau <- sub2.null.dt.tau[!is.na(sub2.null.dt.tau)]
-sub3.null.dt.tau <- sub3.null.dt.tau[!is.na(sub3.null.dt.tau)]
-sub4.null.dt.tau <- sub4.null.dt.tau[!is.na(sub4.null.dt.tau)]
-sub5.null.dt.tau <- sub5.null.dt.tau[!is.na(sub5.null.dt.tau)]
-sub6.null.dt.tau <- sub6.null.dt.tau[!is.na(sub6.null.dt.tau)]
-sub7.null.dt.tau <- sub7.null.dt.tau[!is.na(sub7.null.dt.tau)]
-sub8.null.dt.tau <- sub8.null.dt.tau[!is.na(sub8.null.dt.tau)]
-sub1.dt.fpr.lt <- length(which(sub1.null.dt.tau <= sub1.dt.tau))/length(sub1.null.dt.tau)
-sub2.dt.fpr.lt <- length(which(sub2.null.dt.tau <= sub2.dt.tau))/length(sub2.null.dt.tau)
-sub3.dt.fpr.lt <- length(which(sub3.null.dt.tau <= sub3.dt.tau))/length(sub3.null.dt.tau)
-sub4.dt.fpr.lt <- length(which(sub4.null.dt.tau <= sub4.dt.tau))/length(sub4.null.dt.tau)
-sub5.dt.fpr.lt <- length(which(sub5.null.dt.tau <= sub5.dt.tau))/length(sub5.null.dt.tau)
-sub6.dt.fpr.lt <- length(which(sub6.null.dt.tau <= sub6.dt.tau))/length(sub6.null.dt.tau)
-sub7.dt.fpr.lt <- length(which(sub7.null.dt.tau <= sub7.dt.tau))/length(sub7.null.dt.tau)
-sub8.dt.fpr.lt <- length(which(sub8.null.dt.tau <= sub8.dt.tau))/length(sub8.null.dt.tau)
+sub1.null.dt.taus <- sub1.null.dt.taus[!is.na(sub1.null.dt.taus)]
+sub2.null.dt.taus <- sub2.null.dt.taus[!is.na(sub2.null.dt.taus)]
+sub3.null.dt.taus <- sub3.null.dt.taus[!is.na(sub3.null.dt.taus)]
+sub4.null.dt.taus <- sub4.null.dt.taus[!is.na(sub4.null.dt.taus)]
+sub5.null.dt.taus <- sub5.null.dt.taus[!is.na(sub5.null.dt.taus)]
+sub6.null.dt.taus <- sub6.null.dt.taus[!is.na(sub6.null.dt.taus)]
+sub7.null.dt.taus <- sub7.null.dt.taus[!is.na(sub7.null.dt.taus)]
+sub8.null.dt.taus <- sub8.null.dt.taus[!is.na(sub8.null.dt.taus)]
+sub1.dt.fpr.lt <- length(which(sub1.null.dt.taus <= sub1.dt.tau))/length(sub1.null.dt.taus)
+sub2.dt.fpr.lt <- length(which(sub2.null.dt.taus <= sub2.dt.tau))/length(sub2.null.dt.taus)
+sub3.dt.fpr.lt <- length(which(sub3.null.dt.taus <= sub3.dt.tau))/length(sub3.null.dt.taus)
+sub4.dt.fpr.lt <- length(which(sub4.null.dt.taus <= sub4.dt.tau))/length(sub4.null.dt.taus)
+sub5.dt.fpr.lt <- length(which(sub5.null.dt.taus <= sub5.dt.tau))/length(sub5.null.dt.taus)
+sub6.dt.fpr.lt <- length(which(sub6.null.dt.taus <= sub6.dt.tau))/length(sub6.null.dt.taus)
+sub7.dt.fpr.lt <- length(which(sub7.null.dt.taus <= sub7.dt.tau))/length(sub7.null.dt.taus)
+sub8.dt.fpr.lt <- length(which(sub8.null.dt.taus <= sub8.dt.tau))/length(sub8.null.dt.taus)
 ```
 
 ### Plotting
@@ -1429,6 +1430,22 @@ legend("right", legend = c("Greater Than", "Less Than"), col = "black", pch = c(
 # legend("right", legend = c("Greater Than", "Less Than"), col = "black", pch = c(0, 2))
 ```
 
+## Saving Nulls
+
+```{r}
+subpops <- c(rep(1, 1000), rep(2, 1000), rep(3, 1000), rep(4, 1000), rep(5, 1000), rep(6, 1000), rep(7, 1000), rep(8, 1000))
+resamp.mean.taus <- data.frame(subpops, null.mean.taus)
+resamp.var.taus <- data.frame(subpops, null.var.taus)
+resamp.id.taus <- data.frame(subpops, null.id.taus)
+
+resamp.mean.pvals <- c(sub1.mean.fpr.gt, sub2.mean.fpr.gt, sub3.mean.fpr.gt, sub4.mean.fpr.gt,
+                       sub5.mean.fpr.gt, sub6.mean.fpr.gt, sub7.mean.fpr.gt, sub8.mean.fpr.gt)
+resamp.var.pvals <- c(sub1.var.fpr.gt, sub2.var.fpr.gt, sub3.var.fpr.gt, sub4.var.fpr.gt,
+                       sub5.var.fpr.gt, sub6.var.fpr.gt, sub7.var.fpr.gt, sub8.var.fpr.gt)
+resamp.id.pvals <- c(sub1.id.fpr.gt, sub2.id.fpr.gt, sub3.id.fpr.gt, sub4.id.fpr.gt,
+                       sub5.id.fpr.gt, sub6.id.fpr.gt, sub7.id.fpr.gt, sub8.id.fpr.gt)
+```
+
 # 2. Modified Mann-Kendall Test
 
 I think you apply this, instead of just calculating Kendall's $\tau$ normally? Kind of unclear. Let's see!
@@ -1468,9 +1485,9 @@ true.taus <- c(constant.mean.tau, warming.mean.tau)
 vline.cols <- c(rep("#1434A4", 4), rep("#C21E56", 4))
 par(mfrow = c(2, 4))
 for (i in 1:8){
-  hist(rnorm(n = 10000, mean = 0, sd = sqrt(var[i])), 
+  hist(rnorm(n = 1000, mean = 0, sd = sqrt(var[i])), 
      col = cols[i], border = cols[i],
-     xlim = c(-1, 1), ylim = c(1, 2500),
+     xlim = c(-1, 1), ylim = c(1, 250),
      main = mains[i], xlab = "")
   abline(v = true.taus[i], col = vline.cols[i], lwd = 2)
 }
@@ -1490,9 +1507,9 @@ true.taus <- c(constant.var.tau, warming.var.tau)
 vline.cols <- c(rep("#1434A4", 4), rep("#C21E56", 4))
 par(mfrow = c(2, 4))
 for (i in 1:8){
-  hist(rnorm(n = 10000, mean = 0, sd = sqrt(var[i])), 
+  hist(rnorm(n = 1000, mean = 0, sd = sqrt(var[i])), 
      col = cols[i], border = cols[i],
-     xlim = c(-1, 1), ylim = c(1, 2500),
+     xlim = c(-1, 1), ylim = c(1, 250),
      main = mains[i], xlab = "")
   abline(v = true.taus[i], col = vline.cols[i], lwd = 2)
 }
@@ -1512,9 +1529,9 @@ true.taus <- c(constant.id.tau, warming.id.tau)
 vline.cols <- c(rep("#1434A4", 4), rep("#C21E56", 4))
 par(mfrow = c(2, 4))
 for (i in 1:8){
-  hist(rnorm(n = 10000, mean = 0, sd = sqrt(var[i])), 
+  hist(rnorm(n = 1000, mean = 0, sd = sqrt(var[i])), 
      col = cols[i], border = cols[i],
-     xlim = c(-1, 1), ylim = c(1, 2500),
+     xlim = c(-1, 1), ylim = c(1, 250),
      main = mains[i], xlab = "")
   abline(v = true.taus[i], col = vline.cols[i], lwd = 2)
 }
@@ -1532,13 +1549,15 @@ for (i in 1:8){
   var[i] <- mod.man.kendall(n = length(ts), ps = rank.acf)
 }
 true.taus <- c(constant.mean.tau, warming.mean.tau)
+null.mean.taus.df <- c()
 mean.p.vals <- c()
 for (i in 1:8){
   set.seed(123)
-  null.mean.taus <- rnorm(n = 10000, mean = 0, sd = sqrt(var[i]))
-  mean.p.vals[i] <- length(which(null.mean.taus >= true.taus[i]))/10000
+  null.mean.taus <- rnorm(n = 1000, mean = 0, sd = sqrt(var[i]))
+  null.mean.taus.df <- c(null.mean.taus.df, null.mean.taus)
+  mean.p.vals[i] <- length(which(null.mean.taus >= true.taus[i]))/1000
 }
-
+null.mean.taus.df <- as.data.frame(null.mean.taus.df)
 
 vars <- data.frame(pop1.var, pop2.var, pop3.var, pop4.var, pop5.var, pop6.var, pop7.var, pop8.var); vars <- vars[1:15, ]
 var <- c()
@@ -1549,13 +1568,15 @@ for (i in 1:8){
   var[i] <- mod.man.kendall(n = length(ts), ps = rank.acf)
 }
 true.taus <- c(constant.var.tau, warming.var.tau)
+null.var.taus.df <- c()
 var.p.vals <- c()
 for (i in 1:8){
   set.seed(123)
-  null.var.taus <- rnorm(n = 10000, mean = 0, sd = sqrt(var[i]))
-  var.p.vals[i] <- length(which(null.var.taus >= true.taus[i]))/10000
+  null.var.taus <- rnorm(n = 1000, mean = 0, sd = sqrt(var[i]))
+  null.var.taus.df <- c(null.var.taus.df, null.var.taus)
+  var.p.vals[i] <- length(which(null.var.taus >= true.taus[i]))/1000
 }
-
+null.var.taus.df <- as.data.frame(null.var.taus.df)
 
 ids <- data.frame(pop1.id, pop2.id, pop3.id, pop4.id, pop5.id, pop6.id, pop7.id, pop8.id); ids <- ids[1:15, ]
 var <- c()
@@ -1566,12 +1587,15 @@ for (i in 1:8){
   var[i] <- mod.man.kendall(n = length(ts), ps = rank.acf)
 }
 true.taus <- c(constant.id.tau, warming.id.tau)
+null.id.taus.df <- c()
 id.p.vals <- c()
 for (i in 1:8){
   set.seed(123)
-  null.id.taus <- rnorm(n = 10000, mean = 0, sd = sqrt(var[i]))
-  id.p.vals[i] <- length(which(null.id.taus >= true.taus[i]))/10000
+  null.id.taus <- rnorm(n = 1000, mean = 0, sd = sqrt(var[i]))
+  null.id.taus.df <- c(null.id.taus.df, null.id.taus)
+  id.p.vals[i] <- length(which(null.id.taus >= true.taus[i]))/1000
 }
+null.id.taus.df <- as.data.frame(null.id.taus.df)
 
 p.vals <- data.frame(
   mean = mean.p.vals,
@@ -1598,6 +1622,19 @@ legend("topright", legend = c("Constant Tempertaure", "Rising Temperature"),
        pch = 19, col = c("#1434A4", "#C21E56"), cex = 0.8, bty = "n")
 ```
 
+## Saving Nulls
+
+```{r}
+subpops <- c(rep(1, 1000), rep(2, 1000), rep(3, 1000), rep(4, 1000), rep(5, 1000), rep(6, 1000), rep(7, 1000), rep(8, 1000))
+mmk.mean.taus <- data.frame(subpops, null.mean.taus.df)
+mmk.var.taus <- data.frame(subpops, null.var.taus.df)
+mmk.id.taus <- data.frame(subpops, null.id.taus.df)
+
+mmk.mean.pvals <- p.vals$mean
+mmk.var.pvals <- p.vals$var
+mmk.id.pvals <- p.vals$id
+```
+
 # 3. Surrogate Time Series via AR-1 Model
 
 ## Generating Surrogate Time Series
@@ -1606,6 +1643,15 @@ legend("topright", legend = c("Constant Tempertaure", "Rising Temperature"),
 
 ```{r}
 ## Original empirical time series
+data <- read.csv("Kirk_Data/Epidemics_Data_Dryad/Kirk_et_al_epidemics_sampling_data.csv")
+sub1 <- subset(data.sum, population == 1)
+sub2 <- subset(data.sum, population == 2)
+sub3 <- subset(data.sum, population == 3)
+sub4 <- subset(data.sum, population == 4)
+sub5 <- subset(data.sum, population == 5)
+sub6 <- subset(data.sum, population == 6)
+sub7 <- subset(data.sum, population == 7)
+sub8 <- subset(data.sum, population == 8)
 sub1.ts <- sub1$status.sum[1:20]
 sub2.ts <- sub2$status.sum[1:20]
 sub3.ts <- sub3$status.sum[1:20]
@@ -1873,14 +1919,14 @@ abline(v = 60, lty = 2, lwd = 2)
 ## Data Wrangling
 
 ```{r}
-sub1.surr.nulls <- as.list(sub1.surr.df[1:20, ])
-sub2.surr.nulls <- as.list(sub2.surr.df[1:20, ])
-sub3.surr.nulls <- as.list(sub3.surr.df[1:20, ])
-sub4.surr.nulls <- as.list(sub4.surr.df[1:20, ])
-sub5.surr.nulls <- as.list(sub5.surr.df[1:20, ])
-sub6.surr.nulls <- as.list(sub6.surr.df[1:20, ])
-sub7.surr.nulls <- as.list(sub7.surr.df[1:20, ])
-sub8.surr.nulls <- as.list(sub8.surr.df[1:20, ])
+sub1.surr.null <- as.list(sub1.surr.df[1:20, ])
+sub2.surr.null <- as.list(sub2.surr.df[1:20, ])
+sub3.surr.null <- as.list(sub3.surr.df[1:20, ])
+sub4.surr.null <- as.list(sub4.surr.df[1:20, ])
+sub5.surr.null <- as.list(sub5.surr.df[1:20, ])
+sub6.surr.null <- as.list(sub6.surr.df[1:20, ])
+sub7.surr.null <- as.list(sub7.surr.df[1:20, ])
+sub8.surr.null <- as.list(sub8.surr.df[1:20, ])
 ```
 
 ## Calculating Metrics
@@ -1888,73 +1934,73 @@ sub8.surr.nulls <- as.list(sub8.surr.df[1:20, ])
 ### Mean, Standard Deviation, Skewness, Kurtosis
 
 ```{r}
-sub1.surr.nulls.mean <- list(); sub1.surr.nulls.sd <- list()
-sub2.surr.nulls.mean <- list(); sub2.surr.nulls.sd <- list()
-sub3.surr.nulls.mean <- list(); sub3.surr.nulls.sd <- list()
-sub4.surr.nulls.mean <- list(); sub4.surr.nulls.sd <- list()
-sub5.surr.nulls.mean <- list(); sub5.surr.nulls.sd <- list()
-sub6.surr.nulls.mean <- list(); sub6.surr.nulls.sd <- list()
-sub7.surr.nulls.mean <- list(); sub7.surr.nulls.sd <- list()
-sub8.surr.nulls.mean <- list(); sub8.surr.nulls.sd <- list()
+sub1.surr.null.mean <- list(); sub1.surr.null.sd <- list()
+sub2.surr.null.mean <- list(); sub2.surr.null.sd <- list()
+sub3.surr.null.mean <- list(); sub3.surr.null.sd <- list()
+sub4.surr.null.mean <- list(); sub4.surr.null.sd <- list()
+sub5.surr.null.mean <- list(); sub5.surr.null.sd <- list()
+sub6.surr.null.mean <- list(); sub6.surr.null.sd <- list()
+sub7.surr.null.mean <- list(); sub7.surr.null.sd <- list()
+sub8.surr.null.mean <- list(); sub8.surr.null.sd <- list()
 
-for (i in 1:length(sub1.surr.nulls)){
-  sub1.surr.nulls.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub1.surr.nulls[[i]], window = 5, step = 1)
-  sub1.surr.nulls.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub1.surr.nulls[[i]], window = 5, step = 1)
+for (i in 1:length(sub1.surr.null)){
+  sub1.surr.null.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub1.surr.null[[i]], window = 5, step = 1)
+  sub1.surr.null.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub1.surr.null[[i]], window = 5, step = 1)
   
-  sub2.surr.nulls.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub2.surr.nulls[[i]], window = 5, step = 1)
-  sub2.surr.nulls.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub2.surr.nulls[[i]], window = 5, step = 1)
+  sub2.surr.null.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub2.surr.null[[i]], window = 5, step = 1)
+  sub2.surr.null.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub2.surr.null[[i]], window = 5, step = 1)
   
-  sub3.surr.nulls.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub3.surr.nulls[[i]], window = 5, step = 1)
-  sub3.surr.nulls.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub3.surr.nulls[[i]], window = 5, step = 1)
+  sub3.surr.null.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub3.surr.null[[i]], window = 5, step = 1)
+  sub3.surr.null.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub3.surr.null[[i]], window = 5, step = 1)
   
-  sub4.surr.nulls.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub4.surr.nulls[[i]], window = 5, step = 1)
-  sub4.surr.nulls.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub4.surr.nulls[[i]], window = 5, step = 1)
+  sub4.surr.null.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub4.surr.null[[i]], window = 5, step = 1)
+  sub4.surr.null.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub4.surr.null[[i]], window = 5, step = 1)
   
-  sub5.surr.nulls.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub5.surr.nulls[[i]], window = 5, step = 1)
-  sub5.surr.nulls.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub5.surr.nulls[[i]], window = 5, step = 1)
+  sub5.surr.null.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub5.surr.null[[i]], window = 5, step = 1)
+  sub5.surr.null.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub5.surr.null[[i]], window = 5, step = 1)
   
-  sub6.surr.nulls.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub6.surr.nulls[[i]], window = 5, step = 1)
-  sub6.surr.nulls.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub6.surr.nulls[[i]], window = 5, step = 1)
+  sub6.surr.null.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub6.surr.null[[i]], window = 5, step = 1)
+  sub6.surr.null.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub6.surr.null[[i]], window = 5, step = 1)
   
-  sub7.surr.nulls.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub7.surr.nulls[[i]], window = 5, step = 1)
-  sub7.surr.nulls.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub7.surr.nulls[[i]], window = 5, step = 1)
+  sub7.surr.null.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub7.surr.null[[i]], window = 5, step = 1)
+  sub7.surr.null.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub7.surr.null[[i]], window = 5, step = 1)
   
-  sub8.surr.nulls.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub8.surr.nulls[[i]], window = 5, step = 1)
-  sub8.surr.nulls.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub8.surr.nulls[[i]], window = 5, step = 1)
+  sub8.surr.null.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub8.surr.null[[i]], window = 5, step = 1)
+  sub8.surr.null.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub8.surr.null[[i]], window = 5, step = 1)
 }
 ```
 
 ### Variance
 
 ```{r}
-sub1.surr.nulls.var <- list(); sub2.surr.nulls.var <- list(); sub3.surr.nulls.var <- list(); sub4.surr.nulls.var <- list()
-sub5.surr.nulls.var <- list(); sub6.surr.nulls.var <- list(); sub7.surr.nulls.var <- list(); sub8.surr.nulls.var <- list()
+sub1.surr.null.var <- list(); sub2.surr.null.var <- list(); sub3.surr.null.var <- list(); sub4.surr.null.var <- list()
+sub5.surr.null.var <- list(); sub6.surr.null.var <- list(); sub7.surr.null.var <- list(); sub8.surr.null.var <- list()
 for (i in 1:1000){
-  sub1.surr.nulls.var[[i]] <- sub1.surr.nulls.sd[[i]]^2
-  sub2.surr.nulls.var[[i]] <- sub2.surr.nulls.sd[[i]]^2
-  sub3.surr.nulls.var[[i]] <- sub3.surr.nulls.sd[[i]]^2
-  sub4.surr.nulls.var[[i]] <- sub4.surr.nulls.sd[[i]]^2
-  sub5.surr.nulls.var[[i]] <- sub5.surr.nulls.sd[[i]]^2
-  sub6.surr.nulls.var[[i]] <- sub6.surr.nulls.sd[[i]]^2
-  sub7.surr.nulls.var[[i]] <- sub7.surr.nulls.sd[[i]]^2
-  sub8.surr.nulls.var[[i]] <- sub8.surr.nulls.sd[[i]]^2
+  sub1.surr.null.var[[i]] <- sub1.surr.null.sd[[i]]^2
+  sub2.surr.null.var[[i]] <- sub2.surr.null.sd[[i]]^2
+  sub3.surr.null.var[[i]] <- sub3.surr.null.sd[[i]]^2
+  sub4.surr.null.var[[i]] <- sub4.surr.null.sd[[i]]^2
+  sub5.surr.null.var[[i]] <- sub5.surr.null.sd[[i]]^2
+  sub6.surr.null.var[[i]] <- sub6.surr.null.sd[[i]]^2
+  sub7.surr.null.var[[i]] <- sub7.surr.null.sd[[i]]^2
+  sub8.surr.null.var[[i]] <- sub8.surr.null.sd[[i]]^2
 }
 ```
 
 ### Index of Dispersion
 
 ```{r}
-sub1.surr.nulls.id <- list(); sub2.surr.nulls.id <- list(); sub3.surr.nulls.id <- list(); sub4.surr.nulls.id <- list()
-sub5.surr.nulls.id <- list(); sub6.surr.nulls.id <- list(); sub7.surr.nulls.id <- list(); sub8.surr.nulls.id <- list()
+sub1.surr.null.id <- list(); sub2.surr.null.id <- list(); sub3.surr.null.id <- list(); sub4.surr.null.id <- list()
+sub5.surr.null.id <- list(); sub6.surr.null.id <- list(); sub7.surr.null.id <- list(); sub8.surr.null.id <- list()
 for (i in 1:1000){
-  sub1.surr.nulls.id[[i]] <- sub1.surr.nulls.var[[i]]/(sub1.surr.nulls.mean[[i]] + 1e-10)
-  sub2.surr.nulls.id[[i]] <- sub2.surr.nulls.var[[i]]/(sub2.surr.nulls.mean[[i]] + 1e-10)
-  sub3.surr.nulls.id[[i]] <- sub3.surr.nulls.var[[i]]/(sub3.surr.nulls.mean[[i]] + 1e-10)
-  sub4.surr.nulls.id[[i]] <- sub4.surr.nulls.var[[i]]/(sub4.surr.nulls.mean[[i]] + 1e-10)
-  sub5.surr.nulls.id[[i]] <- sub5.surr.nulls.var[[i]]/(sub5.surr.nulls.mean[[i]] + 1e-10)
-  sub6.surr.nulls.id[[i]] <- sub6.surr.nulls.var[[i]]/(sub6.surr.nulls.mean[[i]] + 1e-10)
-  sub7.surr.nulls.id[[i]] <- sub7.surr.nulls.var[[i]]/(sub7.surr.nulls.mean[[i]] + 1e-10)
-  sub8.surr.nulls.id[[i]] <- sub8.surr.nulls.var[[i]]/(sub8.surr.nulls.mean[[i]] + 1e-10)
+  sub1.surr.null.id[[i]] <- sub1.surr.null.var[[i]]/(sub1.surr.null.mean[[i]] + 1e-10)
+  sub2.surr.null.id[[i]] <- sub2.surr.null.var[[i]]/(sub2.surr.null.mean[[i]] + 1e-10)
+  sub3.surr.null.id[[i]] <- sub3.surr.null.var[[i]]/(sub3.surr.null.mean[[i]] + 1e-10)
+  sub4.surr.null.id[[i]] <- sub4.surr.null.var[[i]]/(sub4.surr.null.mean[[i]] + 1e-10)
+  sub5.surr.null.id[[i]] <- sub5.surr.null.var[[i]]/(sub5.surr.null.mean[[i]] + 1e-10)
+  sub6.surr.null.id[[i]] <- sub6.surr.null.var[[i]]/(sub6.surr.null.mean[[i]] + 1e-10)
+  sub7.surr.null.id[[i]] <- sub7.surr.null.var[[i]]/(sub7.surr.null.mean[[i]] + 1e-10)
+  sub8.surr.null.id[[i]] <- sub8.surr.null.var[[i]]/(sub8.surr.null.mean[[i]] + 1e-10)
 }
 ```
 
@@ -1963,54 +2009,54 @@ for (i in 1:1000){
 ### Mean
 
 ```{r}
-sub1.surr.null.mean.tau <- c(); sub2.surr.null.mean.tau <- c(); sub3.surr.null.mean.tau <- c(); sub4.surr.null.mean.tau <- c()
-sub5.surr.null.mean.tau <- c(); sub6.surr.null.mean.tau <- c(); sub7.surr.null.mean.tau <- c(); sub8.surr.null.mean.tau <- c()
+sub1.surr.null.mean.taus <- c(); sub2.surr.null.mean.taus <- c(); sub3.surr.null.mean.taus <- c(); sub4.surr.null.mean.taus <- c()
+sub5.surr.null.mean.taus <- c(); sub6.surr.null.mean.taus <- c(); sub7.surr.null.mean.taus <- c(); sub8.surr.null.mean.taus <- c()
 t <- seq(1, 15, 1)
 for (i in 1:1000){
-  sub1.surr.null.mean.tau[i] <- cor(sub1.surr.nulls.mean[[i]], t, method = "kendall")
-  sub2.surr.null.mean.tau[i] <- cor(sub2.surr.nulls.mean[[i]], t, method = "kendall")
-  sub3.surr.null.mean.tau[i] <- cor(sub3.surr.nulls.mean[[i]], t, method = "kendall")
-  sub4.surr.null.mean.tau[i] <- cor(sub4.surr.nulls.mean[[i]], t, method = "kendall")
-  sub5.surr.null.mean.tau[i] <- cor(sub5.surr.nulls.mean[[i]], t, method = "kendall")
-  sub6.surr.null.mean.tau[i] <- cor(sub6.surr.nulls.mean[[i]], t, method = "kendall")
-  sub7.surr.null.mean.tau[i] <- cor(sub7.surr.nulls.mean[[i]], t, method = "kendall")
-  sub8.surr.null.mean.tau[i] <- cor(sub8.surr.nulls.mean[[i]], t, method = "kendall")
+  sub1.surr.null.mean.taus[i] <- cor(sub1.surr.null.mean[[i]], t, method = "kendall")
+  sub2.surr.null.mean.taus[i] <- cor(sub2.surr.null.mean[[i]], t, method = "kendall")
+  sub3.surr.null.mean.taus[i] <- cor(sub3.surr.null.mean[[i]], t, method = "kendall")
+  sub4.surr.null.mean.taus[i] <- cor(sub4.surr.null.mean[[i]], t, method = "kendall")
+  sub5.surr.null.mean.taus[i] <- cor(sub5.surr.null.mean[[i]], t, method = "kendall")
+  sub6.surr.null.mean.taus[i] <- cor(sub6.surr.null.mean[[i]], t, method = "kendall")
+  sub7.surr.null.mean.taus[i] <- cor(sub7.surr.null.mean[[i]], t, method = "kendall")
+  sub8.surr.null.mean.taus[i] <- cor(sub8.surr.null.mean[[i]], t, method = "kendall")
 }
 ```
 
 ### Variance
 
 ```{r}
-sub1.surr.null.var.tau <- c(); sub2.surr.null.var.tau <- c(); sub3.surr.null.var.tau <- c(); sub4.surr.null.var.tau <- c()
-sub5.surr.null.var.tau <- c(); sub6.surr.null.var.tau <- c(); sub7.surr.null.var.tau <- c(); sub8.surr.null.var.tau <- c()
+sub1.surr.null.var.taus <- c(); sub2.surr.null.var.taus <- c(); sub3.surr.null.var.taus <- c(); sub4.surr.null.var.taus <- c()
+sub5.surr.null.var.taus <- c(); sub6.surr.null.var.taus <- c(); sub7.surr.null.var.taus <- c(); sub8.surr.null.var.taus <- c()
 t <- seq(1, 15, 1)
 for (i in 1:1000){
-  sub1.surr.null.var.tau[i] <- cor(sub1.surr.nulls.var[[i]], t, method = "kendall")
-  sub2.surr.null.var.tau[i] <- cor(sub2.surr.nulls.var[[i]], t, method = "kendall")
-  sub3.surr.null.var.tau[i] <- cor(sub3.surr.nulls.var[[i]], t, method = "kendall")
-  sub4.surr.null.var.tau[i] <- cor(sub4.surr.nulls.var[[i]], t, method = "kendall")
-  sub5.surr.null.var.tau[i] <- cor(sub5.surr.nulls.var[[i]], t, method = "kendall")
-  sub6.surr.null.var.tau[i] <- cor(sub6.surr.nulls.var[[i]], t, method = "kendall")
-  sub7.surr.null.var.tau[i] <- cor(sub7.surr.nulls.var[[i]], t, method = "kendall")
-  sub8.surr.null.var.tau[i] <- cor(sub8.surr.nulls.var[[i]], t, method = "kendall")
+  sub1.surr.null.var.taus[i] <- cor(sub1.surr.null.var[[i]], t, method = "kendall")
+  sub2.surr.null.var.taus[i] <- cor(sub2.surr.null.var[[i]], t, method = "kendall")
+  sub3.surr.null.var.taus[i] <- cor(sub3.surr.null.var[[i]], t, method = "kendall")
+  sub4.surr.null.var.taus[i] <- cor(sub4.surr.null.var[[i]], t, method = "kendall")
+  sub5.surr.null.var.taus[i] <- cor(sub5.surr.null.var[[i]], t, method = "kendall")
+  sub6.surr.null.var.taus[i] <- cor(sub6.surr.null.var[[i]], t, method = "kendall")
+  sub7.surr.null.var.taus[i] <- cor(sub7.surr.null.var[[i]], t, method = "kendall")
+  sub8.surr.null.var.taus[i] <- cor(sub8.surr.null.var[[i]], t, method = "kendall")
 }
 ```
 
 ### Index of Dispersion
 
 ```{r}
-sub1.surr.null.id.tau <- c(); sub2.surr.null.id.tau <- c(); sub3.surr.null.id.tau <- c(); sub4.surr.null.id.tau <- c()
-sub5.surr.null.id.tau <- c(); sub6.surr.null.id.tau <- c(); sub7.surr.null.id.tau <- c(); sub8.surr.null.id.tau <- c()
+sub1.surr.null.id.taus <- c(); sub2.surr.null.id.taus <- c(); sub3.surr.null.id.taus <- c(); sub4.surr.null.id.taus <- c()
+sub5.surr.null.id.taus <- c(); sub6.surr.null.id.taus <- c(); sub7.surr.null.id.taus <- c(); sub8.surr.null.id.taus <- c()
 t <- seq(1, 15, 1)
 for (i in 1:1000){
-  sub1.surr.null.id.tau[i] <- cor(sub1.surr.nulls.id[[i]], t, method = "kendall")
-  sub2.surr.null.id.tau[i] <- cor(sub2.surr.nulls.id[[i]], t, method = "kendall")
-  sub3.surr.null.id.tau[i] <- cor(sub3.surr.nulls.id[[i]], t, method = "kendall")
-  sub4.surr.null.id.tau[i] <- cor(sub4.surr.nulls.id[[i]], t, method = "kendall")
-  sub5.surr.null.id.tau[i] <- cor(sub5.surr.nulls.id[[i]], t, method = "kendall")
-  sub6.surr.null.id.tau[i] <- cor(sub6.surr.nulls.id[[i]], t, method = "kendall")
-  sub7.surr.null.id.tau[i] <- cor(sub7.surr.nulls.id[[i]], t, method = "kendall")
-  sub8.surr.null.id.tau[i] <- cor(sub8.surr.nulls.id[[i]], t, method = "kendall")
+  sub1.surr.null.id.taus[i] <- cor(sub1.surr.null.id[[i]], t, method = "kendall")
+  sub2.surr.null.id.taus[i] <- cor(sub2.surr.null.id[[i]], t, method = "kendall")
+  sub3.surr.null.id.taus[i] <- cor(sub3.surr.null.id[[i]], t, method = "kendall")
+  sub4.surr.null.id.taus[i] <- cor(sub4.surr.null.id[[i]], t, method = "kendall")
+  sub5.surr.null.id.taus[i] <- cor(sub5.surr.null.id[[i]], t, method = "kendall")
+  sub6.surr.null.id.taus[i] <- cor(sub6.surr.null.id[[i]], t, method = "kendall")
+  sub7.surr.null.id.taus[i] <- cor(sub7.surr.null.id[[i]], t, method = "kendall")
+  sub8.surr.null.id.taus[i] <- cor(sub8.surr.null.id[[i]], t, method = "kendall")
 }
 ```
 
@@ -2021,16 +2067,16 @@ for (i in 1:1000){
 ```{r}
 subpop <- c(rep("1", 1000), rep("2", 1000), rep("3", 1000), rep("4", 1000), rep("5", 1000), rep("6", 1000), rep("7", 1000), rep("8", 1000))
 real.tau <- c(rep(sub1.mean.tau, 1000), rep(sub2.mean.tau, 1000), rep(sub3.mean.tau, 1000), rep(sub4.mean.tau, 1000), rep(sub5.mean.tau, 1000), rep(sub6.mean.tau, 1000), rep(sub7.mean.tau, 1000), rep(sub8.mean.tau, 1000))
-null.mean.tau <- c(sub1.surr.null.mean.tau, sub2.surr.null.mean.tau, sub3.surr.null.mean.tau, sub4.surr.null.mean.tau, sub5.surr.null.mean.tau, sub6.surr.null.mean.tau, sub7.surr.null.mean.tau, sub8.surr.null.mean.tau)
-null.mean.tau.df <- data.frame(
+null.mean.taus <- c(sub1.surr.null.mean.taus, sub2.surr.null.mean.taus, sub3.surr.null.mean.taus, sub4.surr.null.mean.taus, sub5.surr.null.mean.taus, sub6.surr.null.mean.taus, sub7.surr.null.mean.taus, sub8.surr.null.mean.taus)
+null.mean.taus.df <- data.frame(
   subpop = subpop, 
   real.tau = real.tau,
-  null.mean.tau = null.mean.tau
+  null.mean.taus = null.mean.taus
 )
 
 cols <- c(rep("#1434A4", 4000), rep("#C21E56", 4000))
 
-ggplot(null.mean.tau.df, aes(x = subpop, y = null.mean.tau)) + 
+ggplot(null.mean.taus.df, aes(x = subpop, y = null.mean.taus)) + 
   geom_violin() +
   geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
   geom_point(aes(y = real.tau), size = 4, shape = 8) + 
@@ -2048,16 +2094,16 @@ ggplot(null.mean.tau.df, aes(x = subpop, y = null.mean.tau)) +
 ```{r}
 subpop <- c(rep("1", 1000), rep("2", 1000), rep("3", 1000), rep("4", 1000), rep("5", 1000), rep("6", 1000), rep("7", 1000), rep("8", 1000))
 real.tau <- c(rep(sub1.var.tau, 1000), rep(sub2.var.tau, 1000), rep(sub3.var.tau, 1000), rep(sub4.var.tau, 1000), rep(sub5.var.tau, 1000), rep(sub6.var.tau, 1000), rep(sub7.var.tau, 1000), rep(sub8.var.tau, 1000))
-null.var.tau <- c(sub1.surr.null.var.tau, sub2.surr.null.var.tau, sub3.surr.null.var.tau, sub4.surr.null.var.tau, sub5.surr.null.var.tau, sub6.surr.null.var.tau, sub7.surr.null.var.tau, sub8.surr.null.var.tau)
-null.var.tau.df <- data.frame(
+null.var.taus <- c(sub1.surr.null.var.taus, sub2.surr.null.var.taus, sub3.surr.null.var.taus, sub4.surr.null.var.taus, sub5.surr.null.var.taus, sub6.surr.null.var.taus, sub7.surr.null.var.taus, sub8.surr.null.var.taus)
+null.var.taus.df <- data.frame(
   subpop = subpop, 
   real.tau = real.tau,
-  null.var.tau = null.var.tau
+  null.var.taus = null.var.taus
 )
 
 cols <- c(rep("#1434A4", 4000), rep("#C21E56", 4000))
 
-ggplot(null.var.tau.df, aes(x = subpop, y = null.var.tau)) + 
+ggplot(null.var.taus.df, aes(x = subpop, y = null.var.taus)) + 
   geom_violin() +
   geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
   geom_point(aes(y = real.tau), size = 4, shape = 8) + 
@@ -2075,16 +2121,16 @@ ggplot(null.var.tau.df, aes(x = subpop, y = null.var.tau)) +
 ```{r}
 subpop <- c(rep("1", 1000), rep("2", 1000), rep("3", 1000), rep("4", 1000), rep("5", 1000), rep("6", 1000), rep("7", 1000), rep("8", 1000))
 real.tau <- c(rep(sub1.id.tau, 1000), rep(sub2.id.tau, 1000), rep(sub3.id.tau, 1000), rep(sub4.id.tau, 1000), rep(sub5.id.tau, 1000), rep(sub6.id.tau, 1000), rep(sub7.id.tau, 1000), rep(sub8.id.tau, 1000))
-null.id.tau <- c(sub1.surr.null.id.tau, sub2.surr.null.id.tau, sub3.surr.null.id.tau, sub4.surr.null.id.tau, sub5.surr.null.id.tau, sub6.surr.null.id.tau, sub7.surr.null.id.tau, sub8.surr.null.id.tau)
-null.id.tau.df <- data.frame(
+null.id.taus <- c(sub1.surr.null.id.taus, sub2.surr.null.id.taus, sub3.surr.null.id.taus, sub4.surr.null.id.taus, sub5.surr.null.id.taus, sub6.surr.null.id.taus, sub7.surr.null.id.taus, sub8.surr.null.id.taus)
+null.id.taus.df <- data.frame(
   subpop = subpop, 
   real.tau = real.tau,
-  null.id.tau = null.id.tau
+  null.id.taus = null.id.taus
 )
 
 cols <- c(rep("#1434A4", 4000), rep("#C21E56", 4000))
 
-ggplot(null.id.tau.df, aes(x = subpop, y = null.id.tau)) + 
+ggplot(null.id.taus.df, aes(x = subpop, y = null.id.taus)) + 
   geom_violin() +
   geom_jitter(height = 0, width = 0.2, colour = cols, alpha = 0.1) +
   geom_point(aes(y = real.tau), size = 4, shape = 8) + 
@@ -2100,14 +2146,14 @@ ggplot(null.id.tau.df, aes(x = subpop, y = null.id.tau)) +
 ```{r}
 ## Mean
 surr.null.mean.taus <- list(
-  sub1.surr.null.mean.tau,
-  sub2.surr.null.mean.tau,
-  sub3.surr.null.mean.tau,
-  sub4.surr.null.mean.tau,
-  sub5.surr.null.mean.tau,
-  sub6.surr.null.mean.tau,
-  sub7.surr.null.mean.tau,
-  sub8.surr.null.mean.tau
+  sub1.surr.null.mean.taus,
+  sub2.surr.null.mean.taus,
+  sub3.surr.null.mean.taus,
+  sub4.surr.null.mean.taus,
+  sub5.surr.null.mean.taus,
+  sub6.surr.null.mean.taus,
+  sub7.surr.null.mean.taus,
+  sub8.surr.null.mean.taus
 )
 cols <- c(rep("#A7C7E7", 4), rep("#F6799D", 4))
 mains <- c("pop1.mean", "pop2.mean", "pop3.mean", "pop4.mean", "pop5.mean", "pop6.mean", "pop7.mean", "pop8.mean")
@@ -2124,14 +2170,14 @@ for (i in 1:8){
 
 ## Variance
 surr.null.var.taus <- list(
-  sub1.surr.null.var.tau,
-  sub2.surr.null.var.tau,
-  sub3.surr.null.var.tau,
-  sub4.surr.null.var.tau,
-  sub5.surr.null.var.tau,
-  sub6.surr.null.var.tau,
-  sub7.surr.null.var.tau,
-  sub8.surr.null.var.tau
+  sub1.surr.null.var.taus,
+  sub2.surr.null.var.taus,
+  sub3.surr.null.var.taus,
+  sub4.surr.null.var.taus,
+  sub5.surr.null.var.taus,
+  sub6.surr.null.var.taus,
+  sub7.surr.null.var.taus,
+  sub8.surr.null.var.taus
 )
 cols <- c(rep("#A7C7E7", 4), rep("#F6799D", 4))
 mains <- c("pop1.var", "pop2.var", "pop3.var", "pop4.var", "pop5.var", "pop6.var", "pop7.var", "pop8.var")
@@ -2148,14 +2194,14 @@ for (i in 1:8){
 
 ## Index of Dispersion
 surr.null.id.taus <- list(
-  sub1.surr.null.id.tau,
-  sub2.surr.null.id.tau,
-  sub3.surr.null.id.tau,
-  sub4.surr.null.id.tau,
-  sub5.surr.null.id.tau,
-  sub6.surr.null.id.tau,
-  sub7.surr.null.id.tau,
-  sub8.surr.null.id.tau
+  sub1.surr.null.id.taus,
+  sub2.surr.null.id.taus,
+  sub3.surr.null.id.taus,
+  sub4.surr.null.id.taus,
+  sub5.surr.null.id.taus,
+  sub6.surr.null.id.taus,
+  sub7.surr.null.id.taus,
+  sub8.surr.null.id.taus
 )
 cols <- c(rep("#A7C7E7", 4), rep("#F6799D", 4))
 mains <- c("pop1.id", "pop2.id", "pop3.id", "pop4.id", "pop5.id", "pop6.id", "pop7.id", "pop8.id")
@@ -2219,3 +2265,143 @@ axis(2, at = c(0, 1))
 legend("topright", legend = c("Constant Tempertaure", "Rising Temperature"),
        pch = 19, col = c("#1434A4", "#C21E56"), cex = 0.8, bty = "n")
 ```
+
+## Saving Nulls
+
+```{r}
+subpops <- c(rep(1, 1000), rep(2, 1000), rep(3, 1000), rep(4, 1000), rep(5, 1000), rep(6, 1000), rep(7, 1000), rep(8, 1000))
+ar.mean.taus <- data.frame(subpops, null.mean.taus)
+ar.var.taus <- data.frame(subpops, null.var.taus)
+ar.id.taus <- data.frame(subpops, null.id.taus)
+
+ar.mean.pvals <- p.vals$mean
+ar.var.pvals <- p.vals$var
+ar.id.pvals <- p.vals$id
+```
+
+# Plotting Together
+
+```{r}
+## Needed
+# True tau values
+real.mean.taus <- c(sub1.mean.tau, sub2.mean.tau, sub3.mean.tau, sub4.mean.tau,
+                    sub5.mean.tau, sub6.mean.tau, sub7.mean.tau, sub8.mean.tau)
+real.var.taus <- c(sub1.var.tau, sub2.var.tau, sub3.var.tau, sub4.var.tau,
+                    sub5.var.tau, sub6.var.tau, sub7.var.tau, sub8.var.tau)
+real.id.taus <- c(sub1.id.tau, sub2.id.tau, sub3.id.tau, sub4.id.tau,
+                    sub5.id.tau, sub6.id.tau, sub7.id.tau, sub8.id.tau)
+# Resampling
+resamp.mean.taus; resamp.mean.pvals
+resamp.var.taus; resamp.var.pvals
+resamp.id.taus; resamp.id.pvals
+# Modified Mann-Kendall Test
+mmk.mean.taus; mmk.mean.pvals
+mmk.var.taus; mmk.var.pvals
+mmk.id.taus; mmk.id.pvals
+# AR Model
+ar.mean.taus; ar.mean.pvals
+ar.var.taus; ar.var.pvals
+ar.id.taus; ar.id.pvals
+
+## Data wrangling
+ridgeline.mean <- data.frame(
+  method = c(rep("resamp", 8000), rep("mmk", 8000), rep("ar", 8000)),
+  subpop = rep(c(rep("Subpopulation 1", 1000), rep("Subpopulation 2", 1000), rep("Subpopulation 3", 1000), rep("Subpopulation 4", 1000), 
+                 rep("Subpopulation 5", 1000), rep("Subpopulation 6", 1000), rep("Subpopulation 7", 1000), rep("Subpopulation 8", 1000)), 3),
+  k.tau = c(resamp.mean.taus$null.mean.taus, mmk.mean.taus$null.mean.taus.df, ar.mean.taus$null.mean.taus),
+  real.tau = rep(c(rep(real.mean.taus, each = 1000)), 3),
+  p.val = c(rep(resamp.mean.pvals, each = 1000), rep(mmk.mean.pvals, each = 1000), rep(ar.mean.pvals, each = 1000))
+)
+ridgeline.var <- data.frame(
+  method = c(rep("resamp", 8000), rep("mmk", 8000), rep("ar", 8000)),
+  subpop = rep(c(rep("Subpopulation 1", 1000), rep("Subpopulation 2", 1000), rep("Subpopulation 3", 1000), rep("Subpopulation 4", 1000), 
+                 rep("Subpopulation 5", 1000), rep("Subpopulation 6", 1000), rep("Subpopulation 7", 1000), rep("Subpopulation 8", 1000)), 3),
+  k.tau = c(resamp.var.taus$null.var.taus, mmk.var.taus$null.var.taus.df, ar.var.taus$null.var.taus),
+  real.tau = rep(c(rep(real.var.taus, each = 1000)), 3),
+  p.val = c(rep(resamp.var.pvals, each = 1000), rep(mmk.var.pvals, each = 1000), rep(ar.var.pvals, each = 1000))
+)
+ridgeline.id <- data.frame(
+  method = c(rep("resamp", 8000), rep("mmk", 8000), rep("ar", 8000)),
+  subpop = rep(c(rep("Subpopulation 1", 1000), rep("Subpopulation 2", 1000), rep("Subpopulation 3", 1000), rep("Subpopulation 4", 1000), 
+                 rep("Subpopulation 5", 1000), rep("Subpopulation 6", 1000), rep("Subpopulation 7", 1000), rep("Subpopulation 8", 1000)), 3),
+  k.tau = c(resamp.id.taus$null.id.taus, mmk.id.taus$null.id.taus.df, ar.id.taus$null.id.taus),
+  real.tau = rep(c(rep(real.id.taus, each = 1000)), 3),
+  p.val = c(rep(resamp.id.pvals, each = 1000), rep(mmk.id.pvals, each = 1000), rep(ar.id.pvals, each = 1000))
+)
+
+## Requisite objects
+colours <- c("orchid", "goldenrod1", "lightblue1")
+
+## Plotting
+# Minimum example
+# ggplot(ridgeline.mean, aes(x = k.tau, y = subpop , group = interaction(method, subpop), fill = method)) +
+#   geom_density_ridges(alpha = 0.5) 
+
+ggplot(ridgeline.mean, aes(x = k.tau, y = subpop , group = interaction(method, subpop), fill = method)) +
+  geom_density_ridges(alpha = 0.1, scale = 0.9) +
+  geom_point(ridgeline.mean, mapping = aes(x = real.tau, y = subpop , group = interaction(method, subpop), fill = method), 
+             colour = c(rep("#1434A4", 20000), rep("#D22B2B", 4000)), size = 4, show.legend = FALSE) +
+  scale_fill_cyclical(values = colours, guide = "legend",
+                      labels = c("Surrogate Data from AR-1 Model", "Modified Mann-Kendall Test", "Re-Sampling Data")) +
+  stat_density_ridges(quantile_lines = TRUE, quantiles = 0.95, alpha = 0.1, scale = 0.9, show.legend = FALSE) +
+  geom_vline(xintercept = 0) +
+  ggtitle("Mean") +
+  xlim(-1, 1) +
+  xlab("Kendall's Tau") +
+  ylab("") +
+  labs(fill = "Method") +
+  theme(axis.text.x = element_text(colour = "black"),
+        text = element_text(size = 14)) +
+  theme(axis.text.y = element_text(colour = "black"),
+        text = element_text(size = 14)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+ggplot(ridgeline.var, aes(x = k.tau, y = subpop , group = interaction(method, subpop), fill = method)) +
+  geom_density_ridges(alpha = 0.1, scale = 0.9) +
+  geom_point(ridgeline.var, mapping = aes(x = real.tau, y = subpop , group = interaction(method, subpop), fill = method), 
+             colour = c(rep("#1434A4", 20000), rep("#D22B2B", 4000)), size = 4, show.legend = FALSE) +
+  scale_fill_cyclical(values = colours, guide = "legend",
+                      labels = c("Surrogate Data from AR-1 Model", "Modified Mann-Kendall Test", "Re-Sampling Data")) +
+  stat_density_ridges(quantile_lines = TRUE, quantiles = 0.95, alpha = 0.1, scale = 0.9, show.legend = FALSE) +
+  geom_vline(xintercept = 0) +
+  ggtitle("Variance") +
+  xlim(-1, 1) +
+  xlab("Kendall's Tau") +
+  ylab("") +
+  labs(fill = "Method") +
+  theme(axis.text.x = element_text(colour = "black"),
+        text = element_text(size = 14)) +
+  theme(axis.text.y = element_text(colour = "black"),
+        text = element_text(size = 14)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+ ggplot(ridgeline.id, aes(x = k.tau, y = subpop , group = interaction(method, subpop), fill = method)) +
+  geom_density_ridges(alpha = 0.1, scale = 0.9) +
+  geom_point(ridgeline.id, mapping = aes(x = real.tau, y = subpop , group = interaction(method, subpop), fill = method), 
+             colour = c(rep("#1434A4", 20000), rep("#D22B2B", 4000)), size = 4, show.legend = FALSE) +
+  scale_fill_cyclical(values = colours, guide = "legend",
+                      labels = c("Surrogate Data from AR-1 Model", "Modified Mann-Kendall Test", "Re-Sampling Data")) +
+  stat_density_ridges(quantile_lines = TRUE, quantiles = 0.95, alpha = 0.1, scale = 0.9, show.legend = FALSE) +
+  geom_vline(xintercept = 0) +
+  ggtitle("Index of Dispersion") +
+  xlim(-1, 1) +
+  xlab("Kendall's Tau") +
+  ylab("") +
+  labs(fill = "Method") +
+  theme(axis.text.x = element_text(colour = "black"),
+        text = element_text(size = 14)) +
+  theme(axis.text.y = element_text(colour = "black"),
+        text = element_text(size = 14)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+```
+
+
+
+
+
+
+
+
