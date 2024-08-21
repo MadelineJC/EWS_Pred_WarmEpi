@@ -1292,16 +1292,16 @@ hist(warming.sims.acv.5.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
 Calculating AUC:
 
 ```{r}
-AUC_mean_5 <- calc_auc(warming.sims.mean.15.tau, constant.sims.mean.15.tau); AUC_mean_5
-AUC_sk_5 <- calc_auc(warming.sims.sk.15.tau, constant.sims.sk.15.tau); AUC_sk_5
-AUC_kt_5 <- calc_auc(warming.sims.kt.15.tau, constant.sims.kt.15.tau); AUC_kt_5
-AUC_var_5 <- calc_auc(warming.sims.var.15.tau, constant.sims.var.15.tau); AUC_var_5
-AUC_cv_5 <- calc_auc(warming.sims.cv.15.tau, constant.sims.cv.15.tau); AUC_cv_5
-AUC_id_5 <- calc_auc(warming.sims.id.15.tau, constant.sims.id.15.tau); AUC_id_5
-AUC_fdv_5 <- calc_auc(warming.sims.fdv.15.tau, constant.sims.fdv.15.tau); AUC_fdv_5
-AUC_ac_5 <- calc_auc(warming.sims.ac.15.tau, constant.sims.ac.15.tau); AUC_ac_5
-AUC_acv_5 <- calc_auc(warming.sims.acv.15.tau, constant.sims.acv.15.tau); AUC_acv_5
-AUC_dt_5 <- calc_auc(warming.sims.dt.15.tau, constant.sims.dt.15.tau); AUC_dt_5
+AUC_mean_5 <- calc_auc(warming.sims.mean.5.tau, constant.sims.mean.5.tau); AUC_mean_5
+AUC_sk_5 <- calc_auc(warming.sims.sk.5.tau, constant.sims.sk.5.tau); AUC_sk_5
+AUC_kt_5 <- calc_auc(warming.sims.kt.5.tau, constant.sims.kt.5.tau); AUC_kt_5
+AUC_var_5 <- calc_auc(warming.sims.var.5.tau, constant.sims.var.5.tau); AUC_var_5
+AUC_cv_5 <- calc_auc(warming.sims.cv.5.tau, constant.sims.cv.5.tau); AUC_cv_5
+AUC_id_5 <- calc_auc(warming.sims.id.5.tau, constant.sims.id.5.tau); AUC_id_5
+AUC_fdv_5 <- calc_auc(warming.sims.fdv.5.tau, constant.sims.fdv.5.tau); AUC_fdv_5
+AUC_ac_5 <- calc_auc(warming.sims.ac.5.tau, constant.sims.ac.5.tau); AUC_ac_5
+AUC_acv_5 <- calc_auc(warming.sims.acv.5.tau, constant.sims.acv.5.tau); AUC_acv_5
+AUC_dt_5 <- calc_auc(warming.sims.dt.5.tau, constant.sims.dt.5.tau); AUC_dt_5
 ```
 
 ## 15 Day Sliding Window
@@ -1556,16 +1556,16 @@ hist(warming.sims.acv.30.tau, col = alpha("red2", 0.4), breaks = 20, add = T)
 Calculating AUC:
 
 ```{r}
-AUC_mean_30 <- calc_auc(warming.sims.mean.15.tau, constant.sims.mean.15.tau); AUC_mean_30
-AUC_sk_30 <- calc_auc(warming.sims.sk.15.tau, constant.sims.sk.15.tau); AUC_sk_30
-AUC_kt_30 <- calc_auc(warming.sims.kt.15.tau, constant.sims.kt.15.tau); AUC_kt_30
-AUC_var_30 <- calc_auc(warming.sims.var.15.tau, constant.sims.var.15.tau); AUC_var_30
-AUC_cv_30 <- calc_auc(warming.sims.cv.15.tau, constant.sims.cv.15.tau); AUC_cv_30
-AUC_id_30 <- calc_auc(warming.sims.id.15.tau, constant.sims.id.15.tau); AUC_id_30
-AUC_fdv_30 <- calc_auc(warming.sims.fdv.15.tau, constant.sims.fdv.15.tau); AUC_fdv_30
-AUC_ac_30 <- calc_auc(warming.sims.ac.15.tau, constant.sims.ac.15.tau); AUC_ac_30
-AUC_acv_30 <- calc_auc(warming.sims.acv.15.tau, constant.sims.acv.15.tau); AUC_acv_30
-AUC_dt_30 <- calc_auc(warming.sims.dt.15.tau, constant.sims.dt.15.tau); AUC_dt_30
+AUC_mean_30 <- calc_auc(warming.sims.mean.30.tau, constant.sims.mean.30.tau); AUC_mean_30
+AUC_sk_30 <- calc_auc(warming.sims.sk.30.tau, constant.sims.sk.30.tau); AUC_sk_30
+AUC_kt_30 <- calc_auc(warming.sims.kt.30.tau, constant.sims.kt.30.tau); AUC_kt_30
+AUC_var_30 <- calc_auc(warming.sims.var.30.tau, constant.sims.var.30.tau); AUC_var_30
+AUC_cv_30 <- calc_auc(warming.sims.cv.30.tau, constant.sims.cv.30.tau); AUC_cv_30
+AUC_id_30 <- calc_auc(warming.sims.id.30.tau, constant.sims.id.30.tau); AUC_id_30
+AUC_fdv_30 <- calc_auc(warming.sims.fdv.30.tau, constant.sims.fdv.30.tau); AUC_fdv_30
+AUC_ac_30 <- calc_auc(warming.sims.ac.30.tau, constant.sims.ac.30.tau); AUC_ac_30
+AUC_acv_30 <- calc_auc(warming.sims.acv.30.tau, constant.sims.acv.30.tau); AUC_acv_30
+AUC_dt_30 <- calc_auc(warming.sims.dt.30.tau, constant.sims.dt.30.tau); AUC_dt_30
 ```
 
 ## Summarize Outputs

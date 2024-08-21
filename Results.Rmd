@@ -5,9 +5,186 @@ library(cowplot)
 
 # COMPARATIVE & AGGREGATED
 
+Raw Data, plotted.
+
+```{r}
+constant1 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.1.csv")
+constant2 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.2.csv")
+constant3 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.3.csv")
+constant4 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.4.csv")
+constant5 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.5.csv")
+constant6 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.6.csv")
+constant7 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.7.csv")
+constant8 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.8.csv")
+constant9 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.9.csv")
+constant10 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.10.csv")
+sim.const <- data.frame(constant1[,2:ncol(constant1)], 
+                        constant2[,2:ncol(constant1)], 
+                        constant3[,2:ncol(constant1)], 
+                        constant4[,2:ncol(constant1)], 
+                        constant5[,2:ncol(constant1)], 
+                        constant6[,2:ncol(constant1)], 
+                        constant7[,2:ncol(constant1)],
+                        constant8[,2:ncol(constant1)],
+                        constant9[,2:ncol(constant1)],
+                        constant10[,2:ncol(constant1)])
+warming1 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.1.csv")
+warming2 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.2.csv")
+warming3 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.3.csv")
+warming4 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.4.csv")
+warming5 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.5.csv")
+warming6 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.6.csv")
+warming7 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.7.csv")
+warming8 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.8.csv")
+warming9 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.9.csv")
+warming10 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/warming.incidence.last.120.10.csv")
+sim.warm <- data.frame(warming1[,2:ncol(warming1)],
+                       warming2[,2:ncol(warming1)], 
+                       warming3[,2:ncol(warming1)], 
+                       warming4[,2:ncol(warming1)], 
+                       warming5[,2:ncol(warming1)], 
+                       warming6[,2:ncol(warming1)], 
+                       warming7[,2:ncol(warming1)],
+                       warming8[,2:ncol(warming1)],
+                       warming9[,2:ncol(warming1)],
+                       warming10[,2:ncol(warming1)])
+
+```
+
 # Raw
 
 ## Simulated
+
+```{r}
+## SW = 5 Days
+constant.sims.mean.5.tau.rmna <- constant.sims.mean.5.tau[!is.na(constant.sims.mean.5.tau)]
+warming.sims.mean.5.tau.rmna <- warming.sims.mean.5.tau[!is.na(warming.sims.mean.5.tau)]
+constant.sims.sk.5.tau.rmna <- constant.sims.sk.5.tau[!is.na(constant.sims.sk.5.tau)]
+warming.sims.sk.5.tau.rmna <- warming.sims.sk.5.tau[!is.na(warming.sims.sk.5.tau)]
+constant.sims.kt.5.tau.rmna <- constant.sims.kt.5.tau[!is.na(constant.sims.kt.5.tau)]
+warming.sims.kt.5.tau.rmna <- warming.sims.kt.5.tau[!is.na(warming.sims.kt.5.tau)]
+constant.sims.var.5.tau.rmna <- constant.sims.var.5.tau[!is.na(constant.sims.var.5.tau)]
+warming.sims.var.5.tau.rmna <- warming.sims.var.5.tau[!is.na(warming.sims.var.5.tau)]
+constant.sims.cv.5.tau.rmna <- constant.sims.cv.5.tau[!is.na(constant.sims.cv.5.tau)]
+warming.sims.cv.5.tau.rmna <- warming.sims.cv.5.tau[!is.na(warming.sims.cv.5.tau)]
+constant.sims.id.5.tau.rmna <- constant.sims.id.5.tau[!is.na(constant.sims.id.5.tau)]
+warming.sims.id.5.tau.rmna <- warming.sims.id.5.tau[!is.na(warming.sims.id.5.tau)]
+constant.sims.fdv.5.tau.rmna <- constant.sims.fdv.5.tau[!is.na(constant.sims.fdv.5.tau)]
+warming.sims.fdv.5.tau.rmna <- warming.sims.fdv.5.tau[!is.na(warming.sims.fdv.5.tau)]
+constant.sims.ac.5.tau.rmna <- constant.sims.ac.5.tau[!is.na(constant.sims.ac.5.tau)]
+warming.sims.ac.5.tau.rmna <- warming.sims.ac.5.tau[!is.na(warming.sims.ac.5.tau)]
+constant.sims.acv.5.tau.rmna <- constant.sims.acv.5.tau[!is.na(constant.sims.acv.5.tau)]
+warming.sims.acv.5.tau.rmna <- warming.sims.acv.5.tau[!is.na(warming.sims.acv.5.tau)]
+constant.sims.dt.5.tau.rmna <- constant.sims.dt.5.tau[!is.na(constant.sims.dt.5.tau)]
+warming.sims.dt.5.tau.rmna <- warming.sims.dt.5.tau[!is.na(warming.sims.dt.5.tau)]
+
+median(constant.sims.mean.5.tau.rmna)
+median(warming.sims.mean.5.tau.rmna)
+median(constant.sims.sk.5.tau.rmna)
+median(warming.sims.sk.5.tau.rmna)
+median(constant.sims.kt.5.tau.rmna)
+median(warming.sims.kt.5.tau.rmna)
+median(constant.sims.var.5.tau.rmna)
+median(warming.sims.var.5.tau.rmna)
+median(constant.sims.cv.5.tau.rmna)
+median(warming.sims.cv.5.tau.rmna)
+median(constant.sims.id.5.tau.rmna)
+median(warming.sims.id.5.tau.rmna)
+median(constant.sims.fdv.5.tau.rmna)
+median(warming.sims.fdv.5.tau.rmna)
+median(constant.sims.ac.5.tau.rmna)
+median(warming.sims.ac.5.tau.rmna)
+median(constant.sims.acv.5.tau.rmna)
+median(warming.sims.acv.5.tau.rmna)
+median(constant.sims.dt.5.tau.rmna)
+median(warming.sims.dt.5.tau.rmna)
+
+## SW = 15 Days
+constant.sims.mean.15.tau.rmna <- constant.sims.mean.15.tau[!is.na(constant.sims.mean.15.tau)]
+warming.sims.mean.15.tau.rmna <- warming.sims.mean.15.tau[!is.na(warming.sims.mean.15.tau)]
+constant.sims.sk.15.tau.rmna <- constant.sims.sk.15.tau[!is.na(constant.sims.sk.15.tau)]
+warming.sims.sk.15.tau.rmna <- warming.sims.sk.15.tau[!is.na(warming.sims.sk.15.tau)]
+constant.sims.kt.15.tau.rmna <- constant.sims.kt.15.tau[!is.na(constant.sims.kt.15.tau)]
+warming.sims.kt.15.tau.rmna <- warming.sims.kt.15.tau[!is.na(warming.sims.kt.15.tau)]
+constant.sims.var.15.tau.rmna <- constant.sims.var.15.tau[!is.na(constant.sims.var.15.tau)]
+warming.sims.var.15.tau.rmna <- warming.sims.var.15.tau[!is.na(warming.sims.var.15.tau)]
+constant.sims.cv.15.tau.rmna <- constant.sims.cv.15.tau[!is.na(constant.sims.cv.15.tau)]
+warming.sims.cv.15.tau.rmna <- warming.sims.cv.15.tau[!is.na(warming.sims.cv.15.tau)]
+constant.sims.id.15.tau.rmna <- constant.sims.id.15.tau[!is.na(constant.sims.id.15.tau)]
+warming.sims.id.15.tau.rmna <- warming.sims.id.15.tau[!is.na(warming.sims.id.15.tau)]
+constant.sims.fdv.15.tau.rmna <- constant.sims.fdv.15.tau[!is.na(constant.sims.fdv.15.tau)]
+warming.sims.fdv.15.tau.rmna <- warming.sims.fdv.15.tau[!is.na(warming.sims.fdv.15.tau)]
+constant.sims.ac.15.tau.rmna <- constant.sims.ac.15.tau[!is.na(constant.sims.ac.15.tau)]
+warming.sims.ac.15.tau.rmna <- warming.sims.ac.15.tau[!is.na(warming.sims.ac.15.tau)]
+constant.sims.acv.15.tau.rmna <- constant.sims.acv.15.tau[!is.na(constant.sims.acv.15.tau)]
+warming.sims.acv.15.tau.rmna <- warming.sims.acv.15.tau[!is.na(warming.sims.acv.15.tau)]
+constant.sims.dt.15.tau.rmna <- constant.sims.dt.15.tau[!is.na(constant.sims.dt.15.tau)]
+warming.sims.dt.15.tau.rmna <- warming.sims.dt.15.tau[!is.na(warming.sims.dt.15.tau)]
+
+median(constant.sims.mean.15.tau.rmna)
+median(warming.sims.mean.15.tau.rmna)
+median(constant.sims.sk.15.tau.rmna)
+median(warming.sims.sk.15.tau.rmna)
+median(constant.sims.kt.15.tau.rmna)
+median(warming.sims.kt.15.tau.rmna)
+median(constant.sims.var.15.tau.rmna)
+median(warming.sims.var.15.tau.rmna)
+median(constant.sims.cv.15.tau.rmna)
+median(warming.sims.cv.15.tau.rmna)
+median(constant.sims.id.15.tau.rmna)
+median(warming.sims.id.15.tau.rmna)
+median(constant.sims.fdv.15.tau.rmna)
+median(warming.sims.fdv.15.tau.rmna)
+median(constant.sims.ac.15.tau.rmna)
+median(warming.sims.ac.15.tau.rmna)
+median(constant.sims.acv.15.tau.rmna)
+median(warming.sims.acv.15.tau.rmna)
+median(constant.sims.dt.15.tau.rmna)
+median(warming.sims.dt.15.tau.rmna)
+
+## SW = 30 Days
+constant.sims.mean.30.tau.rmna <- constant.sims.mean.30.tau[!is.na(constant.sims.mean.30.tau)]
+warming.sims.mean.30.tau.rmna <- warming.sims.mean.30.tau[!is.na(warming.sims.mean.30.tau)]
+constant.sims.sk.30.tau.rmna <- constant.sims.sk.30.tau[!is.na(constant.sims.sk.30.tau)]
+warming.sims.sk.30.tau.rmna <- warming.sims.sk.30.tau[!is.na(warming.sims.sk.30.tau)]
+constant.sims.kt.30.tau.rmna <- constant.sims.kt.30.tau[!is.na(constant.sims.kt.30.tau)]
+warming.sims.kt.30.tau.rmna <- warming.sims.kt.30.tau[!is.na(warming.sims.kt.30.tau)]
+constant.sims.var.30.tau.rmna <- constant.sims.var.30.tau[!is.na(constant.sims.var.30.tau)]
+warming.sims.var.30.tau.rmna <- warming.sims.var.30.tau[!is.na(warming.sims.var.30.tau)]
+constant.sims.cv.30.tau.rmna <- constant.sims.cv.30.tau[!is.na(constant.sims.cv.30.tau)]
+warming.sims.cv.30.tau.rmna <- warming.sims.cv.30.tau[!is.na(warming.sims.cv.30.tau)]
+constant.sims.id.30.tau.rmna <- constant.sims.id.30.tau[!is.na(constant.sims.id.30.tau)]
+warming.sims.id.30.tau.rmna <- warming.sims.id.30.tau[!is.na(warming.sims.id.30.tau)]
+constant.sims.fdv.30.tau.rmna <- constant.sims.fdv.30.tau[!is.na(constant.sims.fdv.30.tau)]
+warming.sims.fdv.30.tau.rmna <- warming.sims.fdv.30.tau[!is.na(warming.sims.fdv.30.tau)]
+constant.sims.ac.30.tau.rmna <- constant.sims.ac.30.tau[!is.na(constant.sims.ac.30.tau)]
+warming.sims.ac.30.tau.rmna <- warming.sims.ac.30.tau[!is.na(warming.sims.ac.30.tau)]
+constant.sims.acv.30.tau.rmna <- constant.sims.acv.30.tau[!is.na(constant.sims.acv.30.tau)]
+warming.sims.acv.30.tau.rmna <- warming.sims.acv.30.tau[!is.na(warming.sims.acv.30.tau)]
+constant.sims.dt.30.tau.rmna <- constant.sims.dt.30.tau[!is.na(constant.sims.dt.30.tau)]
+warming.sims.dt.30.tau.rmna <- warming.sims.dt.30.tau[!is.na(warming.sims.dt.30.tau)]
+
+median(constant.sims.mean.30.tau.rmna)
+median(warming.sims.mean.30.tau.rmna)
+median(constant.sims.sk.30.tau.rmna)
+median(warming.sims.sk.30.tau.rmna)
+median(constant.sims.kt.30.tau.rmna)
+median(warming.sims.kt.30.tau.rmna)
+median(constant.sims.var.30.tau.rmna)
+median(warming.sims.var.30.tau.rmna)
+median(constant.sims.cv.30.tau.rmna)
+median(warming.sims.cv.30.tau.rmna)
+median(constant.sims.id.30.tau.rmna)
+median(warming.sims.id.30.tau.rmna)
+median(constant.sims.fdv.30.tau.rmna)
+median(warming.sims.fdv.30.tau.rmna)
+median(constant.sims.ac.30.tau.rmna)
+median(warming.sims.ac.30.tau.rmna)
+median(constant.sims.acv.30.tau.rmna)
+median(warming.sims.acv.30.tau.rmna)
+median(constant.sims.dt.30.tau.rmna)
+median(warming.sims.dt.30.tau.rmna)
+```
 
 Objects generated in `3_EWS-SimData.Rmd`.
 
@@ -687,6 +864,162 @@ violin <- ggplot(raw.sim.dt.15.tau, aes(x = Treatment, y = k.tau)) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
 plot_grid(dens, violin, align = "h", labels = "AUTO")
+```
+
+```{r}
+## Mean
+raw.sim.mean.15.tau <- readRDS("Objects/raw.sim.mean.15.tau.rds")
+med.const.sims.mean.15.tau <- median(constant.sims.mean.15.tau)
+med.warm.sims.mean.15.tau <- median(warming.sims.mean.15.tau)
+dens.mean <- ggplot(data = raw.sim.mean.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.mean.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.mean.15.tau, colour = "#C21E56") +
+  xlab(" ") +
+  ylab(" ") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+## Variance
+raw.sim.var.15.tau <- readRDS("Objects/raw.sim.var.15.tau.rds")
+med.const.sims.var.15.tau <- median(constant.sims.var.15.tau)
+med.warm.sims.var.15.tau <- median(warming.sims.var.15.tau)
+dens.var <- ggplot(data = raw.sim.var.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.var.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.var.15.tau, colour = "#C21E56") +
+  xlab(" ") +
+  ylab(" ") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+## Skewness
+raw.sim.sk.15.tau <- readRDS("Objects/raw.sim.sk.15.tau.rds")
+med.const.sims.sk.15.tau <- median(constant.sims.sk.15.tau)
+med.warm.sims.sk.15.tau <- median(warming.sims.sk.15.tau)
+dens.sk <- ggplot(data = raw.sim.sk.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.sk.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.sk.15.tau, colour = "#C21E56") +
+  xlab(" ") +
+  ylab(" ") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+## Kurtosis
+raw.sim.kt.15.tau <- readRDS("Objects/raw.sim.kt.15.tau.rds")
+med.const.sims.kt.15.tau <- median(constant.sims.kt.15.tau)
+med.warm.sims.kt.15.tau <- median(warming.sims.kt.15.tau)
+dens.kt <- ggplot(data = raw.sim.kt.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.kt.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.kt.15.tau, colour = "#C21E56") +
+  xlab(" ") +
+  ylab(" ") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+## Co-Efficient of Variation
+raw.sim.cv.15.tau <- readRDS("Objects/raw.sim.cv.15.tau.rds")
+med.const.sims.cv.15.tau <- median(constant.sims.cv.15.tau)
+med.warm.sims.cv.15.tau <- median(warming.sims.cv.15.tau)
+dens.cv <- ggplot(data = raw.sim.cv.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.cv.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.cv.15.tau, colour = "#C21E56") +
+  xlab(" ") +
+  ylab(" ") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+## Index of Dispersion
+raw.sim.id.15.tau <- readRDS("Objects/raw.sim.id.15.tau.rds")
+med.const.sims.id.15.tau <- median(constant.sims.id.15.tau)
+med.warm.sims.id.15.tau <- median(warming.sims.id.15.tau)
+dens.id <- ggplot(data = raw.sim.id.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.id.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.id.15.tau, colour = "#C21E56") +
+  xlab(" ") +
+  ylab(" ") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+## First Difference Variance
+raw.sim.fdv.15.tau <- readRDS("Objects/raw.sim.fdv.15.tau.rds")
+med.const.sims.fdv.15.tau <- median(constant.sims.fdv.15.tau)
+med.warm.sims.fdv.15.tau <- median(warming.sims.fdv.15.tau)
+dens.fdv <- ggplot(data = raw.sim.fdv.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.fdv.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.fdv.15.tau, colour = "#C21E56") +
+  xlab(" ") +
+  ylab(" ") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+## Autocorrelation
+raw.sim.ac.15.tau <- readRDS("Objects/raw.sim.ac.15.tau.rds")
+med.const.sims.ac.15.tau <- median(constant.sims.ac.15.tau)
+med.warm.sims.ac.15.tau <- median(warming.sims.ac.15.tau)
+dens.ac <- ggplot(data = raw.sim.ac.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.ac.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.ac.15.tau, colour = "#C21E56") +
+  xlab(" ") +
+  ylab(" ") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+## Autocovariance
+raw.sim.acv.15.tau <- readRDS("Objects/raw.sim.acv.15.tau.rds")
+med.const.sims.acv.15.tau <- median(constant.sims.acv.15.tau)
+med.warm.sims.acv.15.tau <- median(warming.sims.acv.15.tau)
+dens.acv <- ggplot(data = raw.sim.acv.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.acv.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.acv.15.tau, colour = "#C21E56") +
+  xlab(" ") +
+  ylab(" ") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+## Decay Time
+raw.sim.dt.15.tau <- readRDS("Objects/raw.sim.dt.15.tau.rds")
+med.const.sims.dt.15.tau <- median(constant.sims.dt.15.tau)
+med.warm.sims.dt.15.tau <- median(warming.sims.dt.15.tau)
+dens.dt <- ggplot(data = raw.sim.dt.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.dt.15.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.dt.15.tau, colour = "#C21E56") +
+  xlab(" ") +
+  ylab(" ") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+plot_grid(dens.mean, dens.sk, dens.kt, dens.var, dens.cv,
+          dens.id, dens.fdv, dens.ac, dens.acv, dens.dt,
+          nrow = 2, align = "h", labels = "AUTO")
 ```
 
 ```{r}
