@@ -83,15 +83,15 @@ Okay, so, if we look at `2_EpidemicModel-Stochastic.Rmd`, we can see that the SI
 -   **Need to make sure that there's no addition/removal happening in this model**
 
 ```{r}
-rbinom(12, 1, 9/169) # Where 12 is the number of samples, 9 is the true prevalence, and 169 is N
+rbinom(12, 1, 9/170) # Where 12 is the number of samples, 9 is the true prevalence, and 170 is N
 
 # We want to count the number of 1s, and use that as our sampled prevalence
-set.seed(123); infec.samp <- rbinom(12, 1, 9/169)
+set.seed(123); infec.samp <- rbinom(12, 1, 9/170)
 samp.prev <- length(which(infec.samp == 1))
 
 ## Okay, let's write a loop to take a look at this
 
-N <- 169
+N <- 170
 
 ## Constant
 constant.sims.sampled.prev <- c()
@@ -539,6 +539,42 @@ ggplot(dt, aes(x = treatment, y = k.tau)) +
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
 ```
 
+### Median Trend Coefficients
+
+```{r}
+med.constant.sims.mean.15.tau <- median(constant.sims.mean.15.tau, na.rm = TRUE)
+med.constant.sims.sk.15.tau <- median(constant.sims.sk.15.tau, na.rm = TRUE)
+med.constant.sims.kt.15.tau <- median(constant.sims.kt.15.tau, na.rm = TRUE)
+med.constant.sims.var.15.tau <- median(constant.sims.var.15.tau, na.rm = TRUE)
+med.constant.sims.cv.15.tau <- median(constant.sims.cv.15.tau, na.rm = TRUE)
+med.constant.sims.id.15.tau <- median(constant.sims.id.15.tau, na.rm = TRUE)
+med.constant.sims.fdv.15.tau <- median(constant.sims.fdv.15.tau, na.rm = TRUE)
+med.constant.sims.ac.15.tau <- median(constant.sims.ac.15.tau, na.rm = TRUE)
+med.constant.sims.acv.15.tau <- median(constant.sims.acv.15.tau, na.rm = TRUE)
+med.constant.sims.dt.15.tau <- median(constant.sims.dt.15.tau, na.rm = TRUE)
+range(c(med.constant.sims.mean.15.tau, med.constant.sims.sk.15.tau, 
+      med.constant.sims.kt.15.tau, med.constant.sims.var.15.tau,
+      med.constant.sims.cv.15.tau, med.constant.sims.id.15.tau,
+      med.constant.sims.fdv.15.tau, med.constant.sims.ac.15.tau,
+      med.constant.sims.acv.15.tau, med.constant.sims.dt.15.tau), na.rm = TRUE)
+
+med.warming.sims.mean.15.tau <- median(warming.sims.mean.15.tau, na.rm = TRUE)
+med.warming.sims.sk.15.tau <- median(warming.sims.sk.15.tau, na.rm = TRUE)
+med.warming.sims.kt.15.tau <- median(warming.sims.kt.15.tau, na.rm = TRUE)
+med.warming.sims.var.15.tau <- median(warming.sims.var.15.tau, na.rm = TRUE)
+med.warming.sims.cv.15.tau <- median(warming.sims.cv.15.tau, na.rm = TRUE)
+med.warming.sims.id.15.tau <- median(warming.sims.id.15.tau, na.rm = TRUE)
+med.warming.sims.fdv.15.tau <- median(warming.sims.fdv.15.tau, na.rm = TRUE)
+med.warming.sims.ac.15.tau <- median(warming.sims.ac.15.tau, na.rm = TRUE)
+med.warming.sims.acv.15.tau <- median(warming.sims.acv.15.tau, na.rm = TRUE)
+med.warming.sims.dt.15.tau <- median(warming.sims.dt.15.tau, na.rm = TRUE)
+range(c(med.warming.sims.mean.15.tau, med.warming.sims.sk.15.tau, 
+      med.warming.sims.kt.15.tau, med.warming.sims.var.15.tau,
+      med.warming.sims.cv.15.tau, med.warming.sims.id.15.tau,
+      med.warming.sims.fdv.15.tau, med.warming.sims.ac.15.tau,
+      med.warming.sims.acv.15.tau, med.warming.sims.dt.15.tau), na.rm = TRUE)
+```
+
 ## AUC
 
 ```{r}
@@ -562,12 +598,14 @@ metrics <- c("mean", "skewness", "kurtosis", "variance", "cv", "id", "fdv", "cor
 AUC_15 <- c(AUC_mean_15, AUC_sk_15, AUC_kt_15, AUC_var_15, AUC_cv_15, 
            AUC_id_15, AUC_fdv_15, AUC_ac_15 ,AUC_acv_15, AUC_dt_15)
 
-metrics_full <- c("Mean", "Skewness", "Kurtosis", "Variance", "acvariance", "Index of Dispersion", "First Difference Variance", "Autocorrelation", "Autocovariance", "Decay Time")
+metrics_full <- c("Mean", "Skewness", "Kurtosis", "Variance", "Coefficient of Variation", "Index of Dispersion", "First Difference Variance", "Autocorrelation", "Autocovariance", "Decay Time")
 
 ## Plot 
+par(mar = c(11, 4.1, 4.1, 2.1))
 plot(1:10, AUC_15, type = "p", 
      main = "Simulated Data", xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
      col = "red3", pch = 19)
 abline(h = 0.5, lty = 3)
 axis(side = 1, at = 1:10, labels = metrics_full, las = 2)
+mtext("(After accounting for the effects of experimental sampling.)", side = 3, line = 0.4)
 ```
