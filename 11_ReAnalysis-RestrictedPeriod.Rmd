@@ -11,9 +11,14 @@ require(ecp)
 require(strucchange)
 require(TTR)
 require(moments)
+require(tidyverse)
+require(earlywarnings)
+library(ggridges)
+library(cowplot)
 ```
 
 ## Simulated Data
+
 ```{r}
 ## Constant temperature
 constant1 <- read.csv("Kirk_Data/Sim_Pops_EWS_Analyses/constant.incidence.last.120.1.csv")
@@ -50,6 +55,7 @@ warming.incidence.daily <- cbind(warming1[ ,2:101], warming2[ ,2:101], warming3[
 ```
 
 ### Calculating Metrics (5 Day Sliding Window)
+
 ```{r}
 ## SD, Mean, Skewness, Kurtosis
 num.of.sims <- 10^3
@@ -134,6 +140,7 @@ for(i in 1:num.of.sims){
 ```
 
 ### Calculating Metrics (15 Day Sliding Window)
+
 ```{r}
 ## SD, Mean, Skewness, Kurtosis
 num.of.sims <- 10^3
@@ -217,175 +224,178 @@ for(i in 1:num.of.sims){
 }
 ```
 
-### Kendall's Tau and AUC (5 Day Sliding Window) | Days 20 to 55
+### Kendall's Tau and AUC (5 Day Sliding Window) \| Days 20 to 55
+
 ```{r}
-constant.sims.var.5 <- constant.sims.var.5[20:55, ]
-constant.sims.mean.5 <- constant.sims.mean.5[20:55, ]
-constant.sims.cv.5 <- constant.sims.cv.5[20:55, ]
-constant.sims.sk.5 <- constant.sims.sk.5[20:55, ]
-constant.sims.kt.5 <- constant.sims.kt.5[20:55, ]
-constant.sims.id.5 <- constant.sims.id.5[20:55, ]
-constant.sims.ac.5 <- constant.sims.ac.5[20:55, ]
-constant.sims.acv.5 <- constant.sims.acv.5[20:55, ]
-constant.sims.fdv.5 <- constant.sims.fdv.5[20:55, ]
-constant.sims.dt.5 <- constant.sims.dt.5[20:55, ]
+constant.sims.var.5.day20 <- constant.sims.var.5[20:55, ]
+constant.sims.mean.5.day20 <- constant.sims.mean.5[20:55, ]
+constant.sims.cv.5.day20 <- constant.sims.cv.5[20:55, ]
+constant.sims.sk.5.day20 <- constant.sims.sk.5[20:55, ]
+constant.sims.kt.5.day20 <- constant.sims.kt.5[20:55, ]
+constant.sims.id.5.day20 <- constant.sims.id.5[20:55, ]
+constant.sims.ac.5.day20 <- constant.sims.ac.5[20:55, ]
+constant.sims.acv.5.day20 <- constant.sims.acv.5[20:55, ]
+constant.sims.fdv.5.day20 <- constant.sims.fdv.5[20:55, ]
+constant.sims.dt.5.day20 <- constant.sims.dt.5[20:55, ]
 
-warming.sims.var.5 <- warming.sims.var.5[20:55, ]
-warming.sims.mean.5 <- warming.sims.mean.5[20:55, ]
-warming.sims.cv.5 <- warming.sims.cv.5[20:55, ]
-warming.sims.sk.5 <- warming.sims.sk.5[20:55, ]
-warming.sims.kt.5 <- warming.sims.kt.5[20:55, ]
-warming.sims.id.5 <- warming.sims.id.5[20:55, ]
-warming.sims.ac.5 <- warming.sims.ac.5[20:55, ]
-warming.sims.acv.5 <- warming.sims.acv.5[20:55, ]
-warming.sims.fdv.5 <- warming.sims.fdv.5[20:55, ]
-warming.sims.dt.5 <- warming.sims.dt.5[20:55, ]
+warming.sims.var.5.day20 <- warming.sims.var.5[20:55, ]
+warming.sims.mean.5.day20 <- warming.sims.mean.5[20:55, ]
+warming.sims.cv.5.day20 <- warming.sims.cv.5[20:55, ]
+warming.sims.sk.5.day20 <- warming.sims.sk.5[20:55, ]
+warming.sims.kt.5.day20 <- warming.sims.kt.5[20:55, ]
+warming.sims.id.5.day20 <- warming.sims.id.5[20:55, ]
+warming.sims.ac.5.day20 <- warming.sims.ac.5[20:55, ]
+warming.sims.acv.5.day20 <- warming.sims.acv.5[20:55, ]
+warming.sims.fdv.5.day20 <- warming.sims.fdv.5[20:55, ]
+warming.sims.dt.5.day20 <- warming.sims.dt.5[20:55, ]
 
-constant.sims.var.5.tau <- c()
-constant.sims.mean.5.tau <- c()
-constant.sims.cv.5.tau <- c()
-constant.sims.sk.5.tau <- c()
-constant.sims.kt.5.tau <- c()
-constant.sims.id.5.tau <- c()
-constant.sims.ac.5.tau <- c()
-constant.sims.acv.5.tau <- c()
-constant.sims.fdv.5.tau <- c()
-constant.sims.dt.5.tau <- c()
+constant.sims.var.5.day20.tau <- c()
+constant.sims.mean.5.day20.tau <- c()
+constant.sims.cv.5.day20.tau <- c()
+constant.sims.sk.5.day20.tau <- c()
+constant.sims.kt.5.day20.tau <- c()
+constant.sims.id.5.day20.tau <- c()
+constant.sims.ac.5.day20.tau <- c()
+constant.sims.acv.5.day20.tau <- c()
+constant.sims.fdv.5.day20.tau <- c()
+constant.sims.dt.5.day20.tau <- c()
 
-warming.sims.var.5.tau <- c()
-warming.sims.mean.5.tau <- c()
-warming.sims.cv.5.tau <- c()
-warming.sims.sk.5.tau <- c()
-warming.sims.kt.5.tau <- c()
-warming.sims.id.5.tau <- c()
-warming.sims.ac.5.tau <- c()
-warming.sims.acv.5.tau <- c()
-warming.sims.fdv.5.tau <- c()
-warming.sims.dt.5.tau <- c()
+warming.sims.var.5.day20.tau <- c()
+warming.sims.mean.5.day20.tau <- c()
+warming.sims.cv.5.day20.tau <- c()
+warming.sims.sk.5.day20.tau <- c()
+warming.sims.kt.5.day20.tau <- c()
+warming.sims.id.5.day20.tau <- c()
+warming.sims.ac.5.day20.tau <- c()
+warming.sims.acv.5.day20.tau <- c()
+warming.sims.fdv.5.day20.tau <- c()
+warming.sims.dt.5.day20.tau <- c()
 
 time.5 <- c(1:36)
 
 for(i in 1:num.of.sims){
-  constant.sims.mean.5.tau[i] <- cor(constant.sims.mean.5[ , i], time.5, method = "kendall")
-  constant.sims.sk.5.tau[i] <- cor(constant.sims.sk.5[ , i], time.5, method = "kendall")
-  constant.sims.kt.5.tau[i] <- cor(constant.sims.kt.5[ , i], time.5, method = "kendall")
-  constant.sims.var.5.tau[i] <- cor(constant.sims.var.5[ , i], time.5, method = "kendall")
-  constant.sims.cv.5.tau[i] <- cor(constant.sims.cv.5[ , i], time.5, method = "kendall")
-  constant.sims.id.5.tau[i] <- cor(constant.sims.id.5[ , i], time.5, method = "kendall")
-  constant.sims.fdv.5.tau[i] <- cor(constant.sims.fdv.5[ , i], time.5, method = "kendall")
-  constant.sims.ac.5.tau[i] <- cor(constant.sims.ac.5[ , i], time.5, method = "kendall")
-  constant.sims.acv.5.tau[i] <- cor(constant.sims.acv.5[ , i], time.5, method = "kendall")
-  constant.sims.dt.5.tau[i] <- cor(constant.sims.dt.5[ , i], time.5, method = "kendall")
+  constant.sims.mean.5.day20.tau[i] <- cor(constant.sims.mean.5.day20[ , i], time.5, method = "kendall")
+  constant.sims.sk.5.day20.tau[i] <- cor(constant.sims.sk.5.day20[ , i], time.5, method = "kendall")
+  constant.sims.kt.5.day20.tau[i] <- cor(constant.sims.kt.5.day20[ , i], time.5, method = "kendall")
+  constant.sims.var.5.day20.tau[i] <- cor(constant.sims.var.5.day20[ , i], time.5, method = "kendall")
+  constant.sims.cv.5.day20.tau[i] <- cor(constant.sims.cv.5.day20[ , i], time.5, method = "kendall")
+  constant.sims.id.5.day20.tau[i] <- cor(constant.sims.id.5.day20[ , i], time.5, method = "kendall")
+  constant.sims.fdv.5.day20.tau[i] <- cor(constant.sims.fdv.5.day20[ , i], time.5, method = "kendall")
+  constant.sims.ac.5.day20.tau[i] <- cor(constant.sims.ac.5.day20[ , i], time.5, method = "kendall")
+  constant.sims.acv.5.day20.tau[i] <- cor(constant.sims.acv.5.day20[ , i], time.5, method = "kendall")
+  constant.sims.dt.5.day20.tau[i] <- cor(constant.sims.dt.5.day20[ , i], time.5, method = "kendall")
   
-  warming.sims.mean.5.tau[i] <- cor(warming.sims.mean.5[ , i], time.5, method = "kendall")
-  warming.sims.sk.5.tau[i] <- cor(warming.sims.sk.5[ , i], time.5, method = "kendall")
-  warming.sims.kt.5.tau[i] <- cor(warming.sims.kt.5[ , i], time.5, method = "kendall")
-  warming.sims.var.5.tau[i] <- cor(warming.sims.var.5[ , i], time.5, method = "kendall")
-  warming.sims.cv.5.tau[i] <- cor(warming.sims.cv.5[ , i], time.5, method = "kendall")
-  warming.sims.id.5.tau[i] <- cor(warming.sims.id.5[ , i], time.5, method = "kendall")
-  warming.sims.fdv.5.tau[i] <- cor(warming.sims.fdv.5[ , i], time.5, method = "kendall")
-  warming.sims.ac.5.tau[i] <- cor(warming.sims.ac.5[ , i], time.5, method = "kendall")
-  warming.sims.acv.5.tau[i] <- cor(warming.sims.acv.5[ , i], time.5, method = "kendall")
-  warming.sims.dt.5.tau[i] <- cor(warming.sims.dt.5[ , i], time.5, method = "kendall")
+  warming.sims.mean.5.day20.tau[i] <- cor(warming.sims.mean.5.day20[ , i], time.5, method = "kendall")
+  warming.sims.sk.5.day20.tau[i] <- cor(warming.sims.sk.5.day20[ , i], time.5, method = "kendall")
+  warming.sims.kt.5.day20.tau[i] <- cor(warming.sims.kt.5.day20[ , i], time.5, method = "kendall")
+  warming.sims.var.5.day20.tau[i] <- cor(warming.sims.var.5.day20[ , i], time.5, method = "kendall")
+  warming.sims.cv.5.day20.tau[i] <- cor(warming.sims.cv.5.day20[ , i], time.5, method = "kendall")
+  warming.sims.id.5.day20.tau[i] <- cor(warming.sims.id.5.day20[ , i], time.5, method = "kendall")
+  warming.sims.fdv.5.day20.tau[i] <- cor(warming.sims.fdv.5.day20[ , i], time.5, method = "kendall")
+  warming.sims.ac.5.day20.tau[i] <- cor(warming.sims.ac.5.day20[ , i], time.5, method = "kendall")
+  warming.sims.acv.5.day20.tau[i] <- cor(warming.sims.acv.5.day20[ , i], time.5, method = "kendall")
+  warming.sims.dt.5.day20.tau[i] <- cor(warming.sims.dt.5.day20[ , i], time.5, method = "kendall")
 }
 
-AUC_mean_5 <- calc_auc(warming.sims.mean.5.tau, constant.sims.mean.5.tau); AUC_mean_5
-AUC_sk_5 <- calc_auc(warming.sims.sk.5.tau, constant.sims.sk.5.tau); AUC_sk_5
-AUC_kt_5 <- calc_auc(warming.sims.kt.5.tau, constant.sims.kt.5.tau); AUC_kt_5
-AUC_var_5 <- calc_auc(warming.sims.var.5.tau, constant.sims.var.5.tau); AUC_var_5
-AUC_cv_5 <- calc_auc(warming.sims.cv.5.tau, constant.sims.cv.5.tau); AUC_cv_5
-AUC_id_5 <- calc_auc(warming.sims.id.5.tau, constant.sims.id.5.tau); AUC_id_5
-AUC_fdv_5 <- calc_auc(warming.sims.fdv.5.tau, constant.sims.fdv.5.tau); AUC_fdv_5
-AUC_ac_5 <- calc_auc(warming.sims.ac.5.tau, constant.sims.ac.5.tau); AUC_ac_5
-AUC_acv_5 <- calc_auc(warming.sims.acv.5.tau, constant.sims.acv.5.tau); AUC_acv_5
-AUC_dt_5 <- calc_auc(warming.sims.dt.5.tau, constant.sims.dt.5.tau); AUC_dt_5
+AUC_mean_5 <- calc_auc(warming.sims.mean.5.day20.tau, constant.sims.mean.5.day20.tau); AUC_mean_5
+AUC_sk_5 <- calc_auc(warming.sims.sk.5.day20.tau, constant.sims.sk.5.day20.tau); AUC_sk_5
+AUC_kt_5 <- calc_auc(warming.sims.kt.5.day20.tau, constant.sims.kt.5.day20.tau); AUC_kt_5
+AUC_var_5 <- calc_auc(warming.sims.var.5.day20.tau, constant.sims.var.5.day20.tau); AUC_var_5
+AUC_cv_5 <- calc_auc(warming.sims.cv.5.day20.tau, constant.sims.cv.5.day20.tau); AUC_cv_5
+AUC_id_5 <- calc_auc(warming.sims.id.5.day20.tau, constant.sims.id.5.day20.tau); AUC_id_5
+AUC_fdv_5 <- calc_auc(warming.sims.fdv.5.day20.tau, constant.sims.fdv.5.day20.tau); AUC_fdv_5
+AUC_ac_5 <- calc_auc(warming.sims.ac.5.day20.tau, constant.sims.ac.5.day20.tau); AUC_ac_5
+AUC_acv_5 <- calc_auc(warming.sims.acv.5.day20.tau, constant.sims.acv.5.day20.tau); AUC_acv_5
+AUC_dt_5 <- calc_auc(warming.sims.dt.5.day20.tau, constant.sims.dt.5.day20.tau); AUC_dt_5
 ```
 
-### Kendall's Tau and AUC (15 Day Sliding Window) | Days 20 to 45
+### Kendall's Tau and AUC (15 Day Sliding Window) \| Days 20 to 45
+
 ```{r}
-constant.sims.var.15 <- constant.sims.var.15[20:45, ]
-constant.sims.mean.15 <- constant.sims.mean.15[20:45, ]
-constant.sims.cv.15 <- constant.sims.cv.15[20:45, ]
-constant.sims.sk.15 <- constant.sims.sk.15[20:45, ]
-constant.sims.kt.15 <- constant.sims.kt.15[20:45, ]
-constant.sims.id.15 <- constant.sims.id.15[20:45, ]
-constant.sims.ac.15 <- constant.sims.ac.15[20:45, ]
-constant.sims.acv.15 <- constant.sims.acv.15[20:45, ]
-constant.sims.fdv.15 <- constant.sims.fdv.15[20:45, ]
-constant.sims.dt.15 <- constant.sims.dt.15[20:45, ]
+constant.sims.var.15.day20 <- constant.sims.var.15[20:45, ]
+constant.sims.mean.15.day20 <- constant.sims.mean.15[20:45, ]
+constant.sims.cv.15.day20 <- constant.sims.cv.15[20:45, ]
+constant.sims.sk.15.day20 <- constant.sims.sk.15[20:45, ]
+constant.sims.kt.15.day20 <- constant.sims.kt.15[20:45, ]
+constant.sims.id.15.day20 <- constant.sims.id.15[20:45, ]
+constant.sims.ac.15.day20 <- constant.sims.ac.15[20:45, ]
+constant.sims.acv.15.day20 <- constant.sims.acv.15[20:45, ]
+constant.sims.fdv.15.day20 <- constant.sims.fdv.15[20:45, ]
+constant.sims.dt.15.day20 <- constant.sims.dt.15[20:45, ]
 
-warming.sims.var.15 <- warming.sims.var.15[20:45, ]
-warming.sims.mean.15 <- warming.sims.mean.15[20:45, ]
-warming.sims.cv.15 <- warming.sims.cv.15[20:45, ]
-warming.sims.sk.15 <- warming.sims.sk.15[20:45, ]
-warming.sims.kt.15 <- warming.sims.kt.15[20:45, ]
-warming.sims.id.15 <- warming.sims.id.15[20:45, ]
-warming.sims.ac.15 <- warming.sims.ac.15[20:45, ]
-warming.sims.acv.15 <- warming.sims.acv.15[20:45, ]
-warming.sims.fdv.15 <- warming.sims.fdv.15[20:45, ]
-warming.sims.dt.15 <- warming.sims.dt.15[20:45, ]
+warming.sims.var.15.day20 <- warming.sims.var.15[20:45, ]
+warming.sims.mean.15.day20 <- warming.sims.mean.15[20:45, ]
+warming.sims.cv.15.day20 <- warming.sims.cv.15[20:45, ]
+warming.sims.sk.15.day20 <- warming.sims.sk.15[20:45, ]
+warming.sims.kt.15.day20 <- warming.sims.kt.15[20:45, ]
+warming.sims.id.15.day20 <- warming.sims.id.15[20:45, ]
+warming.sims.ac.15.day20 <- warming.sims.ac.15[20:45, ]
+warming.sims.acv.15.day20 <- warming.sims.acv.15[20:45, ]
+warming.sims.fdv.15.day20 <- warming.sims.fdv.15[20:45, ]
+warming.sims.dt.15.day20 <- warming.sims.dt.15[20:45, ]
 
-constant.sims.var.15.tau <- c()
-constant.sims.mean.15.tau <- c()
-constant.sims.cv.15.tau <- c()
-constant.sims.sk.15.tau <- c()
-constant.sims.kt.15.tau <- c()
-constant.sims.id.15.tau <- c()
-constant.sims.ac.15.tau <- c()
-constant.sims.acv.15.tau <- c()
-constant.sims.fdv.15.tau <- c()
-constant.sims.dt.15.tau <- c()
+constant.sims.var.15.day20.tau <- c()
+constant.sims.mean.15.day20.tau <- c()
+constant.sims.cv.15.day20.tau <- c()
+constant.sims.sk.15.day20.tau <- c()
+constant.sims.kt.15.day20.tau <- c()
+constant.sims.id.15.day20.tau <- c()
+constant.sims.ac.15.day20.tau <- c()
+constant.sims.acv.15.day20.tau <- c()
+constant.sims.fdv.15.day20.tau <- c()
+constant.sims.dt.15.day20.tau <- c()
 
-warming.sims.var.15.tau <- c()
-warming.sims.mean.15.tau <- c()
-warming.sims.cv.15.tau <- c()
-warming.sims.sk.15.tau <- c()
-warming.sims.kt.15.tau <- c()
-warming.sims.id.15.tau <- c()
-warming.sims.ac.15.tau <- c()
-warming.sims.acv.15.tau <- c()
-warming.sims.fdv.15.tau <- c()
-warming.sims.dt.15.tau <- c()
+warming.sims.var.15.day20.tau <- c()
+warming.sims.mean.15.day20.tau <- c()
+warming.sims.cv.15.day20.tau <- c()
+warming.sims.sk.15.day20.tau <- c()
+warming.sims.kt.15.day20.tau <- c()
+warming.sims.id.15.day20.tau <- c()
+warming.sims.ac.15.day20.tau <- c()
+warming.sims.acv.15.day20.tau <- c()
+warming.sims.fdv.15.day20.tau <- c()
+warming.sims.dt.15.day20.tau <- c()
 
 time.15 <- c(1:26)
 
 for(i in 1:num.of.sims){
-  constant.sims.mean.15.tau[i] <- cor(constant.sims.mean.15[ , i], time.15, method = "kendall")
-  constant.sims.sk.15.tau[i] <- cor(constant.sims.sk.15[ , i], time.15, method = "kendall")
-  constant.sims.kt.15.tau[i] <- cor(constant.sims.kt.15[ , i], time.15, method = "kendall")
-  constant.sims.var.15.tau[i] <- cor(constant.sims.var.15[ , i], time.15, method = "kendall")
-  constant.sims.cv.15.tau[i] <- cor(constant.sims.cv.15[ , i], time.15, method = "kendall")
-  constant.sims.id.15.tau[i] <- cor(constant.sims.id.15[ , i], time.15, method = "kendall")
-  constant.sims.fdv.15.tau[i] <- cor(constant.sims.fdv.15[ , i], time.15, method = "kendall")
-  constant.sims.ac.15.tau[i] <- cor(constant.sims.ac.15[ , i], time.15, method = "kendall")
-  constant.sims.acv.15.tau[i] <- cor(constant.sims.acv.15[ , i], time.15, method = "kendall")
-  constant.sims.dt.15.tau[i] <- cor(constant.sims.dt.15[ , i], time.15, method = "kendall")
+  constant.sims.mean.15.day20.tau[i] <- cor(constant.sims.mean.15.day20[ , i], time.15, method = "kendall")
+  constant.sims.sk.15.day20.tau[i] <- cor(constant.sims.sk.15.day20[ , i], time.15, method = "kendall")
+  constant.sims.kt.15.day20.tau[i] <- cor(constant.sims.kt.15.day20[ , i], time.15, method = "kendall")
+  constant.sims.var.15.day20.tau[i] <- cor(constant.sims.var.15.day20[ , i], time.15, method = "kendall")
+  constant.sims.cv.15.day20.tau[i] <- cor(constant.sims.cv.15.day20[ , i], time.15, method = "kendall")
+  constant.sims.id.15.day20.tau[i] <- cor(constant.sims.id.15.day20[ , i], time.15, method = "kendall")
+  constant.sims.fdv.15.day20.tau[i] <- cor(constant.sims.fdv.15.day20[ , i], time.15, method = "kendall")
+  constant.sims.ac.15.day20.tau[i] <- cor(constant.sims.ac.15.day20[ , i], time.15, method = "kendall")
+  constant.sims.acv.15.day20.tau[i] <- cor(constant.sims.acv.15.day20[ , i], time.15, method = "kendall")
+  constant.sims.dt.15.day20.tau[i] <- cor(constant.sims.dt.15.day20[ , i], time.15, method = "kendall")
   
-  warming.sims.mean.15.tau[i] <- cor(warming.sims.mean.15[ , i], time.15, method = "kendall")
-  warming.sims.sk.15.tau[i] <- cor(warming.sims.sk.15[ , i], time.15, method = "kendall")
-  warming.sims.kt.15.tau[i] <- cor(warming.sims.kt.15[ , i], time.15, method = "kendall")
-  warming.sims.var.15.tau[i] <- cor(warming.sims.var.15[ , i], time.15, method = "kendall")
-  warming.sims.cv.15.tau[i] <- cor(warming.sims.cv.15[ , i], time.15, method = "kendall")
-  warming.sims.id.15.tau[i] <- cor(warming.sims.id.15[ , i], time.15, method = "kendall")
-  warming.sims.fdv.15.tau[i] <- cor(warming.sims.fdv.15[ , i], time.15, method = "kendall")
-  warming.sims.ac.15.tau[i] <- cor(warming.sims.ac.15[ , i], time.15, method = "kendall")
-  warming.sims.acv.15.tau[i] <- cor(warming.sims.acv.15[ , i], time.15, method = "kendall")
-  warming.sims.dt.15.tau[i] <- cor(warming.sims.dt.15[ , i], time.15, method = "kendall")
+  warming.sims.mean.15.day20.tau[i] <- cor(warming.sims.mean.15.day20[ , i], time.15, method = "kendall")
+  warming.sims.sk.15.day20.tau[i] <- cor(warming.sims.sk.15.day20[ , i], time.15, method = "kendall")
+  warming.sims.kt.15.day20.tau[i] <- cor(warming.sims.kt.15.day20[ , i], time.15, method = "kendall")
+  warming.sims.var.15.day20.tau[i] <- cor(warming.sims.var.15.day20[ , i], time.15, method = "kendall")
+  warming.sims.cv.15.day20.tau[i] <- cor(warming.sims.cv.15.day20[ , i], time.15, method = "kendall")
+  warming.sims.id.15.day20.tau[i] <- cor(warming.sims.id.15.day20[ , i], time.15, method = "kendall")
+  warming.sims.fdv.15.day20.tau[i] <- cor(warming.sims.fdv.15.day20[ , i], time.15, method = "kendall")
+  warming.sims.ac.15.day20.tau[i] <- cor(warming.sims.ac.15.day20[ , i], time.15, method = "kendall")
+  warming.sims.acv.15.day20.tau[i] <- cor(warming.sims.acv.15.day20[ , i], time.15, method = "kendall")
+  warming.sims.dt.15.day20.tau[i] <- cor(warming.sims.dt.15.day20[ , i], time.15, method = "kendall")
 }
 
-AUC_mean_15 <- calc_auc(warming.sims.mean.15.tau, constant.sims.mean.15.tau); AUC_mean_15
-AUC_sk_15 <- calc_auc(warming.sims.sk.15.tau, constant.sims.sk.15.tau); AUC_sk_15
-AUC_kt_15 <- calc_auc(warming.sims.kt.15.tau, constant.sims.kt.15.tau); AUC_kt_15
-AUC_var_15 <- calc_auc(warming.sims.var.15.tau, constant.sims.var.15.tau); AUC_var_15
-AUC_cv_15 <- calc_auc(warming.sims.cv.15.tau, constant.sims.cv.15.tau); AUC_cv_15
-AUC_id_15 <- calc_auc(warming.sims.id.15.tau, constant.sims.id.15.tau); AUC_id_15
-AUC_fdv_15 <- calc_auc(warming.sims.fdv.15.tau, constant.sims.fdv.15.tau); AUC_fdv_15
-AUC_ac_15 <- calc_auc(warming.sims.ac.15.tau, constant.sims.ac.15.tau); AUC_ac_15
-AUC_acv_15 <- calc_auc(warming.sims.acv.15.tau, constant.sims.acv.15.tau); AUC_acv_15
-AUC_dt_15 <- calc_auc(warming.sims.dt.15.tau, constant.sims.dt.15.tau); AUC_dt_15
+AUC_mean_15 <- calc_auc(warming.sims.mean.15.day20.tau, constant.sims.mean.15.day20.tau); AUC_mean_15
+AUC_sk_15 <- calc_auc(warming.sims.sk.15.day20.tau, constant.sims.sk.15.day20.tau); AUC_sk_15
+AUC_kt_15 <- calc_auc(warming.sims.kt.15.day20.tau, constant.sims.kt.15.day20.tau); AUC_kt_15
+AUC_var_15 <- calc_auc(warming.sims.var.15.day20.tau, constant.sims.var.15.day20.tau); AUC_var_15
+AUC_cv_15 <- calc_auc(warming.sims.cv.15.day20.tau, constant.sims.cv.15.day20.tau); AUC_cv_15
+AUC_id_15 <- calc_auc(warming.sims.id.15.day20.tau, constant.sims.id.15.day20.tau); AUC_id_15
+AUC_fdv_15 <- calc_auc(warming.sims.fdv.15.day20.tau, constant.sims.fdv.15.day20.tau); AUC_fdv_15
+AUC_ac_15 <- calc_auc(warming.sims.ac.15.day20.tau, constant.sims.ac.15.day20.tau); AUC_ac_15
+AUC_acv_15 <- calc_auc(warming.sims.acv.15.day20.tau, constant.sims.acv.15.day20.tau); AUC_acv_15
+AUC_dt_15 <- calc_auc(warming.sims.dt.15.day20.tau, constant.sims.dt.15.day20.tau); AUC_dt_15
 ```
 
 ### Summarized Outputs
+
 ```{r}
 metrics <- c("mean", "skewness", "kurtosis", "variance", "cv", "id", "fdv", "cor", "acv", "dt")
 AUC_5_restricted <- c(AUC_mean_5, AUC_sk_5, AUC_kt_5, AUC_var_5, AUC_cv_5, 
@@ -407,175 +417,360 @@ abline(h = 0.5, lty = 3)
 axis(side = 1, at = 1:10, labels = metrics_full, las = 2)
 ```
 
-### Kendall's Tau and AUC (5 Day Sliding Window) | Days 30 to 55
+### Plotting
+
 ```{r}
-constant.sims.var.5 <- constant.sims.var.5[10:55, ]
-constant.sims.mean.5 <- constant.sims.mean.5[10:55, ]
-constant.sims.cv.5 <- constant.sims.cv.5[10:55, ]
-constant.sims.sk.5 <- constant.sims.sk.5[10:55, ]
-constant.sims.kt.5 <- constant.sims.kt.5[10:55, ]
-constant.sims.id.5 <- constant.sims.id.5[10:55, ]
-constant.sims.ac.5 <- constant.sims.ac.5[10:55, ]
-constant.sims.acv.5 <- constant.sims.acv.5[10:55, ]
-constant.sims.fdv.5 <- constant.sims.fdv.5[10:55, ]
-constant.sims.dt.5 <- constant.sims.dt.5[10:55, ]
+cols <- c(rep("#1434A4", 512), rep("#C21E56", 512))
 
-warming.sims.var.5 <- warming.sims.var.5[10:55, ]
-warming.sims.mean.5 <- warming.sims.mean.5[10:55, ]
-warming.sims.cv.5 <- warming.sims.cv.5[10:55, ]
-warming.sims.sk.5 <- warming.sims.sk.5[10:55, ]
-warming.sims.kt.5 <- warming.sims.kt.5[10:55, ]
-warming.sims.id.5 <- warming.sims.id.5[10:55, ]
-warming.sims.ac.5 <- warming.sims.ac.5[10:55, ]
-warming.sims.acv.5 <- warming.sims.acv.5[10:55, ]
-warming.sims.fdv.5 <- warming.sims.fdv.5[10:55, ]
-warming.sims.dt.5 <- warming.sims.dt.5[10:55, ]
+## Mean
+sim.mean.15.day20.tau <- data.frame(Treatment = c(rep("Constant", 1000), rep("Warming", 1000)), k.tau = c(constant.sims.mean.15.day20.tau, warming.sims.mean.15.day20.tau))
+med.const.sims.mean.15.day20.tau <- median(constant.sims.mean.15.day20.tau)
+med.warm.sims.mean.15.day20.tau <- median(warming.sims.mean.15.day20.tau)
+dens.mean <- ggplot(data = sim.mean.15.day20.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.mean.15.day20.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.mean.15.day20.tau, colour = "#C21E56") +
+  ggtitle("Mean: 80% Overlap") +
+  xlab(" ") +
+  ylab(" ") +
+  xlim(-1, 1) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
 
-constant.sims.var.5.tau <- c()
-constant.sims.mean.5.tau <- c()
-constant.sims.cv.5.tau <- c()
-constant.sims.sk.5.tau <- c()
-constant.sims.kt.5.tau <- c()
-constant.sims.id.5.tau <- c()
-constant.sims.ac.5.tau <- c()
-constant.sims.acv.5.tau <- c()
-constant.sims.fdv.5.tau <- c()
-constant.sims.dt.5.tau <- c()
+## Variance
+sim.var.15.day20.tau <- data.frame(Treatment = c(rep("Constant", 1000), rep("Warming", 1000)), k.tau = c(constant.sims.var.15.day20.tau, warming.sims.var.15.day20.tau))
+med.const.sims.var.15.day20.tau <- median(constant.sims.var.15.day20.tau)
+med.warm.sims.var.15.day20.tau <- median(warming.sims.var.15.day20.tau)
+dens.var <- ggplot(data = sim.var.15.day20.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.var.15.day20.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.var.15.day20.tau, colour = "#C21E56") +
+  ggtitle("Variance: 91% Overlap") +
+  xlab(" ") +
+  ylab(" ") +
+  xlim(-1, 1) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
 
-warming.sims.var.5.tau <- c()
-warming.sims.mean.5.tau <- c()
-warming.sims.cv.5.tau <- c()
-warming.sims.sk.5.tau <- c()
-warming.sims.kt.5.tau <- c()
-warming.sims.id.5.tau <- c()
-warming.sims.ac.5.tau <- c()
-warming.sims.acv.5.tau <- c()
-warming.sims.fdv.5.tau <- c()
-warming.sims.dt.5.tau <- c()
+## Skewness
+sim.sk.15.day20.tau <- data.frame(Treatment = c(rep("Constant", 1000), rep("Warming", 1000)), k.tau = c(constant.sims.sk.15.day20.tau, warming.sims.sk.15.day20.tau))
+med.const.sims.sk.15.day20.tau <- median(constant.sims.sk.15.day20.tau)
+med.warm.sims.sk.15.day20.tau <- median(warming.sims.sk.15.day20.tau)
+dens.sk <- ggplot(data = sim.sk.15.day20.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.sk.15.day20.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.sk.15.day20.tau, colour = "#C21E56") +
+  ggtitle("Skewness: 94% Overlap") +
+  xlab(" ") +
+  ylab(" ") +
+  xlim(-1, 1) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+## Kurtosis
+sim.kt.15.day20.tau <- data.frame(Treatment = c(rep("Constant", 1000), rep("Warming", 1000)), k.tau = c(constant.sims.kt.15.day20.tau, warming.sims.kt.15.day20.tau))
+med.const.sims.kt.15.day20.tau <- median(constant.sims.kt.15.day20.tau)
+med.warm.sims.kt.15.day20.tau <- median(warming.sims.kt.15.day20.tau)
+dens.kt <- ggplot(data = sim.kt.15.day20.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.kt.15.day20.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.kt.15.day20.tau, colour = "#C21E56") +
+  ggtitle("Kurtosis: 96% Overlap") +
+  xlab(" ") +
+  ylab(" ") +
+  xlim(-1, 1) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+## Co-Efficient of Variation
+sim.cv.15.day20.tau <- data.frame(Treatment = c(rep("Constant", 1000), rep("Warming", 1000)), k.tau = c(constant.sims.cv.15.day20.tau, warming.sims.cv.15.day20.tau))
+med.const.sims.cv.15.day20.tau <- median(constant.sims.cv.15.day20.tau)
+med.warm.sims.cv.15.day20.tau <- median(warming.sims.cv.15.day20.tau)
+dens.cv <- ggplot(data = sim.cv.15.day20.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.cv.15.day20.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.cv.15.day20.tau, colour = "#C21E56") +
+  ggtitle("Co-Efficient of Variation: 97% Overlap") +
+  xlab(" ") +
+  ylab(" ") +
+  xlim(-1, 1) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+## Index of Dispersion
+sim.id.15.day20.tau <- data.frame(Treatment = c(rep("Constant", 1000), rep("Warming", 1000)), k.tau = c(constant.sims.id.15.day20.tau, warming.sims.id.15.day20.tau))
+med.const.sims.id.15.day20.tau <- median(constant.sims.id.15.day20.tau)
+med.warm.sims.id.15.day20.tau <- median(warming.sims.id.15.day20.tau)
+dens.id <- ggplot(data = sim.id.15.day20.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.id.15.day20.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.id.15.day20.tau, colour = "#C21E56") +
+  ggtitle("Index of Dispersion: 94% Overlap") +
+  xlab(" ") +
+  ylab(" ") +
+  xlim(-1, 1) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+## First Difference Variance
+sim.fdv.15.day20.tau <- data.frame(Treatment = c(rep("Constant", 1000), rep("Warming", 1000)), k.tau = c(constant.sims.fdv.15.day20.tau, warming.sims.fdv.15.day20.tau))
+med.const.sims.fdv.15.day20.tau <- median(constant.sims.fdv.15.day20.tau)
+med.warm.sims.fdv.15.day20.tau <- median(warming.sims.fdv.15.day20.tau)
+dens.fdv <- ggplot(data = sim.fdv.15.day20.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.fdv.15.day20.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.fdv.15.day20.tau, colour = "#C21E56") +
+  ggtitle("First Difference Variance: 96% Overlap") +
+  xlab(" ") +
+  ylab(" ") +
+  xlim(-1, 1) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+## Autocorrelation
+sim.ac.15.day20.tau <- data.frame(Treatment = c(rep("Constant", 1000), rep("Warming", 1000)), k.tau = c(constant.sims.ac.15.day20.tau, warming.sims.ac.15.day20.tau))
+med.const.sims.ac.15.day20.tau <- median(constant.sims.ac.15.day20.tau)
+med.warm.sims.ac.15.day20.tau <- median(warming.sims.ac.15.day20.tau)
+dens.ac <- ggplot(data = sim.ac.15.day20.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.ac.15.day20.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.ac.15.day20.tau, colour = "#C21E56") +
+  ggtitle("Autocorrelation: 97% Overlap") +
+  xlab(" ") +
+  ylab(" ") +
+  xlim(-1, 1) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+## Autocovariance
+sim.acv.15.day20.tau <- data.frame(Treatment = c(rep("Constant", 1000), rep("Warming", 1000)), k.tau = c(constant.sims.acv.15.day20.tau, warming.sims.acv.15.day20.tau))
+med.const.sims.acv.15.day20.tau <- median(constant.sims.acv.15.day20.tau)
+med.warm.sims.acv.15.day20.tau <- median(warming.sims.acv.15.day20.tau)
+dens.acv <- ggplot(data = sim.acv.15.day20.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.acv.15.day20.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.acv.15.day20.tau, colour = "#C21E56") +
+  ggtitle("Autocovariance: 92% Overlap") +
+  xlab(" ") +
+  ylab(" ") +
+  xlim(-1, 1) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+## Decay Time
+sim.dt.15.day20.tau <- data.frame(Treatment = c(rep("Constant", 1000), rep("Warming", 1000)), k.tau = c(constant.sims.dt.15.day20.tau, warming.sims.dt.15.day20.tau))
+med.const.sims.dt.15.day20.tau <- median(constant.sims.dt.15.day20.tau)
+med.warm.sims.dt.15.day20.tau <- median(warming.sims.dt.15.day20.tau)
+dens.dt <- ggplot(data = sim.dt.15.day20.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.dt.15.day20.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.dt.15.day20.tau, colour = "#C21E56") +
+  ggtitle("Decay Time: 94% Overlap") +
+  xlab(" ") +
+  ylab(" ") +
+  xlim(-1, 1) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+plot_grid(dens.mean, dens.sk, dens.kt, dens.var, dens.cv,
+          dens.id, dens.fdv, dens.ac, dens.acv, dens.dt,
+          nrow = 2, align = "h"
+          # , labels = "AUTO", label_fontfamily = "serif"
+          )
+```
+
+### Kendall's Tau and AUC (5 Day Sliding Window) \| Days 30 to 55
+
+```{r}
+constant.sims.var.5.day30 <- constant.sims.var.5[30:55, ]
+constant.sims.mean.5.day30 <- constant.sims.mean.5[30:55, ]
+constant.sims.cv.5.day30 <- constant.sims.cv.5[30:55, ]
+constant.sims.sk.5.day30 <- constant.sims.sk.5[30:55, ]
+constant.sims.kt.5.day30 <- constant.sims.kt.5[30:55, ]
+constant.sims.id.5.day30 <- constant.sims.id.5[30:55, ]
+constant.sims.ac.5.day30 <- constant.sims.ac.5[30:55, ]
+constant.sims.acv.5.day30 <- constant.sims.acv.5[30:55, ]
+constant.sims.fdv.5.day30 <- constant.sims.fdv.5[30:55, ]
+constant.sims.dt.5.day30 <- constant.sims.dt.5[30:55, ]
+
+warming.sims.var.5.day30 <- warming.sims.var.5[30:55, ]
+warming.sims.mean.5.day30 <- warming.sims.mean.5[30:55, ]
+warming.sims.cv.5.day30 <- warming.sims.cv.5[30:55, ]
+warming.sims.sk.5.day30 <- warming.sims.sk.5[30:55, ]
+warming.sims.kt.5.day30 <- warming.sims.kt.5[30:55, ]
+warming.sims.id.5.day30 <- warming.sims.id.5[30:55, ]
+warming.sims.ac.5.day30 <- warming.sims.ac.5[30:55, ]
+warming.sims.acv.5.day30 <- warming.sims.acv.5[30:55, ]
+warming.sims.fdv.5.day30 <- warming.sims.fdv.5[30:55, ]
+warming.sims.dt.5.day30 <- warming.sims.dt.5[30:55, ]
+
+constant.sims.var.5.day30.tau <- c()
+constant.sims.mean.5.day30.tau <- c()
+constant.sims.cv.5.day30.tau <- c()
+constant.sims.sk.5.day30.tau <- c()
+constant.sims.kt.5.day30.tau <- c()
+constant.sims.id.5.day30.tau <- c()
+constant.sims.ac.5.day30.tau <- c()
+constant.sims.acv.5.day30.tau <- c()
+constant.sims.fdv.5.day30.tau <- c()
+constant.sims.dt.5.day30.tau <- c()
+
+warming.sims.var.5.day30.tau <- c()
+warming.sims.mean.5.day30.tau <- c()
+warming.sims.cv.5.day30.tau <- c()
+warming.sims.sk.5.day30.tau <- c()
+warming.sims.kt.5.day30.tau <- c()
+warming.sims.id.5.day30.tau <- c()
+warming.sims.ac.5.day30.tau <- c()
+warming.sims.acv.5.day30.tau <- c()
+warming.sims.fdv.5.day30.tau <- c()
+warming.sims.dt.5.day30.tau <- c()
 
 time.5 <- c(1:26)
 
 for(i in 1:num.of.sims){
-  constant.sims.mean.5.tau[i] <- cor(constant.sims.mean.5[ , i], time.5, method = "kendall")
-  constant.sims.sk.5.tau[i] <- cor(constant.sims.sk.5[ , i], time.5, method = "kendall")
-  constant.sims.kt.5.tau[i] <- cor(constant.sims.kt.5[ , i], time.5, method = "kendall")
-  constant.sims.var.5.tau[i] <- cor(constant.sims.var.5[ , i], time.5, method = "kendall")
-  constant.sims.cv.5.tau[i] <- cor(constant.sims.cv.5[ , i], time.5, method = "kendall")
-  constant.sims.id.5.tau[i] <- cor(constant.sims.id.5[ , i], time.5, method = "kendall")
-  constant.sims.fdv.5.tau[i] <- cor(constant.sims.fdv.5[ , i], time.5, method = "kendall")
-  constant.sims.ac.5.tau[i] <- cor(constant.sims.ac.5[ , i], time.5, method = "kendall")
-  constant.sims.acv.5.tau[i] <- cor(constant.sims.acv.5[ , i], time.5, method = "kendall")
-  constant.sims.dt.5.tau[i] <- cor(constant.sims.dt.5[ , i], time.5, method = "kendall")
+  constant.sims.mean.5.day30.tau[i] <- cor(constant.sims.mean.5.day30[ , i], time.5, method = "kendall")
+  constant.sims.sk.5.day30.tau[i] <- cor(constant.sims.sk.5.day30[ , i], time.5, method = "kendall")
+  constant.sims.kt.5.day30.tau[i] <- cor(constant.sims.kt.5.day30[ , i], time.5, method = "kendall")
+  constant.sims.var.5.day30.tau[i] <- cor(constant.sims.var.5.day30[ , i], time.5, method = "kendall")
+  constant.sims.cv.5.day30.tau[i] <- cor(constant.sims.cv.5.day30[ , i], time.5, method = "kendall")
+  constant.sims.id.5.day30.tau[i] <- cor(constant.sims.id.5.day30[ , i], time.5, method = "kendall")
+  constant.sims.fdv.5.day30.tau[i] <- cor(constant.sims.fdv.5.day30[ , i], time.5, method = "kendall")
+  constant.sims.ac.5.day30.tau[i] <- cor(constant.sims.ac.5.day30[ , i], time.5, method = "kendall")
+  constant.sims.acv.5.day30.tau[i] <- cor(constant.sims.acv.5.day30[ , i], time.5, method = "kendall")
+  constant.sims.dt.5.day30.tau[i] <- cor(constant.sims.dt.5.day30[ , i], time.5, method = "kendall")
   
-  warming.sims.mean.5.tau[i] <- cor(warming.sims.mean.5[ , i], time.5, method = "kendall")
-  warming.sims.sk.5.tau[i] <- cor(warming.sims.sk.5[ , i], time.5, method = "kendall")
-  warming.sims.kt.5.tau[i] <- cor(warming.sims.kt.5[ , i], time.5, method = "kendall")
-  warming.sims.var.5.tau[i] <- cor(warming.sims.var.5[ , i], time.5, method = "kendall")
-  warming.sims.cv.5.tau[i] <- cor(warming.sims.cv.5[ , i], time.5, method = "kendall")
-  warming.sims.id.5.tau[i] <- cor(warming.sims.id.5[ , i], time.5, method = "kendall")
-  warming.sims.fdv.5.tau[i] <- cor(warming.sims.fdv.5[ , i], time.5, method = "kendall")
-  warming.sims.ac.5.tau[i] <- cor(warming.sims.ac.5[ , i], time.5, method = "kendall")
-  warming.sims.acv.5.tau[i] <- cor(warming.sims.acv.5[ , i], time.5, method = "kendall")
-  warming.sims.dt.5.tau[i] <- cor(warming.sims.dt.5[ , i], time.5, method = "kendall")
+  warming.sims.mean.5.day30.tau[i] <- cor(warming.sims.mean.5.day30[ , i], time.5, method = "kendall")
+  warming.sims.sk.5.day30.tau[i] <- cor(warming.sims.sk.5.day30[ , i], time.5, method = "kendall")
+  warming.sims.kt.5.day30.tau[i] <- cor(warming.sims.kt.5.day30[ , i], time.5, method = "kendall")
+  warming.sims.var.5.day30.tau[i] <- cor(warming.sims.var.5.day30[ , i], time.5, method = "kendall")
+  warming.sims.cv.5.day30.tau[i] <- cor(warming.sims.cv.5.day30[ , i], time.5, method = "kendall")
+  warming.sims.id.5.day30.tau[i] <- cor(warming.sims.id.5.day30[ , i], time.5, method = "kendall")
+  warming.sims.fdv.5.day30.tau[i] <- cor(warming.sims.fdv.5.day30[ , i], time.5, method = "kendall")
+  warming.sims.ac.5.day30.tau[i] <- cor(warming.sims.ac.5.day30[ , i], time.5, method = "kendall")
+  warming.sims.acv.5.day30.tau[i] <- cor(warming.sims.acv.5.day30[ , i], time.5, method = "kendall")
+  warming.sims.dt.5.day30.tau[i] <- cor(warming.sims.dt.5.day30[ , i], time.5, method = "kendall")
 }
 
-AUC_mean_5 <- calc_auc(warming.sims.mean.5.tau, constant.sims.mean.5.tau); AUC_mean_5
-AUC_sk_5 <- calc_auc(warming.sims.sk.5.tau, constant.sims.sk.5.tau); AUC_sk_5
-AUC_kt_5 <- calc_auc(warming.sims.kt.5.tau, constant.sims.kt.5.tau); AUC_kt_5
-AUC_var_5 <- calc_auc(warming.sims.var.5.tau, constant.sims.var.5.tau); AUC_var_5
-AUC_cv_5 <- calc_auc(warming.sims.cv.5.tau, constant.sims.cv.5.tau); AUC_cv_5
-AUC_id_5 <- calc_auc(warming.sims.id.5.tau, constant.sims.id.5.tau); AUC_id_5
-AUC_fdv_5 <- calc_auc(warming.sims.fdv.5.tau, constant.sims.fdv.5.tau); AUC_fdv_5
-AUC_ac_5 <- calc_auc(warming.sims.ac.5.tau, constant.sims.ac.5.tau); AUC_ac_5
-AUC_acv_5 <- calc_auc(warming.sims.acv.5.tau, constant.sims.acv.5.tau); AUC_acv_5
-AUC_dt_5 <- calc_auc(warming.sims.dt.5.tau, constant.sims.dt.5.tau); AUC_dt_5
+AUC_mean_5 <- calc_auc(warming.sims.mean.5.day30.tau, constant.sims.mean.5.day30.tau); AUC_mean_5
+AUC_sk_5 <- calc_auc(warming.sims.sk.5.day30.tau, constant.sims.sk.5.day30.tau); AUC_sk_5
+AUC_kt_5 <- calc_auc(warming.sims.kt.5.day30.tau, constant.sims.kt.5.day30.tau); AUC_kt_5
+AUC_var_5 <- calc_auc(warming.sims.var.5.day30.tau, constant.sims.var.5.day30.tau); AUC_var_5
+AUC_cv_5 <- calc_auc(warming.sims.cv.5.day30.tau, constant.sims.cv.5.day30.tau); AUC_cv_5
+AUC_id_5 <- calc_auc(warming.sims.id.5.day30.tau, constant.sims.id.5.day30.tau); AUC_id_5
+AUC_fdv_5 <- calc_auc(warming.sims.fdv.5.day30.tau, constant.sims.fdv.5.day30.tau); AUC_fdv_5
+AUC_ac_5 <- calc_auc(warming.sims.ac.5.day30.tau, constant.sims.ac.5.day30.tau); AUC_ac_5
+AUC_acv_5 <- calc_auc(warming.sims.acv.5.day30.tau, constant.sims.acv.5.day30.tau); AUC_acv_5
+AUC_dt_5 <- calc_auc(warming.sims.dt.5.day30.tau, constant.sims.dt.5.day30.tau); AUC_dt_5
 ```
 
-### Kendall's Tau and AUC (15 Day Sliding Window) | Days 30 to 45
+### Kendall's Tau and AUC (15 Day Sliding Window) \| Days 30 to 45
+
 ```{r}
-constant.sims.var.15 <- constant.sims.var.15[10:45, ]
-constant.sims.mean.15 <- constant.sims.mean.15[10:45, ]
-constant.sims.cv.15 <- constant.sims.cv.15[10:45, ]
-constant.sims.sk.15 <- constant.sims.sk.15[10:45, ]
-constant.sims.kt.15 <- constant.sims.kt.15[10:45, ]
-constant.sims.id.15 <- constant.sims.id.15[10:45, ]
-constant.sims.ac.15 <- constant.sims.ac.15[10:45, ]
-constant.sims.acv.15 <- constant.sims.acv.15[10:45, ]
-constant.sims.fdv.15 <- constant.sims.fdv.15[10:45, ]
-constant.sims.dt.15 <- constant.sims.dt.15[10:45, ]
+constant.sims.var.15.day30 <- constant.sims.var.15[30:45, ]
+constant.sims.mean.15.day30 <- constant.sims.mean.15[30:45, ]
+constant.sims.cv.15.day30 <- constant.sims.cv.15[30:45, ]
+constant.sims.sk.15.day30 <- constant.sims.sk.15[30:45, ]
+constant.sims.kt.15.day30 <- constant.sims.kt.15[30:45, ]
+constant.sims.id.15.day30 <- constant.sims.id.15[30:45, ]
+constant.sims.ac.15.day30 <- constant.sims.ac.15[30:45, ]
+constant.sims.acv.15.day30 <- constant.sims.acv.15[30:45, ]
+constant.sims.fdv.15.day30 <- constant.sims.fdv.15[30:45, ]
+constant.sims.dt.15.day30 <- constant.sims.dt.15[30:45, ]
 
-warming.sims.var.15 <- warming.sims.var.15[10:45, ]
-warming.sims.mean.15 <- warming.sims.mean.15[10:45, ]
-warming.sims.cv.15 <- warming.sims.cv.15[10:45, ]
-warming.sims.sk.15 <- warming.sims.sk.15[10:45, ]
-warming.sims.kt.15 <- warming.sims.kt.15[10:45, ]
-warming.sims.id.15 <- warming.sims.id.15[10:45, ]
-warming.sims.ac.15 <- warming.sims.ac.15[10:45, ]
-warming.sims.acv.15 <- warming.sims.acv.15[10:45, ]
-warming.sims.fdv.15 <- warming.sims.fdv.15[10:45, ]
-warming.sims.dt.15 <- warming.sims.dt.15[10:45, ]
+warming.sims.var.15.day30 <- warming.sims.var.15[30:45, ]
+warming.sims.mean.15.day30 <- warming.sims.mean.15[30:45, ]
+warming.sims.cv.15.day30 <- warming.sims.cv.15[30:45, ]
+warming.sims.sk.15.day30 <- warming.sims.sk.15[30:45, ]
+warming.sims.kt.15.day30 <- warming.sims.kt.15[30:45, ]
+warming.sims.id.15.day30 <- warming.sims.id.15[30:45, ]
+warming.sims.ac.15.day30 <- warming.sims.ac.15[30:45, ]
+warming.sims.acv.15.day30 <- warming.sims.acv.15[30:45, ]
+warming.sims.fdv.15.day30 <- warming.sims.fdv.15[30:45, ]
+warming.sims.dt.15.day30 <- warming.sims.dt.15[30:45, ]
 
-constant.sims.var.15.tau <- c()
-constant.sims.mean.15.tau <- c()
-constant.sims.cv.15.tau <- c()
-constant.sims.sk.15.tau <- c()
-constant.sims.kt.15.tau <- c()
-constant.sims.id.15.tau <- c()
-constant.sims.ac.15.tau <- c()
-constant.sims.acv.15.tau <- c()
-constant.sims.fdv.15.tau <- c()
-constant.sims.dt.15.tau <- c()
+constant.sims.var.15.day30.tau <- c()
+constant.sims.mean.15.day30.tau <- c()
+constant.sims.cv.15.day30.tau <- c()
+constant.sims.sk.15.day30.tau <- c()
+constant.sims.kt.15.day30.tau <- c()
+constant.sims.id.15.day30.tau <- c()
+constant.sims.ac.15.day30.tau <- c()
+constant.sims.acv.15.day30.tau <- c()
+constant.sims.fdv.15.day30.tau <- c()
+constant.sims.dt.15.day30.tau <- c()
 
-warming.sims.var.15.tau <- c()
-warming.sims.mean.15.tau <- c()
-warming.sims.cv.15.tau <- c()
-warming.sims.sk.15.tau <- c()
-warming.sims.kt.15.tau <- c()
-warming.sims.id.15.tau <- c()
-warming.sims.ac.15.tau <- c()
-warming.sims.acv.15.tau <- c()
-warming.sims.fdv.15.tau <- c()
-warming.sims.dt.15.tau <- c()
+warming.sims.var.15.day30.tau <- c()
+warming.sims.mean.15.day30.tau <- c()
+warming.sims.cv.15.day30.tau <- c()
+warming.sims.sk.15.day30.tau <- c()
+warming.sims.kt.15.day30.tau <- c()
+warming.sims.id.15.day30.tau <- c()
+warming.sims.ac.15.day30.tau <- c()
+warming.sims.acv.15.day30.tau <- c()
+warming.sims.fdv.15.day30.tau <- c()
+warming.sims.dt.15.day30.tau <- c()
 
-time.15 <- c(1:26)
+time.15 <- c(1:16)
 
 for(i in 1:num.of.sims){
-  constant.sims.mean.15.tau[i] <- cor(constant.sims.mean.15[ , i], time.15, method = "kendall")
-  constant.sims.sk.15.tau[i] <- cor(constant.sims.sk.15[ , i], time.15, method = "kendall")
-  constant.sims.kt.15.tau[i] <- cor(constant.sims.kt.15[ , i], time.15, method = "kendall")
-  constant.sims.var.15.tau[i] <- cor(constant.sims.var.15[ , i], time.15, method = "kendall")
-  constant.sims.cv.15.tau[i] <- cor(constant.sims.cv.15[ , i], time.15, method = "kendall")
-  constant.sims.id.15.tau[i] <- cor(constant.sims.id.15[ , i], time.15, method = "kendall")
-  constant.sims.fdv.15.tau[i] <- cor(constant.sims.fdv.15[ , i], time.15, method = "kendall")
-  constant.sims.ac.15.tau[i] <- cor(constant.sims.ac.15[ , i], time.15, method = "kendall")
-  constant.sims.acv.15.tau[i] <- cor(constant.sims.acv.15[ , i], time.15, method = "kendall")
-  constant.sims.dt.15.tau[i] <- cor(constant.sims.dt.15[ , i], time.15, method = "kendall")
+  constant.sims.mean.15.day30.tau[i] <- cor(constant.sims.mean.15.day30[ , i], time.15, method = "kendall")
+  constant.sims.sk.15.day30.tau[i] <- cor(constant.sims.sk.15.day30[ , i], time.15, method = "kendall")
+  constant.sims.kt.15.day30.tau[i] <- cor(constant.sims.kt.15.day30[ , i], time.15, method = "kendall")
+  constant.sims.var.15.day30.tau[i] <- cor(constant.sims.var.15.day30[ , i], time.15, method = "kendall")
+  constant.sims.cv.15.day30.tau[i] <- cor(constant.sims.cv.15.day30[ , i], time.15, method = "kendall")
+  constant.sims.id.15.day30.tau[i] <- cor(constant.sims.id.15.day30[ , i], time.15, method = "kendall")
+  constant.sims.fdv.15.day30.tau[i] <- cor(constant.sims.fdv.15.day30[ , i], time.15, method = "kendall")
+  constant.sims.ac.15.day30.tau[i] <- cor(constant.sims.ac.15.day30[ , i], time.15, method = "kendall")
+  constant.sims.acv.15.day30.tau[i] <- cor(constant.sims.acv.15.day30[ , i], time.15, method = "kendall")
+  constant.sims.dt.15.day30.tau[i] <- cor(constant.sims.dt.15.day30[ , i], time.15, method = "kendall")
   
-  warming.sims.mean.15.tau[i] <- cor(warming.sims.mean.15[ , i], time.15, method = "kendall")
-  warming.sims.sk.15.tau[i] <- cor(warming.sims.sk.15[ , i], time.15, method = "kendall")
-  warming.sims.kt.15.tau[i] <- cor(warming.sims.kt.15[ , i], time.15, method = "kendall")
-  warming.sims.var.15.tau[i] <- cor(warming.sims.var.15[ , i], time.15, method = "kendall")
-  warming.sims.cv.15.tau[i] <- cor(warming.sims.cv.15[ , i], time.15, method = "kendall")
-  warming.sims.id.15.tau[i] <- cor(warming.sims.id.15[ , i], time.15, method = "kendall")
-  warming.sims.fdv.15.tau[i] <- cor(warming.sims.fdv.15[ , i], time.15, method = "kendall")
-  warming.sims.ac.15.tau[i] <- cor(warming.sims.ac.15[ , i], time.15, method = "kendall")
-  warming.sims.acv.15.tau[i] <- cor(warming.sims.acv.15[ , i], time.15, method = "kendall")
-  warming.sims.dt.15.tau[i] <- cor(warming.sims.dt.15[ , i], time.15, method = "kendall")
+  warming.sims.mean.15.day30.tau[i] <- cor(warming.sims.mean.15.day30[ , i], time.15, method = "kendall")
+  warming.sims.sk.15.day30.tau[i] <- cor(warming.sims.sk.15.day30[ , i], time.15, method = "kendall")
+  warming.sims.kt.15.day30.tau[i] <- cor(warming.sims.kt.15.day30[ , i], time.15, method = "kendall")
+  warming.sims.var.15.day30.tau[i] <- cor(warming.sims.var.15.day30[ , i], time.15, method = "kendall")
+  warming.sims.cv.15.day30.tau[i] <- cor(warming.sims.cv.15.day30[ , i], time.15, method = "kendall")
+  warming.sims.id.15.day30.tau[i] <- cor(warming.sims.id.15.day30[ , i], time.15, method = "kendall")
+  warming.sims.fdv.15.day30.tau[i] <- cor(warming.sims.fdv.15.day30[ , i], time.15, method = "kendall")
+  warming.sims.ac.15.day30.tau[i] <- cor(warming.sims.ac.15.day30[ , i], time.15, method = "kendall")
+  warming.sims.acv.15.day30.tau[i] <- cor(warming.sims.acv.15.day30[ , i], time.15, method = "kendall")
+  warming.sims.dt.15.day30.tau[i] <- cor(warming.sims.dt.15.day30[ , i], time.15, method = "kendall")
 }
 
-AUC_mean_15 <- calc_auc(warming.sims.mean.15.tau, constant.sims.mean.15.tau); AUC_mean_15
-AUC_sk_15 <- calc_auc(warming.sims.sk.15.tau, constant.sims.sk.15.tau); AUC_sk_15
-AUC_kt_15 <- calc_auc(warming.sims.kt.15.tau, constant.sims.kt.15.tau); AUC_kt_15
-AUC_var_15 <- calc_auc(warming.sims.var.15.tau, constant.sims.var.15.tau); AUC_var_15
-AUC_cv_15 <- calc_auc(warming.sims.cv.15.tau, constant.sims.cv.15.tau); AUC_cv_15
-AUC_id_15 <- calc_auc(warming.sims.id.15.tau, constant.sims.id.15.tau); AUC_id_15
-AUC_fdv_15 <- calc_auc(warming.sims.fdv.15.tau, constant.sims.fdv.15.tau); AUC_fdv_15
-AUC_ac_15 <- calc_auc(warming.sims.ac.15.tau, constant.sims.ac.15.tau); AUC_ac_15
-AUC_acv_15 <- calc_auc(warming.sims.acv.15.tau, constant.sims.acv.15.tau); AUC_acv_15
-AUC_dt_15 <- calc_auc(warming.sims.dt.15.tau, constant.sims.dt.15.tau); AUC_dt_15
+AUC_mean_15 <- calc_auc(warming.sims.mean.15.day30.tau, constant.sims.mean.15.day30.tau); AUC_mean_15
+AUC_sk_15 <- calc_auc(warming.sims.sk.15.day30.tau, constant.sims.sk.15.day30.tau); AUC_sk_15
+AUC_kt_15 <- calc_auc(warming.sims.kt.15.day30.tau, constant.sims.kt.15.day30.tau); AUC_kt_15
+AUC_var_15 <- calc_auc(warming.sims.var.15.day30.tau, constant.sims.var.15.day30.tau); AUC_var_15
+AUC_cv_15 <- calc_auc(warming.sims.cv.15.day30.tau, constant.sims.cv.15.day30.tau); AUC_cv_15
+AUC_id_15 <- calc_auc(warming.sims.id.15.day30.tau, constant.sims.id.15.day30.tau); AUC_id_15
+AUC_fdv_15 <- calc_auc(warming.sims.fdv.15.day30.tau, constant.sims.fdv.15.day30.tau); AUC_fdv_15
+AUC_ac_15 <- calc_auc(warming.sims.ac.15.day30.tau, constant.sims.ac.15.day30.tau); AUC_ac_15
+AUC_acv_15 <- calc_auc(warming.sims.acv.15.day30.tau, constant.sims.acv.15.day30.tau); AUC_acv_15
+AUC_dt_15 <- calc_auc(warming.sims.dt.15.day30.tau, constant.sims.dt.15.day30.tau); AUC_dt_15
 ```
 
 ### Summarized Outputs
+
 ```{r}
 metrics <- c("mean", "skewness", "kurtosis", "variance", "cv", "id", "fdv", "cor", "acv", "dt")
 AUC_5_restricted <- c(AUC_mean_5, AUC_sk_5, AUC_kt_5, AUC_var_5, AUC_cv_5, 
@@ -597,7 +792,190 @@ abline(h = 0.5, lty = 3)
 axis(side = 1, at = 1:10, labels = metrics_full, las = 2)
 ```
 
+### Plotting
+
+```{r}
+cols <- c(rep("#1434A4", 512), rep("#C21E56", 512))
+
+## Mean
+sim.mean.15.day30.tau <- data.frame(Treatment = c(rep("Constant", 1000), rep("Warming", 1000)), k.tau = c(constant.sims.mean.15.day30.tau, warming.sims.mean.15.day30.tau))
+med.const.sims.mean.15.day30.tau <- median(constant.sims.mean.15.day30.tau)
+med.warm.sims.mean.15.day30.tau <- median(warming.sims.mean.15.day30.tau)
+dens.mean <- ggplot(data = sim.mean.15.day30.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.mean.15.day30.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.mean.15.day30.tau, colour = "#C21E56") +
+  ggtitle("Mean: 79% Overlap") +
+  xlab(" ") +
+  ylab(" ") +
+  xlim(-1, 1) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+## Variance
+sim.var.15.day30.tau <- data.frame(Treatment = c(rep("Constant", 1000), rep("Warming", 1000)), k.tau = c(constant.sims.var.15.day30.tau, warming.sims.var.15.day30.tau))
+med.const.sims.var.15.day30.tau <- median(constant.sims.var.15.day30.tau)
+med.warm.sims.var.15.day30.tau <- median(warming.sims.var.15.day30.tau)
+dens.var <- ggplot(data = sim.var.15.day30.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.var.15.day30.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.var.15.day30.tau, colour = "#C21E56") +
+  ggtitle("Variance: 91% Overlap") +
+  xlab(" ") +
+  ylab(" ") +
+  xlim(-1, 1) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+## Skewness
+sim.sk.15.day30.tau <- data.frame(Treatment = c(rep("Constant", 1000), rep("Warming", 1000)), k.tau = c(constant.sims.sk.15.day30.tau, warming.sims.sk.15.day30.tau))
+med.const.sims.sk.15.day30.tau <- median(constant.sims.sk.15.day30.tau)
+med.warm.sims.sk.15.day30.tau <- median(warming.sims.sk.15.day30.tau)
+dens.sk <- ggplot(data = sim.sk.15.day30.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.sk.15.day30.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.sk.15.day30.tau, colour = "#C21E56") +
+  ggtitle("Skewness: 95% Overlap") +
+  xlab(" ") +
+  ylab(" ") +
+  xlim(-1, 1) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+## Kurtosis
+sim.kt.15.day30.tau <- data.frame(Treatment = c(rep("Constant", 1000), rep("Warming", 1000)), k.tau = c(constant.sims.kt.15.day30.tau, warming.sims.kt.15.day30.tau))
+med.const.sims.kt.15.day30.tau <- median(constant.sims.kt.15.day30.tau)
+med.warm.sims.kt.15.day30.tau <- median(warming.sims.kt.15.day30.tau)
+dens.kt <- ggplot(data = sim.kt.15.day30.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.kt.15.day30.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.kt.15.day30.tau, colour = "#C21E56") +
+  ggtitle("Kurtosis: 96% Overlap") +
+  xlab(" ") +
+  ylab(" ") +
+  xlim(-1, 1) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+## Co-Efficient of Variation
+sim.cv.15.day30.tau <- data.frame(Treatment = c(rep("Constant", 1000), rep("Warming", 1000)), k.tau = c(constant.sims.cv.15.day30.tau, warming.sims.cv.15.day30.tau))
+med.const.sims.cv.15.day30.tau <- median(constant.sims.cv.15.day30.tau)
+med.warm.sims.cv.15.day30.tau <- median(warming.sims.cv.15.day30.tau)
+dens.cv <- ggplot(data = sim.cv.15.day30.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.cv.15.day30.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.cv.15.day30.tau, colour = "#C21E56") +
+  ggtitle("Co-Efficient of Variation: 94% Overlap") +
+  xlab(" ") +
+  ylab(" ") +
+  xlim(-1, 1) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+## Index of Dispersion
+sim.id.15.day30.tau <- data.frame(Treatment = c(rep("Constant", 1000), rep("Warming", 1000)), k.tau = c(constant.sims.id.15.day30.tau, warming.sims.id.15.day30.tau))
+med.const.sims.id.15.day30.tau <- median(constant.sims.id.15.day30.tau)
+med.warm.sims.id.15.day30.tau <- median(warming.sims.id.15.day30.tau)
+dens.id <- ggplot(data = sim.id.15.day30.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.id.15.day30.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.id.15.day30.tau, colour = "#C21E56") +
+  ggtitle("Index of Dispersion: 93% Overlap") +
+  xlab(" ") +
+  ylab(" ") +
+  xlim(-1, 1) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+## First Difference Variance
+sim.fdv.15.day30.tau <- data.frame(Treatment = c(rep("Constant", 1000), rep("Warming", 1000)), k.tau = c(constant.sims.fdv.15.day30.tau, warming.sims.fdv.15.day30.tau))
+med.const.sims.fdv.15.day30.tau <- median(constant.sims.fdv.15.day30.tau)
+med.warm.sims.fdv.15.day30.tau <- median(warming.sims.fdv.15.day30.tau)
+dens.fdv <- ggplot(data = sim.fdv.15.day30.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.fdv.15.day30.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.fdv.15.day30.tau, colour = "#C21E56") +
+  ggtitle("First Difference Variance: 95% Overlap") +
+  xlab(" ") +
+  ylab(" ") +
+  xlim(-1, 1) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+## Autocorrelation
+sim.ac.15.day30.tau <- data.frame(Treatment = c(rep("Constant", 1000), rep("Warming", 1000)), k.tau = c(constant.sims.ac.15.day30.tau, warming.sims.ac.15.day30.tau))
+med.const.sims.ac.15.day30.tau <- median(constant.sims.ac.15.day30.tau)
+med.warm.sims.ac.15.day30.tau <- median(warming.sims.ac.15.day30.tau)
+dens.ac <- ggplot(data = sim.ac.15.day30.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.ac.15.day30.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.ac.15.day30.tau, colour = "#C21E56") +
+  ggtitle("Autocorrelation: 96% Overlap") +
+  xlab(" ") +
+  ylab(" ") +
+  xlim(-1, 1) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+## Autocovariance
+sim.acv.15.day30.tau <- data.frame(Treatment = c(rep("Constant", 1000), rep("Warming", 1000)), k.tau = c(constant.sims.acv.15.day30.tau, warming.sims.acv.15.day30.tau))
+med.const.sims.acv.15.day30.tau <- median(constant.sims.acv.15.day30.tau)
+med.warm.sims.acv.15.day30.tau <- median(warming.sims.acv.15.day30.tau)
+dens.acv <- ggplot(data = sim.acv.15.day30.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.acv.15.day30.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.acv.15.day30.tau, colour = "#C21E56") +
+  ggtitle("Autocovariance: 93% Overlap") +
+  xlab(" ") +
+  ylab(" ") +
+  xlim(-1, 1) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+## Decay Time
+sim.dt.15.day30.tau <- data.frame(Treatment = c(rep("Constant", 1000), rep("Warming", 1000)), k.tau = c(constant.sims.dt.15.day30.tau, warming.sims.dt.15.day30.tau))
+med.const.sims.dt.15.day30.tau <- median(constant.sims.dt.15.day30.tau)
+med.warm.sims.dt.15.day30.tau <- median(warming.sims.dt.15.day30.tau)
+dens.dt <- ggplot(data = sim.dt.15.day30.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
+  geom_density(alpha = 0.4, colour = cols) +
+  scale_fill_manual(values = c("#1434A4", "#C21E56")) +
+  geom_vline(xintercept = med.const.sims.dt.15.day30.tau, colour = "#1434A4") +
+  geom_vline(xintercept = med.warm.sims.dt.15.day30.tau, colour = "#C21E56") +
+  ggtitle("Decay Time: 95% Overlap") +
+  xlab(" ") +
+  ylab(" ") +
+  xlim(-1, 1) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
+  theme(legend.position = "none")
+
+plot_grid(dens.mean, dens.sk, dens.kt, dens.var, dens.cv,
+          dens.id, dens.fdv, dens.ac, dens.acv, dens.dt,
+          nrow = 2, align = "h"
+          # , labels = "AUTO", label_fontfamily = "serif"
+          )
+```
+
 ## Empirical Data
+
 ```{r}
 data <- read.csv("Kirk_Data/Epidemics_Data_Dryad/Kirk_et_al_epidemics_sampling_data.csv")
 data.sum <- summaryBy(status ~ population + treatment + day, data = data, FUN = sum)
@@ -612,6 +990,7 @@ sub8 <- subset(data.sum, population == 8)
 ```
 
 ### Calculating Metrics (15 Day Sliding Window)
+
 ```{r}
 ## Standard deviation
 pop1.sd <- SlidingWindow(FUN = "sd", data = sub1$status.sum, window = 5, step = 1)
@@ -798,73 +1177,75 @@ for(i in 1:35){
 }
 ```
 
-### Kendall's Tau and AUC (15 Day Sliding Window) | Days 21 to 60
+### Kendall's Tau and AUC (15 Day Sliding Window) \| Days 21 to 60
+
 ```{r}
 time.15 <- seq(1, 9, 1)
 
-constant.mean.tau <- c(cor(pop1.mean[7:15], time.15, method = "kendall"), cor(pop2.mean[7:15], time.15, method = "kendall"),
+constant.mean.tau.day21 <- c(cor(pop1.mean[7:15], time.15, method = "kendall"), cor(pop2.mean[7:15], time.15, method = "kendall"),
                       cor(pop3.mean[7:15], time.15, method = "kendall"), cor(pop4.mean[7:15], time.15, method = "kendall"))
-warming.mean.tau <- c(cor(pop5.mean[7:15], time.15, method = "kendall"), cor(pop6.mean[7:15], time.15, method = "kendall"),
+warming.mean.tau.day21 <- c(cor(pop5.mean[7:15], time.15, method = "kendall"), cor(pop6.mean[7:15], time.15, method = "kendall"),
                       cor(pop7.mean[7:15], time.15, method = "kendall"), cor(pop8.mean[7:15], time.15, method = "kendall"))
 
-constant.sk.tau <- c(cor(pop1.sk[7:15], time.15, method = "kendall"), cor(pop2.sk[7:15], time.15, method = "kendall"),
+constant.sk.tau.day21 <- c(cor(pop1.sk[7:15], time.15, method = "kendall"), cor(pop2.sk[7:15], time.15, method = "kendall"),
                           cor(pop3.sk[7:15], time.15, method = "kendall"), cor(pop4.sk[7:15], time.15, method = "kendall"))
-warming.sk.tau <- c(cor(pop5.sk[7:15], time.15, method = "kendall"), cor(pop6.sk[7:15], time.15, method = "kendall"),
+warming.sk.tau.day21 <- c(cor(pop5.sk[7:15], time.15, method = "kendall"), cor(pop6.sk[7:15], time.15, method = "kendall"),
                           cor(pop7.sk[7:15], time.15, method = "kendall"), cor(pop8.sk[7:15], time.15, method = "kendall"))
 
-constant.kt.tau <- c(cor(pop1.kt[7:15], time.15, method = "kendall"), cor(pop2.kt[7:15], time.15, method = "kendall"),
+constant.kt.tau.day21 <- c(cor(pop1.kt[7:15], time.15, method = "kendall"), cor(pop2.kt[7:15], time.15, method = "kendall"),
                           cor(pop3.kt[7:15], time.15, method = "kendall"), cor(pop4.kt[7:15], time.15, method = "kendall"))
-warming.kt.tau <- c(cor(pop5.kt[7:15], time.15, method = "kendall"), cor(pop6.kt[7:15], time.15, method = "kendall"),
+warming.kt.tau.day21 <- c(cor(pop5.kt[7:15], time.15, method = "kendall"), cor(pop6.kt[7:15], time.15, method = "kendall"),
                           cor(pop7.kt[7:15], time.15, method = "kendall"), cor(pop8.kt[7:15], time.15, method = "kendall"))
 
-constant.var.tau <- c(cor(pop1.var[7:15], time.15, method = "kendall"), cor(pop2.var[7:15], time.15, method = "kendall"),
+constant.var.tau.day21 <- c(cor(pop1.var[7:15], time.15, method = "kendall"), cor(pop2.var[7:15], time.15, method = "kendall"),
                           cor(pop3.var[7:15], time.15, method = "kendall"), cor(pop4.var[7:15], time.15, method = "kendall"))
-warming.var.tau<- c(cor(pop5.var[7:15], time.15, method = "kendall"), cor(pop6.var[7:15], time.15, method = "kendall"),
+warming.var.tau.day21<- c(cor(pop5.var[7:15], time.15, method = "kendall"), cor(pop6.var[7:15], time.15, method = "kendall"),
                          cor(pop7.var[7:15], time.15, method = "kendall"), cor(pop8.var[7:15], time.15, method = "kendall"))
 
-constant.cv.tau <- c(cor(pop1.cv[7:15], time.15, method = "kendall"), cor(pop2.cv[7:15], time.15, method = "kendall"),
+constant.cv.tau.day21 <- c(cor(pop1.cv[7:15], time.15, method = "kendall"), cor(pop2.cv[7:15], time.15, method = "kendall"),
                     cor(pop3.cv[7:15], time.15, method = "kendall"), cor(pop4.cv[7:15], time.15, method = "kendall"))
-warming.cv.tau <- c(cor(pop5.cv[7:15], time.15, method = "kendall"), cor(pop6.cv[7:15], time.15, method = "kendall"),
+warming.cv.tau.day21 <- c(cor(pop5.cv[7:15], time.15, method = "kendall"), cor(pop6.cv[7:15], time.15, method = "kendall"),
                     cor(pop7.cv[7:15], time.15, method = "kendall"), cor(pop8.cv[7:15], time.15, method = "kendall"))
 
-constant.id.tau <- c(cor(pop1.id[7:15], time.15, method = "kendall"), cor(pop2.id[7:15], time.15, method = "kendall"),
+constant.id.tau.day21 <- c(cor(pop1.id[7:15], time.15, method = "kendall"), cor(pop2.id[7:15], time.15, method = "kendall"),
                     cor(pop3.id[7:15], time.15, method = "kendall"), cor(pop4.id[7:15], time.15, method = "kendall"))
-warming.id.tau <- c(cor(pop5.id[7:15], time.15, method = "kendall"), cor(pop6.id[7:15], time.15, method = "kendall"),
+warming.id.tau.day21 <- c(cor(pop5.id[7:15], time.15, method = "kendall"), cor(pop6.id[7:15], time.15, method = "kendall"),
                     cor(pop7.id[7:15], time.15, method = "kendall"), cor(pop8.id[7:15], time.15, method = "kendall"))
 
-constant.fdv.tau <- c(cor(pop1.fdv[7:15], time.15, method = "kendall"), cor(pop2.fdv[7:15], time.15, method = "kendall"),
+constant.fdv.tau.day21 <- c(cor(pop1.fdv[7:15], time.15, method = "kendall"), cor(pop2.fdv[7:15], time.15, method = "kendall"),
                                      cor(pop3.fdv[7:15], time.15, method = "kendall"), cor(pop4.fdv[7:15], time.15, method = "kendall"))
-warming.fdv.tau <- c(cor(pop5.fdv[7:15], time.15, method = "kendall"), cor(pop6.fdv[7:15], time.15, method = "kendall"),
+warming.fdv.tau.day21 <- c(cor(pop5.fdv[7:15], time.15, method = "kendall"), cor(pop6.fdv[7:15], time.15, method = "kendall"),
                                      cor(pop7.fdv[7:15], time.15, method = "kendall"), cor(pop8.fdv[7:15], time.15, method = "kendall"))
 
-constant.ac.tau <- c(cor(pop1.ac[7:15], time.15, method = "kendall"), cor(pop2.ac[7:15], time.15, method = "kendall"),
+constant.ac.tau.day21 <- c(cor(pop1.ac[7:15], time.15, method = "kendall"), cor(pop2.ac[7:15], time.15, method = "kendall"),
                     cor(pop3.ac[7:15], time.15, method = "kendall"), cor(pop4.ac[7:15], time.15, method = "kendall"))
-warming.ac.tau <- c(cor(pop5.ac[7:15], time.15, method = "kendall"), cor(pop6.ac[7:15], time.15, method = "kendall"),
+warming.ac.tau.day21 <- c(cor(pop5.ac[7:15], time.15, method = "kendall"), cor(pop6.ac[7:15], time.15, method = "kendall"),
                     cor(pop7.ac[7:15], time.15, method = "kendall"), cor(pop8.ac[7:15], time.15, method = "kendall"))
 
-constant.acv.tau <- c(cor(pop1.acv[7:15], time.15, method = "kendall"), cor(pop2.acv[7:15], time.15, method = "kendall"),
+constant.acv.tau.day21 <- c(cor(pop1.acv[7:15], time.15, method = "kendall"), cor(pop2.acv[7:15], time.15, method = "kendall"),
                      cor(pop3.acv[7:15], time.15, method = "kendall"), cor(pop4.acv[7:15], time.15, method = "kendall"))
-warming.acv.tau <- c(cor(pop5.acv[7:15], time.15, method = "kendall"), cor(pop6.acv[7:15], time.15, method = "kendall"),
+warming.acv.tau.day21 <- c(cor(pop5.acv[7:15], time.15, method = "kendall"), cor(pop6.acv[7:15], time.15, method = "kendall"),
                      cor(pop7.acv[7:15], time.15, method = "kendall"), cor(pop8.acv[7:15], time.15, method = "kendall"))
 
-constant.dt.tau <- c(cor(pop1.dt[7:15], time.15, method = "kendall"), cor(pop2.dt[7:15], time.15, method = "kendall"),
+constant.dt.tau.day21 <- c(cor(pop1.dt[7:15], time.15, method = "kendall"), cor(pop2.dt[7:15], time.15, method = "kendall"),
                             cor(pop3.dt[7:15], time.15, method = "kendall"), cor(pop4.dt[7:15], time.15, method = "kendall"))
-warming.dt.tau <- c(cor(pop5.dt[7:15], time.15, method = "kendall"), cor(pop6.dt[7:15], time.15, method = "kendall"),
+warming.dt.tau.day21 <- c(cor(pop5.dt[7:15], time.15, method = "kendall"), cor(pop6.dt[7:15], time.15, method = "kendall"),
                             cor(pop7.dt[7:15], time.15, method = "kendall"), cor(pop8.dt[7:15], time.15, method = "kendall"))
 
-AUC_mean_data <- calc_auc(warming.mean.tau, constant.mean.tau); AUC_mean_data
-AUC_sk_data <- calc_auc(warming.sk.tau, constant.sk.tau); AUC_sk_data
-AUC_kt_data <- calc_auc(warming.kt.tau, constant.kt.tau); AUC_kt_data
-AUC_var_data <- calc_auc(warming.var.tau, constant.var.tau); AUC_var_data
-AUC_cv_data <- calc_auc(warming.cv.tau, constant.cv.tau); AUC_cv_data
-AUC_id_data <- calc_auc(warming.id.tau, constant.id.tau); AUC_id_data
-AUC_fdv_data <- calc_auc(warming.fdv.tau, constant.fdv.tau); AUC_fdv_data
-AUC_ac_data <- calc_auc(warming.ac.tau, constant.ac.tau); AUC_ac_data
-AUC_acv_data <- calc_auc(warming.acv.tau, constant.acv.tau); AUC_acv_data
-AUC_dt_data <- calc_auc(warming.dt.tau, constant.dt.tau); AUC_dt_data
+AUC_mean_data <- calc_auc(warming.mean.tau.day21, constant.mean.tau.day21); AUC_mean_data
+AUC_sk_data <- calc_auc(warming.sk.tau.day21, constant.sk.tau.day21); AUC_sk_data
+AUC_kt_data <- calc_auc(warming.kt.tau.day21, constant.kt.tau.day21); AUC_kt_data
+AUC_var_data <- calc_auc(warming.var.tau.day21, constant.var.tau.day21); AUC_var_data
+AUC_cv_data <- calc_auc(warming.cv.tau.day21, constant.cv.tau.day21); AUC_cv_data
+AUC_id_data <- calc_auc(warming.id.tau.day21, constant.id.tau.day21); AUC_id_data
+AUC_fdv_data <- calc_auc(warming.fdv.tau.day21, constant.fdv.tau.day21); AUC_fdv_data
+AUC_ac_data <- calc_auc(warming.ac.tau.day21, constant.ac.tau.day21); AUC_ac_data
+AUC_acv_data <- calc_auc(warming.acv.tau.day21, constant.acv.tau.day21); AUC_acv_data
+AUC_dt_data <- calc_auc(warming.dt.tau.day21, constant.dt.tau.day21); AUC_dt_data
 ```
 
 ### Summarized Outputs
+
 ```{r}
 metrics <- c("mean", "skewness", "kurtosis", "variance", "cv", "id", "fdv", "ac", "acv", "dt")
 AUC_data_restrict <- c(AUC_mean_data, AUC_sk_data, AUC_kt_data, AUC_var_data, AUC_cv_data, AUC_id_data, AUC_fdv_data, AUC_ac_data, AUC_acv_data, AUC_dt_data)
@@ -878,73 +1259,136 @@ abline(h = 0.5, lty = 3)
 axis(side = 1, at = 1:10, labels = metrics_full, las = 2)
 ```
 
-### Kendall's Tau and AUC (15 Day Sliding Window) | Days 30 to 60
+### Plotting
+```{r}
+df <- data.frame(
+  metric = c(rep("Mean", 8),
+             rep("Skewness", 8),
+             rep("Kurtosis", 8),
+             rep("Variance", 8),
+             rep("Co-Efficient of Variance", 8),
+             rep("Index of Dispersion", 8),
+             rep("First Difference Variance", 8),
+             rep("Autocorrelation", 8),
+             rep("Autocovariance", 8),
+             rep("Decay Time", 8)),
+  Treatment = c(rep(c(rep("Constant", 4), rep("Warming", 4)), 10)),
+  k.tau.day21 = c(constant.mean.tau.day21, warming.mean.tau.day21,
+            constant.sk.tau.day21, warming.sk.tau.day21,
+            constant.kt.tau.day21, warming.kt.tau.day21,
+            constant.var.tau.day21, warming.var.tau.day21,
+            constant.cv.tau.day21, warming.cv.tau.day21,
+            constant.id.tau.day21, warming.id.tau.day21,
+            constant.fdv.tau.day21, warming.fdv.tau.day21,
+            constant.ac.tau.day21, warming.ac.tau.day21,
+            constant.acv.tau.day21, warming.acv.tau.day21,
+            constant.dt.tau.day21, warming.dt.tau.day21)
+)
+# df[is.na(df)] <- 0
+
+df$metric <- factor(df$metric, levels = unique(df$metric))
+cols <- rep(c("#1434A4","#C21E56"), 10)
+cols.pts <- rep(c(rep("#1434A4", 4), rep("#C21E56", 4)), 10)
+cols.pts <- c(rep("#1434A4", 4), rep("#C21E56", 4),
+              rep(NA, 3), "#1434A4", NA, rep("#C21E56", 3),
+              rep(NA, 3), "#1434A4", NA, rep("#C21E56", 3),
+              rep("#1434A4", 4), rep("#C21E56", 4),
+              rep("#1434A4", 4), rep("#C21E56", 4),
+              rep("#1434A4", 4), rep("#C21E56", 4),
+              rep("#1434A4", 4), rep("#C21E56", 4),
+              rep(NA, 3), "#1434A4", NA, rep("#C21E56", 3),
+              rep("#1434A4", 4), rep("#C21E56", 4),
+              rep(NA, 8))
+
+df %>%
+  ggplot(aes(x = metric, y = k.tau.day21, fill = Treatment)) +
+  geom_violin(position = position_dodge(width = 1), alpha = 0.2) +
+  scale_fill_manual(values = cols) +
+  # geom_jitter(height = 0, width = 0, colour = "black", alpha = 0.5) +
+  geom_point(aes(y = k.tau.day21), 
+             position = position_jitterdodge(seed = 1, dodge.width = 1), 
+             colour = cols.pts, size = 2, shape = 8) + 
+  xlab("") +
+  ylab("Kendall's Tau") +
+  ylim(-1, 1) +
+  geom_hline(yintercept = 0, linetype = "dotted", color = "black") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, colour = "black"),
+        text = element_text(size = 12)) +
+  theme(axis.text.y = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+```
+
+### Kendall's Tau and AUC (15 Day Sliding Window) \| Days 30 to 60
+
 ```{r}
 time.15 <- seq(1, 6, 1)
 
-constant.mean.tau <- c(cor(pop1.mean[10:15], time.15, method = "kendall"), cor(pop2.mean[10:15], time.15, method = "kendall"),
+constant.mean.tau.day30 <- c(cor(pop1.mean[10:15], time.15, method = "kendall"), cor(pop2.mean[10:15], time.15, method = "kendall"),
                       cor(pop3.mean[10:15], time.15, method = "kendall"), cor(pop4.mean[10:15], time.15, method = "kendall"))
-warming.mean.tau <- c(cor(pop5.mean[10:15], time.15, method = "kendall"), cor(pop6.mean[10:15], time.15, method = "kendall"),
+warming.mean.tau.day30 <- c(cor(pop5.mean[10:15], time.15, method = "kendall"), cor(pop6.mean[10:15], time.15, method = "kendall"),
                       cor(pop7.mean[10:15], time.15, method = "kendall"), cor(pop8.mean[10:15], time.15, method = "kendall"))
 
-constant.sk.tau <- c(cor(pop1.sk[10:15], time.15, method = "kendall"), cor(pop2.sk[10:15], time.15, method = "kendall"),
+constant.sk.tau.day30 <- c(cor(pop1.sk[10:15], time.15, method = "kendall"), cor(pop2.sk[10:15], time.15, method = "kendall"),
                           cor(pop3.sk[10:15], time.15, method = "kendall"), cor(pop4.sk[10:15], time.15, method = "kendall"))
-warming.sk.tau <- c(cor(pop5.sk[10:15], time.15, method = "kendall"), cor(pop6.sk[10:15], time.15, method = "kendall"),
+warming.sk.tau.day30 <- c(cor(pop5.sk[10:15], time.15, method = "kendall"), cor(pop6.sk[10:15], time.15, method = "kendall"),
                           cor(pop7.sk[10:15], time.15, method = "kendall"), cor(pop8.sk[10:15], time.15, method = "kendall"))
 
-constant.kt.tau <- c(cor(pop1.kt[10:15], time.15, method = "kendall"), cor(pop2.kt[10:15], time.15, method = "kendall"),
+constant.kt.tau.day30 <- c(cor(pop1.kt[10:15], time.15, method = "kendall"), cor(pop2.kt[10:15], time.15, method = "kendall"),
                           cor(pop3.kt[10:15], time.15, method = "kendall"), cor(pop4.kt[10:15], time.15, method = "kendall"))
-warming.kt.tau <- c(cor(pop5.kt[10:15], time.15, method = "kendall"), cor(pop6.kt[10:15], time.15, method = "kendall"),
+warming.kt.tau.day30 <- c(cor(pop5.kt[10:15], time.15, method = "kendall"), cor(pop6.kt[10:15], time.15, method = "kendall"),
                           cor(pop7.kt[10:15], time.15, method = "kendall"), cor(pop8.kt[10:15], time.15, method = "kendall"))
 
-constant.var.tau <- c(cor(pop1.var[10:15], time.15, method = "kendall"), cor(pop2.var[10:15], time.15, method = "kendall"),
+constant.var.tau.day30 <- c(cor(pop1.var[10:15], time.15, method = "kendall"), cor(pop2.var[10:15], time.15, method = "kendall"),
                           cor(pop3.var[10:15], time.15, method = "kendall"), cor(pop4.var[10:15], time.15, method = "kendall"))
-warming.var.tau<- c(cor(pop5.var[10:15], time.15, method = "kendall"), cor(pop6.var[10:15], time.15, method = "kendall"),
+warming.var.tau.day30<- c(cor(pop5.var[10:15], time.15, method = "kendall"), cor(pop6.var[10:15], time.15, method = "kendall"),
                          cor(pop7.var[10:15], time.15, method = "kendall"), cor(pop8.var[10:15], time.15, method = "kendall"))
 
-constant.cv.tau <- c(cor(pop1.cv[10:15], time.15, method = "kendall"), cor(pop2.cv[10:15], time.15, method = "kendall"),
+constant.cv.tau.day30 <- c(cor(pop1.cv[10:15], time.15, method = "kendall"), cor(pop2.cv[10:15], time.15, method = "kendall"),
                     cor(pop3.cv[10:15], time.15, method = "kendall"), cor(pop4.cv[10:15], time.15, method = "kendall"))
-warming.cv.tau <- c(cor(pop5.cv[10:15], time.15, method = "kendall"), cor(pop6.cv[10:15], time.15, method = "kendall"),
+warming.cv.tau.day30 <- c(cor(pop5.cv[10:15], time.15, method = "kendall"), cor(pop6.cv[10:15], time.15, method = "kendall"),
                     cor(pop7.cv[10:15], time.15, method = "kendall"), cor(pop8.cv[10:15], time.15, method = "kendall"))
 
-constant.id.tau <- c(cor(pop1.id[10:15], time.15, method = "kendall"), cor(pop2.id[10:15], time.15, method = "kendall"),
+constant.id.tau.day30 <- c(cor(pop1.id[10:15], time.15, method = "kendall"), cor(pop2.id[10:15], time.15, method = "kendall"),
                     cor(pop3.id[10:15], time.15, method = "kendall"), cor(pop4.id[10:15], time.15, method = "kendall"))
-warming.id.tau <- c(cor(pop5.id[10:15], time.15, method = "kendall"), cor(pop6.id[10:15], time.15, method = "kendall"),
+warming.id.tau.day30 <- c(cor(pop5.id[10:15], time.15, method = "kendall"), cor(pop6.id[10:15], time.15, method = "kendall"),
                     cor(pop7.id[10:15], time.15, method = "kendall"), cor(pop8.id[10:15], time.15, method = "kendall"))
 
-constant.fdv.tau <- c(cor(pop1.fdv[10:15], time.15, method = "kendall"), cor(pop2.fdv[10:15], time.15, method = "kendall"),
+constant.fdv.tau.day30 <- c(cor(pop1.fdv[10:15], time.15, method = "kendall"), cor(pop2.fdv[10:15], time.15, method = "kendall"),
                                      cor(pop3.fdv[10:15], time.15, method = "kendall"), cor(pop4.fdv[10:15], time.15, method = "kendall"))
-warming.fdv.tau <- c(cor(pop5.fdv[10:15], time.15, method = "kendall"), cor(pop6.fdv[10:15], time.15, method = "kendall"),
+warming.fdv.tau.day30 <- c(cor(pop5.fdv[10:15], time.15, method = "kendall"), cor(pop6.fdv[10:15], time.15, method = "kendall"),
                                      cor(pop7.fdv[10:15], time.15, method = "kendall"), cor(pop8.fdv[10:15], time.15, method = "kendall"))
 
-constant.ac.tau <- c(cor(pop1.ac[10:15], time.15, method = "kendall"), cor(pop2.ac[10:15], time.15, method = "kendall"),
+constant.ac.tau.day30 <- c(cor(pop1.ac[10:15], time.15, method = "kendall"), cor(pop2.ac[10:15], time.15, method = "kendall"),
                     cor(pop3.ac[10:15], time.15, method = "kendall"), cor(pop4.ac[10:15], time.15, method = "kendall"))
-warming.ac.tau <- c(cor(pop5.ac[10:15], time.15, method = "kendall"), cor(pop6.ac[10:15], time.15, method = "kendall"),
+warming.ac.tau.day30 <- c(cor(pop5.ac[10:15], time.15, method = "kendall"), cor(pop6.ac[10:15], time.15, method = "kendall"),
                     cor(pop7.ac[10:15], time.15, method = "kendall"), cor(pop8.ac[10:15], time.15, method = "kendall"))
 
-constant.acv.tau <- c(cor(pop1.acv[10:15], time.15, method = "kendall"), cor(pop2.acv[10:15], time.15, method = "kendall"),
+constant.acv.tau.day30 <- c(cor(pop1.acv[10:15], time.15, method = "kendall"), cor(pop2.acv[10:15], time.15, method = "kendall"),
                      cor(pop3.acv[10:15], time.15, method = "kendall"), cor(pop4.acv[10:15], time.15, method = "kendall"))
-warming.acv.tau <- c(cor(pop5.acv[10:15], time.15, method = "kendall"), cor(pop6.acv[10:15], time.15, method = "kendall"),
+warming.acv.tau.day30 <- c(cor(pop5.acv[10:15], time.15, method = "kendall"), cor(pop6.acv[10:15], time.15, method = "kendall"),
                      cor(pop7.acv[10:15], time.15, method = "kendall"), cor(pop8.acv[10:15], time.15, method = "kendall"))
 
-constant.dt.tau <- c(cor(pop1.dt[10:15], time.15, method = "kendall"), cor(pop2.dt[10:15], time.15, method = "kendall"),
+constant.dt.tau.day30 <- c(cor(pop1.dt[10:15], time.15, method = "kendall"), cor(pop2.dt[10:15], time.15, method = "kendall"),
                             cor(pop3.dt[10:15], time.15, method = "kendall"), cor(pop4.dt[10:15], time.15, method = "kendall"))
-warming.dt.tau <- c(cor(pop5.dt[10:15], time.15, method = "kendall"), cor(pop6.dt[10:15], time.15, method = "kendall"),
+warming.dt.tau.day30 <- c(cor(pop5.dt[10:15], time.15, method = "kendall"), cor(pop6.dt[10:15], time.15, method = "kendall"),
                             cor(pop7.dt[10:15], time.15, method = "kendall"), cor(pop8.dt[10:15], time.15, method = "kendall"))
 
-AUC_mean_data <- calc_auc(warming.mean.tau, constant.mean.tau); AUC_mean_data
-AUC_sk_data <- calc_auc(warming.sk.tau, constant.sk.tau); AUC_sk_data
-AUC_kt_data <- calc_auc(warming.kt.tau, constant.kt.tau); AUC_kt_data
-AUC_var_data <- calc_auc(warming.var.tau, constant.var.tau); AUC_var_data
-AUC_cv_data <- calc_auc(warming.cv.tau, constant.cv.tau); AUC_cv_data
-AUC_id_data <- calc_auc(warming.id.tau, constant.id.tau); AUC_id_data
-AUC_fdv_data <- calc_auc(warming.fdv.tau, constant.fdv.tau); AUC_fdv_data
-AUC_ac_data <- calc_auc(warming.ac.tau, constant.ac.tau); AUC_ac_data
-AUC_acv_data <- calc_auc(warming.acv.tau, constant.acv.tau); AUC_acv_data
-AUC_dt_data <- calc_auc(warming.dt.tau, constant.dt.tau); AUC_dt_data
+AUC_mean_data <- calc_auc(warming.mean.tau.day30, constant.mean.tau.day30); AUC_mean_data
+AUC_sk_data <- calc_auc(warming.sk.tau.day30, constant.sk.tau.day30); AUC_sk_data
+AUC_kt_data <- calc_auc(warming.kt.tau.day30, constant.kt.tau.day30); AUC_kt_data
+AUC_var_data <- calc_auc(warming.var.tau.day30, constant.var.tau.day30); AUC_var_data
+AUC_cv_data <- calc_auc(warming.cv.tau.day30, constant.cv.tau.day30); AUC_cv_data
+AUC_id_data <- calc_auc(warming.id.tau.day30, constant.id.tau.day30); AUC_id_data
+AUC_fdv_data <- calc_auc(warming.fdv.tau.day30, constant.fdv.tau.day30); AUC_fdv_data
+AUC_ac_data <- calc_auc(warming.ac.tau.day30, constant.ac.tau.day30); AUC_ac_data
+AUC_acv_data <- calc_auc(warming.acv.tau.day30, constant.acv.tau.day30); AUC_acv_data
+AUC_dt_data <- calc_auc(warming.dt.tau.day30, constant.dt.tau.day30); AUC_dt_data
 ```
 
 ### Summarized Outputs
+
 ```{r}
 metrics <- c("mean", "skewness", "kurtosis", "variance", "cv", "id", "fdv", "ac", "acv", "dt")
 AUC_data_restrict <- c(AUC_mean_data, AUC_sk_data, AUC_kt_data, AUC_var_data, AUC_cv_data, AUC_id_data, AUC_fdv_data, AUC_ac_data, AUC_acv_data, AUC_dt_data)
@@ -957,3 +1401,56 @@ plot(1:10, AUC_df_restrict$AUC_data, type = "p",
 abline(h = 0.5, lty = 3)
 axis(side = 1, at = 1:10, labels = metrics_full, las = 2)
 ```
+
+### Plotting
+```{r}
+df <- data.frame(
+  metric = c(rep("Mean", 8),
+             rep("Skewness", 8),
+             rep("Kurtosis", 8),
+             rep("Variance", 8),
+             rep("Co-Efficient of Variance", 8),
+             rep("Index of Dispersion", 8),
+             rep("First Difference Variance", 8),
+             rep("Autocorrelation", 8),
+             rep("Autocovariance", 8),
+             rep("Decay Time", 8)),
+  Treatment = c(rep(c(rep("Constant", 4), rep("Warming", 4)), 10)),
+  k.tau.day30 = c(constant.mean.tau.day30, warming.mean.tau.day30,
+            constant.sk.tau.day30, warming.sk.tau.day30,
+            constant.kt.tau.day30, warming.kt.tau.day30,
+            constant.var.tau.day30, warming.var.tau.day30,
+            constant.cv.tau.day30, warming.cv.tau.day30,
+            constant.id.tau.day30, warming.id.tau.day30,
+            constant.fdv.tau.day30, warming.fdv.tau.day30,
+            constant.ac.tau.day30, warming.ac.tau.day30,
+            constant.acv.tau.day30, warming.acv.tau.day30,
+            constant.dt.tau.day30, warming.dt.tau.day30)
+)
+
+df$metric <- factor(df$metric, levels = unique(df$metric))
+cols <- rep(c("#1434A4","#C21E56"), 10)
+cols.pts <- rep(c(rep("#1434A4", 4), rep("#C21E56", 4)), 10)
+
+df %>%
+  ggplot(aes(x = metric, y = k.tau.day30, fill = Treatment)) +
+  geom_violin(position = position_dodge(width = 1), alpha = 0.2) +
+  scale_fill_manual(values = cols) +
+  # geom_jitter(height = 0, width = 0, colour = "black", alpha = 0.5) +
+  geom_point(aes(y = k.tau.day30), 
+             position = position_jitterdodge(seed = 1, dodge.width = 1), 
+             colour = cols.pts, size = 2, shape = 8) + 
+  xlab("") +
+  ylab("Kendall's Tau") +
+  ylim(-1, 1) +
+  geom_hline(yintercept = 0, linetype = "dotted", color = "black") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, colour = "black"),
+        text = element_text(size = 12)) +
+  theme(axis.text.y = element_text(colour = "black"),
+        text = element_text(size = 12)) +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+```
+
+
+

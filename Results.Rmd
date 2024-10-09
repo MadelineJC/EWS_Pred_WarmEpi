@@ -869,8 +869,8 @@ plot_grid(dens, violin, align = "h", labels = "AUTO")
 ```{r}
 ## Mean
 raw.sim.mean.15.tau <- readRDS("Objects/raw.sim.mean.15.tau.rds")
-med.const.sims.mean.15.tau <- median(constant.sims.mean.15.tau)
-med.warm.sims.mean.15.tau <- median(warming.sims.mean.15.tau)
+med.const.sims.mean.15.tau <- median(raw.sim.mean.15.tau[1:1000, 2])
+med.warm.sims.mean.15.tau <- median(raw.sim.mean.15.tau[1001:2000, 2])
 dens.mean <- ggplot(data = raw.sim.mean.15.tau, aes(x = k.tau, group = Treatment, fill = Treatment)) +
   geom_density(alpha = 0.4, colour = cols) +
   scale_fill_manual(values = c("#1434A4", "#C21E56")) +
@@ -878,6 +878,7 @@ dens.mean <- ggplot(data = raw.sim.mean.15.tau, aes(x = k.tau, group = Treatment
   geom_vline(xintercept = med.warm.sims.mean.15.tau, colour = "#C21E56") +
   xlab(" ") +
   ylab(" ") +
+  xlim(-1, 1) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black")) +
   theme(legend.position = "none")
@@ -893,6 +894,7 @@ dens.var <- ggplot(data = raw.sim.var.15.tau, aes(x = k.tau, group = Treatment, 
   geom_vline(xintercept = med.warm.sims.var.15.tau, colour = "#C21E56") +
   xlab(" ") +
   ylab(" ") +
+  xlim(-1, 1) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black")) +
   theme(legend.position = "none")
@@ -908,6 +910,7 @@ dens.sk <- ggplot(data = raw.sim.sk.15.tau, aes(x = k.tau, group = Treatment, fi
   geom_vline(xintercept = med.warm.sims.sk.15.tau, colour = "#C21E56") +
   xlab(" ") +
   ylab(" ") +
+  xlim(-1, 1) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black")) +
   theme(legend.position = "none")
@@ -923,6 +926,7 @@ dens.kt <- ggplot(data = raw.sim.kt.15.tau, aes(x = k.tau, group = Treatment, fi
   geom_vline(xintercept = med.warm.sims.kt.15.tau, colour = "#C21E56") +
   xlab(" ") +
   ylab(" ") +
+  xlim(-1, 1) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black")) +
   theme(legend.position = "none")
@@ -938,6 +942,7 @@ dens.cv <- ggplot(data = raw.sim.cv.15.tau, aes(x = k.tau, group = Treatment, fi
   geom_vline(xintercept = med.warm.sims.cv.15.tau, colour = "#C21E56") +
   xlab(" ") +
   ylab(" ") +
+  xlim(-1, 1) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black")) +
   theme(legend.position = "none")
@@ -953,6 +958,7 @@ dens.id <- ggplot(data = raw.sim.id.15.tau, aes(x = k.tau, group = Treatment, fi
   geom_vline(xintercept = med.warm.sims.id.15.tau, colour = "#C21E56") +
   xlab(" ") +
   ylab(" ") +
+  xlim(-1, 1) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black")) +
   theme(legend.position = "none")
@@ -968,6 +974,7 @@ dens.fdv <- ggplot(data = raw.sim.fdv.15.tau, aes(x = k.tau, group = Treatment, 
   geom_vline(xintercept = med.warm.sims.fdv.15.tau, colour = "#C21E56") +
   xlab(" ") +
   ylab(" ") +
+  xlim(-1, 1) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black")) +
   theme(legend.position = "none")
@@ -983,6 +990,7 @@ dens.ac <- ggplot(data = raw.sim.ac.15.tau, aes(x = k.tau, group = Treatment, fi
   geom_vline(xintercept = med.warm.sims.ac.15.tau, colour = "#C21E56") +
   xlab(" ") +
   ylab(" ") +
+  xlim(-1, 1) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black")) +
   theme(legend.position = "none")
@@ -998,6 +1006,7 @@ dens.acv <- ggplot(data = raw.sim.acv.15.tau, aes(x = k.tau, group = Treatment, 
   geom_vline(xintercept = med.warm.sims.acv.15.tau, colour = "#C21E56") +
   xlab(" ") +
   ylab(" ") +
+  xlim(-1, 1) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black")) +
   theme(legend.position = "none")
@@ -1013,13 +1022,14 @@ dens.dt <- ggplot(data = raw.sim.dt.15.tau, aes(x = k.tau, group = Treatment, fi
   geom_vline(xintercept = med.warm.sims.dt.15.tau, colour = "#C21E56") +
   xlab(" ") +
   ylab(" ") +
+  xlim(-1, 1) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black")) +
   theme(legend.position = "none")
 
 plot_grid(dens.mean, dens.sk, dens.kt, dens.var, dens.cv,
           dens.id, dens.fdv, dens.ac, dens.acv, dens.dt,
-          nrow = 2, align = "h", labels = "AUTO")
+          nrow = 2, align = "h", labels = "AUTO", label_fontfamily = "serif")
 ```
 
 ```{r}
