@@ -415,6 +415,49 @@ plot(1:10, AUC_restricted_df$AUC_15_restricted, type = "p",
      col = "orchid", pch = 19)
 abline(h = 0.5, lty = 3)
 axis(side = 1, at = 1:10, labels = metrics_full, las = 2)
+
+## Medians
+paste("Median Mean in Control Populations: ", median(constant.sims.mean.5.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Mean in Test Populations: ", median(warming.sims.mean.5.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Skewness in Control Populations: ", median(constant.sims.sk.5.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Skewness in Test Populations: ", median(warming.sims.sk.5.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Kurtosis in Control Populations: ", median(constant.sims.kt.5.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Kurtosis in Test Populations: ", median(warming.sims.kt.5.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Variance in Control Populations: ", median(constant.sims.var.5.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Variance in Test Populations: ", median(warming.sims.var.5.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Co-Efficient of Variation in Control Populations: ", median(constant.sims.cv.5.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Co-Efficient of Variation in Test Populations: ", median(warming.sims.cv.5.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Index of Dispersion in Control Populations: ", median(constant.sims.id.5.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Index of Dispersion in Test Populations: ", median(warming.sims.id.5.day20.tau, na.rm = TRUE), sep = "")
+paste("Median First Difference Variance in Control Populations: ", median(constant.sims.fdv.5.day20.tau, na.rm = TRUE), sep = "")
+paste("Median First Difference Variance in Test Populations: ", median(warming.sims.fdv.5.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Autocorrelation in Control Populations: ", median(constant.sims.ac.5.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Autocorrelation in Test Populations: ", median(warming.sims.ac.5.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Autocovariance in Control Populations: ", median(constant.sims.acv.5.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Autocovariance in Test Populations: ", median(warming.sims.acv.5.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Decay Time in Control Populations: ", median(constant.sims.dt.5.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Decay Time in Test Populations: ", median(warming.sims.dt.5.day20.tau, na.rm = TRUE), sep = "")
+
+paste("Median Mean in Control Populations: ", median(constant.sims.mean.15.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Mean in Test Populations: ", median(warming.sims.mean.15.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Skewness in Control Populations: ", median(constant.sims.sk.15.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Skewness in Test Populations: ", median(warming.sims.sk.15.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Kurtosis in Control Populations: ", median(constant.sims.kt.15.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Kurtosis in Test Populations: ", median(warming.sims.kt.15.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Variance in Control Populations: ", median(constant.sims.var.15.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Variance in Test Populations: ", median(warming.sims.var.15.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Co-Efficient of Variation in Control Populations: ", median(constant.sims.cv.15.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Co-Efficient of Variation in Test Populations: ", median(warming.sims.cv.15.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Index of Dispersion in Control Populations: ", median(constant.sims.id.15.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Index of Dispersion in Test Populations: ", median(warming.sims.id.15.day20.tau, na.rm = TRUE), sep = "")
+paste("Median First Difference Variance in Control Populations: ", median(constant.sims.fdv.15.day20.tau, na.rm = TRUE), sep = "")
+paste("Median First Difference Variance in Test Populations: ", median(warming.sims.fdv.15.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Autocorrelation in Control Populations: ", median(constant.sims.ac.15.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Autocorrelation in Test Populations: ", median(warming.sims.ac.15.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Autocovariance in Control Populations: ", median(constant.sims.acv.15.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Autocovariance in Test Populations: ", median(warming.sims.acv.15.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Decay Time in Control Populations: ", median(constant.sims.dt.15.day20.tau, na.rm = TRUE), sep = "")
+paste("Median Decay Time in Test Populations: ", median(warming.sims.dt.15.day20.tau, na.rm = TRUE), sep = "")
 ```
 
 ### Plotting
@@ -790,6 +833,49 @@ plot(1:10, AUC_restricted_df$AUC_15_restricted, type = "p",
      col = "orchid", pch = 19)
 abline(h = 0.5, lty = 3)
 axis(side = 1, at = 1:10, labels = metrics_full, las = 2)
+
+## Medians
+paste("Median Mean in Control Populations: ", median(constant.sims.mean.5.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Mean in Test Populations: ", median(warming.sims.mean.5.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Skewness in Control Populations: ", median(constant.sims.sk.5.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Skewness in Test Populations: ", median(warming.sims.sk.5.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Kurtosis in Control Populations: ", median(constant.sims.kt.5.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Kurtosis in Test Populations: ", median(warming.sims.kt.5.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Variance in Control Populations: ", median(constant.sims.var.5.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Variance in Test Populations: ", median(warming.sims.var.5.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Co-Efficient of Variation in Control Populations: ", median(constant.sims.cv.5.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Co-Efficient of Variation in Test Populations: ", median(warming.sims.cv.5.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Index of Dispersion in Control Populations: ", median(constant.sims.id.5.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Index of Dispersion in Test Populations: ", median(warming.sims.id.5.day30.tau, na.rm = TRUE), sep = "")
+paste("Median First Difference Variance in Control Populations: ", median(constant.sims.fdv.5.day30.tau, na.rm = TRUE), sep = "")
+paste("Median First Difference Variance in Test Populations: ", median(warming.sims.fdv.5.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Autocorrelation in Control Populations: ", median(constant.sims.ac.5.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Autocorrelation in Test Populations: ", median(warming.sims.ac.5.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Autocovariance in Control Populations: ", median(constant.sims.acv.5.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Autocovariance in Test Populations: ", median(warming.sims.acv.5.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Decay Time in Control Populations: ", median(constant.sims.dt.5.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Decay Time in Test Populations: ", median(warming.sims.dt.5.day30.tau, na.rm = TRUE), sep = "")
+
+paste("Median Mean in Control Populations: ", median(constant.sims.mean.15.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Mean in Test Populations: ", median(warming.sims.mean.15.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Skewness in Control Populations: ", median(constant.sims.sk.15.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Skewness in Test Populations: ", median(warming.sims.sk.15.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Kurtosis in Control Populations: ", median(constant.sims.kt.15.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Kurtosis in Test Populations: ", median(warming.sims.kt.15.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Variance in Control Populations: ", median(constant.sims.var.15.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Variance in Test Populations: ", median(warming.sims.var.15.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Co-Efficient of Variation in Control Populations: ", median(constant.sims.cv.15.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Co-Efficient of Variation in Test Populations: ", median(warming.sims.cv.15.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Index of Dispersion in Control Populations: ", median(constant.sims.id.15.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Index of Dispersion in Test Populations: ", median(warming.sims.id.15.day30.tau, na.rm = TRUE), sep = "")
+paste("Median First Difference Variance in Control Populations: ", median(constant.sims.fdv.15.day30.tau, na.rm = TRUE), sep = "")
+paste("Median First Difference Variance in Test Populations: ", median(warming.sims.fdv.15.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Autocorrelation in Control Populations: ", median(constant.sims.ac.15.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Autocorrelation in Test Populations: ", median(warming.sims.ac.15.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Autocovariance in Control Populations: ", median(constant.sims.acv.15.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Autocovariance in Test Populations: ", median(warming.sims.acv.15.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Decay Time in Control Populations: ", median(constant.sims.dt.15.day30.tau, na.rm = TRUE), sep = "")
+paste("Median Decay Time in Test Populations: ", median(warming.sims.dt.15.day30.tau, na.rm = TRUE), sep = "")
 ```
 
 ### Plotting
@@ -1261,63 +1347,41 @@ axis(side = 1, at = 1:10, labels = metrics_full, las = 2)
 
 ### Plotting
 ```{r}
-df <- data.frame(
-  metric = c(rep("Mean", 8),
-             rep("Skewness", 8),
-             rep("Kurtosis", 8),
-             rep("Variance", 8),
-             rep("Co-Efficient of Variance", 8),
-             rep("Index of Dispersion", 8),
-             rep("First Difference Variance", 8),
-             rep("Autocorrelation", 8),
-             rep("Autocovariance", 8),
-             rep("Decay Time", 8)),
-  Treatment = c(rep(c(rep("Constant", 4), rep("Warming", 4)), 10)),
-  k.tau.day21 = c(constant.mean.tau.day21, warming.mean.tau.day21,
-            constant.sk.tau.day21, warming.sk.tau.day21,
-            constant.kt.tau.day21, warming.kt.tau.day21,
-            constant.var.tau.day21, warming.var.tau.day21,
-            constant.cv.tau.day21, warming.cv.tau.day21,
-            constant.id.tau.day21, warming.id.tau.day21,
-            constant.fdv.tau.day21, warming.fdv.tau.day21,
-            constant.ac.tau.day21, warming.ac.tau.day21,
-            constant.acv.tau.day21, warming.acv.tau.day21,
-            constant.dt.tau.day21, warming.dt.tau.day21)
+emp.ktaus <- data.frame(
+  mean = c(constant.mean.tau.day21, warming.mean.tau.day21),
+  sk = c(constant.sk.tau.day21, warming.sk.tau.day21),
+  kt = c(constant.kt.tau.day21, warming.kt.tau.day21),
+  var = c(constant.var.tau.day21, warming.var.tau.day21),
+  cv = c(constant.cv.tau.day21, warming.cv.tau.day21),
+  id = c(constant.id.tau.day21, warming.id.tau.day21),
+  fdv = c(constant.fdv.tau.day21, warming.fdv.tau.day21),
+  ac = c(constant.ac.tau.day21, warming.ac.tau.day21),
+  acv = c(constant.acv.tau.day21, warming.acv.tau.day21),
+  dt = c(constant.dt.tau.day21, warming.dt.tau.day21)
 )
-# df[is.na(df)] <- 0
+rownames(emp.ktaus) <- c("constant.1", "constant.2", "constant.3", "constant.4", "warming.1", "warming.2", "warming.3", "warming.4")
 
-df$metric <- factor(df$metric, levels = unique(df$metric))
-cols <- rep(c("#1434A4","#C21E56"), 10)
-cols.pts <- rep(c(rep("#1434A4", 4), rep("#C21E56", 4)), 10)
-cols.pts <- c(rep("#1434A4", 4), rep("#C21E56", 4),
-              rep(NA, 3), "#1434A4", NA, rep("#C21E56", 3),
-              rep(NA, 3), "#1434A4", NA, rep("#C21E56", 3),
-              rep("#1434A4", 4), rep("#C21E56", 4),
-              rep("#1434A4", 4), rep("#C21E56", 4),
-              rep("#1434A4", 4), rep("#C21E56", 4),
-              rep("#1434A4", 4), rep("#C21E56", 4),
-              rep(NA, 3), "#1434A4", NA, rep("#C21E56", 3),
-              rep("#1434A4", 4), rep("#C21E56", 4),
-              rep(NA, 8))
-
-df %>%
-  ggplot(aes(x = metric, y = k.tau.day21, fill = Treatment)) +
-  geom_violin(position = position_dodge(width = 1), alpha = 0.2) +
-  scale_fill_manual(values = cols) +
-  # geom_jitter(height = 0, width = 0, colour = "black", alpha = 0.5) +
-  geom_point(aes(y = k.tau.day21), 
-             position = position_jitterdodge(seed = 1, dodge.width = 1), 
-             colour = cols.pts, size = 2, shape = 8) + 
-  xlab("") +
-  ylab("Kendall's Tau") +
-  ylim(-1, 1) +
-  geom_hline(yintercept = 0, linetype = "dotted", color = "black") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, colour = "black"),
-        text = element_text(size = 12)) +
-  theme(axis.text.y = element_text(colour = "black"),
-        text = element_text(size = 12)) +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+x.labs <- c("Mean", "Skewness", "Kurtosis", 
+                              "Variance", "Co-Efficient of Variation", "Index of Dispersion",
+                              "First Difference Variance", "Autocorrelation", "Autocovariance",
+                              "Decay Time")
+par(mar = c(6.5, 4, 4, 4)) # Order: 'bottom', 'left', 'top', 'right'.
+plot(x = 1, type = "n", xaxt = "n", yaxt = "n", 
+     main = "Experimental Data", xlab = "", ylab = "Kendall's Tau",
+     xlim = c(1, 10), ylim = c(-1, 1))
+text(1:10, emp.ktaus[1, ], label = 1, col = alpha("#1434A4", 0.5))
+text(1:10, emp.ktaus[2, ], label = 2, col = alpha("#1434A4", 0.5))
+text(1:10, emp.ktaus[3, ], label = 3, col = alpha("#1434A4", 0.5))
+text(1:10, emp.ktaus[4, ], label = 4, col = alpha("#1434A4", 0.5))
+text(1:10, emp.ktaus[5, ], label = 5, col = alpha("#C21E56", 0.5))
+text(1:10, emp.ktaus[6, ], label = 6, col = alpha("#C21E56", 0.5))
+text(1:10, emp.ktaus[7, ], label = 7, col = alpha("#C21E56", 0.5))
+text(1:10, emp.ktaus[8, ], label = 8, col = alpha("#C21E56", 0.5))
+abline(h = 0, lty = 3)
+axis(2, at = c(-1, -0.5, 0, 0.5, 1))
+text(cex = 1, x = 1:10, y = -1.4, x.labs, xpd = TRUE, srt = 35)
+legend(8, 1.1, legend = c("Constant Tempertaure", "Rising Temperature"),
+       pch = 19, col = c("#1434A4", "#C21E56"), cex = 0.8, bty = "n")
 ```
 
 ### Kendall's Tau and AUC (15 Day Sliding Window) \| Days 30 to 60
@@ -1404,52 +1468,41 @@ axis(side = 1, at = 1:10, labels = metrics_full, las = 2)
 
 ### Plotting
 ```{r}
-df <- data.frame(
-  metric = c(rep("Mean", 8),
-             rep("Skewness", 8),
-             rep("Kurtosis", 8),
-             rep("Variance", 8),
-             rep("Co-Efficient of Variance", 8),
-             rep("Index of Dispersion", 8),
-             rep("First Difference Variance", 8),
-             rep("Autocorrelation", 8),
-             rep("Autocovariance", 8),
-             rep("Decay Time", 8)),
-  Treatment = c(rep(c(rep("Constant", 4), rep("Warming", 4)), 10)),
-  k.tau.day30 = c(constant.mean.tau.day30, warming.mean.tau.day30,
-            constant.sk.tau.day30, warming.sk.tau.day30,
-            constant.kt.tau.day30, warming.kt.tau.day30,
-            constant.var.tau.day30, warming.var.tau.day30,
-            constant.cv.tau.day30, warming.cv.tau.day30,
-            constant.id.tau.day30, warming.id.tau.day30,
-            constant.fdv.tau.day30, warming.fdv.tau.day30,
-            constant.ac.tau.day30, warming.ac.tau.day30,
-            constant.acv.tau.day30, warming.acv.tau.day30,
-            constant.dt.tau.day30, warming.dt.tau.day30)
+emp.ktaus <- data.frame(
+  mean = c(constant.mean.tau.day30, warming.mean.tau.day30),
+  sk = c(constant.sk.tau.day30, warming.sk.tau.day30),
+  kt = c(constant.kt.tau.day30, warming.kt.tau.day30),
+  var = c(constant.var.tau.day30, warming.var.tau.day30),
+  cv = c(constant.cv.tau.day30, warming.cv.tau.day30),
+  id = c(constant.id.tau.day30, warming.id.tau.day30),
+  fdv = c(constant.fdv.tau.day30, warming.fdv.tau.day30),
+  ac = c(constant.ac.tau.day30, warming.ac.tau.day30),
+  acv = c(constant.acv.tau.day30, warming.acv.tau.day30),
+  dt = c(constant.dt.tau.day30, warming.dt.tau.day30)
 )
+rownames(emp.ktaus) <- c("constant.1", "constant.2", "constant.3", "constant.4", "warming.1", "warming.2", "warming.3", "warming.4")
 
-df$metric <- factor(df$metric, levels = unique(df$metric))
-cols <- rep(c("#1434A4","#C21E56"), 10)
-cols.pts <- rep(c(rep("#1434A4", 4), rep("#C21E56", 4)), 10)
-
-df %>%
-  ggplot(aes(x = metric, y = k.tau.day30, fill = Treatment)) +
-  geom_violin(position = position_dodge(width = 1), alpha = 0.2) +
-  scale_fill_manual(values = cols) +
-  # geom_jitter(height = 0, width = 0, colour = "black", alpha = 0.5) +
-  geom_point(aes(y = k.tau.day30), 
-             position = position_jitterdodge(seed = 1, dodge.width = 1), 
-             colour = cols.pts, size = 2, shape = 8) + 
-  xlab("") +
-  ylab("Kendall's Tau") +
-  ylim(-1, 1) +
-  geom_hline(yintercept = 0, linetype = "dotted", color = "black") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, colour = "black"),
-        text = element_text(size = 12)) +
-  theme(axis.text.y = element_text(colour = "black"),
-        text = element_text(size = 12)) +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black"))
+x.labs <- c("Mean", "Skewness", "Kurtosis", 
+                              "Variance", "Co-Efficient of Variation", "Index of Dispersion",
+                              "First Difference Variance", "Autocorrelation", "Autocovariance",
+                              "Decay Time")
+par(mar = c(6.5, 4, 4, 4)) # Order: 'bottom', 'left', 'top', 'right'.
+plot(x = 1, type = "n", xaxt = "n", yaxt = "n", 
+     main = "Experimental Data", xlab = "", ylab = "Kendall's Tau",
+     xlim = c(1, 10), ylim = c(-1, 1))
+text(1:10, emp.ktaus[1, ], label = 1, col = alpha("#1434A4", 0.5))
+text(1:10, emp.ktaus[2, ], label = 2, col = alpha("#1434A4", 0.5))
+text(1:10, emp.ktaus[3, ], label = 3, col = alpha("#1434A4", 0.5))
+text(1:10, emp.ktaus[4, ], label = 4, col = alpha("#1434A4", 0.5))
+text(1:10, emp.ktaus[5, ], label = 5, col = alpha("#C21E56", 0.5))
+text(1:10, emp.ktaus[6, ], label = 6, col = alpha("#C21E56", 0.5))
+text(1:10, emp.ktaus[7, ], label = 7, col = alpha("#C21E56", 0.5))
+text(1:10, emp.ktaus[8, ], label = 8, col = alpha("#C21E56", 0.5))
+abline(h = 0, lty = 3)
+axis(2, at = c(-1, -0.5, 0, 0.5, 1))
+text(cex = 1, x = 1:10, y = -1.4, x.labs, xpd = TRUE, srt = 35)
+legend(8, 1.1, legend = c("Constant Tempertaure", "Rising Temperature"),
+       pch = 19, col = c("#1434A4", "#C21E56"), cex = 0.8, bty = "n")
 ```
 
 
