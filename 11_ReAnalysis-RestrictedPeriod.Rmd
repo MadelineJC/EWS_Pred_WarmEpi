@@ -635,11 +635,11 @@ dens.dt <- ggplot(data = sim.dt.15.day20.tau, aes(x = k.tau, group = Treatment, 
         panel.background = element_blank(), axis.line = element_line(colour = "black")) +
   theme(legend.position = "none")
 
-plot_grid(dens.mean, dens.sk, dens.kt, dens.var, dens.cv,
-          dens.id, dens.fdv, dens.ac, dens.acv, dens.dt,
-          nrow = 2, align = "h"
-          # , labels = "AUTO", label_fontfamily = "serif"
-          )
+sim.taus.day20.plot <- plot_grid(dens.mean, dens.sk, dens.kt, dens.var, dens.cv,
+                                 dens.id, dens.fdv, dens.ac, dens.acv, dens.dt,
+                                 nrow = 2, align = "h"
+                                 # , labels = "AUTO", label_fontfamily = "serif"
+                                 )
 ```
 
 ### Kendall's Tau and AUC (5 Day Sliding Window) \| Days 30 to 55
@@ -1053,11 +1053,11 @@ dens.dt <- ggplot(data = sim.dt.15.day30.tau, aes(x = k.tau, group = Treatment, 
         panel.background = element_blank(), axis.line = element_line(colour = "black")) +
   theme(legend.position = "none")
 
-plot_grid(dens.mean, dens.sk, dens.kt, dens.var, dens.cv,
-          dens.id, dens.fdv, dens.ac, dens.acv, dens.dt,
-          nrow = 2, align = "h"
-          # , labels = "AUTO", label_fontfamily = "serif"
-          )
+sim.taus.day30.plot <- plot_grid(dens.mean, dens.sk, dens.kt, dens.var, dens.cv,
+                                 dens.id, dens.fdv, dens.ac, dens.acv, dens.dt,
+                                 nrow = 2, align = "h"
+                                 # , labels = "AUTO", label_fontfamily = "serif"
+                                 )
 ```
 
 ## Empirical Data

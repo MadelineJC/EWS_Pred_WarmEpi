@@ -876,6 +876,7 @@ dens.mean <- ggplot(data = raw.sim.mean.15.tau, aes(x = k.tau, group = Treatment
   scale_fill_manual(values = c("#1434A4", "#C21E56")) +
   geom_vline(xintercept = med.const.sims.mean.15.tau, colour = "#1434A4") +
   geom_vline(xintercept = med.warm.sims.mean.15.tau, colour = "#C21E56") +
+  ggtitle("Mean: 81% Overlap") +
   xlab(" ") +
   ylab(" ") +
   xlim(-1, 1) +
@@ -892,6 +893,7 @@ dens.var <- ggplot(data = raw.sim.var.15.tau, aes(x = k.tau, group = Treatment, 
   scale_fill_manual(values = c("#1434A4", "#C21E56")) +
   geom_vline(xintercept = med.const.sims.var.15.tau, colour = "#1434A4") +
   geom_vline(xintercept = med.warm.sims.var.15.tau, colour = "#C21E56") +
+  ggtitle("Variance: 92% Overlap") +
   xlab(" ") +
   ylab(" ") +
   xlim(-1, 1) +
@@ -908,6 +910,7 @@ dens.sk <- ggplot(data = raw.sim.sk.15.tau, aes(x = k.tau, group = Treatment, fi
   scale_fill_manual(values = c("#1434A4", "#C21E56")) +
   geom_vline(xintercept = med.const.sims.sk.15.tau, colour = "#1434A4") +
   geom_vline(xintercept = med.warm.sims.sk.15.tau, colour = "#C21E56") +
+  ggtitle("Skewness: 98% Overlap") +
   xlab(" ") +
   ylab(" ") +
   xlim(-1, 1) +
@@ -924,6 +927,7 @@ dens.kt <- ggplot(data = raw.sim.kt.15.tau, aes(x = k.tau, group = Treatment, fi
   scale_fill_manual(values = c("#1434A4", "#C21E56")) +
   geom_vline(xintercept = med.const.sims.kt.15.tau, colour = "#1434A4") +
   geom_vline(xintercept = med.warm.sims.kt.15.tau, colour = "#C21E56") +
+  ggtitle("Kurtosis: 97% Overlap") +
   xlab(" ") +
   ylab(" ") +
   xlim(-1, 1) +
@@ -940,6 +944,7 @@ dens.cv <- ggplot(data = raw.sim.cv.15.tau, aes(x = k.tau, group = Treatment, fi
   scale_fill_manual(values = c("#1434A4", "#C21E56")) +
   geom_vline(xintercept = med.const.sims.cv.15.tau, colour = "#1434A4") +
   geom_vline(xintercept = med.warm.sims.cv.15.tau, colour = "#C21E56") +
+  ggtitle("Co-Efficient of Variation: 95% Overlap") +
   xlab(" ") +
   ylab(" ") +
   xlim(-1, 1) +
@@ -956,6 +961,7 @@ dens.id <- ggplot(data = raw.sim.id.15.tau, aes(x = k.tau, group = Treatment, fi
   scale_fill_manual(values = c("#1434A4", "#C21E56")) +
   geom_vline(xintercept = med.const.sims.id.15.tau, colour = "#1434A4") +
   geom_vline(xintercept = med.warm.sims.id.15.tau, colour = "#C21E56") +
+  ggtitle("Index of Dispersion: 94% Overlap") +
   xlab(" ") +
   ylab(" ") +
   xlim(-1, 1) +
@@ -972,6 +978,7 @@ dens.fdv <- ggplot(data = raw.sim.fdv.15.tau, aes(x = k.tau, group = Treatment, 
   scale_fill_manual(values = c("#1434A4", "#C21E56")) +
   geom_vline(xintercept = med.const.sims.fdv.15.tau, colour = "#1434A4") +
   geom_vline(xintercept = med.warm.sims.fdv.15.tau, colour = "#C21E56") +
+  ggtitle("First Difference Variance: 95% Overlap") +
   xlab(" ") +
   ylab(" ") +
   xlim(-1, 1) +
@@ -988,6 +995,7 @@ dens.ac <- ggplot(data = raw.sim.ac.15.tau, aes(x = k.tau, group = Treatment, fi
   scale_fill_manual(values = c("#1434A4", "#C21E56")) +
   geom_vline(xintercept = med.const.sims.ac.15.tau, colour = "#1434A4") +
   geom_vline(xintercept = med.warm.sims.ac.15.tau, colour = "#C21E56") +
+  ggtitle("Autocorrelation: 96% Overlap") +
   xlab(" ") +
   ylab(" ") +
   xlim(-1, 1) +
@@ -1004,7 +1012,8 @@ dens.acv <- ggplot(data = raw.sim.acv.15.tau, aes(x = k.tau, group = Treatment, 
   scale_fill_manual(values = c("#1434A4", "#C21E56")) +
   geom_vline(xintercept = med.const.sims.acv.15.tau, colour = "#1434A4") +
   geom_vline(xintercept = med.warm.sims.acv.15.tau, colour = "#C21E56") +
-  xlab(" ") +
+  
+  ggtitle("Autocovariance: 91% Overlap") +xlab(" ") +
   ylab(" ") +
   xlim(-1, 1) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -1020,6 +1029,7 @@ dens.dt <- ggplot(data = raw.sim.dt.15.tau, aes(x = k.tau, group = Treatment, fi
   scale_fill_manual(values = c("#1434A4", "#C21E56")) +
   geom_vline(xintercept = med.const.sims.dt.15.tau, colour = "#1434A4") +
   geom_vline(xintercept = med.warm.sims.dt.15.tau, colour = "#C21E56") +
+  ggtitle("Decay Time: 93% Overlap") +
   xlab(" ") +
   ylab(" ") +
   xlim(-1, 1) +
@@ -1027,9 +1037,11 @@ dens.dt <- ggplot(data = raw.sim.dt.15.tau, aes(x = k.tau, group = Treatment, fi
         panel.background = element_blank(), axis.line = element_line(colour = "black")) +
   theme(legend.position = "none")
 
-plot_grid(dens.mean, dens.sk, dens.kt, dens.var, dens.cv,
-          dens.id, dens.fdv, dens.ac, dens.acv, dens.dt,
-          nrow = 2, align = "h", labels = "AUTO", label_fontfamily = "serif")
+sim.taus.day1.plot <- plot_grid(dens.mean, dens.sk, dens.kt, dens.var, dens.cv,
+                                dens.id, dens.fdv, dens.ac, dens.acv, dens.dt,
+                                nrow = 2, align = "h"
+                                # , labels = "AUTO", label_fontfamily = "serif"
+                                )
 ```
 
 ```{r}
@@ -1136,7 +1148,7 @@ df <- data.frame(
              rep("Skewness", 8),
              rep("Kurtosis", 8),
              rep("Variance", 8),
-             rep("Co-Efficient of Variance", 8),
+             rep("Co-Efficient of Variation", 8),
              rep("Index of Dispersion", 8),
              rep("First Difference Variance", 8),
              rep("Autocorrelation", 8),
@@ -1702,4 +1714,13 @@ axis(1, at = 1:3, labels = x.labs)
 axis(2, at = c(0, 1))
 legend("topright", legend = c("Constant Tempertaure", "Rising Temperature"),
        pch = 19, col = c("#1434A4", "#C21E56"), cex = 0.8, bty = "n")
+```
+
+# Big Plots
+
+```{r}
+sim.taus.plot <- ggarrange(sim.taus.day20.plot, sim.taus.day30.plot, sim.taus.day1.plot, 
+                           labels = c("Days 20 to 60", "Days 30 to 60", "Days 1 to 60"),
+                           ncol = 1, nrow = 3,
+                           widths = 1)
 ```
