@@ -1662,14 +1662,14 @@ sub7.ts <- sub7$status.sum[1:20]
 sub8.ts <- sub8$status.sum[1:20]
 
 ## Mean, variance
-sub1.ts.mean <- mean(sub1.ts); sub1.ts.var <- var(sub1.ts)
-sub2.ts.mean <- mean(sub2.ts); sub2.ts.var <- var(sub2.ts)
-sub3.ts.mean <- mean(sub3.ts); sub3.ts.var <- var(sub3.ts)
-sub4.ts.mean <- mean(sub4.ts); sub4.ts.var <- var(sub4.ts)
-sub5.ts.mean <- mean(sub5.ts); sub5.ts.var <- var(sub5.ts)
-sub6.ts.mean <- mean(sub6.ts); sub6.ts.var <- var(sub6.ts)
-sub7.ts.mean <- mean(sub7.ts); sub7.ts.var <- var(sub7.ts)
-sub8.ts.mean <- mean(sub8.ts); sub8.ts.var <- var(sub8.ts)
+sub1.ts.mean <- mean(sub1.ts); sub1.ts.var <- var(sub1.ts); print(c(sub1.ts.mean, sub1.ts.var))
+sub2.ts.mean <- mean(sub2.ts); sub2.ts.var <- var(sub2.ts); print(c(sub2.ts.mean, sub2.ts.var))
+sub3.ts.mean <- mean(sub3.ts); sub3.ts.var <- var(sub3.ts); print(c(sub3.ts.mean, sub3.ts.var))
+sub4.ts.mean <- mean(sub4.ts); sub4.ts.var <- var(sub4.ts); print(c(sub4.ts.mean, sub4.ts.var))
+sub5.ts.mean <- mean(sub5.ts); sub5.ts.var <- var(sub5.ts); print(c(sub5.ts.mean, sub5.ts.var))
+sub6.ts.mean <- mean(sub6.ts); sub6.ts.var <- var(sub6.ts); print(c(sub6.ts.mean, sub6.ts.var))
+sub7.ts.mean <- mean(sub7.ts); sub7.ts.var <- var(sub7.ts); print(c(sub7.ts.mean, sub7.ts.var))
+sub8.ts.mean <- mean(sub8.ts); sub8.ts.var <- var(sub8.ts); print(c(sub8.ts.mean, sub8.ts.var))
 
 ## AR(1)
 sub1.ts.ac <- acf(sub1.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2]
@@ -1680,6 +1680,12 @@ sub5.ts.ac <- acf(sub5.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]]
 sub6.ts.ac <- acf(sub6.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2] 
 sub7.ts.ac <- acf(sub7.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2]
 sub8.ts.ac <- acf(sub8.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2] 
+
+
+# take log of mean so when it's exponentiated it's the same and do the same for the variance
+# use lognormal distribution
+# look at formualr for lognroal dist for equation for mean and var
+
 
 ## Function
 AR.func <- function(x.prev, mu, v, ac){
