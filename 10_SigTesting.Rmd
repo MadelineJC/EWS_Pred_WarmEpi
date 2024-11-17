@@ -2403,3 +2403,217 @@ ggplot(ridgeline.var, aes(x = k.tau, y = subpop , group = interaction(method, su
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
 ```
+
+# AR Poisson Process: Messing Around
+
+From Theiler et al. 1992:
+
+$x_t = \alpha_0 + \alpha_1 x_{t-1} + \sigma e_t$
+
+Where:
+
+$\alpha_1 = A(1)$
+
+$\alpha_0 = \mu (1-\alpha_1)$
+
+$\sigma^2 = v(1-\alpha_1^2)$
+
+$e_t$ is given by a Gaussian pseudorandom number generator
+
+## So Far:
+
+```{r}
+# x(t) = ac*x(t-1) + mu(1 - ac) + rnorm(n = 1, mean = 0, sd = var(1 - ac^2))
+
+## Using experimental population one as an example:
+# Data
+data <- read.csv("Kirk_Data/Epidemics_Data_Dryad/Kirk_et_al_epidemics_sampling_data.csv")
+sub1 <- subset(data.sum, population == 1)
+sub1.ts <- sub1$status.sum[1:20]
+sub1.ts.mean <- mean(sub1.ts); sub1.ts.var <- var(sub1.ts); print(c(sub1.ts.mean, sub1.ts.var))
+sub1.ts.ac <- acf(sub1.ts, lag.max = 1, type = "correlation", plot = FALSE)[[1]][2]
+# AR Function
+AR.func <- function(x.prev, mu, v, ac){
+  alpha0 <- mu*(1 - ac)
+  sigma2 <- v*(1 - ac^2)
+  error <- rnorm(n = 1, mean = 0, sd = sigma2)
+  x.next <- ac*x.prev + alpha0 + error
+  return(x.next)
+}
+# Set-up
+ints <- c(1:(1000*119))
+all.seeds <- matrix(ints, nrow = 119)
+# Implementation
+sub1.surr.df <- c()
+for (i in 1:1000){
+  x.prev <- 0
+  seeds <- all.seeds[ , i]
+  surr.ts <- c(x.prev)
+  for (j in 1:119){
+    set.seed(seeds[j])
+    x.next <- AR.func(x.prev = x.prev, mu = sub1.ts.mean, v = sub1.ts.var, ac = sub1.ts.ac)
+    surr.ts <- c(surr.ts, x.next)
+    x.prev <- x.next
+  }
+  sub1.surr.df <- cbind(sub1.surr.df, surr.ts)
+}
+sub1.surr.df <- as.data.frame(sub1.surr.df[seq(3, 120, 3), ])
+# Plotting
+plot(1, type = "n", xlim = c(1, 120), ylim = c(-0.5, 1), xlab = "Day", ylab = "Prevalence")
+for (i in 1:1000){
+  points(x = seq(1, 120, 3), y = sub1.surr.df[ , i], col = "red3")
+}
+points(x = seq(1, 120, 3), y = sub1$status.sum, pch = 16)
+```
+
+## New:
+
+```{r}
+mu = 0; var = 1
+
+plot(density(rnorm(1000, mu, var^2)))
+
+plot(density(rlnorm(1000, mu, var^2)))
+
+exp(mu + (var^2)/2) # Mean
+(exp(var^2) - 1)*(exp(2*mu) + var^2)
+
+sub1.ts.mean; sub1.ts.var
+
+# Probability density with normal distribution
+plot(density(rnorm(1000, 0, sub1.ts.var*(1 - sub1.ts.ac^2))))
+# Probability density with lognormal distribution
+plot(density(rlnorm(1000, 0, ((exp(sub1.ts.var^2) - 1)*(exp(2*0) + sub1.ts.var^2)))))
+# How to add the autocorrelation to the variance?
+
+x <- rlnorm(1000, 1, 1); plot(density(x)); mean(x)
+y <- log(x); plot(density(y)); mean(y)
+
+plot(density(rpois(1000, 0)))
+```
+
+## Marty's Script:
+
+```{r}
+# Parameters
+x_start <- 0.5; # starting value for the autoregressive part
+phi <- 0.2; # autoregressive part
+sigma <- 0.5 # variance for additive white noise
+
+
+TT <- 100 #length of simulation
+
+# Simulation
+x <- c(0.5); # time series for the mean of the auto-regressive process
+y <- rpois(1, exp(x[1])) # start of time series of the number of infections per time step
+for(t in 2:TT){
+	x[t] <- phi*x[t-1] + rnorm(1,0,sigma) # autoregressive part
+	y[t] <- rpois(1,exp(x[t])) # counts for the number of infected
+}
+mean(x); range(x)
+
+plot(density(rpois(1000, exp(mean(x)))), xlim = c(0, 10), ylim = c(0, 3))
+lines(density(rpois(1000, exp(min(x)))), col = "green")
+lines(density(rpois(1000, exp(max(x)))), col = "blue")
+
+plot(1, type = "n", xlim = c(0, 10), ylim = c(0, 4), xlab = "x", ylab = "Density")
+for (t in 1:length(x)){
+  lines(density(rpois(10000, exp(x[t]))))
+}
+
+y
+
+# Likelihood to fit in stan (syntax may be not perfect)
+
+y[1] ~ poisson(exp(x_start))
+
+for (t in 2:TT){
+	x_new[t-1] ~ normal(0,sigma)
+	x[t] <- phi*x[t-1] + x_new[t-1]
+	y[t] ~ poisson(exp(x[t]))
+	
+}
+```
+
+## Maddie's Interpretation:
+
+```{r}
+# Population 1 Example:
+mu <- sub1.ts.mean; var <- sub1.ts.var; ac <- sub1.ts.ac; print(mu); print(var); print(ac)
+TT <- 60 # First half of experiment if samples were taken every day
+x <- c(mu) # Time series for mean of AR process
+y <- rpois(1, exp(x[1])) # Start of time series of number of interactions per time step
+for (t in 2:TT){
+  x[t] <- ac*x[t - 1] + rnorm(1, 0, var*(1 - ac^2)) # AR process
+  y[t] <- rpois(1, exp(x[t])) # Prevalence counts
+}
+range(x)
+plot(1, type = "n", xlim = c(0, 10), ylim = c(0, 2), xlab = "x", ylab = "Density")
+for (t in 1:length(x)){
+  lines(density(rpois(1000, exp(x[t]))))
+}
+
+plot(x = 1:TT, y = y,
+     type = "l", main = "Population 1: Daily Sampling", xlab = "Day", ylab = "Detected Prevalence")
+lines(x = seq(3, 60, 3), y = sub1$status.sum[1:20], col = "red3")
+
+ySamp <- y[seq(3, 60, 3)]
+plot(x = seq(3, 60, 3), y = ySamp,
+     type = "l", main = "Population 1: Every Third Day Sampling", xlab = "Day", ylab = "Detected Prevalence")
+lines(x = seq(3, 60, 3), y = sub1$status.sum[1:20], col = "red3")
+
+# Trying with a warming population, let's say 8:
+mu <- sub8.ts.mean; var <- sub8.ts.var; ac <- sub8.ts.ac; print(mu); print(var); print(ac)
+TT <- 60 # First half of experiment if samples were taken every day
+x <- c(mu) # Time series for mean of AR process
+y <- rpois(1, exp(x[1])) # Start of time series of number of interactions per time step
+for (t in 2:TT){
+  x[t] <- ac*x[t - 1] + rnorm(1, 0, var*(1 - ac^2)) # AR process
+  y[t] <- rpois(1, exp(x[t])) # Prevalence counts
+}
+range(x)
+plot(1, type = "n", xlim = c(0, 10), ylim = c(0, 2), xlab = "x", ylab = "Density")
+for (t in 1:length(x)){
+  lines(density(rpois(1000, exp(x[t]))))
+}
+
+plot(x = 1:TT, y = y,
+     type = "l", main = "Population 8: Daily Sampling", xlab = "Day", ylab = "Detected Prevalence")
+lines(x = seq(3, 60, 3), y = sub1$status.sum[1:20], col = "red3")
+
+ySamp <- y[seq(3, 60, 3)]
+plot(x = seq(3, 60, 3), y = ySamp,
+     type = "l", main = "Population 8: Every Third Day Sampling", xlab = "Day", ylab = "Detected Prevalence")
+lines(x = seq(3, 60, 3), y = sub1$status.sum[1:20], col = "red3")
+```
+
+## Fitting AR Model in Stan
+
+```{r}
+library(rstan)
+
+# Data
+pop8.pre.ts <- sub8$status.sum[1:20]
+N <- length(pop8.pre.ts)
+y <- pop8.pre.ts
+data <- list(N = N, y = y)
+
+# Model
+model <- stan_model("10_SigTesting.stan")
+
+# Fitting
+fit <- sampling(model, data = data, chains = 4, iter = 4000, cores = 4, seed = 123, verbose = FALSE)
+
+# Extract fit
+fit.ex <- extract(fit)
+
+# Check out y_tilde
+y_tilde <- fit.ex$y_tilde
+View(y_tilde)
+length(which(y_tilde[ , 1] == 0)); init.zero <- which(y_tilde[ , 1] == 0); init.zero <- init.zero[1:1000]
+temp <- y_tilde[init.zero , ]
+sub8.surr.null.pois <- list()
+for(i in 1:1000){
+  sub8.surr.null.pois[[i]] <- as.numeric(temp[i, ])
+}
+```
