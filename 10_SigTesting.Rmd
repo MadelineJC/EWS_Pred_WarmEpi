@@ -3301,17 +3301,125 @@ for (i in 1:8){
 }
 ```
 
+### Model Checks
+
+```{r}
+
+
+```
+
 ## Plotting $\mu$ from Model Output
 
 ```{r}
-pop1.fit.ex
-pop2.fit.ex
-pop3.fit.ex
-pop4.fit.ex
-pop5.fit.ex
-pop6.fit.ex
-pop7.fit.ex
-pop8.fit.ex
+pop1.mu <- rstan::extract(pop1.fit, pars = "mu")[[1]]
+pop2.mu <- rstan::extract(pop2.fit, pars = "mu")[[1]]
+pop3.mu <- rstan::extract(pop3.fit, pars = "mu")[[1]]
+pop4.mu <- rstan::extract(pop4.fit, pars = "mu")[[1]]
+pop5.mu <- rstan::extract(pop5.fit, pars = "mu")[[1]]
+pop6.mu <- rstan::extract(pop6.fit, pars = "mu")[[1]]
+pop7.mu <- rstan::extract(pop7.fit, pars = "mu")[[1]]
+pop8.mu <- rstan::extract(pop8.fit, pars = "mu")[[1]]
+
+ts <- factor(1:ncol(pop1.mu), levels = 1:ncol(pop1.mu)); ts <- rep(ts, each = nrow(pop1.mu))
+
+mu.1 <- c()
+for (i in 1:ncol(pop1.mu)){
+  temp <- pop1.mu[ , i]
+  mu.1 <- c(mu.1, temp)
+}
+mu.2 <- c()
+for (i in 1:ncol(pop2.mu)){
+  temp <- pop2.mu[ , i]
+  mu.2 <- c(mu.2, temp)
+}
+mu.3 <- c()
+for (i in 1:ncol(pop3.mu)){
+  temp <- pop3.mu[ , i]
+  mu.3 <- c(mu.3, temp)
+}
+mu.4 <- c()
+for (i in 1:ncol(pop4.mu)){
+  temp <- pop4.mu[ , i]
+  mu.4 <- c(mu.4, temp)
+}
+mu.5 <- c()
+for (i in 1:ncol(pop5.mu)){
+  temp <- pop5.mu[ , i]
+  mu.5 <- c(mu.5, temp)
+}
+mu.6 <- c()
+for (i in 1:ncol(pop6.mu)){
+  temp <- pop6.mu[ , i]
+  mu.6 <- c(mu.6, temp)
+}
+mu.7 <- c()
+for (i in 1:ncol(pop7.mu)){
+  temp <- pop7.mu[ , i]
+  mu.7 <- c(mu.7, temp)
+}
+mu.8 <- c()
+for (i in 1:ncol(pop8.mu)){
+  temp <- pop8.mu[ , i]
+  mu.8 <- c(mu.8, temp)
+}
+
+df <- data.frame(ts, mu.1, mu.2, mu.3, mu.4, mu.5, mu.6, mu.7, mu.8)
+
+ggplot(df, aes(x = mu.1, y = ts, fill = ts)) +
+  geom_density_ridges(quantile_lines = TRUE, quantile_fun = function(mu.1,...)mean(mu.1)) +
+  theme_ridges() + 
+  xlim(-10, 3) +
+  labs(title = "Population 1 (Control)", x = "Estimated Values of µ", y = "Time Step") +
+  theme(legend.position = "none")
+
+ggplot(df, aes(x = mu.2, y = ts, fill = ts)) +
+  geom_density_ridges(quantile_lines = TRUE, quantile_fun = function(mu.2,...)mean(mu.2)) +
+  theme_ridges() + 
+  xlim(-10, 3) +
+  labs(title = "Population 2 (Control)", x = "Estimated Values of µ", y = "Time Step") +
+  theme(legend.position = "none")
+
+ggplot(df, aes(x = mu.3, y = ts, fill = ts)) +
+  geom_density_ridges(quantile_lines = TRUE, quantile_fun = function(mu.3,...)mean(mu.3)) +
+  theme_ridges() + 
+  xlim(-10, 3) +
+  labs(title = "Population 3 (Control)", x = "Estimated Values of µ", y = "Time Step") +
+  theme(legend.position = "none")
+
+ggplot(df, aes(x = mu.4, y = ts, fill = ts)) +
+  geom_density_ridges(quantile_lines = TRUE, quantile_fun = function(mu.4,...)mean(mu.4)) +
+  theme_ridges() + 
+  xlim(-10, 3) +
+  labs(title = "Population 4 (Control)", x = "Estimated Values of µ", y = "Time Step") +
+  theme(legend.position = "none")
+
+ggplot(df, aes(x = mu.5, y = ts, fill = ts)) +
+  geom_density_ridges(quantile_lines = TRUE, quantile_fun = function(mu.5,...)mean(mu.5)) +
+  theme_ridges() + 
+  xlim(-10, 3) +
+  labs(title = "Population 5 (Test)", x = "Estimated Values of µ", y = "Time Step") +
+  theme(legend.position = "none")
+
+ggplot(df, aes(x = mu.6, y = ts, fill = ts)) +
+  geom_density_ridges(quantile_lines = TRUE, quantile_fun = function(mu.6,...)mean(mu.6)) +
+  theme_ridges() + 
+  xlim(-10, 3) +
+  labs(title = "Population 6 (Test)", x = "Estimated Values of µ", y = "Time Step") +
+  theme(legend.position = "none")
+
+ggplot(df, aes(x = mu.7, y = ts, fill = ts)) +
+  geom_density_ridges(quantile_lines = TRUE, quantile_fun = function(mu.7,...)mean(mu.7)) +
+  theme_ridges() + 
+  xlim(-10, 3) +
+  labs(title = "Population 7 (Test)", x = "Estimated Values of µ", y = "Time Step") +
+  theme(legend.position = "none")
+
+ggplot(df, aes(x = mu.8, y = ts, fill = ts)) +
+  geom_density_ridges(quantile_lines = TRUE, quantile_fun = function(mu.8,...)mean(mu.8)) +
+  theme_ridges() + 
+  xlim(-10, 3) +
+  labs(title = "Population 8 (Test)", x = "Estimated Values of µ", y = "Time Step") +
+  theme(legend.position = "none")
 ```
 
 
