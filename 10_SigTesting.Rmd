@@ -3036,3 +3036,283 @@ ggplot(ridgeline.var, aes(x = k.tau, y = subpop , group = interaction(method, su
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
 ```
+
+# Troubleshooting
+
+## Running the Model for Longer
+
+```{r}
+# Fitting
+pop1.fit <- rstan::sampling(model, data = pop1.data, chains = 4, iter = 20000, cores = 4, seed = 123, verbose = FALSE)
+pop2.fit <- rstan::sampling(model, data = pop2.data, chains = 4, iter = 20000, cores = 4, seed = 123, verbose = FALSE)
+pop3.fit <- rstan::sampling(model, data = pop3.data, chains = 4, iter = 20000, cores = 4, seed = 123, verbose = FALSE)
+pop4.fit <- rstan::sampling(model, data = pop4.data, chains = 4, iter = 20000, cores = 4, seed = 123, verbose = FALSE)
+pop5.fit <- rstan::sampling(model, data = pop5.data, chains = 4, iter = 20000, cores = 4, seed = 123, verbose = FALSE)
+pop6.fit <- rstan::sampling(model, data = pop6.data, chains = 4, iter = 20000, cores = 4, seed = 123, verbose = FALSE)
+pop7.fit <- rstan::sampling(model, data = pop7.data, chains = 4, iter = 20000, cores = 4, seed = 123, verbose = FALSE)
+pop8.fit <- rstan::sampling(model, data = pop8.data, chains = 4, iter = 20000, cores = 4, seed = 123, verbose = FALSE)
+
+# Extract fit
+pop1.fit.ex <- rstan::extract(pop1.fit)
+pop2.fit.ex <- rstan::extract(pop2.fit)
+pop3.fit.ex <- rstan::extract(pop3.fit)
+pop4.fit.ex <- rstan::extract(pop4.fit)
+pop5.fit.ex <- rstan::extract(pop5.fit)
+pop6.fit.ex <- rstan::extract(pop6.fit)
+pop7.fit.ex <- rstan::extract(pop7.fit)
+pop8.fit.ex <- rstan::extract(pop8.fit)
+
+# Check out y_tilde
+y_tilde <- pop1.fit.ex$y_tilde
+sub1.surr.null <- list()
+for(i in 1:20000){
+  sub1.surr.null[[i]] <- as.numeric(y_tilde[i, ])
+}
+
+y_tilde <- pop2.fit.ex$y_tilde
+sub1.surr.null <- list()
+for(i in 1:20000){
+  sub2.surr.null[[i]] <- as.numeric(y_tilde[i, ])
+}
+
+y_tilde <- pop3.fit.ex$y_tilde
+sub1.surr.null <- list()
+for(i in 1:20000){
+  sub3.surr.null[[i]] <- as.numeric(y_tilde[i, ])
+}
+
+y_tilde <- pop4.fit.ex$y_tilde
+sub1.surr.null <- list()
+for(i in 1:20000){
+  sub4.surr.null[[i]] <- as.numeric(y_tilde[i, ])
+}
+
+y_tilde <- pop5.fit.ex$y_tilde
+sub1.surr.null <- list()
+for(i in 1:20000){
+  sub5.surr.null[[i]] <- as.numeric(y_tilde[i, ])
+}
+
+y_tilde <- pop6.fit.ex$y_tilde
+sub1.surr.null <- list()
+for(i in 1:20000){
+  sub6.surr.null[[i]] <- as.numeric(y_tilde[i, ])
+}
+
+y_tilde <- pop7.fit.ex$y_tilde
+sub1.surr.null <- list()
+for(i in 1:20000){
+  sub7.surr.null[[i]] <- as.numeric(y_tilde[i, ])
+}
+
+y_tilde <- pop8.fit.ex$y_tilde
+sub1.surr.null <- list()
+for(i in 1:20000){
+  sub8.surr.null[[i]] <- as.numeric(y_tilde[i, ])
+}
+```
+
+```{r}
+sub1.surr.null.mean <- list(); sub1.surr.null.sd <- list()
+sub2.surr.null.mean <- list(); sub2.surr.null.sd <- list()
+sub3.surr.null.mean <- list(); sub3.surr.null.sd <- list()
+sub4.surr.null.mean <- list(); sub4.surr.null.sd <- list()
+sub5.surr.null.mean <- list(); sub5.surr.null.sd <- list()
+sub6.surr.null.mean <- list(); sub6.surr.null.sd <- list()
+sub7.surr.null.mean <- list(); sub7.surr.null.sd <- list()
+sub8.surr.null.mean <- list(); sub8.surr.null.sd <- list()
+
+for (i in 1:length(sub1.surr.null)){
+  sub1.surr.null.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub1.surr.null[[i]], window = 5, step = 1)
+  sub1.surr.null.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub1.surr.null[[i]], window = 5, step = 1)
+  
+  sub2.surr.null.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub2.surr.null[[i]], window = 5, step = 1)
+  sub2.surr.null.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub2.surr.null[[i]], window = 5, step = 1)
+  
+  sub3.surr.null.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub3.surr.null[[i]], window = 5, step = 1)
+  sub3.surr.null.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub3.surr.null[[i]], window = 5, step = 1)
+  
+  sub4.surr.null.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub4.surr.null[[i]], window = 5, step = 1)
+  sub4.surr.null.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub4.surr.null[[i]], window = 5, step = 1)
+  
+  sub5.surr.null.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub5.surr.null[[i]], window = 5, step = 1)
+  sub5.surr.null.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub5.surr.null[[i]], window = 5, step = 1)
+  
+  sub6.surr.null.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub6.surr.null[[i]], window = 5, step = 1)
+  sub6.surr.null.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub6.surr.null[[i]], window = 5, step = 1)
+  
+  sub7.surr.null.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub7.surr.null[[i]], window = 5, step = 1)
+  sub7.surr.null.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub7.surr.null[[i]], window = 5, step = 1)
+  
+  sub8.surr.null.mean[[i]] <- SlidingWindow(FUN = "mean", data = sub8.surr.null[[i]], window = 5, step = 1)
+  sub8.surr.null.sd[[i]] <- SlidingWindow(FUN = "sd", data = sub8.surr.null[[i]], window = 5, step = 1)
+}
+```
+
+```{r}
+sub1.surr.null.var <- list(); sub2.surr.null.var <- list(); sub3.surr.null.var <- list(); sub4.surr.null.var <- list()
+sub5.surr.null.var <- list(); sub6.surr.null.var <- list(); sub7.surr.null.var <- list(); sub8.surr.null.var <- list()
+for (i in 1:20000){
+  sub1.surr.null.var[[i]] <- sub1.surr.null.sd[[i]]^2
+  sub2.surr.null.var[[i]] <- sub2.surr.null.sd[[i]]^2
+  sub3.surr.null.var[[i]] <- sub3.surr.null.sd[[i]]^2
+  sub4.surr.null.var[[i]] <- sub4.surr.null.sd[[i]]^2
+  sub5.surr.null.var[[i]] <- sub5.surr.null.sd[[i]]^2
+  sub6.surr.null.var[[i]] <- sub6.surr.null.sd[[i]]^2
+  sub7.surr.null.var[[i]] <- sub7.surr.null.sd[[i]]^2
+  sub8.surr.null.var[[i]] <- sub8.surr.null.sd[[i]]^2
+}
+```
+
+```{r}
+sub1.surr.null.id <- list(); sub2.surr.null.id <- list(); sub3.surr.null.id <- list(); sub4.surr.null.id <- list()
+sub5.surr.null.id <- list(); sub6.surr.null.id <- list(); sub7.surr.null.id <- list(); sub8.surr.null.id <- list()
+for (i in 1:20000){
+  sub1.surr.null.id[[i]] <- sub1.surr.null.var[[i]]/(sub1.surr.null.mean[[i]] + 1e-10)
+  sub2.surr.null.id[[i]] <- sub2.surr.null.var[[i]]/(sub2.surr.null.mean[[i]] + 1e-10)
+  sub3.surr.null.id[[i]] <- sub3.surr.null.var[[i]]/(sub3.surr.null.mean[[i]] + 1e-10)
+  sub4.surr.null.id[[i]] <- sub4.surr.null.var[[i]]/(sub4.surr.null.mean[[i]] + 1e-10)
+  sub5.surr.null.id[[i]] <- sub5.surr.null.var[[i]]/(sub5.surr.null.mean[[i]] + 1e-10)
+  sub6.surr.null.id[[i]] <- sub6.surr.null.var[[i]]/(sub6.surr.null.mean[[i]] + 1e-10)
+  sub7.surr.null.id[[i]] <- sub7.surr.null.var[[i]]/(sub7.surr.null.mean[[i]] + 1e-10)
+  sub8.surr.null.id[[i]] <- sub8.surr.null.var[[i]]/(sub8.surr.null.mean[[i]] + 1e-10)
+}
+```
+
+```{r}
+sub1.surr.null.mean.taus <- c(); sub2.surr.null.mean.taus <- c(); sub3.surr.null.mean.taus <- c(); sub4.surr.null.mean.taus <- c()
+sub5.surr.null.mean.taus <- c(); sub6.surr.null.mean.taus <- c(); sub7.surr.null.mean.taus <- c(); sub8.surr.null.mean.taus <- c()
+t <- seq(1, 15, 1)
+for (i in 1:20000){
+  sub1.surr.null.mean.taus[i] <- cor(sub1.surr.null.mean[[i]], t, method = "kendall")
+  sub2.surr.null.mean.taus[i] <- cor(sub2.surr.null.mean[[i]], t, method = "kendall")
+  sub3.surr.null.mean.taus[i] <- cor(sub3.surr.null.mean[[i]], t, method = "kendall")
+  sub4.surr.null.mean.taus[i] <- cor(sub4.surr.null.mean[[i]], t, method = "kendall")
+  sub5.surr.null.mean.taus[i] <- cor(sub5.surr.null.mean[[i]], t, method = "kendall")
+  sub6.surr.null.mean.taus[i] <- cor(sub6.surr.null.mean[[i]], t, method = "kendall")
+  sub7.surr.null.mean.taus[i] <- cor(sub7.surr.null.mean[[i]], t, method = "kendall")
+  sub8.surr.null.mean.taus[i] <- cor(sub8.surr.null.mean[[i]], t, method = "kendall")
+}
+```
+
+```{r}
+sub1.surr.null.var.taus <- c(); sub2.surr.null.var.taus <- c(); sub3.surr.null.var.taus <- c(); sub4.surr.null.var.taus <- c()
+sub5.surr.null.var.taus <- c(); sub6.surr.null.var.taus <- c(); sub7.surr.null.var.taus <- c(); sub8.surr.null.var.taus <- c()
+t <- seq(1, 15, 1)
+for (i in 1:20000){
+  sub1.surr.null.var.taus[i] <- cor(sub1.surr.null.var[[i]], t, method = "kendall")
+  sub2.surr.null.var.taus[i] <- cor(sub2.surr.null.var[[i]], t, method = "kendall")
+  sub3.surr.null.var.taus[i] <- cor(sub3.surr.null.var[[i]], t, method = "kendall")
+  sub4.surr.null.var.taus[i] <- cor(sub4.surr.null.var[[i]], t, method = "kendall")
+  sub5.surr.null.var.taus[i] <- cor(sub5.surr.null.var[[i]], t, method = "kendall")
+  sub6.surr.null.var.taus[i] <- cor(sub6.surr.null.var[[i]], t, method = "kendall")
+  sub7.surr.null.var.taus[i] <- cor(sub7.surr.null.var[[i]], t, method = "kendall")
+  sub8.surr.null.var.taus[i] <- cor(sub8.surr.null.var[[i]], t, method = "kendall")
+}
+```
+
+```{r}
+sub1.surr.null.id.taus <- c(); sub2.surr.null.id.taus <- c(); sub3.surr.null.id.taus <- c(); sub4.surr.null.id.taus <- c()
+sub5.surr.null.id.taus <- c(); sub6.surr.null.id.taus <- c(); sub7.surr.null.id.taus <- c(); sub8.surr.null.id.taus <- c()
+t <- seq(1, 15, 1)
+for (i in 1:20000){
+  sub1.surr.null.id.taus[i] <- cor(sub1.surr.null.id[[i]], t, method = "kendall")
+  sub2.surr.null.id.taus[i] <- cor(sub2.surr.null.id[[i]], t, method = "kendall")
+  sub3.surr.null.id.taus[i] <- cor(sub3.surr.null.id[[i]], t, method = "kendall")
+  sub4.surr.null.id.taus[i] <- cor(sub4.surr.null.id[[i]], t, method = "kendall")
+  sub5.surr.null.id.taus[i] <- cor(sub5.surr.null.id[[i]], t, method = "kendall")
+  sub6.surr.null.id.taus[i] <- cor(sub6.surr.null.id[[i]], t, method = "kendall")
+  sub7.surr.null.id.taus[i] <- cor(sub7.surr.null.id[[i]], t, method = "kendall")
+  sub8.surr.null.id.taus[i] <- cor(sub8.surr.null.id[[i]], t, method = "kendall")
+}
+```
+
+```{r}
+## Mean
+surr.null.mean.taus <- list(
+  sub1.surr.null.mean.taus,
+  sub2.surr.null.mean.taus,
+  sub3.surr.null.mean.taus,
+  sub4.surr.null.mean.taus,
+  sub5.surr.null.mean.taus,
+  sub6.surr.null.mean.taus,
+  sub7.surr.null.mean.taus,
+  sub8.surr.null.mean.taus
+)
+cols <- c(rep("#A7C7E7", 4), rep("#F6799D", 4))
+mains <- c("pop1.mean", "pop2.mean", "pop3.mean", "pop4.mean", "pop5.mean", "pop6.mean", "pop7.mean", "pop8.mean")
+true.taus <- c(constant.mean.tau, warming.mean.tau)
+vline.cols <- c(rep("#1434A4", 4), rep("#C21E56", 4))
+par(mfrow = c(2, 4))
+for (i in 1:8){
+  hist(surr.null.mean.taus[[i]], 
+     col = cols[i], border = cols[i],
+     xlim = c(-1, 1), ylim = c(1, 2500),
+     main = mains[i], xlab = "")
+  abline(v = true.taus[i], col = vline.cols[i], lwd = 2)
+}
+
+## Variance
+surr.null.var.taus <- list(
+  sub1.surr.null.var.taus,
+  sub2.surr.null.var.taus,
+  sub3.surr.null.var.taus,
+  sub4.surr.null.var.taus,
+  sub5.surr.null.var.taus,
+  sub6.surr.null.var.taus,
+  sub7.surr.null.var.taus,
+  sub8.surr.null.var.taus
+)
+cols <- c(rep("#A7C7E7", 4), rep("#F6799D", 4))
+mains <- c("pop1.var", "pop2.var", "pop3.var", "pop4.var", "pop5.var", "pop6.var", "pop7.var", "pop8.var")
+true.taus <- c(constant.var.tau, warming.var.tau)
+vline.cols <- c(rep("#1434A4", 4), rep("#C21E56", 4))
+par(mfrow = c(2, 4))
+for (i in 1:8){
+  hist(surr.null.var.taus[[i]], 
+     col = cols[i], border = cols[i],
+     xlim = c(-1, 1), ylim = c(1, 2500),
+     main = mains[i], xlab = "")
+  abline(v = true.taus[i], col = vline.cols[i], lwd = 2)
+}
+
+## Index of Dispersion
+surr.null.id.taus <- list(
+  sub1.surr.null.id.taus,
+  sub2.surr.null.id.taus,
+  sub3.surr.null.id.taus,
+  sub4.surr.null.id.taus,
+  sub5.surr.null.id.taus,
+  sub6.surr.null.id.taus,
+  sub7.surr.null.id.taus,
+  sub8.surr.null.id.taus
+)
+cols <- c(rep("#A7C7E7", 4), rep("#F6799D", 4))
+mains <- c("pop1.id", "pop2.id", "pop3.id", "pop4.id", "pop5.id", "pop6.id", "pop7.id", "pop8.id")
+true.taus <- c(constant.id.tau, warming.id.tau)
+vline.cols <- c(rep("#1434A4", 4), rep("#C21E56", 4))
+par(mfrow = c(2, 4))
+for (i in 1:8){
+  hist(surr.null.id.taus[[i]], 
+     col = cols[i], border = cols[i],
+     xlim = c(-1, 1), ylim = c(1, 2500),
+     main = mains[i], xlab = "")
+  abline(v = true.taus[i], col = vline.cols[i], lwd = 2)
+}
+```
+
+## Plotting $\mu$ from Model Output
+
+```{r}
+pop1.fit.ex
+pop2.fit.ex
+pop3.fit.ex
+pop4.fit.ex
+pop5.fit.ex
+pop6.fit.ex
+pop7.fit.ex
+pop8.fit.ex
+```
+
+
+
