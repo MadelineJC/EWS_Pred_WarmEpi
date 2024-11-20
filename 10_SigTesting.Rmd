@@ -14,6 +14,9 @@ require(moments)
 require(tidyverse)
 require(earlywarnings)
 library(ggridges)
+library(bayesplot)
+library(ggplot2)
+library(rstan)
 ```
 
 # Literature
@@ -60,7 +63,7 @@ What else does the literature say?
 
 -   **Dakos et al. 2012:** "Here, we suggest that the simplest null hypothesis one could imagine is that the trend estimates of the indicators are due to chance alone. To test this null hypothesis, we produced surrogate datasets to compare trend estimates in the original record with trend estimates obtained from records that have the same correlation structure and probability distribution as the original dataset, but that were produced by linear stationary processes (Dakos et al. 2008). **Surrogate datasets can be obtained by different approaches, including generating data with the same Fourier spectrum and amplitudes (Dakos et al. 2008; Theiler et al. 1992), or generating data from the simplest fitted linear first-order autoregressive model**. Although these are only some of the ways surrogate data can be produced to test for trends (Halley and Kugiumtzis 2011), we used here a more general approach. **We fit the best linear autoregressive moving average model (ARMA(p,q)) based on AIC to residuals (after detrending/filtering), then generated 1,000 simulated datasets of the same length as the residual time series. For each simulated dataset, we estimated the trend of the rolling window metric (in particular we only tested for autocorrelation at-lag-1, standard deviation, and skewness) using Kendall's** $\tau$**. We compared the Kendall** $\tau$ of the original data **to the number of cases in which the statistic was equal to or smaller than the estimates of the simulated records, P (**$\tau^* \geqslant \tau$**)**. We estimated this probability for all combinations of bandwidth and rolling window size as we did for the sensitivity analysis."
 
-# 1. Resampling Time Series
+# (1) Resampling Time Series
 
 From Harris et al. (2020):
 
@@ -1446,7 +1449,7 @@ resamp.id.pvals <- c(sub1.id.fpr.gt, sub2.id.fpr.gt, sub3.id.fpr.gt, sub4.id.fpr
                        sub5.id.fpr.gt, sub6.id.fpr.gt, sub7.id.fpr.gt, sub8.id.fpr.gt)
 ```
 
-# 2. Modified Mann-Kendall Test
+# (2) Modified Mann-Kendall Test
 
 I think you apply this, instead of just calculating Kendall's $\tau$ normally? Kind of unclear. Let's see!
 
@@ -1635,7 +1638,7 @@ mmk.var.pvals <- p.vals$var
 mmk.id.pvals <- p.vals$id
 ```
 
-# 3. Surrogate Time Series via AR-1 Model
+# (3) Surrogate Time Series via AR-1 Model
 
 ## Generating Surrogate Time Series
 
@@ -2404,7 +2407,7 @@ ggplot(ridgeline.var, aes(x = k.tau, y = subpop , group = interaction(method, su
         panel.background = element_blank(), axis.line = element_line(colour = "black"))
 ```
 
-# 4. AR Poisson Process with Poisson Distribution
+# (4) AR Poisson Process with Poisson Distribution
 
 From Theiler et al. 1992:
 
@@ -2423,7 +2426,6 @@ $e_t$ is given by a Gaussian pseudorandom number generator
 ## Compiling Model
 
 ```{r}
-library(rstan)
 model <- stan_model("10_SigTesting.stan")
 ```
 
@@ -2488,80 +2490,72 @@ pop8.fit.ex <- rstan::extract(pop8.fit)
 
 # Check out y_tilde
 y_tilde <- pop1.fit.ex$y_tilde
-# length(which(y_tilde[ , 1] == 0)); init.zero <- which(y_tilde[ , 1] == 0); init.zero <- init.zero[1:1000]
-# temp <- y_tilde[init.zero , ]
-select.rows <- c(sample(nrow(y_tilde), 1000, replace = FALSE))
+length(which(y_tilde[ , 1] == 0)); init.zero <- which(y_tilde[ , 1] == 0); init.zero <- init.zero[1:1000]
 temp <- y_tilde[init.zero , ]
+# select.rows <- c(sample(nrow(y_tilde), 1000, replace = FALSE))
 sub1.surr.null <- list()
 for(i in 1:1000){
   sub1.surr.null[[i]] <- as.numeric(temp[i, ])
 }
 
 y_tilde <- pop2.fit.ex$y_tilde
-# length(which(y_tilde[ , 1] == 0)); init.zero <- which(y_tilde[ , 1] == 0); init.zero <- init.zero[1:1000]
-# temp <- y_tilde[init.zero , ]
-select.rows <- c(sample(nrow(y_tilde), 1000, replace = FALSE))
+length(which(y_tilde[ , 1] == 0)); init.zero <- which(y_tilde[ , 1] == 0); init.zero <- init.zero[1:1000]
 temp <- y_tilde[init.zero , ]
+# select.rows <- c(sample(nrow(y_tilde), 1000, replace = FALSE))
 sub2.surr.null <- list()
 for(i in 1:1000){
   sub2.surr.null[[i]] <- as.numeric(temp[i, ])
 }
 
 y_tilde <- pop3.fit.ex$y_tilde
-# length(which(y_tilde[ , 1] == 0)); init.zero <- which(y_tilde[ , 1] == 0); init.zero <- init.zero[1:1000]
-# temp <- y_tilde[init.zero , ]
-select.rows <- c(sample(nrow(y_tilde), 1000, replace = FALSE))
+length(which(y_tilde[ , 1] == 0)); init.zero <- which(y_tilde[ , 1] == 0); init.zero <- init.zero[1:1000]
 temp <- y_tilde[init.zero , ]
+# select.rows <- c(sample(nrow(y_tilde), 1000, replace = FALSE))
 sub3.surr.null <- list()
 for(i in 1:1000){
   sub3.surr.null[[i]] <- as.numeric(temp[i, ])
 }
 
 y_tilde <- pop4.fit.ex$y_tilde
-# length(which(y_tilde[ , 1] == 0)); init.zero <- which(y_tilde[ , 1] == 0); init.zero <- init.zero[1:1000]
-# temp <- y_tilde[init.zero , ]
-select.rows <- c(sample(nrow(y_tilde), 1000, replace = FALSE))
+length(which(y_tilde[ , 1] == 0)); init.zero <- which(y_tilde[ , 1] == 0); init.zero <- init.zero[1:1000]
 temp <- y_tilde[init.zero , ]
+# select.rows <- c(sample(nrow(y_tilde), 1000, replace = FALSE))
 sub4.surr.null <- list()
 for(i in 1:1000){
   sub4.surr.null[[i]] <- as.numeric(temp[i, ])
 }
 
 y_tilde <- pop5.fit.ex$y_tilde
-# length(which(y_tilde[ , 1] == 0)); init.zero <- which(y_tilde[ , 1] == 0); init.zero <- init.zero[1:1000]
-# temp <- y_tilde[init.zero , ]
-select.rows <- c(sample(nrow(y_tilde), 1000, replace = FALSE))
+length(which(y_tilde[ , 1] == 0)); init.zero <- which(y_tilde[ , 1] == 0); init.zero <- init.zero[1:1000]
 temp <- y_tilde[init.zero , ]
+# select.rows <- c(sample(nrow(y_tilde), 1000, replace = FALSE))
 sub5.surr.null <- list()
 for(i in 1:1000){
   sub5.surr.null[[i]] <- as.numeric(temp[i, ])
 }
 
 y_tilde <- pop6.fit.ex$y_tilde
-# length(which(y_tilde[ , 1] == 0)); init.zero <- which(y_tilde[ , 1] == 0); init.zero <- init.zero[1:1000]
-# temp <- y_tilde[init.zero , ]
-select.rows <- c(sample(nrow(y_tilde), 1000, replace = FALSE))
+length(which(y_tilde[ , 1] == 0)); init.zero <- which(y_tilde[ , 1] == 0); init.zero <- init.zero[1:1000]
 temp <- y_tilde[init.zero , ]
+# select.rows <- c(sample(nrow(y_tilde), 1000, replace = FALSE))
 sub6.surr.null <- list()
 for(i in 1:1000){
   sub6.surr.null[[i]] <- as.numeric(temp[i, ])
 }
 
 y_tilde <- pop7.fit.ex$y_tilde
-# length(which(y_tilde[ , 1] == 0)); init.zero <- which(y_tilde[ , 1] == 0); init.zero <- init.zero[1:1000]
-# temp <- y_tilde[init.zero , ]
-select.rows <- c(sample(nrow(y_tilde), 1000, replace = FALSE))
+length(which(y_tilde[ , 1] == 0)); init.zero <- which(y_tilde[ , 1] == 0); init.zero <- init.zero[1:1000]
 temp <- y_tilde[init.zero , ]
+# select.rows <- c(sample(nrow(y_tilde), 1000, replace = FALSE))
 sub7.surr.null <- list()
 for(i in 1:1000){
   sub7.surr.null[[i]] <- as.numeric(temp[i, ])
 }
 
 y_tilde <- pop8.fit.ex$y_tilde
-# length(which(y_tilde[ , 1] == 0)); init.zero <- which(y_tilde[ , 1] == 0); init.zero <- init.zero[1:1000]
-# temp <- y_tilde[init.zero , ]
-select.rows <- c(sample(nrow(y_tilde), 1000, replace = FALSE))
+length(which(y_tilde[ , 1] == 0)); init.zero <- which(y_tilde[ , 1] == 0); init.zero <- init.zero[1:1000]
 temp <- y_tilde[init.zero , ]
+# select.rows <- c(sample(nrow(y_tilde), 1000, replace = FALSE))
 sub8.surr.null <- list()
 for(i in 1:1000){
   sub8.surr.null[[i]] <- as.numeric(temp[i, ])
@@ -3039,7 +3033,7 @@ ggplot(ridgeline.var, aes(x = k.tau, y = subpop , group = interaction(method, su
 
 # Troubleshooting
 
-## Running the Model for Longer
+## (1) Running the Model for Longer
 
 ```{r}
 # Fitting
@@ -3304,11 +3298,255 @@ for (i in 1:8){
 ### Model Checks
 
 ```{r}
+## TRACE PLOTS
+color_scheme_set("brightblue")
 
+mcmc_trace(pop1.fit,  pars = c("mu[1]", "mu[2]", "mu[3]", "mu[4]", "mu[5]",
+                               "mu[6]", "mu[7]", "mu[8]", "mu[9]", "mu[10]",
+                               "mu[11]", "mu[12]", "mu[13]", "mu[14]", "mu[15]",
+                               "mu[16]", "mu[17]", "mu[18]", "mu[19]", "mu[20]")) +
+  labs(title = "Population 1") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
 
+mcmc_trace(pop1.fit,  pars = c("ac", "sigma")) +
+  labs(title = "Population 1") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+mcmc_trace(pop1.fit,  pars = c("mu[1]", "mu[2]", "mu[3]", "mu[4]", "mu[5]",
+                               "mu[6]", "mu[7]", "mu[8]", "mu[9]", "mu[10]",
+                               "mu[11]", "mu[12]", "mu[13]", "mu[14]", "mu[15]",
+                               "mu[16]", "mu[17]", "mu[18]", "mu[19]", "mu[20]")) +
+  labs(title = "Population 2") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+mcmc_trace(pop2.fit,  pars = c("ac", "sigma")) +
+  labs(title = "Population 2") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+mcmc_trace(pop1.fit,  pars = c("mu[1]", "mu[2]", "mu[3]", "mu[4]", "mu[5]",
+                               "mu[6]", "mu[7]", "mu[8]", "mu[9]", "mu[10]",
+                               "mu[11]", "mu[12]", "mu[13]", "mu[14]", "mu[15]",
+                               "mu[16]", "mu[17]", "mu[18]", "mu[19]", "mu[20]")) +
+  labs(title = "Population 3") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+mcmc_trace(pop3.fit,  pars = c("ac", "sigma")) +
+  labs(title = "Population 3") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+mcmc_trace(pop4.fit,  pars = c("mu[1]", "mu[2]", "mu[3]", "mu[4]", "mu[5]",
+                               "mu[6]", "mu[7]", "mu[8]", "mu[9]", "mu[10]",
+                               "mu[11]", "mu[12]", "mu[13]", "mu[14]", "mu[15]",
+                               "mu[16]", "mu[17]", "mu[18]", "mu[19]", "mu[20]")) +
+  labs(title = "Population 4") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+mcmc_trace(pop4.fit,  pars = c("ac", "sigma")) +
+  labs(title = "Population 4") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+color_scheme_set("pink")
+
+mcmc_trace(pop5.fit,  pars = c("mu[1]", "mu[2]", "mu[3]", "mu[4]", "mu[5]",
+                               "mu[6]", "mu[7]", "mu[8]", "mu[9]", "mu[10]",
+                               "mu[11]", "mu[12]", "mu[13]", "mu[14]", "mu[15]",
+                               "mu[16]", "mu[17]", "mu[18]", "mu[19]", "mu[20]")) +
+  labs(title = "Population 5") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+mcmc_trace(pop5.fit,  pars = c("ac", "sigma")) +
+  labs(title = "Population 5") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+mcmc_trace(pop6.fit,  pars = c("mu[1]", "mu[2]", "mu[3]", "mu[4]", "mu[5]",
+                               "mu[6]", "mu[7]", "mu[8]", "mu[9]", "mu[10]",
+                               "mu[11]", "mu[12]", "mu[13]", "mu[14]", "mu[15]",
+                               "mu[16]", "mu[17]", "mu[18]", "mu[19]", "mu[20]")) +
+  labs(title = "Population 6") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+mcmc_trace(pop6.fit,  pars = c("ac", "sigma")) +
+  labs(title = "Population 6") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+mcmc_trace(pop7.fit,  pars = c("mu[1]", "mu[2]", "mu[3]", "mu[4]", "mu[5]",
+                               "mu[6]", "mu[7]", "mu[8]", "mu[9]", "mu[10]",
+                               "mu[11]", "mu[12]", "mu[13]", "mu[14]", "mu[15]",
+                               "mu[16]", "mu[17]", "mu[18]", "mu[19]", "mu[20]")) +
+  labs(title = "Population 7") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+mcmc_trace(pop7.fit,  pars = c("ac", "sigma")) +
+  labs(title = "Population 7") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+mcmc_trace(pop8.fit,  pars = c("mu[1]", "mu[2]", "mu[3]", "mu[4]", "mu[5]",
+                               "mu[6]", "mu[7]", "mu[8]", "mu[9]", "mu[10]",
+                               "mu[11]", "mu[12]", "mu[13]", "mu[14]", "mu[15]",
+                               "mu[16]", "mu[17]", "mu[18]", "mu[19]", "mu[20]")) +
+  labs(title = "Population 8") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+mcmc_trace(pop8.fit,  pars = c("ac", "sigma")) +
+  labs(title = "Population 8") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+## AREA PLOTS
+color_scheme_set("brightblue")
+
+mcmc_areas(pop1.fit,
+           pars = c("mu[1]", "mu[2]", "mu[3]", "mu[4]", "mu[5]",
+                    "mu[6]", "mu[7]", "mu[8]", "mu[9]", "mu[10]",
+                    "mu[11]", "mu[12]", "mu[13]", "mu[14]", "mu[15]",
+                    "mu[16]", "mu[17]", "mu[18]", "mu[19]", "mu[20]"),
+           prob = 0.8) +
+  labs(title = "Population 1") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+mcmc_areas(pop2.fit,
+           pars = c("mu[1]", "mu[2]", "mu[3]", "mu[4]", "mu[5]",
+                    "mu[6]", "mu[7]", "mu[8]", "mu[9]", "mu[10]",
+                    "mu[11]", "mu[12]", "mu[13]", "mu[14]", "mu[15]",
+                    "mu[16]", "mu[17]", "mu[18]", "mu[19]", "mu[20]"),
+           prob = 0.8) +
+  labs(title = "Population 2") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+mcmc_areas(pop3.fit,
+           pars = c("mu[1]", "mu[2]", "mu[3]", "mu[4]", "mu[5]",
+                    "mu[6]", "mu[7]", "mu[8]", "mu[9]", "mu[10]",
+                    "mu[11]", "mu[12]", "mu[13]", "mu[14]", "mu[15]",
+                    "mu[16]", "mu[17]", "mu[18]", "mu[19]", "mu[20]"),
+           prob = 0.8) +
+  labs(title = "Population 3") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+mcmc_areas(pop4.fit,
+           pars = c("mu[1]", "mu[2]", "mu[3]", "mu[4]", "mu[5]",
+                    "mu[6]", "mu[7]", "mu[8]", "mu[9]", "mu[10]",
+                    "mu[11]", "mu[12]", "mu[13]", "mu[14]", "mu[15]",
+                    "mu[16]", "mu[17]", "mu[18]", "mu[19]", "mu[20]"),
+           prob = 0.8) +
+  labs(title = "Population 4") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+color_scheme_set("pink")
+
+mcmc_areas(pop5.fit,
+           pars = c("mu[1]", "mu[2]", "mu[3]", "mu[4]", "mu[5]",
+                    "mu[6]", "mu[7]", "mu[8]", "mu[9]", "mu[10]",
+                    "mu[11]", "mu[12]", "mu[13]", "mu[14]", "mu[15]",
+                    "mu[16]", "mu[17]", "mu[18]", "mu[19]", "mu[20]"),
+           prob = 0.8) +
+  labs(title = "Population 5") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+mcmc_areas(pop6.fit,
+           pars = c("mu[1]", "mu[2]", "mu[3]", "mu[4]", "mu[5]",
+                    "mu[6]", "mu[7]", "mu[8]", "mu[9]", "mu[10]",
+                    "mu[11]", "mu[12]", "mu[13]", "mu[14]", "mu[15]",
+                    "mu[16]", "mu[17]", "mu[18]", "mu[19]", "mu[20]"),
+           prob = 0.8) +
+  labs(title = "Population 6") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+mcmc_areas(pop7.fit,
+           pars = c("mu[1]", "mu[2]", "mu[3]", "mu[4]", "mu[5]",
+                    "mu[6]", "mu[7]", "mu[8]", "mu[9]", "mu[10]",
+                    "mu[11]", "mu[12]", "mu[13]", "mu[14]", "mu[15]",
+                    "mu[16]", "mu[17]", "mu[18]", "mu[19]", "mu[20]"),
+           prob = 0.8) +
+  labs(title = "Population 7") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+mcmc_areas(pop8.fit,
+           pars = c("mu[1]", "mu[2]", "mu[3]", "mu[4]", "mu[5]",
+                    "mu[6]", "mu[7]", "mu[8]", "mu[9]", "mu[10]",
+                    "mu[11]", "mu[12]", "mu[13]", "mu[14]", "mu[15]",
+                    "mu[16]", "mu[17]", "mu[18]", "mu[19]", "mu[20]"),
+           prob = 0.8) +
+  labs(title = "Population 8") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+## DENSITY PLOTS
+color_scheme_set("brightblue")
+
+y_tilde <- pop1.fit.ex$y_tilde
+ppc_dens_overlay(y1, y_tilde[1:1000, ]) +
+  labs(title = "Population 1") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+y_tilde <- pop2.fit.ex$y_tilde
+ppc_dens_overlay(y2, y_tilde[1:1000, ]) +
+  labs(title = "Population 2") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+y_tilde <- pop3.fit.ex$y_tilde
+ppc_dens_overlay(y3, y_tilde[1:1000, ]) +
+  labs(title = "Population 3") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+y_tilde <- pop4.fit.ex$y_tilde
+ppc_dens_overlay(y4, y_tilde[1:1000, ]) +
+  labs(title = "Population 4") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+color_scheme_set("pink")
+
+y_tilde <- pop5.fit.ex$y_tilde
+ppc_dens_overlay(y5, y_tilde[1:1000, ]) +
+  labs(title = "Population 5") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+y_tilde <- pop6.fit.ex$y_tilde
+ppc_dens_overlay(y6, y_tilde[1:1000, ]) +
+  labs(title = "Population 6") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+y_tilde <- pop7.fit.ex$y_tilde
+ppc_dens_overlay(y7, y_tilde[1:1000, ]) +
+  labs(title = "Population 7") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+y_tilde <- pop8.fit.ex$y_tilde
+ppc_dens_overlay(y8, y_tilde[1:1000, ]) +
+  labs(title = "Population 8") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
 ```
 
-## Plotting $\mu$ from Model Output
+## (2) Plotting µ from Model Output
 
 ```{r}
 pop1.mu <- rstan::extract(pop1.fit, pars = "mu")[[1]]
@@ -3422,5 +3660,137 @@ ggplot(df, aes(x = mu.8, y = ts, fill = ts)) +
   theme(legend.position = "none")
 ```
 
+## (3) Simulating Data and Fitting
+
+```{r}
+## Simulating data
+# Parameters
+mu_start <- 0.1; # Starting value for the mean of the autoregressive part
+ac <- 0.2; # Autoregressive part
+sigma <- 0.5 # Variance for additive white noise
 
 
+TT <- 20 #length of simulation
+
+# Simulation
+mu <- c(mu_start); # Time series for the mean of the auto-regressive process
+y <- rpois(1, exp(mu[1])) # Start of prevalence time series
+for(t in 2:TT){
+	mu[t] <- ac*mu[t-1] + rnorm(1, 0, sigma) # Autoregressive part
+	y[t] <- rpois(1, exp(mu[t])) # Prevalence count
+}
+
+mu; mu_input <- mu
+y; y_input <- y; plot(y, type = "l")
+
+## Let's fit the model to these data
+sim.data <- list(N = TT, y = y)
+sim.fit <- rstan::sampling(model, data = sim.data, chains = 4, iter = 4000, cores = 4, seed = 123, verbose = FALSE)
+sim.fit.ex <- rstan::extract(sim.fit)
+y_tilde <- sim.fit.ex$y_tilde
+
+## Analysis
+length(which(y_tilde[ , 1] == 0)); init.zero <- which(y_tilde[ , 1] == 0); init.zero <- init.zero[1:1000]
+temp <- y_tilde[init.zero , ]
+# select.rows <- c(sample(nrow(y_tilde), 1000, replace = FALSE))
+sim.dat <- list()
+for(i in 1:1000){
+  sim.dat[[i]] <- as.numeric(temp[i, ])
+}
+
+# Calculating metrics
+sim.dat.mean <- list(); sim.dat.sd <- list()
+for (i in 1:length(sim.dat)){
+  sim.dat.mean[[i]] <- SlidingWindow(FUN = "mean", data = sim.dat[[i]], window = 5, step = 1)
+  sim.dat.sd[[i]] <- SlidingWindow(FUN = "sd", data = sim.dat[[i]], window = 5, step = 1)
+}
+
+sim.dat.var <- list()
+for (i in 1:1000){
+  sim.dat.var[[i]] <- sim.dat.sd[[i]]^2
+}
+
+sim.dat.id <- list()
+for (i in 1:1000){
+  sim.dat.id[[i]] <- sim.dat.var[[i]]/(sim.dat.mean[[i]] + 1e-10)
+}
+
+# Kendall's Tau
+sim.dat.mean.taus <- c()
+t <- seq(1, 15, 1)
+for (i in 1:1000){
+  sim.dat.mean.taus[i] <- cor(sim.dat.mean[[i]], t, method = "kendall")
+}
+
+sim.dat.var.taus <- c()
+t <- seq(1, 15, 1)
+for (i in 1:1000){
+  sim.dat.var.taus[i] <- cor(sim.dat.var[[i]], t, method = "kendall")
+}
+
+sim.dat.id.taus <- c()
+t <- seq(1, 15, 1)
+for (i in 1:1000){
+  sim.dat.id.taus[i] <- cor(sim.dat.id[[i]], t, method = "kendall")
+}
+
+Metric <- c(rep("Mean", 1000), rep("Variance", 1000), rep("Index of Dispersion", 1000))
+Tau <- c(sim.dat.mean.taus, sim.dat.var.taus, sim.dat.id.taus)
+df <- data_frame(Metric = Metric, Tau = Tau)
+
+ggplot(data = df, aes(x = Tau, group = Metric, fill = Metric)) +
+  geom_density(adjust = 1.5, alpha = 0.4) +
+  labs(title = "Simulated Data", y = "Density") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+```
+
+### Model Checks
+
+```{r}
+color_scheme_set("green")
+
+mcmc_trace(sim.fit,  pars = c("mu[1]", "mu[2]", "mu[3]", "mu[4]", "mu[5]",
+                              "mu[6]", "mu[7]", "mu[8]", "mu[9]", "mu[10]",
+                              "mu[11]", "mu[12]", "mu[13]", "mu[14]", "mu[15]",
+                              "mu[16]", "mu[17]", "mu[18]", "mu[19]", "mu[20]")) +
+  labs(title = "Simulated Data") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+mcmc_trace(sim.fit,  pars = c("ac", "sigma")) +
+  labs(title = "Simulated Data") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+mcmc_areas(sim.fit,
+           pars = c("mu[1]", "mu[2]", "mu[3]", "mu[4]", "mu[5]",
+                    "mu[6]", "mu[7]", "mu[8]", "mu[9]", "mu[10]",
+                    "mu[11]", "mu[12]", "mu[13]", "mu[14]", "mu[15]",
+                    "mu[16]", "mu[17]", "mu[18]", "mu[19]", "mu[20]"),
+           prob = 0.8) +
+  labs(title = "Simulated Data") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+
+y_tilde <- sim.fit.ex$y_tilde
+ppc_dens_overlay(y, y_tilde[1:1000, ]) +
+  labs(title = "Simulated Data") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+panel.background = element_blank(), axis.line = element_line(colour = "black"))
+```
+
+### Comparing In & Out
+
+```{r}
+plot(1, type = "n", main = "Simulated Data and Estimates", xlab = "Time", ylab = "Prevalence", xlim = c(1, 20), ylim = c(0, 10))
+for (i in 1:1000)
+  lines(1:20, y_tilde[i, ], col = adjustcolor("orchid", alpha = 0.1))
+lines(1:20, y_input, col = "black", lwd = 3)
+
+mu_est <- sim.fit.ex$mu
+plot(1, type = "n", main = "Simulated µ and Estimates", xlab = "Time", ylab = "Mean of AR-1 Process", xlim = c(1, 20), ylim = c(-2, 2))
+for (i in 1:1000)
+  lines(1:20, mu_est[i, ], col = adjustcolor("lightblue", alpha = 0.1))
+lines(1:20, mu_input, col = "black", lwd = 3)
+```
