@@ -292,11 +292,14 @@ for (j in widths){
 
 cols <- c("red3", "orange", "goldenrod1", "forestgreen", "cornflowerblue", "orchid")
 plot(sub8$day, sub8$infecteds, type = "l",
-     main = "Manually Smoothed (Every 3 Days), Varying Bandwidths", xlab = "Day", ylab = "Infecteds",
+     main = "Detrended Experimental Data (Population 8), Varying Bandwidths", xlab = "Day", ylab = "Infecteds",
      col = "grey", lwd = 2)
 for (i in 1:length(widths)){
   lines(sub8$day, df[ , i], col = cols[i], lwd = 2, lty = 2)
 }
+legend("topleft", 
+       legend = c("Raw Data", "Bandwidth = 1", "Bandwidth = 2", "Bandwidth = 3", "Bandwidth = 4", "Bandwidth = 5", "Bandwidth = 6"), 
+       lwd = 2, col = c("grey", cols))
 ```
 
 Looking at the smoothed time series above, it looks like we should go with a **bandwidth of 2 or 3**.

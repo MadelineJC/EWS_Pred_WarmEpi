@@ -65,6 +65,34 @@ plot(rising$day, rising$intensity,
 legend("topleft", legend = c("Population 5", "Population 6", "Population 7", "Population 8"),
        pch = 16, col = colours2, cex = 1, pt.cex = 2, bty = "n", x.intersp = 0.5)
 
+#### Plotting Simulated and Empirical Data ####
+sim.N <- 170; samp.N <- 12; days <- seq(1, 120, 1); exp.days <- seq(3, 120, 3)
+sim.c <- cbind(constant1[ , 2:101], constant2[ , 2:101], constant3[ , 2:101], constant4[ , 2:101], constant5[ , 2:101], constant6[ , 2:101], constant7[ , 2:101], constant8[ , 2:101], constant9[ , 2:101], constant10[ , 2:101])
+sim.w <- cbind(warming1[ , 2:101], warming2[ , 2:101], warming3[ , 2:101], warming4[ , 2:101], warming5[ , 2:101], warming6[ , 2:101], warming7[ , 2:101], warming8[ , 2:101], warming9[ , 2:101], warming10[ , 2:101])
+exp.c <- cbind(sub1$status, sub2$status, sub3$status, sub4$status)
+exp.w <- cbind(sub5$status, sub6$status, sub7$status, sub8$status)
+sim.c.prop <- sim.c/sim.N; sim.w.prop <- sim.w/sim.N
+exp.c.prop <- exp.c/samp.N; exp.w.prop <- exp.w/samp.N
+
+plot(1, type = "n", main = "Constant Treatment", xlab = "Day", ylab = "Prevalence", xlim = c(1, 120), ylim = c(0, 1))
+for (i in 1:1000){
+        lines(x = days, y = sim.c.prop[ , i], col = adjustcolor("royalblue", alpha = 0.1))
+}
+lines(x = days, y = rowMeans(sim.c.prop), col = "lightblue1", lwd = 3)
+for (i in 1:4){
+        lines(x = exp.days, y = exp.c.prop[ , i], col = "navy", lwd = 3)
+}
+
+plot(1, type = "n", main = "Warming Treatment", xlab = "Day", ylab = "Prevalence", xlim = c(1, 120), ylim = c(0, 1))
+for (i in 1:1000){
+        lines(x = days, y = sim.w.prop[ , i], col = adjustcolor("#DE3163", alpha = 0.1))
+}
+lines(x = days, y = rowMeans(sim.w.prop), col = "orchid1", lwd = 3)
+for (i in 1:4){
+        lines(x = exp.days, y = exp.w.prop[ , i], col = "#9F2B68", lwd = 3)
+}
+abline(v = 60, col = "orange1", lwd = 3)
+
 
 
 
