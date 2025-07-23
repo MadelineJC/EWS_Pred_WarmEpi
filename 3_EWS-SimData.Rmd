@@ -1306,7 +1306,7 @@ AUC_dt_5 <- calc_auc(warming.sims.dt.5.tau, constant.sims.dt.5.tau); AUC_dt_5
 
 ## 15 Day Sliding Window
 
-Cutting down all our statistical metric data frame to restrict our time frame to the first 55 days, and making some empty vectors to store our results in.
+Cutting down all our statistical metric data frame to restrict our time frame to the first 45 days, and making some empty vectors to store our results in.
 
 ```{r}
 constant.sims.var.15 <- constant.sims.var.15[1:45, ]
@@ -1438,7 +1438,7 @@ AUC_dt_15 <- calc_auc(warming.sims.dt.15.tau, constant.sims.dt.15.tau); AUC_dt_1
 
 ## 30 Day Sliding Window
 
-Cutting down all our statistical metric data frame to restrict our time frame to the first 55 days, and making some empty vectors to store our results in.
+Cutting down all our statistical metric data frame to restrict our time frame to the first 30 days, and making some empty vectors to store our results in.
 
 ```{r}
 constant.sims.var.30 <- constant.sims.var.30[1:30, ]

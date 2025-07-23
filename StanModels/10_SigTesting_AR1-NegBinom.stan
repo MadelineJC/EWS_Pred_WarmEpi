@@ -10,11 +10,12 @@ parameters {
 }
 
 transformed parameters {
+// https://mc-stan.org/docs/2_21/functions-reference/negative-binomial-distribution.html
   vector[N] alpha;
   vector[N] beta;
   for (i in 1:N){
-    alpha[i] = log(mu[i])^2 / sigma^2;
-    beta[i] = log(mu[i]) / sigma^2;
+    alpha[i] = exp(mu[i])^2 / sigma^2;
+    beta[i] = exp(mu[i]) / sigma^2;
   }
 }
 

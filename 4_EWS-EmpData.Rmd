@@ -71,9 +71,355 @@ mtext(text = "Number of Infecteds", side = 2, line = 2, outer = TRUE)
 mtext(text = "Days", side = 1, line = 2, outer = TRUE)
 ```
 
-# Calculating Statistical Metrics
+# 6 Day Sliding Window
 
-## 15 Day Sliding Window
+## Calculating Statistical Metrics
+
+```{r}
+## Standard deviation
+pop1.sd <- SlidingWindow(FUN = "sd", data = sub1$status.sum, window = 2, step = 1)
+pop2.sd <- SlidingWindow(FUN = "sd", data = sub2$status.sum, window = 2, step = 1)
+pop3.sd <- SlidingWindow(FUN = "sd", data = sub3$status.sum, window = 2, step = 1)
+pop4.sd <- SlidingWindow(FUN = "sd", data = sub4$status.sum, window = 2, step = 1)
+pop5.sd <- SlidingWindow(FUN = "sd", data = sub5$status.sum, window = 2, step = 1)
+pop6.sd <- SlidingWindow(FUN = "sd", data = sub6$status.sum, window = 2, step = 1)
+pop7.sd <- SlidingWindow(FUN = "sd", data = sub7$status.sum, window = 2, step = 1)
+pop8.sd <- SlidingWindow(FUN = "sd", data = sub8$status.sum, window = 2, step = 1)
+
+## Mean
+pop1.mean <- SlidingWindow(FUN = "mean", data = sub1$status.sum, window = 2, step = 1)
+pop2.mean <- SlidingWindow(FUN = "mean", data = sub2$status.sum, window = 2, step = 1)
+pop3.mean <- SlidingWindow(FUN = "mean", data = sub3$status.sum, window = 2, step = 1)
+pop4.mean <- SlidingWindow(FUN = "mean", data = sub4$status.sum, window = 2, step = 1)
+pop5.mean <- SlidingWindow(FUN = "mean", data = sub5$status.sum, window = 2, step = 1)
+pop6.mean <- SlidingWindow(FUN = "mean", data = sub6$status.sum, window = 2, step = 1)
+pop7.mean <- SlidingWindow(FUN = "mean", data = sub7$status.sum, window = 2, step = 1)
+pop8.mean <- SlidingWindow(FUN = "mean", data = sub8$status.sum, window = 2, step = 1)
+
+## Skewness
+pop1.sk <- SlidingWindow(FUN = "skewness", data = sub1$status.sum, window = 2, step = 1)
+pop2.sk <- SlidingWindow(FUN = "skewness", data = sub2$status.sum, window = 2, step = 1)
+pop3.sk <- SlidingWindow(FUN = "skewness", data = sub3$status.sum, window = 2, step = 1)
+pop4.sk <- SlidingWindow(FUN = "skewness", data = sub4$status.sum, window = 2, step = 1)
+pop5.sk <- SlidingWindow(FUN = "skewness", data = sub5$status.sum, window = 2, step = 1)
+pop6.sk <- SlidingWindow(FUN = "skewness", data = sub6$status.sum, window = 2, step = 1)
+pop7.sk <- SlidingWindow(FUN = "skewness", data = sub7$status.sum, window = 2, step = 1)
+pop8.sk <- SlidingWindow(FUN = "skewness", data = sub8$status.sum, window = 2, step = 1)
+
+## Kurtosis
+pop1.kt <- SlidingWindow(FUN = "kurtosis", data = sub1$status.sum, window = 2, step = 1)
+pop2.kt <- SlidingWindow(FUN = "kurtosis", data = sub2$status.sum, window = 2, step = 1)
+pop3.kt <- SlidingWindow(FUN = "kurtosis", data = sub3$status.sum, window = 2, step = 1)
+pop4.kt <- SlidingWindow(FUN = "kurtosis", data = sub4$status.sum, window = 2, step = 1)
+pop5.kt <- SlidingWindow(FUN = "kurtosis", data = sub5$status.sum, window = 2, step = 1)
+pop6.kt <- SlidingWindow(FUN = "kurtosis", data = sub6$status.sum, window = 2, step = 1)
+pop7.kt <- SlidingWindow(FUN = "kurtosis", data = sub7$status.sum, window = 2, step = 1)
+pop8.kt <- SlidingWindow(FUN = "kurtosis", data = sub8$status.sum, window = 2, step = 1)
+```
+
+### Variance
+
+```{r}
+pop1.var <- pop1.sd^2
+pop2.var <- pop2.sd^2
+pop3.var <- pop3.sd^2
+pop4.var <- pop4.sd^2
+pop5.var <- pop5.sd^2
+pop6.var <- pop6.sd^2
+pop7.var <- pop7.sd^2
+pop8.var <- pop8.sd^2
+```
+
+### Coefficient of Variation
+
+We're adding 1e-10 to the mean so we don't divide by 0.
+
+```{r}
+pop1.cv <- pop1.sd/(pop1.mean + 1e-10)
+pop2.cv <- pop2.sd/(pop2.mean + 1e-10)
+pop3.cv <- pop3.sd/(pop3.mean + 1e-10)
+pop4.cv <- pop4.sd/(pop4.mean + 1e-10)
+pop5.cv <- pop5.sd/(pop5.mean + 1e-10)
+pop6.cv <- pop6.sd/(pop6.mean + 1e-10)
+pop7.cv <- pop7.sd/(pop7.mean + 1e-10)
+pop8.cv <- pop8.sd/(pop8.mean + 1e-10)
+```
+
+### Index of Dispersion
+
+```{r}
+pop1.id <- pop1.var/(pop1.mean + 1e-10)
+pop2.id <- pop2.var/(pop2.mean + 1e-10)
+pop3.id <- pop3.var/(pop3.mean + 1e-10)
+pop4.id <- pop4.var/(pop4.mean + 1e-10)
+pop5.id <- pop5.var/(pop5.mean + 1e-10)
+pop6.id <- pop6.var/(pop6.mean + 1e-10)
+pop7.id <- pop7.var/(pop7.mean + 1e-10)
+pop8.id <- pop8.var/(pop8.mean + 1e-10)
+```
+
+### First Difference Variance
+
+```{r}
+pop1.fdv <- c()
+pop2.fdv <- c()
+pop3.fdv <- c()
+pop4.fdv <- c()
+pop5.fdv <- c()
+pop6.fdv <- c()
+pop7.fdv <- c()
+pop8.fdv <- c()
+
+for(i in 2:35){
+pop1.fdv[i - 1] <- pop1.var[i] - pop1.var[i - 1]
+pop2.fdv[i - 1] <- pop2.var[i] - pop2.var[i - 1]
+pop3.fdv[i - 1] <- pop3.var[i] - pop3.var[i - 1]
+pop4.fdv[i - 1] <- pop4.var[i] - pop4.var[i - 1]
+pop5.fdv[i - 1] <- pop5.var[i] - pop5.var[i - 1]
+pop6.fdv[i - 1] <- pop6.var[i] - pop6.var[i - 1]
+pop7.fdv[i - 1] <- pop7.var[i] - pop7.var[i - 1]
+pop8.fdv[i - 1] <- pop8.var[i] - pop8.var[i - 1]
+}
+```
+
+### Autocorrelation and Autocovariance
+
+```{r}
+pop1.ac <- c()
+pop1.acv <- c()
+for(i in 1:38){
+  window.start <- i
+  window.end <- i + 1
+  
+  segment <- sub1$status.sum[c(window.start:window.end)]
+  
+  pop1.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop1.acv[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+
+pop2.ac <- c()
+pop2.acv <- c()
+for(i in 1:38){
+  window.start <- i
+  window.end <- i + 1
+  
+  segment <- sub2$status.sum[c(window.start:window.end)]
+  
+  pop2.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop2.acv[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+
+pop3.ac <- c()
+pop3.acv <- c()
+for(i in 1:38){
+  window.start <- i
+  window.end <- i + 1
+  
+  segment <- sub3$status.sum[c(window.start:window.end)]
+  
+  pop3.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop3.acv[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+
+pop4.ac <- c()
+pop4.acv <- c()
+for(i in 1:38){
+  window.start <- i
+  window.end <- i + 1
+  
+  segment <- sub4$status.sum[c(window.start:window.end)]
+  
+  pop4.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop4.acv[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+
+pop5.ac <- c()
+pop5.acv <- c()
+for(i in 1:38){
+  window.start <- i
+  window.end <- i + 1
+  
+  segment <- sub5$status.sum[c(window.start:window.end)]
+  
+  pop5.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop5.acv[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+
+pop6.ac <- c()
+pop6.acv <- c()
+for(i in 1:38){
+  window.start <- i
+  window.end <- i + 1
+  
+  segment <- sub6$status.sum[c(window.start:window.end)]
+  
+  pop6.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop6.acv[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+
+pop7.ac <- c()
+pop7.acv <- c()
+for(i in 1:38){
+  window.start <- i
+  window.end <- i + 1
+  
+  segment <- sub7$status.sum[c(window.start:window.end)]
+  
+  pop7.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop7.acv[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+
+pop8.ac <- c()
+pop8.acv <- c()
+for(i in 1:38){
+  window.start <- i
+  window.end <- i + 1
+  
+  segment <- sub8$status.sum[c(window.start:window.end)]
+  
+  pop8.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop8.acv[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
+}
+```
+
+### Decay Time
+
+```{r}
+pop1.dt <- c()
+pop2.dt <- c()
+pop3.dt <- c()
+pop4.dt <- c()
+pop5.dt <- c()
+pop6.dt <- c()
+pop7.dt <- c()
+pop8.dt <- c()
+
+for(i in 1:38){
+  suppressWarnings(pop1.dt[i] <- -i/log(pop1.ac[i]))
+  suppressWarnings(pop2.dt[i] <- -i/log(pop2.ac[i]))
+  suppressWarnings(pop3.dt[i] <- -i/log(pop3.ac[i]))
+  suppressWarnings(pop4.dt[i] <- -i/log(pop4.ac[i]))
+  suppressWarnings(pop5.dt[i] <- -i/log(pop5.ac[i]))
+  suppressWarnings(pop6.dt[i] <- -i/log(pop6.ac[i]))
+  suppressWarnings(pop7.dt[i] <- -i/log(pop7.ac[i]))
+  suppressWarnings(pop8.dt[i] <- -i/log(pop8.ac[i]))
+}
+```
+
+## Kendall's Tau
+
+```{r}
+time.6 <- seq(1, 18, 1)
+
+constant.mean.tau.6 <- c(cor(pop1.mean[1:18], time.6, method = "kendall"), cor(pop2.mean[1:18], time.6, method = "kendall"),
+                      cor(pop3.mean[1:18], time.6, method = "kendall"), cor(pop4.mean[1:18], time.6, method = "kendall"))
+warming.mean.tau.6 <- c(cor(pop5.mean[1:18], time.6, method = "kendall"), cor(pop6.mean[1:18], time.6, method = "kendall"),
+                      cor(pop7.mean[1:18], time.6, method = "kendall"), cor(pop8.mean[1:18], time.6, method = "kendall"))
+
+constant.sk.tau.6 <- c(cor(pop1.sk[1:18], time.6, method = "kendall"), cor(pop2.sk[1:18], time.6, method = "kendall"),
+                          cor(pop3.sk[1:18], time.6, method = "kendall"), cor(pop4.sk[1:18], time.6, method = "kendall"))
+warming.sk.tau.6 <- c(cor(pop5.sk[1:18], time.6, method = "kendall"), cor(pop6.sk[1:18], time.6, method = "kendall"),
+                          cor(pop7.sk[1:18], time.6, method = "kendall"), cor(pop8.sk[1:18], time.6, method = "kendall"))
+
+constant.kt.tau.6 <- c(cor(pop1.kt[1:18], time.6, method = "kendall"), cor(pop2.kt[1:18], time.6, method = "kendall"),
+                          cor(pop3.kt[1:18], time.6, method = "kendall"), cor(pop4.kt[1:18], time.6, method = "kendall"))
+warming.kt.tau.6 <- c(cor(pop5.kt[1:18], time.6, method = "kendall"), cor(pop6.kt[1:18], time.6, method = "kendall"),
+                          cor(pop7.kt[1:18], time.6, method = "kendall"), cor(pop8.kt[1:18], time.6, method = "kendall"))
+
+constant.var.tau.6 <- c(cor(pop1.var[1:18], time.6, method = "kendall"), cor(pop2.var[1:18], time.6, method = "kendall"),
+                          cor(pop3.var[1:18], time.6, method = "kendall"), cor(pop4.var[1:18], time.6, method = "kendall"))
+warming.var.tau.6<- c(cor(pop5.var[1:18], time.6, method = "kendall"), cor(pop6.var[1:18], time.6, method = "kendall"),
+                         cor(pop7.var[1:18], time.6, method = "kendall"), cor(pop8.var[1:18], time.6, method = "kendall"))
+
+constant.cv.tau.6 <- c(cor(pop1.cv[1:18], time.6, method = "kendall"), cor(pop2.cv[1:18], time.6, method = "kendall"),
+                    cor(pop3.cv[1:18], time.6, method = "kendall"), cor(pop4.cv[1:18], time.6, method = "kendall"))
+warming.cv.tau.6 <- c(cor(pop5.cv[1:18], time.6, method = "kendall"), cor(pop6.cv[1:18], time.6, method = "kendall"),
+                    cor(pop7.cv[1:18], time.6, method = "kendall"), cor(pop8.cv[1:18], time.6, method = "kendall"))
+
+constant.id.tau.6 <- c(cor(pop1.id[1:18], time.6, method = "kendall"), cor(pop2.id[1:18], time.6, method = "kendall"),
+                    cor(pop3.id[1:18], time.6, method = "kendall"), cor(pop4.id[1:18], time.6, method = "kendall"))
+warming.id.tau.6 <- c(cor(pop5.id[1:18], time.6, method = "kendall"), cor(pop6.id[1:18], time.6, method = "kendall"),
+                    cor(pop7.id[1:18], time.6, method = "kendall"), cor(pop8.id[1:18], time.6, method = "kendall"))
+
+constant.fdv.tau.6 <- c(cor(pop1.fdv[1:18], time.6, method = "kendall"), cor(pop2.fdv[1:18], time.6, method = "kendall"),
+                                     cor(pop3.fdv[1:18], time.6, method = "kendall"), cor(pop4.fdv[1:18], time.6, method = "kendall"))
+warming.fdv.tau.6 <- c(cor(pop5.fdv[1:18], time.6, method = "kendall"), cor(pop6.fdv[1:18], time.6, method = "kendall"),
+                                     cor(pop7.fdv[1:18], time.6, method = "kendall"), cor(pop8.fdv[1:18], time.6, method = "kendall"))
+
+constant.ac.tau.6 <- c(cor(pop1.ac[1:18], time.6, method = "kendall"), cor(pop2.ac[1:18], time.6, method = "kendall"),
+                    cor(pop3.ac[1:18], time.6, method = "kendall"), cor(pop4.ac[1:18], time.6, method = "kendall"))
+warming.ac.tau.6 <- c(cor(pop5.ac[1:18], time.6, method = "kendall"), cor(pop6.ac[1:18], time.6, method = "kendall"),
+                    cor(pop7.ac[1:18], time.6, method = "kendall"), cor(pop8.ac[1:18], time.6, method = "kendall"))
+
+constant.acv.tau.6 <- c(cor(pop1.acv[1:18], time.6, method = "kendall"), cor(pop2.acv[1:18], time.6, method = "kendall"),
+                     cor(pop3.acv[1:18], time.6, method = "kendall"), cor(pop4.acv[1:18], time.6, method = "kendall"))
+warming.acv.tau.6 <- c(cor(pop5.acv[1:18], time.6, method = "kendall"), cor(pop6.acv[1:18], time.6, method = "kendall"),
+                     cor(pop7.acv[1:18], time.6, method = "kendall"), cor(pop8.acv[1:18], time.6, method = "kendall"))
+
+constant.dt.tau.6 <- c(cor(pop1.dt[1:18], time.6, method = "kendall"), cor(pop2.dt[1:18], time.6, method = "kendall"),
+                            cor(pop3.dt[1:18], time.6, method = "kendall"), cor(pop4.dt[1:18], time.6, method = "kendall"))
+warming.dt.tau.6 <- c(cor(pop5.dt[1:18], time.6, method = "kendall"), cor(pop6.dt[1:18], time.6, method = "kendall"),
+                            cor(pop7.dt[1:18], time.6, method = "kendall"), cor(pop8.dt[1:18], time.6, method = "kendall"))
+```
+
+## Area Under Curve (AUC) Tests
+
+Function to calculate AUC:
+
+```{r}
+calc_auc <- function(test.taus, null.taus){
+  
+  combined.taus <- c(test.taus,null.taus)
+  r <- rank(combined.taus, na.last=NA)
+  
+  test.taus.length <- sum(!is.na(test.taus))
+  null.taus.length <- sum(!is.na(null.taus))
+  
+  r1 <- sum(r[1:test.taus.length])
+  
+  n1 <- test.taus.length
+  n2 <- null.taus.length
+  
+  (r1 - n1 * (n1 + 1) / 2) / (n1 * n2)
+}
+```
+
+
+```{r}
+AUC_mean_data <- calc_auc(warming.mean.tau.6, constant.mean.tau.6); AUC_mean_data
+AUC_sk_data <- calc_auc(warming.sk.tau.6, constant.sk.tau.6); AUC_sk_data
+AUC_kt_data <- calc_auc(warming.kt.tau.6, constant.kt.tau.6); AUC_kt_data
+AUC_var_data <- calc_auc(warming.var.tau.6, constant.var.tau.6); AUC_var_data
+AUC_cv_data <- calc_auc(warming.cv.tau.6, constant.cv.tau.6); AUC_cv_data
+AUC_id_data <- calc_auc(warming.id.tau.6, constant.id.tau.6); AUC_id_data
+AUC_fdv_data <- calc_auc(warming.fdv.tau.6, constant.fdv.tau.6); AUC_fdv_data
+AUC_ac_data <- calc_auc(warming.ac.tau.6, constant.ac.tau.6); AUC_ac_data
+AUC_acv_data <- calc_auc(warming.acv.tau.6, constant.acv.tau.6); AUC_acv_data
+AUC_dt_data <- calc_auc(warming.dt.tau.6, constant.dt.tau.6); AUC_dt_data
+```
+
+## Summarize Outputs
+
+```{r}
+metrics <- c("mean", "skewness", "kurtosis", "variance", "cv", "id", "fdv", "ac", "acv", "dt")
+
+AUC_6 <- c(AUC_mean_data, 
+           AUC_sk_data, 
+           AUC_kt_data, 
+           AUC_var_data,
+           AUC_cv_data,
+           AUC_id_data, 
+           AUC_fdv_data, 
+           AUC_ac_data, 
+           AUC_acv_data, 
+           AUC_dt_data)
+
+AUC_6 <- data.frame(metrics, AUC_6); AUC_6
+```
+
+# 15 Day Sliding Window
+
+## Calculating Statistical Metrics
 
 Devin notes that due to the structure of the empirical data, we can't implement a shorter or longer window.
 
@@ -308,9 +654,7 @@ for(i in 1:35){
 }
 ```
 
-## 15 Day Sliding Window
-
-Calculating Kendall Tau statistics for each metric:
+## Kendall's Tau
 
 ```{r}
 time.15 <- seq(1, 15, 1)
@@ -366,43 +710,9 @@ warming.dt.tau <- c(cor(pop5.dt[1:15], time.15, method = "kendall"), cor(pop6.dt
                             cor(pop7.dt[1:15], time.15, method = "kendall"), cor(pop8.dt[1:15], time.15, method = "kendall"))
 ```
 
-# Area Under Curve (AUC) Tests
+## Area Under Curve (AUC) Tests
 
 Function to calculate AUC:
-
-```{r}
-calc_auc <- function(test.taus, null.taus){
-  
-  combined.taus <- c(test.taus,null.taus)
-  r <- rank(combined.taus, na.last=NA)
-  
-  test.taus.length <- sum(!is.na(test.taus))
-  null.taus.length <- sum(!is.na(null.taus))
-  
-  r1 <- sum(r[1:test.taus.length])
-  
-  n1 <- test.taus.length
-  n2 <- null.taus.length
-  
-  (r1 - n1 * (n1 + 1) / 2) / (n1 * n2)
-}
-```
-
-For reference, metrics and their short hands are as follows:
-
-|                           |        |
-|---------------------------|--------|
-| Standard Deviation        | `sd`   |
-| Mean                      | `mean` |
-| Skew                      | `sk`   |
-| Kurtosis                  | `kt`   |
-| Variance                  | `var`  |
-| Co-Efficient of Variance  | `cv`   |
-| Index of Dispersion       | `id`   |
-| First Difference Variance | `fdv`  |
-| Autocorrelation           | `ac`   |
-| Autocovariance            | `acv`  |
-| Decay Time                | `dt`   |
 
 ```{r}
 AUC_mean_data <- calc_auc(warming.mean.tau, constant.mean.tau); AUC_mean_data
@@ -422,19 +732,18 @@ AUC_dt_data <- calc_auc(warming.dt.tau, constant.dt.tau); AUC_dt_data
 ```{r}
 metrics <- c("mean", "skewness", "kurtosis", "variance", "cv", "id", "fdv", "ac", "acv", "dt")
 
-AUC_data <- c(AUC_mean_data, 
-              AUC_sk_data, 
-              AUC_kt_data, 
-              AUC_var_data,
-              AUC_cv_data,
-              AUC_id_data, 
-              AUC_fdv_data, 
-              AUC_ac_data, 
-              AUC_acv_data, 
-              AUC_dt_data)
+AUC_15 <- c(AUC_mean_data, 
+            AUC_sk_data, 
+            AUC_kt_data, 
+            AUC_var_data,
+            AUC_cv_data,
+            AUC_id_data, 
+            AUC_fdv_data, 
+            AUC_ac_data, 
+            AUC_acv_data, 
+            AUC_dt_data)
 
-AUC_df <- data.frame(metrics, AUC_data); AUC_df
-saveRDS(AUC_df, "Objects/AUC_EmpiricalData.rds")
+AUC_15 <- data.frame(metrics, AUC_15); AUC_15
 ```
 
 A plot!
@@ -443,7 +752,7 @@ A plot!
 metrics_full <- c("Mean", "Skewness", "Kurtosis", "Variance", "Covariance", "Index of Dispersion", "First Difference Variance", "Autocorrelation", "Autocovariance", "Decay Time")
 
 ## Plot
-plot(1:10, AUC_df$AUC_data, type = "p", 
+plot(1:10, AUC_15$AUC_15, type = "p", 
      main = "Empirical Data, All Populations", xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
      col = "orchid", pch = 19)
 abline(h = 0.5, lty = 3)
@@ -451,7 +760,7 @@ axis(side = 1, at = 1:10, labels = metrics_full, las = 2)
 
 ## Saving plot as .png
 png(file = "Plots/AUC_EmpiricalData_AllPopns.png", width = 1500, height = 350)
-plot(1:10, AUC_df$AUC_data, type = "p", 
+plot(1:10, AUC_15$AUC_15, type = "p", 
      main = "Empirical Data, All Populations", xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
      col = "orchid", pch = 19)
 abline(h = 0.5, lty = 3)
@@ -459,488 +768,717 @@ axis(side = 1, at = 1:10, labels = metrics_full)
 dev.off()
 ```
 
-# Excluding Population 5
+## Plotting
 
-Population 5 never reached the epidemic stage; what happens when we remove it from the analysis?
+### Empirical Results
 
 ```{r}
-time.15 <- seq(1,15,1)
-
-warming.mean.tau_without5 <- c(cor(pop6.mean[1:15], time.15, method = "kendall"),
-                               cor(pop7.mean[1:15], time.15, method = "kendall"), 
-                               cor(pop8.mean[1:15], time.15, method = "kendall"))
-
-warming.sk.tau_without5 <- c(cor(pop6.sk[1:15], time.15, method = "kendall"),
-                                   cor(pop7.sk[1:15], time.15, method = "kendall"), 
-                                   cor(pop8.sk[1:15], time.15, method = "kendall"))
-
-
-warming.kt.tau_without5 <- c(cor(pop6.kt[1:15], time.15, method = "kendall"),
-                                   cor(pop7.kt[1:15], time.15, method = "kendall"), 
-                                   cor(pop8.kt[1:15], time.15, method = "kendall"))
-
-warming.var.tau_without5 <- c(cor(pop6.var[1:15], time.15, method = "kendall"),
-                                   cor(pop7.var[1:15], time.15, method = "kendall"), 
-                                   cor(pop8.var[1:15], time.15, method = "kendall"))
-
-warming.cv.tau_without5 <- c(cor(pop6.cv[1:15], time.15, method = "kendall"),
-                             cor(pop7.cv[1:15], time.15, method = "kendall"), 
-                             cor(pop8.cv[1:15], time.15, method = "kendall"))
-
-warming.id.tau_without5 <- c(cor(pop6.id[1:15], time.15, method = "kendall"),
-                             cor(pop7.id[1:15], time.15, method = "kendall"), 
-                             cor(pop8.id[1:15], time.15, method = "kendall"))
-
-warming.ac.tau_without5 <- c(cor(pop6.ac[1:15], time.15, method = "kendall"),
-                             cor(pop7.ac[1:15], time.15, method = "kendall"), 
-                             cor(pop8.ac[1:15], time.15, method = "kendall"))
-
-
-warming.acv.tau_without5 <- c(cor(pop6.acv[1:15], time.15, method = "kendall"),
-                              cor(pop7.acv[1:15], time.15, method = "kendall"), 
-                              cor(pop8.acv[1:15], time.15, method = "kendall"))
-
-warming.fdv.tau_without5 <- c(cor(pop6.fdv[1:15], time.15, method = "kendall"),
-                                              cor(pop7.fdv[1:15], time.15, method = "kendall"),
-                                              cor(pop8.fdv[1:15], time.15, method = "kendall"))
-
-warming.dt.tau_without5 <- c(cor(pop6.dt[1:15], time.15, method = "kendall"),
-                                     cor(pop7.dt[1:15], time.15, method = "kendall"), 
-                                     cor(pop8.dt[1:15], time.15, method = "kendall"))
+# col.vec <- rep(c("gray0", "gray12", "gray24", "gray36"), 2)
+# time.plot <- c(6:20)
+# 
+# par(mfrow = c(3, 2))
+# par(mar = c(1, 1, 1, 1))
+# par(oma = c(4, 4, 0, 0))
+# 
+# plot(sub1$status.sum ~ sub1$day, type = "n", ylim = c(0, 6), ylab = NA, xlab = NA, cex.axis = 0.8)
+# for(i in 1:4){
+#   sub <- subset(data.sum, population == i)
+#   lines(sub$status.sum ~ sub$day, col = alpha(col.vec[i], 0.6), lty = 1, lwd = 3)
+# }
+# text(5, 5.5, labels = ("(a)"))
+# mtext("Disease Incidence", side = 2, cex = 1, line = 3, outer = FALSE)
+# 
+# plot(sub5$status.sum ~ sub5$day, type = "n", ylim = c(0,6), ylab = NA, xlab = NA, cex.axis = 0.8)
+# for(i in 5:8){
+#   sub <- subset(data.sum, population == i)
+#   lines(sub$status.sum ~ sub$day, col = alpha(col.vec[i], 0.6), lty = 1,lwd = 3)
+# }
+# abline(v = c(15, 30, 45, 75, 90, 105), lty = 3)
+# abline(v = c(60), col = "orchid", lty = 3, lwd = 4)
+# text(x = c(7.5, 22.5, 37.5, 52.5, 67.5, 82.5, 97.5, 112.5), y = 5.7, 
+#      labels = c("10.0C", "10.5C", "11.0C", "11.5C", "12.0C", "12.5C", "13.0C", "13.5C"), cex = 0.75)
+# text(5, 5, labels = ("(b)"))
+# 
+# # MEAN #
+# plot(pop1.mean[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), type = "l", ylim = c(0, 1.5), xlim = c(0, 40), lwd = 3)
+# lines(pop2.mean[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 3, ylim = c(0, 4))
+# lines(pop3.mean[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 3,ylim = c(0, 4))
+# lines(pop4.mean[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 3,ylim = c(0, 4))
+# mtext("Mean", side = 2, cex = 1, line = 3, outer = FALSE)
+# 
+# plot(pop5.mean[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), lwd = 3,type = "l", ylim = c(0, 1.5), xlim = c(0, 40))
+# lines(pop6.mean[1:15] ~ time.plot,col = alpha(col.vec[2], 0.6), lwd = 3, ylim = c(0, 4))
+# lines(pop7.mean[1:15] ~ time.plot,col = alpha(col.vec[3], 0.6), lwd = 3, ylim = c(0, 4))
+# lines(pop8.mean[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6),lwd = 3, ylim = c(0, 4))
+# abline(v = c(20), col = "orchid",lty = 3, lwd = 4)
+# 
+# ## VARIANCE ##
+# plot(pop1.var[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), lwd = 3,type = "l",ylim = c(0, 2), xlim = c(0, 40))
+# lines(pop2.var[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 3, ylim = c(0, 4))
+# lines(pop3.var[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 3, ylim = c(0, 4))
+# lines(pop4.var[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 3, ylim = c(0, 4))
+# mtext("Variance", side = 2, cex = 1, line = 3, outer = FALSE)
+# 
+# plot(pop5.var[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), lwd = 3, type = "l", ylim = c(0, 2), xlim = c(0, 40))
+# lines(pop6.var[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 3, ylim = c(0, 4))
+# lines(pop7.var[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 3, ylim = c(0, 4))
+# lines(pop8.var[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 3, ylim = c(0, 4))
+# abline(v = c(60), col = "orchid",lty = 3, lwd = 4)
+# 
+# mtext("Day", side = 1, cex = 1, line = 2, outer = TRUE)
 ```
 
-## Summarize Outputs
+### Comparing Simulation and Empirical Results
 
 ```{r}
-AUC_mean_data_without5 <- calc_auc(warming.mean.tau_without5,constant.mean.tau); AUC_mean_data_without5 
-AUC_sk_data_without5 <- calc_auc(warming.sk.tau_without5,constant.sk.tau); AUC_sk_data_without5 
-AUC_kt_data_without5 <- calc_auc(warming.kt.tau_without5, constant.kt.tau); AUC_kt_data_without5 
-AUC_var_data_without5 <- calc_auc(warming.var.tau_without5,constant.var.tau); AUC_var_data_without5 
-AUC_cv_data_without5 <- calc_auc(warming.cv.tau_without5,constant.cv.tau); AUC_cv_data_without5
-AUC_id_data_without5 <- calc_auc(warming.id.tau_without5,constant.id.tau); AUC_id_data_without5 
-AUC_fdv_data_without5 <- calc_auc(warming.fdv.tau_without5,constant.fdv.tau); AUC_fdv_data_without5 
-AUC_ac_data_without5 <- calc_auc(warming.ac.tau_without5,constant.ac.tau); AUC_ac_data_without5 
-AUC_acv_data_without5 <- calc_auc(warming.acv.tau_without5,constant.acv.tau); AUC_acv_data_without5 
-AUC_dt_data_without5 <- calc_auc(warming.dt.tau_without5,constant.dt.tau); AUC_dt_data_without5 
-```
-
-```{r}
-AUC_data <- c(AUC_mean_data_without5,
-              AUC_sk_data_without5,
-              AUC_kt_data_without5,
-              AUC_var_data_without5,
-              AUC_cv_data_without5,
-              AUC_id_data_without5,
-              AUC_fdv_data_without5,
-              AUC_ac_data_without5,
-              AUC_acv_data_without5,
-              AUC_dt_data_without5)
-
-AUC_df_without5 <- data.frame(metrics, AUC_data); AUC_df_without5
-saveRDS(AUC_df_without5, "Objects/AUC_EmpiricalData_ExPop5.rds")
-```
-
-A plot!
-
-```{r}
-## Plots
-plot(1:10, AUC_df_without5$AUC_data, type = "p", 
-     main = "Empirical Data, Excluding Population 5", xaxt = "none", xlab = "", ylim = c(0.2, 0.8), ylab = "AUC",
-     col = "red3", pch = 19)
-abline(h = 0.5, lty = 3)
-axis(side = 1, at = 1:10, labels = metrics_full, las = 2)
-
-plot(1:10, AUC_df$AUC_data, type = "p", 
-     main = "Empirical Data", xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
-     col = "orchid", pch = 19)
-points(1:10, AUC_df_without5$AUC_data, col = "red3", pch = 19)
-abline(h = 0.5, lty = 3)
-axis(side = 1, at = 1:10, labels = metrics_full, las = 2)
-legend("topright", legend = c("All Populations", "Excluding Population 5"),
-       col = c("orchid", "red3"), pch = 19)
-
-## Saving plots as .pngs
-png(file = "Plots/AUC_EmpiricalData_ExcludingPopn5.png", width = 1500, height = 350)
-plot(1:10, AUC_df_without5$AUC_data, type = "p", 
-     main = "Empirical Data, Excluding Population 5", xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
-     col = "red3", pch = 19)
-abline(h = 0.5, lty = 3)
-axis(side = 1, at = 1:10, labels = metrics_full)
-dev.off()
-
-png(file = "Plots/AUC_EmpiricalData.png", width = 1500, height = 350)
-plot(1:10, AUC_df$AUC_data, type = "p", 
-     main = "Empirical Data", xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC",
-     col = "orchid", pch = 19)
-points(1:10, AUC_df_without5$AUC_data, col = "red3", pch = 19)
-abline(h = 0.5, lty = 3)
-axis(side = 1, at = 1:10, labels = metrics_full)
-legend("topright", legend = c("All Populations", "Excluding Population 5"),
-       col = c("orchid", "red3"), pch = 19)
-dev.off()
-```
-
-# Plotting
-
-## Empirical Results
-
-```{r}
-col.vec <- rep(c("gray0", "gray12", "gray24", "gray36"), 2)
-time.plot <- c(6:20)
-
-par(mfrow = c(3, 2))
-par(mar = c(1, 1, 1, 1))
-par(oma = c(4, 4, 0, 0))
-
-plot(sub1$status.sum ~ sub1$day, type = "n", ylim = c(0, 6), ylab = NA, xlab = NA, cex.axis = 0.8)
-for(i in 1:4){
-  sub <- subset(data.sum, population == i)
-  lines(sub$status.sum ~ sub$day, col = alpha(col.vec[i], 0.6), lty = 1, lwd = 3)
-}
-text(5, 5.5, labels = ("(a)"))
-mtext("Disease Incidence", side = 2, cex = 1, line = 3, outer = FALSE)
-
-plot(sub5$status.sum ~ sub5$day, type = "n", ylim = c(0,6), ylab = NA, xlab = NA, cex.axis = 0.8)
-for(i in 5:8){
-  sub <- subset(data.sum, population == i)
-  lines(sub$status.sum ~ sub$day, col = alpha(col.vec[i], 0.6), lty = 1,lwd = 3)
-}
-abline(v = c(15, 30, 45, 75, 90, 105), lty = 3)
-abline(v = c(60), col = "orchid", lty = 3, lwd = 4)
-text(x = c(7.5, 22.5, 37.5, 52.5, 67.5, 82.5, 97.5, 112.5), y = 5.7, 
-     labels = c("10.0C", "10.5C", "11.0C", "11.5C", "12.0C", "12.5C", "13.0C", "13.5C"), cex = 0.75)
-text(5, 5, labels = ("(b)"))
-
-# MEAN #
-plot(pop1.mean[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), type = "l", ylim = c(0, 1.5), xlim = c(0, 40), lwd = 3)
-lines(pop2.mean[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 3, ylim = c(0, 4))
-lines(pop3.mean[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 3,ylim = c(0, 4))
-lines(pop4.mean[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 3,ylim = c(0, 4))
-mtext("Mean", side = 2, cex = 1, line = 3, outer = FALSE)
-
-plot(pop5.mean[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), lwd = 3,type = "l", ylim = c(0, 1.5), xlim = c(0, 40))
-lines(pop6.mean[1:15] ~ time.plot,col = alpha(col.vec[2], 0.6), lwd = 3, ylim = c(0, 4))
-lines(pop7.mean[1:15] ~ time.plot,col = alpha(col.vec[3], 0.6), lwd = 3, ylim = c(0, 4))
-lines(pop8.mean[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6),lwd = 3, ylim = c(0, 4))
-abline(v = c(20), col = "orchid",lty = 3, lwd = 4)
-
-## VARIANCE ##
-plot(pop1.var[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), lwd = 3,type = "l",ylim = c(0, 2), xlim = c(0, 40))
-lines(pop2.var[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 3, ylim = c(0, 4))
-lines(pop3.var[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 3, ylim = c(0, 4))
-lines(pop4.var[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 3, ylim = c(0, 4))
-mtext("Variance", side = 2, cex = 1, line = 3, outer = FALSE)
-
-plot(pop5.var[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), lwd = 3, type = "l", ylim = c(0, 2), xlim = c(0, 40))
-lines(pop6.var[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 3, ylim = c(0, 4))
-lines(pop7.var[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 3, ylim = c(0, 4))
-lines(pop8.var[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 3, ylim = c(0, 4))
-abline(v = c(60), col = "orchid",lty = 3, lwd = 4)
-
-mtext("Day", side = 1, cex = 1, line = 2, outer = TRUE)
-```
-
-## Comparing Simulation and Empirical Results
-
-```{r}
-col.vec <- rep(c("gray0", "gray12", "gray24", "gray36"), 2)
-time.plot <- c(6:20) # Experiments
-plot.time <- c(16:60) # Simulations
-
-par(mfrow = c(3, 4))
-par(mar = c(1, 1, 1, 1))
-par(oma = c(4, 4, 4, 0))
-
-plot(constant.incidence.daily[, 1] ~ c(1:120),  type = "n", ylim = c(0, 100), xlim = c(0, 120), 
-     xlab = "Time", ylab = "Disease Incidence", cex.lab = 1.5 , lwd = 3)
-for(i in 1:1000){
-  lines(constant.incidence.daily[ ,i] ~ c(1:120), col = alpha("black", 0.01), lwd = 1)
-}
-lines(constant.sims.mean.incidence, col = "black", lwd = 3)
-mtext("Disease Incidence", side = 2, cex = 1, line = 3, outer = FALSE)
-mtext("Constant", side = 3, cex = 1, line = 1, outer = FALSE)
-text(10, 95, labels = ("a)"))
-
-plot(warming.incidence.daily[, 1], col = "black", type = "n", ylim = c(0, 100), xlim = c(0, 120), 
-     xlab = "Time", ylab = NA, cex.lab = 1.5)
-for(i in 1:1000){
-  lines(warming.incidence.daily[ ,i], col = alpha("black", 0.01), lwd = 1)
-}
-lines(warming.sims.mean.incidence, col = "black", lwd = 3)
-abline(v = 60, lty = 2, col = "orchid",  lwd = 2)
-mtext("Warming", side = 3, cex = 1, line = 1, outer = FALSE)
-text(10, 95, labels = ("b)"))
-
-plot(sub1$status.sum ~ sub1$day, type = "n", ylim = c(0, 6), ylab = NA, xlab = NA)
-for(i in 1:4){
-  sub <- subset(data.sum, population = i)
-  lines(sub$status.sum ~ sub$day, col = alpha(col.vec[i], 0.6), lty = 1, lwd = 1)
-}
-mtext("Constant", side = 3, cex = 1 , line = 1, outer = FALSE)
-text(5, 5.7,labels = ("c)"))
-
-plot(sub5$status.sum ~ sub5$day, type = "n", ylim = c(0, 6), ylab = NA, xlab = NA)
-for(i in 5:8){
-  sub <- subset(data.sum, population = i)
-  lines(sub$status.sum ~ sub$day, col = alpha(col.vec[i], 0.6), lty = 1, lwd = 1)
-}
-abline(v = c(60), col = "orchid", lty = 2, lwd = 2)
-mtext("Warming", side = 3, cex = 1, line = 1, outer = FALSE)
-mtext("Experiment", side = 3, cex = 1, line = 2, outer = TRUE, at = 0.75)
-mtext("Simulations", side = 3, cex = 1, line =2, outer = TRUE, at = 0.25)
-text(5, 5.7, labels = ("d)"))
-
-# MEAN #
-plot(constant.sims.mean.15[ ,1] ~ plot.time, col = "black", type = "n", ylim = c(0, 30), xlim = c(0, 120), 
-     xlab = "Time", ylab = "Mean", cex.lab = 1.5)
-for(i in 1:1000){
-  lines(constant.sims.mean.15[ ,i] ~ plot.time, col = alpha("black", 0.05), lwd = 1)
-}
-lines(constant.sims.mean.mean ~ plot.time, col = "black", lwd = 3)
-mtext("Mean", side = 2, cex = 1, line = 3, outer = FALSE)
-text(5, 28.5, labels = ("e)"))
-
-plot(warming.sims.mean.15[ ,1] ~ plot.time, col = "black", type = "n", ylim = c(0, 30), xlim = c(0, 120), 
-     xlab = "Time", ylab = NA, cex.lab = 1.5)
-for(i in 1:1000){
-  lines(warming.sims.mean.15[ ,i] ~ plot.time, col = alpha("black", 0.05), lwd = 1)
-}
-lines(warming.sims.mean.mean ~ plot.time, col = "black", lwd = 3)
-abline(v = 60, lty = 2, col = "orchid", lwd = 2)
-text(5, 28.5, labels = ("f)"))
-
-plot(pop1.mean[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), xaxt = "n", type = "l", ylim = c(0, 1), xlim = c(0, 40), lwd = 1)
-lines(pop2.mean[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 1 , ylim = c(0, 4))
-lines(pop3.mean[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 1, ylim = c(0, 4))
-lines(pop4.mean[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 1, ylim = c(0, 4))
-axis(side = 1, at = c(0, 20/3, 40/3, 60/3, 80/3, 100/3, 120/3), labels = c(0, 20, 40, 60, 80, 100, 120))
-text(5, 0.95, labels = ("g)"))
-
-plot(pop5.mean[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), xaxt = "n", lwd = 1, type = "l", ylim = c(0, 1), xlim = c(0, 40))
-lines(pop6.mean[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 1, ylim = c(0, 4))
-lines(pop7.mean[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 1, ylim = c(0, 4))
-lines(pop8.mean[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 1, ylim = c(0, 4))
-axis(side = 1, at = c(0, 20/3, 40/3, 60/3, 80/3, 100/3, 120/3), labels = c(0, 20, 40, 60, 80, 100, 120))
-abline(v = c(20), col = "orchid", lty = 2, lwd = 2)
-text(5, 0.95, labels = ("h)"))
-
-# VARIANCE #
-plot(constant.sims.var.15[ ,1] ~ plot.time, col = "black", type = "n", ylim = c(0, 20), xlim = c(0, 120), 
-     xlab = "Time", ylab = "Variance", cex.lab = 1.5)
-for(i in 1:1000){
-  lines(constant.sims.var.15[ ,i] ~ plot.time, col = alpha("black", 0.01), lwd = 1)
-}
-lines(constant.sims.mean.var ~ plot.time, col = "black", lwd = 3)
-mtext("Variance", side = 2, cex = 1, line = 3, outer = FALSE)
-text(5, 19, labels = ("i)"))
-
-plot(warming.sims.var.15[ ,1] ~ plot.time, col = "black", type = "n", ylim = c(0, 20), xlim = c(0, 120), 
-     xlab = "Time", ylab = NA, cex.lab = 1.5)
-for(i in 1:1000){
-  lines(warming.sims.var.15[ ,i] ~ plot.time, col = alpha("black", 0.01), lwd = 1)
-}
-lines(warming.sims.mean.var ~ plot.time, col = "black", lwd = 3)
-abline(v = 60, lty = 2, col = "orchid", lwd = 2)
-text(5, 19, labels = ("j)"))
-
-plot(pop1.var[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), xaxt = "n", lwd = 1, type = "l", ylim = c(0, 1.5), xlim = c(0, 40))
-lines(pop2.var[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 1, ylim = c(0, 4))
-lines(pop3.var[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 1, ylim = c(0, 4))
-lines(pop4.var[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 1, ylim = c(0, 4))
-axis(side = 1, at = c(0, 20/3, 40/3, 60/3, 80/3, 100/3, 120/3),  labels = c(0, 20, 40, 60, 80, 100, 120))
-text(5, 1.425, labels = ("k)"))
-
-plot(pop5.var[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), xaxt = "n", lwd = 1, type = "l", ylim = c(0, 1.5), xlim = c(0, 40))
-lines(pop6.var[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 1, ylim = c(0, 4))
-lines(pop7.var[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 1, ylim = c(0, 4))
-lines(pop8.var[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 1, ylim = c(0, 4))
-axis(side = 1, at = c(0, 20/3, 40/3, 60/3, 80/3, 100/3, 120/3), labels = c(0, 20, 40, 60, 80, 100, 120))
-abline(v = c(20), col = "orchid", lty = 2, lwd = 2)
-text(5, 1.425, labels = ("l)"))
-
-mtext("Days", side = 1, cex = 1, line = 2, outer = TRUE)
+# col.vec <- rep(c("gray0", "gray12", "gray24", "gray36"), 2)
+# time.plot <- c(6:20) # Experiments
+# plot.time <- c(16:60) # Simulations
+# 
+# par(mfrow = c(3, 4))
+# par(mar = c(1, 1, 1, 1))
+# par(oma = c(4, 4, 4, 0))
+# 
+# plot(constant.incidence.daily[, 1] ~ c(1:120),  type = "n", ylim = c(0, 100), xlim = c(0, 120), 
+#      xlab = "Time", ylab = "Disease Incidence", cex.lab = 1.5 , lwd = 3)
+# for(i in 1:1000){
+#   lines(constant.incidence.daily[ ,i] ~ c(1:120), col = alpha("black", 0.01), lwd = 1)
+# }
+# lines(constant.sims.mean.incidence, col = "black", lwd = 3)
+# mtext("Disease Incidence", side = 2, cex = 1, line = 3, outer = FALSE)
+# mtext("Constant", side = 3, cex = 1, line = 1, outer = FALSE)
+# text(10, 95, labels = ("a)"))
+# 
+# plot(warming.incidence.daily[, 1], col = "black", type = "n", ylim = c(0, 100), xlim = c(0, 120), 
+#      xlab = "Time", ylab = NA, cex.lab = 1.5)
+# for(i in 1:1000){
+#   lines(warming.incidence.daily[ ,i], col = alpha("black", 0.01), lwd = 1)
+# }
+# lines(warming.sims.mean.incidence, col = "black", lwd = 3)
+# abline(v = 60, lty = 2, col = "orchid",  lwd = 2)
+# mtext("Warming", side = 3, cex = 1, line = 1, outer = FALSE)
+# text(10, 95, labels = ("b)"))
+# 
+# plot(sub1$status.sum ~ sub1$day, type = "n", ylim = c(0, 6), ylab = NA, xlab = NA)
+# for(i in 1:4){
+#   sub <- subset(data.sum, population = i)
+#   lines(sub$status.sum ~ sub$day, col = alpha(col.vec[i], 0.6), lty = 1, lwd = 1)
+# }
+# mtext("Constant", side = 3, cex = 1 , line = 1, outer = FALSE)
+# text(5, 5.7,labels = ("c)"))
+# 
+# plot(sub5$status.sum ~ sub5$day, type = "n", ylim = c(0, 6), ylab = NA, xlab = NA)
+# for(i in 5:8){
+#   sub <- subset(data.sum, population = i)
+#   lines(sub$status.sum ~ sub$day, col = alpha(col.vec[i], 0.6), lty = 1, lwd = 1)
+# }
+# abline(v = c(60), col = "orchid", lty = 2, lwd = 2)
+# mtext("Warming", side = 3, cex = 1, line = 1, outer = FALSE)
+# mtext("Experiment", side = 3, cex = 1, line = 2, outer = TRUE, at = 0.75)
+# mtext("Simulations", side = 3, cex = 1, line =2, outer = TRUE, at = 0.25)
+# text(5, 5.7, labels = ("d)"))
+# 
+# # MEAN #
+# plot(constant.sims.mean.15[ ,1] ~ plot.time, col = "black", type = "n", ylim = c(0, 30), xlim = c(0, 120), 
+#      xlab = "Time", ylab = "Mean", cex.lab = 1.5)
+# for(i in 1:1000){
+#   lines(constant.sims.mean.15[ ,i] ~ plot.time, col = alpha("black", 0.05), lwd = 1)
+# }
+# lines(constant.sims.mean.mean ~ plot.time, col = "black", lwd = 3)
+# mtext("Mean", side = 2, cex = 1, line = 3, outer = FALSE)
+# text(5, 28.5, labels = ("e)"))
+# 
+# plot(warming.sims.mean.15[ ,1] ~ plot.time, col = "black", type = "n", ylim = c(0, 30), xlim = c(0, 120), 
+#      xlab = "Time", ylab = NA, cex.lab = 1.5)
+# for(i in 1:1000){
+#   lines(warming.sims.mean.15[ ,i] ~ plot.time, col = alpha("black", 0.05), lwd = 1)
+# }
+# lines(warming.sims.mean.mean ~ plot.time, col = "black", lwd = 3)
+# abline(v = 60, lty = 2, col = "orchid", lwd = 2)
+# text(5, 28.5, labels = ("f)"))
+# 
+# plot(pop1.mean[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), xaxt = "n", type = "l", ylim = c(0, 1), xlim = c(0, 40), lwd = 1)
+# lines(pop2.mean[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 1 , ylim = c(0, 4))
+# lines(pop3.mean[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 1, ylim = c(0, 4))
+# lines(pop4.mean[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 1, ylim = c(0, 4))
+# axis(side = 1, at = c(0, 20/3, 40/3, 60/3, 80/3, 100/3, 120/3), labels = c(0, 20, 40, 60, 80, 100, 120))
+# text(5, 0.95, labels = ("g)"))
+# 
+# plot(pop5.mean[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), xaxt = "n", lwd = 1, type = "l", ylim = c(0, 1), xlim = c(0, 40))
+# lines(pop6.mean[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 1, ylim = c(0, 4))
+# lines(pop7.mean[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 1, ylim = c(0, 4))
+# lines(pop8.mean[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 1, ylim = c(0, 4))
+# axis(side = 1, at = c(0, 20/3, 40/3, 60/3, 80/3, 100/3, 120/3), labels = c(0, 20, 40, 60, 80, 100, 120))
+# abline(v = c(20), col = "orchid", lty = 2, lwd = 2)
+# text(5, 0.95, labels = ("h)"))
+# 
+# # VARIANCE #
+# plot(constant.sims.var.15[ ,1] ~ plot.time, col = "black", type = "n", ylim = c(0, 20), xlim = c(0, 120), 
+#      xlab = "Time", ylab = "Variance", cex.lab = 1.5)
+# for(i in 1:1000){
+#   lines(constant.sims.var.15[ ,i] ~ plot.time, col = alpha("black", 0.01), lwd = 1)
+# }
+# lines(constant.sims.mean.var ~ plot.time, col = "black", lwd = 3)
+# mtext("Variance", side = 2, cex = 1, line = 3, outer = FALSE)
+# text(5, 19, labels = ("i)"))
+# 
+# plot(warming.sims.var.15[ ,1] ~ plot.time, col = "black", type = "n", ylim = c(0, 20), xlim = c(0, 120), 
+#      xlab = "Time", ylab = NA, cex.lab = 1.5)
+# for(i in 1:1000){
+#   lines(warming.sims.var.15[ ,i] ~ plot.time, col = alpha("black", 0.01), lwd = 1)
+# }
+# lines(warming.sims.mean.var ~ plot.time, col = "black", lwd = 3)
+# abline(v = 60, lty = 2, col = "orchid", lwd = 2)
+# text(5, 19, labels = ("j)"))
+# 
+# plot(pop1.var[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), xaxt = "n", lwd = 1, type = "l", ylim = c(0, 1.5), xlim = c(0, 40))
+# lines(pop2.var[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 1, ylim = c(0, 4))
+# lines(pop3.var[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 1, ylim = c(0, 4))
+# lines(pop4.var[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 1, ylim = c(0, 4))
+# axis(side = 1, at = c(0, 20/3, 40/3, 60/3, 80/3, 100/3, 120/3),  labels = c(0, 20, 40, 60, 80, 100, 120))
+# text(5, 1.425, labels = ("k)"))
+# 
+# plot(pop5.var[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), xaxt = "n", lwd = 1, type = "l", ylim = c(0, 1.5), xlim = c(0, 40))
+# lines(pop6.var[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 1, ylim = c(0, 4))
+# lines(pop7.var[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 1, ylim = c(0, 4))
+# lines(pop8.var[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 1, ylim = c(0, 4))
+# axis(side = 1, at = c(0, 20/3, 40/3, 60/3, 80/3, 100/3, 120/3), labels = c(0, 20, 40, 60, 80, 100, 120))
+# abline(v = c(20), col = "orchid", lty = 2, lwd = 2)
+# text(5, 1.425, labels = ("l)"))
+# 
+# mtext("Days", side = 1, cex = 1, line = 2, outer = TRUE)
 ```
 
 Saving plots:
 
 ```{r}
-## Plot 1
-png("Plots/Sim-Emp_Comparison_1.png", width = 1200, height = 800)
+# ## Plot 1
+# png("Plots/Sim-Emp_Comparison_1.png", width = 1200, height = 800)
+# 
+# col.vec <- rep(c("gray0", "gray12", "gray24", "gray36"), 2)
+# time.plot <- c(6:20)
+# 
+# par(mfrow = c(3, 2))
+# par(mar = c(1, 1, 1, 1))
+# par(oma = c(4, 4, 0, 0))
+# 
+# plot(sub1$status.sum ~ sub1$day, type = "n", ylim = c(0, 6), ylab = NA, xlab = NA, cex.axis = 0.8)
+# for(i in 1:4){
+#   sub <- subset(data.sum, population == i)
+#   lines(sub$status.sum ~ sub$day, col = alpha(col.vec[i], 0.6), lty = 1, lwd = 3)
+# }
+# text(5, 5.5, labels = ("(a)"))
+# mtext("Disease Incidence", side = 2, cex = 1, line = 3, outer = FALSE)
+# 
+# plot(sub5$status.sum ~ sub5$day, type = "n", ylim = c(0,6), ylab = NA, xlab = NA, cex.axis = 0.8)
+# for(i in 5:8){
+#   sub <- subset(data.sum, population == i)
+#   lines(sub$status.sum ~ sub$day, col = alpha(col.vec[i], 0.6), lty = 1,lwd = 3)
+# }
+# abline(v = c(15, 30, 45, 75, 90, 105), lty = 3)
+# abline(v = c(60), col = "orchid", lty = 3, lwd = 4)
+# text(x = c(7.5, 22.5, 37.5, 52.5, 67.5, 82.5, 97.5, 112.5), y = 5.7, 
+#      labels = c("10.0C", "10.5C", "11.0C", "11.5C", "12.0C", "12.5C", "13.0C", "13.5C"), cex = 0.75)
+# text(5, 5, labels = ("(b)"))
+# 
+# # MEAN #
+# plot(pop1.mean[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), type = "l", ylim = c(0, 1.5), xlim = c(0, 40), lwd = 3)
+# lines(pop2.mean[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 3, ylim = c(0, 4))
+# lines(pop3.mean[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 3,ylim = c(0, 4))
+# lines(pop4.mean[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 3,ylim = c(0, 4))
+# mtext("Mean", side = 2, cex = 1, line = 3, outer = FALSE)
+# 
+# plot(pop5.mean[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), lwd = 3,type = "l", ylim = c(0, 1.5), xlim = c(0, 40))
+# lines(pop6.mean[1:15] ~ time.plot,col = alpha(col.vec[2], 0.6), lwd = 3, ylim = c(0, 4))
+# lines(pop7.mean[1:15] ~ time.plot,col = alpha(col.vec[3], 0.6), lwd = 3, ylim = c(0, 4))
+# lines(pop8.mean[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6),lwd = 3, ylim = c(0, 4))
+# abline(v = c(20), col = "orchid",lty = 3, lwd = 4)
+# 
+# ## VARIANCE ##
+# plot(pop1.var[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), lwd = 3,type = "l",ylim = c(0, 2), xlim = c(0, 40))
+# lines(pop2.var[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 3, ylim = c(0, 4))
+# lines(pop3.var[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 3, ylim = c(0, 4))
+# lines(pop4.var[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 3, ylim = c(0, 4))
+# mtext("Variance", side = 2, cex = 1, line = 3, outer = FALSE)
+# 
+# plot(pop5.var[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), lwd = 3, type = "l", ylim = c(0, 2), xlim = c(0, 40))
+# lines(pop6.var[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 3, ylim = c(0, 4))
+# lines(pop7.var[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 3, ylim = c(0, 4))
+# lines(pop8.var[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 3, ylim = c(0, 4))
+# abline(v = c(60), col = "orchid",lty = 3, lwd = 4)
+# 
+# mtext("Day", side = 1, cex = 1, line = 2, outer = TRUE)
+# 
+# dev.off()
+# 
+# ## Plot 2
+# png("Plots/Sim-Emp_Comparison_2.png", width = 1200, height = 800)
+# 
+# par(mfrow = c(3, 4))
+# par(mar = c(1, 1, 1, 1))
+# par(oma = c(4, 4, 4, 0))
+# 
+# plot(constant.incidence.daily[, 1] ~ c(1:120),  type = "n", ylim = c(0, 100), xlim = c(0, 120), 
+#      xlab = "Time", ylab = "Disease Incidence", cex.lab = 1.5 , lwd = 3)
+# for(i in 1:1000){
+#   lines(constant.incidence.daily[ ,i] ~ c(1:120), col = alpha("black", 0.01), lwd = 1)
+# }
+# lines(constant.sims.mean.incidence, col = "black", lwd = 3)
+# mtext("Disease Incidence", side = 2, cex = 1, line = 3, outer = FALSE)
+# mtext("Constant", side = 3, cex = 1, line = 1, outer = FALSE)
+# text(10, 95, labels = ("a)"))
+# 
+# plot(warming.incidence.daily[, 1], col = "black", type = "n", ylim = c(0, 100), xlim = c(0, 120), 
+#      xlab = "Time", ylab = NA, cex.lab = 1.5)
+# for(i in 1:1000){
+#   lines(warming.incidence.daily[ ,i], col = alpha("black", 0.01), lwd = 1)
+# }
+# lines(warming.sims.mean.incidence, col = "black", lwd = 3)
+# abline(v = 60, lty = 2, col = "orchid",  lwd = 2)
+# mtext("Warming", side = 3, cex = 1, line = 1, outer = FALSE)
+# text(10, 95, labels = ("b)"))
+# 
+# plot(sub1$status.sum ~ sub1$day, type = "n", ylim = c(0, 6), ylab = NA, xlab = NA)
+# for(i in 1:4){
+#   sub <- subset(data.sum, population = i)
+#   lines(sub$status.sum ~ sub$day, col = alpha(col.vec[i], 0.6), lty = 1, lwd = 1)
+# }
+# mtext("Constant", side = 3, cex = 1 , line = 1, outer = FALSE)
+# text(5, 5.7,labels = ("c)"))
+# 
+# plot(sub5$status.sum ~ sub5$day, type = "n", ylim = c(0, 6), ylab = NA, xlab = NA)
+# for(i in 5:8){
+#   sub <- subset(data.sum, population = i)
+#   lines(sub$status.sum ~ sub$day, col = alpha(col.vec[i], 0.6), lty = 1, lwd = 1)
+# }
+# abline(v = c(60), col = "orchid", lty = 2, lwd = 2)
+# mtext("Warming", side = 3, cex = 1, line = 1, outer = FALSE)
+# mtext("Experiment", side = 3, cex = 1, line = 2, outer = TRUE, at = 0.75)
+# mtext("Simulations", side = 3, cex = 1, line =2, outer = TRUE, at = 0.25)
+# text(5, 5.7, labels = ("d)"))
+# 
+# # MEAN #
+# plot(constant.sims.mean.15[ ,1] ~ plot.time, col = "black", type = "n", ylim = c(0, 30), xlim = c(0, 120), 
+#      xlab = "Time", ylab = "Mean", cex.lab = 1.5)
+# for(i in 1:1000){
+#   lines(constant.sims.mean.15[ ,i] ~ plot.time, col = alpha("black", 0.05), lwd = 1)
+# }
+# lines(constant.sims.mean.mean ~ plot.time, col = "black", lwd = 3)
+# mtext("Mean", side = 2, cex = 1, line = 3, outer = FALSE)
+# text(5, 28.5, labels = ("e)"))
+# 
+# plot(warming.sims.mean.15[ ,1] ~ plot.time, col = "black", type = "n", ylim = c(0, 30), xlim = c(0, 120), 
+#      xlab = "Time", ylab = NA, cex.lab = 1.5)
+# for(i in 1:1000){
+#   lines(warming.sims.mean.15[ ,i] ~ plot.time, col = alpha("black", 0.05), lwd = 1)
+# }
+# lines(warming.sims.mean.mean ~ plot.time, col = "black", lwd = 3)
+# abline(v = 60, lty = 2, col = "orchid", lwd = 2)
+# text(5, 28.5, labels = ("f)"))
+# 
+# plot(pop1.mean[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), xaxt = "n", type = "l", ylim = c(0, 1), xlim = c(0, 40), lwd = 1)
+# lines(pop2.mean[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 1 , ylim = c(0, 4))
+# lines(pop3.mean[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 1, ylim = c(0, 4))
+# lines(pop4.mean[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 1, ylim = c(0, 4))
+# axis(side = 1, at = c(0, 20/3, 40/3, 60/3, 80/3, 100/3, 120/3), labels = c(0, 20, 40, 60, 80, 100, 120))
+# text(5, 0.95, labels = ("g)"))
+# 
+# plot(pop5.mean[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), xaxt = "n", lwd = 1, type = "l", ylim = c(0, 1), xlim = c(0, 40))
+# lines(pop6.mean[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 1, ylim = c(0, 4))
+# lines(pop7.mean[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 1, ylim = c(0, 4))
+# lines(pop8.mean[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 1, ylim = c(0, 4))
+# axis(side = 1, at = c(0, 20/3, 40/3, 60/3, 80/3, 100/3, 120/3), labels = c(0, 20, 40, 60, 80, 100, 120))
+# abline(v = c(20), col = "orchid", lty = 2, lwd = 2)
+# text(5, 0.95, labels = ("h)"))
+# 
+# # VARIANCE #
+# plot(constant.sims.var.15[ ,1] ~ plot.time, col = "black", type = "n", ylim = c(0, 20), xlim = c(0, 120), 
+#      xlab = "Time", ylab = "Variance", cex.lab = 1.5)
+# for(i in 1:1000){
+#   lines(constant.sims.var.15[ ,i] ~ plot.time, col = alpha("black", 0.01), lwd = 1)
+# }
+# lines(constant.sims.mean.var ~ plot.time, col = "black", lwd = 3)
+# mtext("Variance", side = 2, cex = 1, line = 3, outer = FALSE)
+# text(5, 19, labels = ("i)"))
+# 
+# plot(warming.sims.var.15[ ,1] ~ plot.time, col = "black", type = "n", ylim = c(0, 20), xlim = c(0, 120), 
+#      xlab = "Time", ylab = NA, cex.lab = 1.5)
+# for(i in 1:1000){
+#   lines(warming.sims.var.15[ ,i] ~ plot.time, col = alpha("black", 0.01), lwd = 1)
+# }
+# lines(warming.sims.mean.var ~ plot.time, col = "black", lwd = 3)
+# abline(v = 60, lty = 2, col = "orchid", lwd = 2)
+# text(5, 19, labels = ("j)"))
+# 
+# plot(pop1.var[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), xaxt = "n", lwd = 1, type = "l", ylim = c(0, 1.5), xlim = c(0, 40))
+# lines(pop2.var[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 1, ylim = c(0, 4))
+# lines(pop3.var[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 1, ylim = c(0, 4))
+# lines(pop4.var[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 1, ylim = c(0, 4))
+# axis(side = 1, at = c(0, 20/3, 40/3, 60/3, 80/3, 100/3, 120/3),  labels = c(0, 20, 40, 60, 80, 100, 120))
+# text(5, 1.425, labels = ("k)"))
+# 
+# plot(pop5.var[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), xaxt = "n", lwd = 1, type = "l", ylim = c(0, 1.5), xlim = c(0, 40))
+# lines(pop6.var[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 1, ylim = c(0, 4))
+# lines(pop7.var[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 1, ylim = c(0, 4))
+# lines(pop8.var[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 1, ylim = c(0, 4))
+# axis(side = 1, at = c(0, 20/3, 40/3, 60/3, 80/3, 100/3, 120/3), labels = c(0, 20, 40, 60, 80, 100, 120))
+# abline(v = c(20), col = "orchid", lty = 2, lwd = 2)
+# text(5, 1.425, labels = ("l)"))
+# 
+# mtext("Days", side = 1, cex = 1, line = 2, outer = TRUE)
+# 
+# dev.off()
+```
 
-col.vec <- rep(c("gray0", "gray12", "gray24", "gray36"), 2)
-time.plot <- c(6:20)
+# 30 Day Sliding Window
 
-par(mfrow = c(3, 2))
-par(mar = c(1, 1, 1, 1))
-par(oma = c(4, 4, 0, 0))
+## Calculating Statistical Metrics
 
-plot(sub1$status.sum ~ sub1$day, type = "n", ylim = c(0, 6), ylab = NA, xlab = NA, cex.axis = 0.8)
-for(i in 1:4){
-  sub <- subset(data.sum, population == i)
-  lines(sub$status.sum ~ sub$day, col = alpha(col.vec[i], 0.6), lty = 1, lwd = 3)
+```{r}
+## Standard deviation
+pop1.sd <- SlidingWindow(FUN = "sd", data = sub1$status.sum, window = 10, step = 1)
+pop2.sd <- SlidingWindow(FUN = "sd", data = sub2$status.sum, window = 10, step = 1)
+pop3.sd <- SlidingWindow(FUN = "sd", data = sub3$status.sum, window = 10, step = 1)
+pop4.sd <- SlidingWindow(FUN = "sd", data = sub4$status.sum, window = 10, step = 1)
+pop5.sd <- SlidingWindow(FUN = "sd", data = sub5$status.sum, window = 10, step = 1)
+pop6.sd <- SlidingWindow(FUN = "sd", data = sub6$status.sum, window = 10, step = 1)
+pop7.sd <- SlidingWindow(FUN = "sd", data = sub7$status.sum, window = 10, step = 1)
+pop8.sd <- SlidingWindow(FUN = "sd", data = sub8$status.sum, window = 10, step = 1)
+
+## Mean
+pop1.mean <- SlidingWindow(FUN = "mean", data = sub1$status.sum, window = 10, step = 1)
+pop2.mean <- SlidingWindow(FUN = "mean", data = sub2$status.sum, window = 10, step = 1)
+pop3.mean <- SlidingWindow(FUN = "mean", data = sub3$status.sum, window = 10, step = 1)
+pop4.mean <- SlidingWindow(FUN = "mean", data = sub4$status.sum, window = 10, step = 1)
+pop5.mean <- SlidingWindow(FUN = "mean", data = sub5$status.sum, window = 10, step = 1)
+pop6.mean <- SlidingWindow(FUN = "mean", data = sub6$status.sum, window = 10, step = 1)
+pop7.mean <- SlidingWindow(FUN = "mean", data = sub7$status.sum, window = 10, step = 1)
+pop8.mean <- SlidingWindow(FUN = "mean", data = sub8$status.sum, window = 10, step = 1)
+
+## Skewness
+pop1.sk <- SlidingWindow(FUN = "skewness", data = sub1$status.sum, window = 10, step = 1)
+pop2.sk <- SlidingWindow(FUN = "skewness", data = sub2$status.sum, window = 10, step = 1)
+pop3.sk <- SlidingWindow(FUN = "skewness", data = sub3$status.sum, window = 10, step = 1)
+pop4.sk <- SlidingWindow(FUN = "skewness", data = sub4$status.sum, window = 10, step = 1)
+pop5.sk <- SlidingWindow(FUN = "skewness", data = sub5$status.sum, window = 10, step = 1)
+pop6.sk <- SlidingWindow(FUN = "skewness", data = sub6$status.sum, window = 10, step = 1)
+pop7.sk <- SlidingWindow(FUN = "skewness", data = sub7$status.sum, window = 10, step = 1)
+pop8.sk <- SlidingWindow(FUN = "skewness", data = sub8$status.sum, window = 10, step = 1)
+
+## Kurtosis
+pop1.kt <- SlidingWindow(FUN = "kurtosis", data = sub1$status.sum, window = 10, step = 1)
+pop2.kt <- SlidingWindow(FUN = "kurtosis", data = sub2$status.sum, window = 10, step = 1)
+pop3.kt <- SlidingWindow(FUN = "kurtosis", data = sub3$status.sum, window = 10, step = 1)
+pop4.kt <- SlidingWindow(FUN = "kurtosis", data = sub4$status.sum, window = 10, step = 1)
+pop5.kt <- SlidingWindow(FUN = "kurtosis", data = sub5$status.sum, window = 10, step = 1)
+pop6.kt <- SlidingWindow(FUN = "kurtosis", data = sub6$status.sum, window = 10, step = 1)
+pop7.kt <- SlidingWindow(FUN = "kurtosis", data = sub7$status.sum, window = 10, step = 1)
+pop8.kt <- SlidingWindow(FUN = "kurtosis", data = sub8$status.sum, window = 10, step = 1)
+```
+
+### Variance
+
+```{r}
+pop1.var <- pop1.sd^2
+pop2.var <- pop2.sd^2
+pop3.var <- pop3.sd^2
+pop4.var <- pop4.sd^2
+pop5.var <- pop5.sd^2
+pop6.var <- pop6.sd^2
+pop7.var <- pop7.sd^2
+pop8.var <- pop8.sd^2
+```
+
+### Coefficient of Variation
+
+We're adding 1e-10 to the mean so we don't divide by 0.
+
+```{r}
+pop1.cv <- pop1.sd/(pop1.mean + 1e-10)
+pop2.cv <- pop2.sd/(pop2.mean + 1e-10)
+pop3.cv <- pop3.sd/(pop3.mean + 1e-10)
+pop4.cv <- pop4.sd/(pop4.mean + 1e-10)
+pop5.cv <- pop5.sd/(pop5.mean + 1e-10)
+pop6.cv <- pop6.sd/(pop6.mean + 1e-10)
+pop7.cv <- pop7.sd/(pop7.mean + 1e-10)
+pop8.cv <- pop8.sd/(pop8.mean + 1e-10)
+```
+
+### Index of Dispersion
+
+```{r}
+pop1.id <- pop1.var/(pop1.mean + 1e-10)
+pop2.id <- pop2.var/(pop2.mean + 1e-10)
+pop3.id <- pop3.var/(pop3.mean + 1e-10)
+pop4.id <- pop4.var/(pop4.mean + 1e-10)
+pop5.id <- pop5.var/(pop5.mean + 1e-10)
+pop6.id <- pop6.var/(pop6.mean + 1e-10)
+pop7.id <- pop7.var/(pop7.mean + 1e-10)
+pop8.id <- pop8.var/(pop8.mean + 1e-10)
+```
+
+### First Difference Variance
+
+```{r}
+pop1.fdv <- c()
+pop2.fdv <- c()
+pop3.fdv <- c()
+pop4.fdv <- c()
+pop5.fdv <- c()
+pop6.fdv <- c()
+pop7.fdv <- c()
+pop8.fdv <- c()
+
+for(i in 2:35){
+pop1.fdv[i - 1] <- pop1.var[i] - pop1.var[i - 1]
+pop2.fdv[i - 1] <- pop2.var[i] - pop2.var[i - 1]
+pop3.fdv[i - 1] <- pop3.var[i] - pop3.var[i - 1]
+pop4.fdv[i - 1] <- pop4.var[i] - pop4.var[i - 1]
+pop5.fdv[i - 1] <- pop5.var[i] - pop5.var[i - 1]
+pop6.fdv[i - 1] <- pop6.var[i] - pop6.var[i - 1]
+pop7.fdv[i - 1] <- pop7.var[i] - pop7.var[i - 1]
+pop8.fdv[i - 1] <- pop8.var[i] - pop8.var[i - 1]
 }
-text(5, 5.5, labels = ("(a)"))
-mtext("Disease Incidence", side = 2, cex = 1, line = 3, outer = FALSE)
+```
 
-plot(sub5$status.sum ~ sub5$day, type = "n", ylim = c(0,6), ylab = NA, xlab = NA, cex.axis = 0.8)
-for(i in 5:8){
-  sub <- subset(data.sum, population == i)
-  lines(sub$status.sum ~ sub$day, col = alpha(col.vec[i], 0.6), lty = 1,lwd = 3)
+### Autocorrelation and Autocovariance
+
+```{r}
+pop1.ac <- c()
+pop1.acv <- c()
+for(i in 1:35){
+  window.start <- i
+  window.end <- i + 4
+  
+  segment <- sub1$status.sum[c(window.start:window.end)]
+  
+  pop1.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop1.acv[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
 }
-abline(v = c(15, 30, 45, 75, 90, 105), lty = 3)
-abline(v = c(60), col = "orchid", lty = 3, lwd = 4)
-text(x = c(7.5, 22.5, 37.5, 52.5, 67.5, 82.5, 97.5, 112.5), y = 5.7, 
-     labels = c("10.0C", "10.5C", "11.0C", "11.5C", "12.0C", "12.5C", "13.0C", "13.5C"), cex = 0.75)
-text(5, 5, labels = ("(b)"))
 
-# MEAN #
-plot(pop1.mean[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), type = "l", ylim = c(0, 1.5), xlim = c(0, 40), lwd = 3)
-lines(pop2.mean[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 3, ylim = c(0, 4))
-lines(pop3.mean[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 3,ylim = c(0, 4))
-lines(pop4.mean[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 3,ylim = c(0, 4))
-mtext("Mean", side = 2, cex = 1, line = 3, outer = FALSE)
-
-plot(pop5.mean[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), lwd = 3,type = "l", ylim = c(0, 1.5), xlim = c(0, 40))
-lines(pop6.mean[1:15] ~ time.plot,col = alpha(col.vec[2], 0.6), lwd = 3, ylim = c(0, 4))
-lines(pop7.mean[1:15] ~ time.plot,col = alpha(col.vec[3], 0.6), lwd = 3, ylim = c(0, 4))
-lines(pop8.mean[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6),lwd = 3, ylim = c(0, 4))
-abline(v = c(20), col = "orchid",lty = 3, lwd = 4)
-
-## VARIANCE ##
-plot(pop1.var[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), lwd = 3,type = "l",ylim = c(0, 2), xlim = c(0, 40))
-lines(pop2.var[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 3, ylim = c(0, 4))
-lines(pop3.var[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 3, ylim = c(0, 4))
-lines(pop4.var[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 3, ylim = c(0, 4))
-mtext("Variance", side = 2, cex = 1, line = 3, outer = FALSE)
-
-plot(pop5.var[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), lwd = 3, type = "l", ylim = c(0, 2), xlim = c(0, 40))
-lines(pop6.var[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 3, ylim = c(0, 4))
-lines(pop7.var[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 3, ylim = c(0, 4))
-lines(pop8.var[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 3, ylim = c(0, 4))
-abline(v = c(60), col = "orchid",lty = 3, lwd = 4)
-
-mtext("Day", side = 1, cex = 1, line = 2, outer = TRUE)
-
-dev.off()
-
-## Plot 2
-png("Plots/Sim-Emp_Comparison_2.png", width = 1200, height = 800)
-
-par(mfrow = c(3, 4))
-par(mar = c(1, 1, 1, 1))
-par(oma = c(4, 4, 4, 0))
-
-plot(constant.incidence.daily[, 1] ~ c(1:120),  type = "n", ylim = c(0, 100), xlim = c(0, 120), 
-     xlab = "Time", ylab = "Disease Incidence", cex.lab = 1.5 , lwd = 3)
-for(i in 1:1000){
-  lines(constant.incidence.daily[ ,i] ~ c(1:120), col = alpha("black", 0.01), lwd = 1)
+pop2.ac <- c()
+pop2.acv <- c()
+for(i in 1:30){
+  window.start <- i
+  window.end <- i + 9
+  
+  segment <- sub2$status.sum[c(window.start:window.end)]
+  
+  pop2.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop2.acv[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
 }
-lines(constant.sims.mean.incidence, col = "black", lwd = 3)
-mtext("Disease Incidence", side = 2, cex = 1, line = 3, outer = FALSE)
-mtext("Constant", side = 3, cex = 1, line = 1, outer = FALSE)
-text(10, 95, labels = ("a)"))
 
-plot(warming.incidence.daily[, 1], col = "black", type = "n", ylim = c(0, 100), xlim = c(0, 120), 
-     xlab = "Time", ylab = NA, cex.lab = 1.5)
-for(i in 1:1000){
-  lines(warming.incidence.daily[ ,i], col = alpha("black", 0.01), lwd = 1)
+pop3.ac <- c()
+pop3.acv <- c()
+for(i in 1:30){
+  window.start <- i
+  window.end <- i + 9
+  
+  segment <- sub3$status.sum[c(window.start:window.end)]
+  
+  pop3.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop3.acv[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
 }
-lines(warming.sims.mean.incidence, col = "black", lwd = 3)
-abline(v = 60, lty = 2, col = "orchid",  lwd = 2)
-mtext("Warming", side = 3, cex = 1, line = 1, outer = FALSE)
-text(10, 95, labels = ("b)"))
 
-plot(sub1$status.sum ~ sub1$day, type = "n", ylim = c(0, 6), ylab = NA, xlab = NA)
-for(i in 1:4){
-  sub <- subset(data.sum, population = i)
-  lines(sub$status.sum ~ sub$day, col = alpha(col.vec[i], 0.6), lty = 1, lwd = 1)
+pop4.ac <- c()
+pop4.acv <- c()
+for(i in 1:30){
+  window.start <- i
+  window.end <- i + 9
+  
+  segment <- sub4$status.sum[c(window.start:window.end)]
+  
+  pop4.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop4.acv[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
 }
-mtext("Constant", side = 3, cex = 1 , line = 1, outer = FALSE)
-text(5, 5.7,labels = ("c)"))
 
-plot(sub5$status.sum ~ sub5$day, type = "n", ylim = c(0, 6), ylab = NA, xlab = NA)
-for(i in 5:8){
-  sub <- subset(data.sum, population = i)
-  lines(sub$status.sum ~ sub$day, col = alpha(col.vec[i], 0.6), lty = 1, lwd = 1)
+pop5.ac <- c()
+pop5.acv <- c()
+for(i in 1:30){
+  window.start <- i
+  window.end <- i + 9
+  
+  segment <- sub5$status.sum[c(window.start:window.end)]
+  
+  pop5.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop5.acv[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
 }
-abline(v = c(60), col = "orchid", lty = 2, lwd = 2)
-mtext("Warming", side = 3, cex = 1, line = 1, outer = FALSE)
-mtext("Experiment", side = 3, cex = 1, line = 2, outer = TRUE, at = 0.75)
-mtext("Simulations", side = 3, cex = 1, line =2, outer = TRUE, at = 0.25)
-text(5, 5.7, labels = ("d)"))
 
-# MEAN #
-plot(constant.sims.mean.15[ ,1] ~ plot.time, col = "black", type = "n", ylim = c(0, 30), xlim = c(0, 120), 
-     xlab = "Time", ylab = "Mean", cex.lab = 1.5)
-for(i in 1:1000){
-  lines(constant.sims.mean.15[ ,i] ~ plot.time, col = alpha("black", 0.05), lwd = 1)
+pop6.ac <- c()
+pop6.acv <- c()
+for(i in 1:30){
+  window.start <- i
+  window.end <- i + 9
+  
+  segment <- sub6$status.sum[c(window.start:window.end)]
+  
+  pop6.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop6.acv[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
 }
-lines(constant.sims.mean.mean ~ plot.time, col = "black", lwd = 3)
-mtext("Mean", side = 2, cex = 1, line = 3, outer = FALSE)
-text(5, 28.5, labels = ("e)"))
 
-plot(warming.sims.mean.15[ ,1] ~ plot.time, col = "black", type = "n", ylim = c(0, 30), xlim = c(0, 120), 
-     xlab = "Time", ylab = NA, cex.lab = 1.5)
-for(i in 1:1000){
-  lines(warming.sims.mean.15[ ,i] ~ plot.time, col = alpha("black", 0.05), lwd = 1)
+pop7.ac <- c()
+pop7.acv <- c()
+for(i in 1:30){
+  window.start <- i
+  window.end <- i + 9
+  
+  segment <- sub7$status.sum[c(window.start:window.end)]
+  
+  pop7.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop7.acv[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
 }
-lines(warming.sims.mean.mean ~ plot.time, col = "black", lwd = 3)
-abline(v = 60, lty = 2, col = "orchid", lwd = 2)
-text(5, 28.5, labels = ("f)"))
 
-plot(pop1.mean[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), xaxt = "n", type = "l", ylim = c(0, 1), xlim = c(0, 40), lwd = 1)
-lines(pop2.mean[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 1 , ylim = c(0, 4))
-lines(pop3.mean[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 1, ylim = c(0, 4))
-lines(pop4.mean[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 1, ylim = c(0, 4))
-axis(side = 1, at = c(0, 20/3, 40/3, 60/3, 80/3, 100/3, 120/3), labels = c(0, 20, 40, 60, 80, 100, 120))
-text(5, 0.95, labels = ("g)"))
-
-plot(pop5.mean[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), xaxt = "n", lwd = 1, type = "l", ylim = c(0, 1), xlim = c(0, 40))
-lines(pop6.mean[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 1, ylim = c(0, 4))
-lines(pop7.mean[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 1, ylim = c(0, 4))
-lines(pop8.mean[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 1, ylim = c(0, 4))
-axis(side = 1, at = c(0, 20/3, 40/3, 60/3, 80/3, 100/3, 120/3), labels = c(0, 20, 40, 60, 80, 100, 120))
-abline(v = c(20), col = "orchid", lty = 2, lwd = 2)
-text(5, 0.95, labels = ("h)"))
-
-# VARIANCE #
-plot(constant.sims.var.15[ ,1] ~ plot.time, col = "black", type = "n", ylim = c(0, 20), xlim = c(0, 120), 
-     xlab = "Time", ylab = "Variance", cex.lab = 1.5)
-for(i in 1:1000){
-  lines(constant.sims.var.15[ ,i] ~ plot.time, col = alpha("black", 0.01), lwd = 1)
+pop8.ac <- c()
+pop8.acv <- c()
+for(i in 1:30){
+  window.start <- i
+  window.end <- i + 9
+  
+  segment <- sub8$status.sum[c(window.start:window.end)]
+  
+  pop8.ac[i] <- acf(segment, plot = FALSE, type = "correlation")[[1]][2]
+  pop8.acv[i] <- acf(segment, plot = FALSE, type = "covariance")[[1]][2]
 }
-lines(constant.sims.mean.var ~ plot.time, col = "black", lwd = 3)
-mtext("Variance", side = 2, cex = 1, line = 3, outer = FALSE)
-text(5, 19, labels = ("i)"))
+```
 
-plot(warming.sims.var.15[ ,1] ~ plot.time, col = "black", type = "n", ylim = c(0, 20), xlim = c(0, 120), 
-     xlab = "Time", ylab = NA, cex.lab = 1.5)
-for(i in 1:1000){
-  lines(warming.sims.var.15[ ,i] ~ plot.time, col = alpha("black", 0.01), lwd = 1)
+### Decay Time
+
+```{r}
+pop1.dt <- c()
+pop2.dt <- c()
+pop3.dt <- c()
+pop4.dt <- c()
+pop5.dt <- c()
+pop6.dt <- c()
+pop7.dt <- c()
+pop8.dt <- c()
+
+for(i in 1:30){
+  suppressWarnings(pop1.dt[i] <- -i/log(pop1.ac[i]))
+  suppressWarnings(pop2.dt[i] <- -i/log(pop2.ac[i]))
+  suppressWarnings(pop3.dt[i] <- -i/log(pop3.ac[i]))
+  suppressWarnings(pop4.dt[i] <- -i/log(pop4.ac[i]))
+  suppressWarnings(pop5.dt[i] <- -i/log(pop5.ac[i]))
+  suppressWarnings(pop6.dt[i] <- -i/log(pop6.ac[i]))
+  suppressWarnings(pop7.dt[i] <- -i/log(pop7.ac[i]))
+  suppressWarnings(pop8.dt[i] <- -i/log(pop8.ac[i]))
 }
-lines(warming.sims.mean.var ~ plot.time, col = "black", lwd = 3)
-abline(v = 60, lty = 2, col = "orchid", lwd = 2)
-text(5, 19, labels = ("j)"))
+```
 
-plot(pop1.var[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), xaxt = "n", lwd = 1, type = "l", ylim = c(0, 1.5), xlim = c(0, 40))
-lines(pop2.var[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 1, ylim = c(0, 4))
-lines(pop3.var[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 1, ylim = c(0, 4))
-lines(pop4.var[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 1, ylim = c(0, 4))
-axis(side = 1, at = c(0, 20/3, 40/3, 60/3, 80/3, 100/3, 120/3),  labels = c(0, 20, 40, 60, 80, 100, 120))
-text(5, 1.425, labels = ("k)"))
+## Kendall's Tau
 
-plot(pop5.var[1:15] ~ time.plot, col = alpha(col.vec[1], 0.6), xaxt = "n", lwd = 1, type = "l", ylim = c(0, 1.5), xlim = c(0, 40))
-lines(pop6.var[1:15] ~ time.plot, col = alpha(col.vec[2], 0.6), lwd = 1, ylim = c(0, 4))
-lines(pop7.var[1:15] ~ time.plot, col = alpha(col.vec[3], 0.6), lwd = 1, ylim = c(0, 4))
-lines(pop8.var[1:15] ~ time.plot, col = alpha(col.vec[4], 0.6), lwd = 1, ylim = c(0, 4))
-axis(side = 1, at = c(0, 20/3, 40/3, 60/3, 80/3, 100/3, 120/3), labels = c(0, 20, 40, 60, 80, 100, 120))
-abline(v = c(20), col = "orchid", lty = 2, lwd = 2)
-text(5, 1.425, labels = ("l)"))
+```{r}
+time.30 <- seq(1, 10, 1)
 
-mtext("Days", side = 1, cex = 1, line = 2, outer = TRUE)
+constant.mean.tau.30 <- c(cor(pop1.mean[1:10], time.30, method = "kendall"), cor(pop2.mean[1:10], time.30, method = "kendall"),
+                      cor(pop3.mean[1:10], time.30, method = "kendall"), cor(pop4.mean[1:10], time.30, method = "kendall"))
+warming.mean.tau.30 <- c(cor(pop5.mean[1:10], time.30, method = "kendall"), cor(pop6.mean[1:10], time.30, method = "kendall"),
+                      cor(pop7.mean[1:10], time.30, method = "kendall"), cor(pop8.mean[1:10], time.30, method = "kendall"))
 
+constant.sk.tau.30 <- c(cor(pop1.sk[1:10], time.30, method = "kendall"), cor(pop2.sk[1:10], time.30, method = "kendall"),
+                          cor(pop3.sk[1:10], time.30, method = "kendall"), cor(pop4.sk[1:10], time.30, method = "kendall"))
+warming.sk.tau.30 <- c(cor(pop5.sk[1:10], time.30, method = "kendall"), cor(pop6.sk[1:10], time.30, method = "kendall"),
+                          cor(pop7.sk[1:10], time.30, method = "kendall"), cor(pop8.sk[1:10], time.30, method = "kendall"))
+
+constant.kt.tau.30 <- c(cor(pop1.kt[1:10], time.30, method = "kendall"), cor(pop2.kt[1:10], time.30, method = "kendall"),
+                          cor(pop3.kt[1:10], time.30, method = "kendall"), cor(pop4.kt[1:10], time.30, method = "kendall"))
+warming.kt.tau.30 <- c(cor(pop5.kt[1:10], time.30, method = "kendall"), cor(pop6.kt[1:10], time.30, method = "kendall"),
+                          cor(pop7.kt[1:10], time.30, method = "kendall"), cor(pop8.kt[1:10], time.30, method = "kendall"))
+
+constant.var.tau.30 <- c(cor(pop1.var[1:10], time.30, method = "kendall"), cor(pop2.var[1:10], time.30, method = "kendall"),
+                          cor(pop3.var[1:10], time.30, method = "kendall"), cor(pop4.var[1:10], time.30, method = "kendall"))
+warming.var.tau.30<- c(cor(pop5.var[1:10], time.30, method = "kendall"), cor(pop6.var[1:10], time.30, method = "kendall"),
+                         cor(pop7.var[1:10], time.30, method = "kendall"), cor(pop8.var[1:10], time.30, method = "kendall"))
+
+constant.cv.tau.30 <- c(cor(pop1.cv[1:10], time.30, method = "kendall"), cor(pop2.cv[1:10], time.30, method = "kendall"),
+                    cor(pop3.cv[1:10], time.30, method = "kendall"), cor(pop4.cv[1:10], time.30, method = "kendall"))
+warming.cv.tau.30 <- c(cor(pop5.cv[1:10], time.30, method = "kendall"), cor(pop6.cv[1:10], time.30, method = "kendall"),
+                    cor(pop7.cv[1:10], time.30, method = "kendall"), cor(pop8.cv[1:10], time.30, method = "kendall"))
+
+constant.id.tau.30 <- c(cor(pop1.id[1:10], time.30, method = "kendall"), cor(pop2.id[1:10], time.30, method = "kendall"),
+                    cor(pop3.id[1:10], time.30, method = "kendall"), cor(pop4.id[1:10], time.30, method = "kendall"))
+warming.id.tau.30 <- c(cor(pop5.id[1:10], time.30, method = "kendall"), cor(pop6.id[1:10], time.30, method = "kendall"),
+                    cor(pop7.id[1:10], time.30, method = "kendall"), cor(pop8.id[1:10], time.30, method = "kendall"))
+
+constant.fdv.tau.30 <- c(cor(pop1.fdv[1:10], time.30, method = "kendall"), cor(pop2.fdv[1:10], time.30, method = "kendall"),
+                                     cor(pop3.fdv[1:10], time.30, method = "kendall"), cor(pop4.fdv[1:10], time.30, method = "kendall"))
+warming.fdv.tau.30 <- c(cor(pop5.fdv[1:10], time.30, method = "kendall"), cor(pop6.fdv[1:10], time.30, method = "kendall"),
+                                     cor(pop7.fdv[1:10], time.30, method = "kendall"), cor(pop8.fdv[1:10], time.30, method = "kendall"))
+
+constant.ac.tau.30 <- c(cor(pop1.ac[1:10], time.30, method = "kendall"), cor(pop2.ac[1:10], time.30, method = "kendall"),
+                    cor(pop3.ac[1:10], time.30, method = "kendall"), cor(pop4.ac[1:10], time.30, method = "kendall"))
+warming.ac.tau.30 <- c(cor(pop5.ac[1:10], time.30, method = "kendall"), cor(pop6.ac[1:10], time.30, method = "kendall"),
+                    cor(pop7.ac[1:10], time.30, method = "kendall"), cor(pop8.ac[1:10], time.30, method = "kendall"))
+
+constant.acv.tau.30 <- c(cor(pop1.acv[1:10], time.30, method = "kendall"), cor(pop2.acv[1:10], time.30, method = "kendall"),
+                     cor(pop3.acv[1:10], time.30, method = "kendall"), cor(pop4.acv[1:10], time.30, method = "kendall"))
+warming.acv.tau.30 <- c(cor(pop5.acv[1:10], time.30, method = "kendall"), cor(pop6.acv[1:10], time.30, method = "kendall"),
+                     cor(pop7.acv[1:10], time.30, method = "kendall"), cor(pop8.acv[1:10], time.30, method = "kendall"))
+
+constant.dt.tau.30 <- c(cor(pop1.dt[1:10], time.30, method = "kendall"), cor(pop2.dt[1:10], time.30, method = "kendall"),
+                            cor(pop3.dt[1:10], time.30, method = "kendall"), cor(pop4.dt[1:10], time.30, method = "kendall"))
+warming.dt.tau.30 <- c(cor(pop5.dt[1:10], time.30, method = "kendall"), cor(pop6.dt[1:10], time.30, method = "kendall"),
+                            cor(pop7.dt[1:10], time.30, method = "kendall"), cor(pop8.dt[1:10], time.30, method = "kendall"))
+```
+
+## Area Under Curve (AUC) Tests
+
+```{r}
+AUC_mean_data <- calc_auc(warming.mean.tau.30, constant.mean.tau.30); AUC_mean_data
+AUC_sk_data <- calc_auc(warming.sk.tau.30, constant.sk.tau.30); AUC_sk_data
+AUC_kt_data <- calc_auc(warming.kt.tau.30, constant.kt.tau.30); AUC_kt_data
+AUC_var_data <- calc_auc(warming.var.tau.30, constant.var.tau.30); AUC_var_data
+AUC_cv_data <- calc_auc(warming.cv.tau.30, constant.cv.tau.30); AUC_cv_data
+AUC_id_data <- calc_auc(warming.id.tau.30, constant.id.tau.30); AUC_id_data
+AUC_fdv_data <- calc_auc(warming.fdv.tau.30, constant.fdv.tau.30); AUC_fdv_data
+AUC_ac_data <- calc_auc(warming.ac.tau.30, constant.ac.tau.30); AUC_ac_data
+AUC_acv_data <- calc_auc(warming.acv.tau.30, constant.acv.tau.30); AUC_acv_data
+AUC_dt_data <- calc_auc(warming.dt.tau.30, constant.dt.tau.30); AUC_dt_data
+```
+
+## Summarize Outputs
+
+```{r}
+metrics <- c("mean", "skewness", "kurtosis", "variance", "cv", "id", "fdv", "ac", "acv", "dt")
+
+AUC_30 <- c(AUC_mean_data, 
+            AUC_sk_data, 
+            AUC_kt_data, 
+            AUC_var_data,
+            AUC_cv_data,
+            AUC_id_data, 
+            AUC_fdv_data, 
+            AUC_ac_data, 
+            AUC_acv_data, 
+            AUC_dt_data)
+
+AUC_30 <- data.frame(metrics, AUC_30); AUC_30
+saveRDS(AUC_df, "Objects/AUC_EmpiricalData.rds")
+```
+
+# Plotting Together
+
+```{r}
+metrics_full <- c("Mean", "Skewness", "Kurtosis", "Variance", "Covariance", "Index of Dispersion", "First Difference Variance", "Autocorrelation", "Autocovariance", "Decay Time")
+
+plot(1:10, AUC_6$AUC_6, col = "orchid", pch = 19,
+     type = "p", main = "Empirical Data, All Populations", xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC")
+points(1:10, AUC_15$AUC_15, col = "orange", pch = 17, size = 5)
+points(1:10, AUC_30$AUC_30, col = "forestgreen", pch = 19)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full, las = 2)
+
+png(file = "Plots/AUC_EmpiricalData.png", width = 1500, height = 350)
+plot(1:10, AUC_6$AUC_6, col = "orchid", pch = 19,
+     type = "p", main = "Empirical Data, All Populations", xaxt = "none", xlab = "", ylim = c(0, 1), ylab = "AUC")
+points(1:10, AUC_15$AUC_15, col = "orange", pch = 17)
+points(1:10, AUC_30$AUC_30, col = "forestgreen", pch = 19)
+abline(h = 0.5, lty = 3)
+axis(side = 1, at = 1:10, labels = metrics_full)
 dev.off()
 ```
+
+
 
 # Troubleshooting Missing Outputs
 
